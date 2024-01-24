@@ -25,6 +25,14 @@ header img {
    
 }
 
+figure {margin:20px 0; padding: 0}
+img {
+    max-width: 95%;
+    display:block;
+}
+figure, caption {font-size: 0.8rem}
+caption {display:block}
+
 .subhead {
     font-size:70%;
 }

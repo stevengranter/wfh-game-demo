@@ -47,7 +47,7 @@
             <article>
                 <h3>Player Experience </h3>
                     <p>
-                        The player plays the role of "Nan", a 76-year-old grandmother. The main gameplay consists of navigating the character through side-scrolling outdoor scenes while attempting to catch wieners that are falling from the sky. Points are awarded for every collectibles, with the opportunity for bonus points if certain tasks are completed successfully.
+                        The player plays the role of "Nan", a 76-year-old grandmother. The main gameplay consists of navigating the character through side-scrolling outdoor scenes while attempting to catch wieners that are falling from the sky. Points are awarded for every collectible, with the opportunity for bonus points if certain tasks are completed successfully.
                     </p>
                     <p>
                         Nan has limited stamina, and can only jump a limited number of times before she has to wait for stamina to recharge. This adds a strategic challenge to level completion. She is able to consume wieners to recharge stamina more rapidly, but this reduces her hit point count and her cumulative point score for the level.
@@ -62,7 +62,7 @@
                 <h3>Monetization</h3>
                     <p>It's a demo, no monetization plans</p>
 
-                <h3>Platform, Technology and Scope (Brief)</h3>
+                <h3>Platform, Technology and Scope</h3>
                     <h4>Platform</h4>
                         <ul>
                             <li>Web-based (mobile and desktop)</li>
@@ -71,7 +71,7 @@
                         <ul>
                             <li>HTML5 (Canvas for gameplay, DOM for User Interface)</li>
                             <li>CSS</li>    
-                            <li>JavaScript</li>
+                            <li>JavaScript (Vanilla)</li>
                             <li>Weather API (TBD)</li>
 
                         </ul>
@@ -107,16 +107,25 @@
                     Internal systems to be created include collision detection, sprite animation, parallax scrolling, state machines, object spawning, score-keeping and other game-related functions and/or classes.
                 </p>
                 <p>
-                    External systems accessed are a weather API (TBD) and leaderboard (potentially). The weather API call fetches latest Probability of Precipitation values for each of the five areas (Atlantic, Central, The Prairies,West Coast, Northern Territories). This value is then used to calculate the POW (Probability of Wieners) value for each level. Players are encouraged to play on days when the weather across Canada is rainy to increase chances of collecting wieners and increasing their score.
+                    External systems accessed are a weather API (TBD) and leaderboard (potentially). The weather API call fetches latest Probability of Precipitation values for each of the five areas (Atlantic, Central, The Prairies,West Coast, Northern Territories). This value is used to calculate the POW (Probability of Wieners) value for each level. Players are encouraged to play on days when the weather across Canada is rainy to increase chances of collecting wieners and increasing their score.
                 </p>
 
                 <h3>Interactivity</h3>
+               
                 <p>
                     Before gameplay during game selection, player is presented with a map of Canada showing POW 'forecast' values for the different regions. Player can then decide to play an individual level or as a progression through the levels in order. 
                 </p>
+                 <figure>
+                    <img src="./images/wfh-jam_edition_level_select_01.jpg" alt="Sketch: Level Select Screen showing map regions and POW values">
+                    <caption>Sketch: Level Select Screen showing map regions and POW values</caption>
+                </figure>
                 <p>
                     Controls are touchscreen and mobile compatible, but offer more accuracy and enjoyment with keyboard or controller. During gameplay the player has to try to catch the collectibles, avoiding obstacles and threats, while considering the player's stamina and health. Quick decisions must be made about sacrificing collected points for stamina and/or health.
                 </p>
+                 <figure>
+                    <img src="./images/wfh-jam_edition_gameplay_01.jpg" alt="Sketch: Gameplay for sidescrolling level">
+                    <caption>Sketch: Gameplay for sidescrolling level</caption>
+                </figure>
                 <p>
                     Game ends when player runs out of lives, or makes it to the end of level 5 (Northern Territories)
                 </p>
