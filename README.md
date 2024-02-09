@@ -26,7 +26,7 @@ Sidescroller / Action / Minigame
 - Play a video game as an elderly person!
 - It's weird!
 
-## ![](./docs/gdd/images/nan-walk-cycle-east.gif) Product Design
+## ![An animated pixelated sprite of a grandmother wearing a blue dress and white apron carrying a large bowl with a blue pattern on it](./docs/gdd/images/nan-walk-cycle-east.gif) Product Design
 
 ### Player Experience
 
