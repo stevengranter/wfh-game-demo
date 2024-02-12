@@ -1,10 +1,11 @@
 import Player from './player.js'
 import InputHandler from './input.js'
 import { drawStatusText } from './utils.js'
+import UI from './ui.js'
 
 // wait for page to fully load
 window.addEventListener('load', function () {
-    const canvas = document.getElementById('canvas1')
+    const canvas = document.getElementById('game-screen__canvas')
     const ctx = canvas.getContext('2d')
     ctx.imageSmoothingEnabled = false
     canvas.width = 475 //* this.devicePixelRatio
@@ -12,6 +13,7 @@ window.addEventListener('load', function () {
 
     const player = new Player(canvas.width, canvas.height)
     const input = new InputHandler()
+    const ui = new UI(canvas)
 
     let lastTime = 0
 
@@ -25,6 +27,8 @@ window.addEventListener('load', function () {
         player.update(input.lastKey)
         player.draw(ctx, deltaTime)
         drawStatusText(ctx, input)
+
+        // ui.toggleOverlay()
 
         requestAnimationFrame(animate)
     }

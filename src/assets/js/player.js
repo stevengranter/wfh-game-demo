@@ -1,4 +1,4 @@
-import { StandingLeft, StandingRight, RunningLeft, RunningRight, Jump } from "./state.js"
+import { StandingLeft, StandingRight, RunningLeft, RunningRight, Jump, Pause } from "./state.js"
 
 export default class Player {
 
@@ -10,12 +10,12 @@ export default class Player {
         this.gameHeight = gameHeight
 
 
-        this.states = [new StandingLeft(this), new StandingRight(this), new RunningLeft(this), new RunningRight(this), new Jump(this)]
-
+        this.states = [new StandingLeft(this), new StandingRight(this), new RunningLeft(this), new RunningRight(this), new Jump(this), new Pause(this)]
+        this.stateHistory = []
         // currentState is at index 0 of states array
         this.currentState = this.states[0]
 
-        console.log(this.currentState)
+
 
         this.image = document.getElementById('player-sprite')
 
@@ -75,6 +75,10 @@ export default class Player {
 
     setState(state) {
         this.currentState = this.states[state]
+        // Add currentState to stateHistory array
+        // TODO: Limit array size
+        this.stateHistory.unshift(this.currentState)
+        console.log(this.stateHistory)
         this.currentState.enter()
     }
 }

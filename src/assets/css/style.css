@@ -21,7 +21,7 @@ img {
   aspect-ratio: 16 / 9;
   width: 100%;
   height: auto;
-  border: 5px solid magenta;
+  /* border: 5px solid magenta; */
   /* background-color: black; */
 }
 .game-screen canvas {
@@ -36,16 +36,16 @@ img {
   z-index: -10;
 }
 
-.game-screen .ui-overlay {
+.game-screen #game-screen__ui {
   position: relative;
   width: 80%;
   height: 80%;
   margin: 0 auto;
   top: 10%;
   padding: 25px;
-  background-color: orange;
   overflow: hidden;
   z-index: 10;
   font-size: 1rem;
   border-radius: 15px;
+  background-color: #00afb9;
 }

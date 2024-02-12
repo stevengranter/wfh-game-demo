@@ -19,6 +19,10 @@ export default class InputHandler {
                 case "Shift":
                     this.lastKey = "PRESS shift"
                     break
+
+                case "Escape":
+                    this.lastKey = "PRESS Escape"
+                    break
             }
 
         })
@@ -40,6 +44,10 @@ export default class InputHandler {
                 case "Shift":
                     this.lastKey = "RELEASE shift"
                     break
+
+                // case "Escape":
+                //     this.lastKey = "RELEASE Escape"
+                //     break
             }
         })
 
