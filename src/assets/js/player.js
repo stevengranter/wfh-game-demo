@@ -1,4 +1,4 @@
-import { StandingLeft, StandingRight, RunningLeft, RunningRight, Jump, Pause } from "./state.js"
+import { StandingLeft, StandingRight, RunningLeft, RunningRight, Jump } from "./state.js"
 
 export default class Player {
 
@@ -10,7 +10,7 @@ export default class Player {
         this.gameHeight = gameHeight
 
 
-        this.states = [new StandingLeft(this), new StandingRight(this), new RunningLeft(this), new RunningRight(this), new Jump(this), new Pause(this)]
+        this.states = [new StandingLeft(this), new StandingRight(this), new RunningLeft(this), new RunningRight(this), new Jump(this)]
         this.stateHistory = []
         // currentState is at index 0 of states array
         this.currentState = this.states[0]
@@ -43,6 +43,7 @@ export default class Player {
         this.frameTimer = 0
         this.frameInterval = 1000 / this.fps
 
+
     }
 
     draw(context, deltaTime) {
@@ -66,6 +67,7 @@ export default class Player {
     }
 
     update(input) {
+
         this.currentState.handleInput(input)
         this.x += this.speedX
         this.y += this.speedY

@@ -15,24 +15,37 @@ window.addEventListener('load', function () {
     const input = new InputHandler()
     const ui = new UI(canvas)
 
+    let paused = false
+
     let lastTime = 0
 
-
+    window.addEventListener('keydown', (e) => {
+        switch (e.key) {
+            case "Escape":
+                paused = !paused
+                break
+        }
+    })
 
     // game loop
     function animate(timeStamp) {
-        const deltaTime = timeStamp - lastTime
-        lastTime = timeStamp
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        player.update(input.lastKey)
-        player.draw(ctx, deltaTime)
-        drawStatusText(ctx, input)
-
-        // ui.toggleOverlay()
-
-        requestAnimationFrame(animate)
+        if (!paused) {
+            const deltaTime = timeStamp - lastTime
+            lastTime = timeStamp
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            player.update(input.lastKey)
+            player.draw(ctx, deltaTime)
+            drawStatusText(ctx, input)
+            requestAnimationFrame(animate)
+        }
     }
-    animate(0)
+
+    function startGame() {
+        animate(0)
+    }
+
+    startGame()
+
 
 })
 

@@ -37,6 +37,7 @@ img {
 }
 
 .game-screen #game-screen__ui {
+  display: none;
   position: relative;
   width: 80%;
   height: 80%;
