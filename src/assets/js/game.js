@@ -6,6 +6,7 @@ import UI from './ui.js'
 // wait for page to fully load
 window.addEventListener('load', function () {
     const canvas = document.getElementById('game-screen__canvas')
+
     const ctx = canvas.getContext('2d')
     ctx.imageSmoothingEnabled = false
     canvas.width = 475 //* this.devicePixelRatio
@@ -23,6 +24,7 @@ window.addEventListener('load', function () {
         switch (e.key) {
             case "Escape":
                 paused = !paused
+                ui.toggleOverlay()
                 break
         }
     })
