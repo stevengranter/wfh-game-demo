@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <link rel="stylesheet" href="./assets/css/style.css" /> -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rammetto+One&family=Titan+One&display=swap"
+      rel="stylesheet"
+    />
+    <title>Wieners From Heaven : Maple Syrup Edition</title>
+    <style>
+      /* Colour variables */
+      :root {
+        --clr-sky_blue: #0ad1ea;
+        --clr-green: #a0cc50;
+        --clr-gold: #fcd224;
+        --clr-orange: #ff775a;
+        --clr-red: #f03668;
+        --clr-pink: oklch(70.58% 0.2641 359.47);
+      }
+
+      /* google font */
+
+      .rammetto-one-regular {
+        font-family: "Rammetto One", sans-serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+
+      /* Basic Reset */
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        overflow: hidden;
+        width: 100vw;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: calc(16px + 0.390625vw);
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5 {
+        font-family: "Rammetto One", sans-serif;
+      }
+      img {
+        display: none;
+      }
+
+      .game-screen {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        width: 100%;
+        height: auto;
+        /* border: 5px solid magenta; */
+        /* background-color: black; */
+      }
+      .game-screen canvas {
+        position: absolute;
+        aspect-ratio: 16 / 9;
+        background: lightblue;
+        image-rendering: pixelated;
+        width: 100%;
+        height: auto;
+        top: 0;
+        left: 0;
+        z-index: -10;
+      }
+
+      .game-screen #game-screen__ui {
+        display: flex;
+        /* align-items: center;
+      vertical-align: top; */
+
+        position: relative;
+        width: 80%;
+        height: 80%;
+        margin: 0 auto;
+        top: 10%;
+        padding: 2vw 4vw;
+        overflow: hidden;
+        z-index: 10;
+        border-radius: 2.5vw;
+        background-color: var(--clr-sky_blue);
+        background: linear-gradient(
+          315deg,
+          rgba(153, 128, 217, 1) 12%,
+          rgba(10, 209, 234, 1) 57%
+        );
+
+        box-shadow: 1vw 1vw oklch(26.23% 0.064 227.12 / 75%);
+        border: 0.4vw solid white;
+        flex-direction: column;
+      }
+      h2 {
+        display: inline-block;
+        font-size: calc(20px + 3vw);
+        /* border: 1px solid magenta; */
+        text-align: center;
+        justify-content: center;
+        width: 100%;
+        text-transform: uppercase;
+
+        color: var(--clr-gold);
+        letter-spacing: 0.1vw;
+        font-weight: normal;
+        /* text-shadow: 0 0.4rem 0 oklch(26.23% 0.064 227.12 / 80%); */
+        -webkit-text-stroke: 0.15rem black;
+      }
+    </style>
+  </head>
+  <body>
+    <img id="player-sprite" src="./assets/images/nan-sprite-walk.png" alt="" />
+    <div class="game-screen">
+      <div id="game-screen__ui">
+        <h2>Settings</h2>
+        <ul>
+          <li>Audio</li>
+          <li>Graphics</li>
+          <li>Controls</li>
+        </ul>
+      </div>
+      <canvas id="game-screen__canvas"></canvas>
+    </div>
+    <script type="module" src="./assets/js/game.js"></script>
+  </body>
+</html>
