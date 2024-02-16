@@ -4,23 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>My Component</title>
-    <style></style>
   </head>
 
   <body>
-    <div>
-      <my-component word="Hello World"></my-component>
-    </div>
-    <script>
-      class MyComponent extends HTMLElement {
-        constructor() {
-          super()
-          const word = this.getAttribute("word")
-          this.innerHTML = `<h1>${word}</h1>`
-        }
-      }
+    <start-button>
+      <span slot="title">Start</span>
+    </start-button>
 
-      customElements.define("my-component", MyComponent)
+    <template id="start-button">
+      <style>
+        button {
+          font-size: 3rem;
+          padding: 0.5em 1em;
+          border-radius: 0.5em;
+          font-weight: 800;
+          display: block;
+        }
+      </style>
+      <button><slot name="title">Button</slot></button>
+    </template>
+
+    <script>
+      customElements.define(
+        "start-button",
+        class StartButton extends HTMLElement {
+          constructor() {
+            super()
+            let template = document.getElementById("start-button")
+            let templateContent = template.content
+
+            const shadowRoot = this.attachShadow({ mode: "open" })
+            shadowRoot.appendChild(templateContent.cloneNode(true))
+          }
+        }
+      )
     </script>
   </body>
 </html>
