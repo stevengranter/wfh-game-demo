@@ -14,12 +14,13 @@
     <style>
       /* Colour variables */
       :root {
-        --clr-sky_blue: #0ad1ea;
-        --clr-green: #a0cc50;
-        --clr-gold: #fcd224;
-        --clr-orange: #ff775a;
-        --clr-red: #f03668;
         --clr-pink: oklch(70.58% 0.2641 359.47);
+        --clr-red: #f03668;
+        --clr-orange: #ff775a;
+        --clr-gold: #fcd224;
+        --clr-green: #a0cc50;
+        --clr-sky_blue: #0ad1ea;
+        --clr-violet: #460087;
       }
 
       /* google font */
@@ -58,6 +59,9 @@
 
       .game-screen {
         position: relative;
+        display: flex;
+        align-items: center;
+        vertical-align: middle;
         aspect-ratio: 16 / 9;
         width: 100%;
         height: auto;
@@ -78,16 +82,16 @@
 
       .game-screen #game-screen__ui {
         /* TODO: Unhide menu */
-        display: none;
+        display: flex;
         /* align-items: center;
       vertical-align: top; */
 
-        position: relative;
+        /* position: relative; */
         width: 80%;
         height: 80%;
         margin: 0 auto;
         top: 10%;
-        padding: 2vw 4vw;
+        padding: 8vw 4vw 2vw 4vw;
         overflow: hidden;
         z-index: 10;
         border-radius: 2.5vw;
@@ -98,24 +102,93 @@
           rgba(10, 209, 234, 1) 57%
         );
 
-        box-shadow: 1vw 1vw oklch(26.23% 0.064 227.12 / 75%);
-        border: 0.4vw solid white;
+        /* box-shadow: 0 0 0 1.5vw black; */
+        border: 0.6vw solid black;
+        outline: 0.6vw solid white;
         flex-direction: column;
+        overflow: auto;
+        z-index: -2;
       }
-      h2 {
+
+      #game-screen__ui h2 {
+        align-self: center;
+        align-items: center;
+        justify-items: center;
+        vertical-align: middle;
         display: inline-block;
         font-size: calc(20px + 3vw);
         /* border: 1px solid magenta; */
         text-align: center;
-        justify-content: center;
-        width: 100%;
         text-transform: uppercase;
-
-        color: var(--clr-gold);
+        padding: 1.7vw 1.8vw;
+        line-height: 100%;
+        border-radius: 2.5vw;
+        color: var(--clr-violet);
         letter-spacing: 0.1vw;
         font-weight: normal;
-        /* text-shadow: 0 0.4rem 0 oklch(26.23% 0.064 227.12 / 80%); */
-        -webkit-text-stroke: 0.15rem black;
+        -webkit-text-stroke: 3px white;
+        border: 0.8vw solid black;
+        background-color: var(--clr-sky_blue);
+        outline: 0.4vw solid white;
+        position: absolute;
+        left: 5%;
+        top: 5%;
+        z-index:
+        overflow: auto;
+        transform: rotate(-5deg)
+      }
+
+       #quit-button {
+        display:inline-block;
+        /* position: relative; */
+        position:absolute;
+        bottom: 5%;
+        left: 5%;
+        clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+        width: 12vw;
+        height: 12vw;
+        box-sizing: border-box;
+        /* aspect-ratio: 46/40; */
+        background-color: black;
+        transform: rotate(10deg)
+      }
+
+      #quit-button #border {
+        display:inline-block;
+        position: relative;
+        left: 0.8vw;
+        top: 0.8vw;
+        clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+        width: 10.4vw;
+        height: 10.4vw;
+        box-sizing: border-box;
+        /* aspect-ratio: 46/40; */
+        background-color: white;
+        transform: rotate(1vw)
+
+      }
+
+
+      #quit-button button {
+        position: absolute;
+        top: 0.6vw;
+        left: 0.6vw;
+        clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+        width: calc(10.4vw - 1.2vw);
+        height: calc(10.4vw - 1.2vw);
+        background-color: red;
+        font-size: 2vw;
+        letter-spacing: 0.3vw;
+        font-family: "Rammetto One", sans-serif;
+        color: white;
+        text-transform: uppercase;
+        text-align:center;
+        font-weight: 200;
+        border: none;
+        transform: rotate(1vw)
+        /* text-align-last: justify; */
+
+
       }
     </style>
   </head>
@@ -123,12 +196,17 @@
     <img id="player-sprite" src="./assets/images/nan-sprite-walk.png" alt="" />
     <div class="game-screen">
       <div id="game-screen__ui">
-        <h2>Settings</h2>
+        <h2>Hello</h2>
         <ul>
           <li>Audio</li>
           <li>Graphics</li>
           <li>Controls</li>
         </ul>
+        <div id="quit-button">
+          <div id="border">
+            <button>Quit</button>
+          </div>
+        </div>
       </div>
       <canvas id="game-screen__canvas"></canvas>
     </div>
