@@ -1,18 +1,18 @@
-## 🇨🇦 Wieners from Heaven: Maple Syrup Edition
+## ![An animated sprite of a grandmother walking in place while facing right and holding a bowl](./docs/gdd/images/nan-walk-cycle-east.gif) Wieners from Heaven: Maple Syrup Edition 🇨🇦 🍁
 
-### 🌭 Overview ![An animated sprite of a grandmother walking in place while facing right and holding a bowl](./docs/gdd/images/nan-walk-cycle-east.gif)
+### 🌭 Overview
 
 This game is a side-scrolling platforming game in a 16-bit era style. The purpose of this project is to evaluate scope required to create a full-length game and to gauge interest from the gaming community by submitting to an itch.io game jam.
 
-### 🔍 What's Here
+> ⚠️ WARNING: This game is very incomplete, in active development (Feb-Mar 2024), and will contain many (MANY) bugs and broken or missing functionality/features. It will probably be the opposite of fun and it may even crash your web browser. 😱
 
-> ⚠️ WARNING: Game is in active development (Feb-Mar 2024) and will contain very (very) many bugs, and much brokenness. It may even crash your web browser. 😱
+⚠️ [Play Wieners From Heaven: Maple Syrup Edition](https://stevengranter.github.io/wieners-maple-syrup/src/) ⚠️
 
-🕹️ [Wieners From Heaven: Maple Syrup Jam Edition](./src/index.html)
+### 📝 Documents
 
-📝 [Game Design Document](./docs/gdd/index.html)
+[Game Design Document](https://stevengranter.github.io/wieners-maple-syrup/docs/gdd/index.html)
 
-### ⭐️ Bonus links
+### ⭐️ Bonus Items
 
 ![An album cover in pixel art style of a grandmother outdoors during a sunset holding a wicker basket full of wieners, while wieners fall from the sky](./src/assets/images/wfh-album-cover-01.png)
 
