@@ -80,8 +80,8 @@
         z-index: -10;
       }
 
-
       .game-screen #ui {
+        z-index: 100;
         /* TODO: Unhide menu */
         display: flex;
         /* align-items: center;
@@ -102,13 +102,13 @@
           rgba(153, 128, 217, 1) 12%,
           rgba(10, 209, 234, 1) 57%
         );
+        overflow: auto;
 
         /* box-shadow: 0 0 0 1.5vw black; */
         border: 0.6vw solid black;
         outline: 0.6vw solid white;
         flex-direction: column;
-        overflow: auto;
-        z-index: -2;
+        overflow: none;
       }
 
       button {
@@ -128,23 +128,21 @@
         letter-spacing: 0.1vw;
         font-weight: normal;
         border: 0.6vw solid black;
-         background: linear-gradient(
+        background: linear-gradient(
           300deg,
           var(--clr-green) 52%,
           VAR(--clr-gold) 80%
-        );;
+        );
 
         outline: 0.4vw solid white;
-         font-family: "Rammetto One", sans-serif;
-
-
+        font-family: "Rammetto One", sans-serif;
       }
 
       #continue-button {
-        position : absolute;
-        right:5vw;
-        bottom:3vw;
-        transform: rotate(-10deg)
+        position: absolute;
+        right: 5vw;
+        bottom: 3vw;
+        transform: rotate(-10deg);
       }
 
       #ui h2 {
@@ -170,15 +168,14 @@
         position: absolute;
         left: 5%;
         top: 5%;
-        z-index:
-        overflow: auto;
-        transform: rotate(-5deg)
+        overflow: none;
+        transform: rotate(-5deg);
       }
 
-       #quit-button {
-        display:inline-block;
+      #quit-button {
+        display: inline-block;
         /* position: relative; */
-        position:absolute;
+        position: absolute;
         bottom: 5%;
         left: 5%;
         clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
@@ -187,11 +184,11 @@
         box-sizing: border-box;
         /* aspect-ratio: 46/40; */
         background-color: black;
-        transform: rotate(10deg)
+        transform: rotate(10deg);
       }
 
       #quit-button #border {
-        display:inline-block;
+        display: inline-block;
         position: relative;
         left: 0.8vw;
         top: 0.8vw;
@@ -201,10 +198,8 @@
         box-sizing: border-box;
         /* aspect-ratio: 46/40; */
         background-color: white;
-        transform: rotate(1vw)
-
+        transform: rotate(1vw);
       }
-
 
       #quit-button button {
         position: absolute;
@@ -219,29 +214,29 @@
 
         color: white;
         text-transform: uppercase;
-        text-align:center;
+        text-align: center;
         font-weight: 200;
         border: none;
-        transform: rotate(1vw)
+        transform: rotate(1vw);
         /* text-align-last: justify; */
       }
 
-        .ui-icon {
-          width: 6vw;
-          height: auto;
-          max-width: 128px;
-          max-height: auto;
-        }
+      .ui-icon {
+        width: 6vw;
+        height: auto;
+        max-width: 128px;
+        max-height: auto;
+      }
 
-        #ui ul {
-          list-style: none;
-          margin:0;
-          padding:0;
-        }
+      #ui ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
 
-        #ui ul li {
-          padding: 1.5vw 0;
-        }
+      #ui ul li {
+        padding: 1.5vw 0;
+      }
     </style>
   </head>
   <body>

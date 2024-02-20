@@ -2,11 +2,11 @@
 
 ### Overview 🌤️
 
-This game is a side-scrolling platforming game in a 16-bit era style. The purpose of this project is to evaluate scope required to create a full-length game and to gauge interest from the gaming community by submitting to an itch.io game jam.
+This game is a side-scrolling platforming game in a 16-bit pixel-art style. The purpose of this project is to evaluate scope required to create a full-length game and to gauge interest from the gaming community by submitting to an itch.io game jam.
 
-> ⚠️ **WARNING**: This game is very incomplete, in active development (Feb-Mar 2024), and will contain many (MANY) bugs and broken or missing functionality/features. _It will probably be the opposite of fun and it may even crash your web browser._ 😱
+> ⛔️ **WARNING**: This game is incomplete, in active development (Feb-Mar 2024), and contains many, MANY bugs and broken or missing functionality/features. _It will probably be the opposite of fun and it may even crash your web browser._ 😳
 
-⚠️ [Play Wieners From Heaven: Maple Syrup Edition](https://stevengranter.github.io/wieners-maple-syrup/src/) ⚠️
+⚠️ [Play Wieners From Heaven: Maple Syrup Edition](https://stevengranter.github.io/wieners-maple-syrup/src/)
 
 ### Documents 📓
 
@@ -14,6 +14,10 @@ This game is a side-scrolling platforming game in a 16-bit era style. The purpos
 
 ### Official Game Soundtrack 💿
 
-| Track / Level                                                            | ![An album cover in pixel art style of a grandmother outdoors during a sunset holding a wicker basket full of wieners, while wieners fall from the sky](./src/assets/images/wfh-album-cover-01.png) |
-| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1. [i = "da b'y"](https://soundcloud.com/sans-unicorn-918008647/i-da-by) | Release date: February 18, 2024                                                                                                                                                                     |
+![An album cover in pixel art style of a grandmother outdoors during a sunset holding a wicker basket full of wieners, while wieners fall from the sky](./src/assets/images/wfh-album-cover-01.png)
+
+Track List
+
+1. [i = "da b'y"](https://soundcloud.com/sansunicorn/i-da-by) (released February 18, 2024)
+
+2. ...more soon!
