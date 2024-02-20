@@ -53,7 +53,7 @@
       h5 {
         font-family: "Rammetto One", sans-serif;
       }
-      img {
+      .hidden {
         display: none;
       }
 
@@ -80,7 +80,8 @@
         z-index: -10;
       }
 
-      .game-screen #game-screen__ui {
+
+      .game-screen #ui {
         /* TODO: Unhide menu */
         display: flex;
         /* align-items: center;
@@ -91,7 +92,7 @@
         height: 80%;
         margin: 0 auto;
         top: 10%;
-        padding: 8vw 4vw 2vw 4vw;
+        padding: 10vw 4vw 2vw 14vw;
         overflow: hidden;
         z-index: 10;
         border-radius: 2.5vw;
@@ -110,7 +111,43 @@
         z-index: -2;
       }
 
-      #game-screen__ui h2 {
+      button {
+        align-self: center;
+        align-items: center;
+        justify-items: center;
+        vertical-align: middle;
+        display: inline-block;
+        font-size: 2vw;
+        /* border: 1px solid magenta; */
+        text-align: center;
+        text-transform: uppercase;
+        padding: 1vw 1.2vw;
+        line-height: 100%;
+        border-radius: 1.5vw;
+        color: black;
+        letter-spacing: 0.1vw;
+        font-weight: normal;
+        border: 0.6vw solid black;
+         background: linear-gradient(
+          300deg,
+          var(--clr-green) 52%,
+          VAR(--clr-gold) 80%
+        );;
+
+        outline: 0.4vw solid white;
+         font-family: "Rammetto One", sans-serif;
+
+
+      }
+
+      #continue-button {
+        position : absolute;
+        right:5vw;
+        bottom:3vw;
+        transform: rotate(-10deg)
+      }
+
+      #ui h2 {
         align-self: center;
         align-items: center;
         justify-items: center;
@@ -176,10 +213,10 @@
         clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
         width: calc(10.4vw - 1.2vw);
         height: calc(10.4vw - 1.2vw);
-        background-color: red;
+        background: red;
         font-size: 2vw;
         letter-spacing: 0.3vw;
-        font-family: "Rammetto One", sans-serif;
+
         color: white;
         text-transform: uppercase;
         text-align:center;
@@ -187,21 +224,54 @@
         border: none;
         transform: rotate(1vw)
         /* text-align-last: justify; */
-
-
       }
+
+        .ui-icon {
+          width: 6vw;
+          height: auto;
+          max-width: 128px;
+          max-height: auto;
+        }
+
+        #ui ul {
+          list-style: none;
+          margin:0;
+          padding:0;
+        }
+
+        #ui ul li {
+          padding: 1.5vw 0;
+        }
     </style>
   </head>
   <body>
-    <img id="player-sprite" src="./assets/images/nan-sprite-walk.png" alt="" />
+    <img
+      class="hidden"
+      id="player-sprite"
+      src="./assets/images/nan-sprite-walk.png"
+      alt=""
+    />
     <div class="game-screen">
-      <div id="game-screen__ui">
-        <h2>Hello</h2>
+      <div id="ui">
+        <h2>Paused</h2>
         <ul>
-          <li>Audio</li>
-          <li>Graphics</li>
-          <li>Controls</li>
+          <li>
+            <img
+              class="ui-icon"
+              src="./assets/images/ui-music_icon.svg"
+              alt="Music Volume"
+            />
+          </li>
+          <li>
+            <img
+              class="ui-icon"
+              src="./assets/images/ui-sfx_icon.svg"
+              alt="Sound Effects Volume"
+            />
+          </li>
         </ul>
+
+        <button id="continue-button">Continue</button>
         <div id="quit-button">
           <div id="border">
             <button>Quit</button>
