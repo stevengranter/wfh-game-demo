@@ -3,186 +3,116 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wieners from Heaven: Maple Syrup Edition</title>
+    <title>⛔️ WARNING ⚠️</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Rammetto+One&family=Titan+One&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Coiny&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
     <style>
-      /* Color variables */
-      :root {
-        --clr-pink: oklch(70.58% 0.2641 359.47);
-        --clr-red: #f03668;
-        --clr-orange: #ff775a;
-        --clr-gold: #fcd224;
-        --clr-green: #a0cc50;
-        --clr-sky_blue: oklch(82.35% 0.1747 210.05);
-        --clr-purple: #d379ff;
-      }
-      * {
-        margin: 0;
-        padding: 0;
-      }
-
-      /* google font */
-
-      .rammetto-one-regular {
-        font-family: "Rammetto One", sans-serif;
-        font-weight: 400;
-        font-style: normal;
-      }
-
-      .silkscreen-regular {
-        font-family: "Silkscreen", sans-serif;
-        font-weight: 400;
-        font-style: normal;
-      }
-
-      .silkscreen-bold {
-        font-family: "Silkscreen", sans-serif;
-        font-weight: 700;
-        font-style: normal;
-      }
-
       body {
-        /* align-items: center; */
+        background-color: var(--clr-violet);
+        color: var(--clr-gold);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        vertical-align: middle;
         justify-content: center;
-        /* vertical-align: middle; */
-        min-height: 100vh;
-
-        background-color: var(--clr-sky_blue);
-        background: linear-gradient(
-          180deg,
-          var(--clr-sky_blue) 20%,
-          rgba(221, 252, 255, 1) 75%
-        );
+        height: 100vh;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        overflow: auto;
       }
+
       img {
+        max-width: 40vw;
+        /* max-height: 50vh; */
+        /* max-height: 40vh; */
+        z-index: 10;
+      }
+
+      h1 {
+        font-family: Coiny, system-ui;
+        background-color: var(--clr-gold);
+        color: black;
+        padding: 10px 20px;
+        border-radius: 15px;
         display: block;
-        margin: 0 auto;
-        max-width: 80vw;
-        max-height: 75vh;
-        /* transition: 0.5s; */
-        /* z-index: +100; */
-        /* animation: 2s ease 0s 1 slideInFromTop; */
-        /* top: 0; */
-      }
+        transform: translateY(30px) rotate(5deg);
 
-      img:hover {
-        /* transform: scale(105%) rotate(-5deg); */
-      }
-
-      .box {
-        /* opacity: 0%; */
-        position: relative;
-        width: 15rem;
-        padding: 12px 34px 16px 38px;
-        margin: 12px auto 20px auto;
-        display: block;
-        transition: 0.3s;
-        /* max-height: 15vh; */
-        /* transform: translateY(-200%); */
-        /* z-index: 10; */
-        /* animation: 1s ease-in-out 1s 1 slideInFromTop; */
-        /* animation-fill-mode: forwards; */
-        /* background: var(--clr-sky_blue); */
-      }
-      a {
-        text-decoration: none;
-        color: inherit;
-      }
-      .box:hover {
-        transform: scale(120%) rotate(-2deg);
-      }
-
-      .box::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        border-radius: 20px;
-        padding: 10px;
-
-        background: conic-gradient(
-          from var(--angle),
-          var(--clr-pink),
-          /* var(--clr-red), */ var(--clr-orange),
-          var(--clr-gold),
-          var(--clr-green),
-          var(--clr-sky_blue),
-          var(--clr-purple),
-          magenta
-        );
-        -webkit-mask: linear-gradient(#fff 0 0) content-box,
-          linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-        mask-composite: exclude;
-        /* cursor: pointer; */
-        /* pointer-events: none; */
-        animation: 4s rotate linear infinite;
-      }
-
-      @keyframes rotate {
-        to {
-          --angle: 360deg;
-        }
-      }
-
-      @keyframes slideInFromTop {
-        0% {
-          transform: translateY(-200%);
-        }
-        70% {
-          transform: translateY(0);
-        }
-        75% {
-          transform: rotate(2deg);
-        }
-        80% {
-          transform: rotate(-2deg);
-        }
-        85% {
-          transform: rotate(2deg);
-        }
-      }
-
-      @property --angle {
-        syntax: "<angle>";
-        initial-value: 0deg;
-        inherits: false;
-      }
-
-      h2 {
-        /* margin: 0 auto; */
-        display: block;
-        font-family: "Silkscreen", "Rammetto One", sans-serif;
-        font-size: 3.5rem;
-        font-weight: 400;
-        letter-spacing: 0.5rem;
-        /* border: 1px solid magenta; */
-        text-align: center;
-        color: #3f0279;
-        /* min-height: 100%; */
+        /* margin: 30px auto; */
+        border: 10px solid black;
+        outline: 5px solid white;
+        font-size: 4vw;
+        z-index: -20;
         text-transform: uppercase;
-        margin: 0;
-        padding: 0;
+        text-shadow: 4px 4px 0 white;
+      }
+      h1:before {
+        content: "! ";
+      }
+
+      h1:after {
+        content: " !";
+      }
+
+      p {
+        background: var(--clr-gold);
+        color: black;
+        /* margin: 30px 10px 0px 10px; */
+        padding: 30px;
+        border-radius: 15px;
+        border: 10px solid white;
+        max-width: 60ch;
+        transform: translateY(-40px) rotate(-2deg);
+        z-index: -1;
+      }
+
+      button.red {
+        background: var(--clr-red) !important;
+        color: white;
+        /* margin: 30px 0; */
+        outline: 0;
+        padding: 30px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-family: Coiny, sans-serif;
+        font-size: 2vw;
+      }
+
+      button.red:hover {
+        border-color: white;
+        transform: rotate(-4deg);
       }
     </style>
   </head>
   <body>
+    <div>
+      <h1>Here be dragons</h1>
+    </div>
+    <img
+      src="./assets/images/caution-dragon-01.png"
+      alt="A cute cartoon image of a baby blue dragon holding a caution sign with an exclamtion point on it"
+    />
+    <p>
+      <strong>WARNING:</strong> This game is incomplete, in active development
+      (Feb-Mar 2024), and contains many, MANY bugs and broken or missing
+      functionality/features. <em>It may crash your web browser, or worse.</em>
+    </p>
     <a href="game.html">
-      <img src="./assets/images/wfh-logo.webp" alt="Wieners From Heaven"
-    /></a>
-    <a href="game.html">
-      <div class="box">
-        <h2>Start</h2>
-      </div></a
-    >
+      <button class="red">
+        Play Wieners From
+        <span style="text-decoration: line-through">Hell</span> Heaven
+      </button>
+    </a>
   </body>
 </html>

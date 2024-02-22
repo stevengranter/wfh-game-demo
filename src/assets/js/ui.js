@@ -5,6 +5,7 @@ export default class UI {
         this.overlay = document.getElementById('game-screen__ui')
     }
 
+
     toggleOverlay() {
         if (this.overlay.style.display === 'block') {
             this.overlay.style.display = 'none'
@@ -12,4 +13,6 @@ export default class UI {
             this.overlay.style.display = 'block'
         }
     }
+
+
 }

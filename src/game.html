@@ -7,18 +7,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Rammetto+One&family=Titan+One&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
       href="https://fonts.googleapis.com/css2?family=Coiny&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./assets/css/style.css" />
-    <title>Wieners From Heaven : Maple Syrup Edition</title>
-    <style></style>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>🌭 Wieners From Heaven: Maple Syrup Edition 🇨🇦</title>
   </head>
   <body>
     <img
@@ -27,43 +26,153 @@
       src="./assets/images/nan-sprite-walk.png"
       alt=""
     />
-    <div class="game-screen">
-      <div id="ui">
-        <header><h2>Paused</h2></header>
-        <ul>
-          <li>
-            <label for="music-volume">
-              <img
-                class="ui-icon"
-                src="./assets/images/ui-music_icon.svg"
-                alt="Music Volume"
-              />
-            </label>
-            <div class="slidecontainer">
-              <input
-                title="music-volume"
-                type="range"
-                min="1"
-                max="100"
-                value="50"
-                class="slider"
-                id="myRange"
-              />
-            </div>
-          </li>
-          <li>
-            <img
-              class="ui-icon"
-              src="./assets/images/ui-sfx_icon.svg"
-              alt="Sound Effects Volume"
-            />
-          </li>
-        </ul>
 
-        <button class="continue-button">Continue</button>
-        <div id="quit-button">
-          <div id="border">
-            <button>Quit</button>
+    <h2 class="center">Title / Home Screen</h2>
+    <div class="game-screen">
+      <div class="game-screen__overlay">
+        <div class="game-screen__menu hidden">
+          <header><h2>Paused</h2></header>
+          <ul>
+            <li>
+              <label for="sfx-volume">
+                <img
+                  class="ui-icon"
+                  src="./assets/images/ui-sfx_icon.svg"
+                  alt="Sound Effects Volume"
+              /></label>
+              <div class="range-container">
+                <input
+                  title="sfx-volume"
+                  type="range"
+                  min="1"
+                  max="100"
+                  value="50"
+                  class="slider"
+                  id="sfx-range"
+                />
+              </div>
+            </li>
+            <li>
+              <label for="music-volume">
+                <img
+                  class="ui-icon"
+                  src="./assets/images/ui-music_icon.svg"
+                  alt="Music Volume"
+                />
+              </label>
+              <div class="range-container">
+                <input
+                  title="music-volume"
+                  type="range"
+                  min="1"
+                  max="100"
+                  value="50"
+                  class="slider"
+                  id="music-range"
+                />
+              </div>
+            </li>
+          </ul>
+
+          <div class="quit-button--stop-sign">
+            <div class="border">
+              <button>Quit</button>
+            </div>
+          </div>
+
+          <button class="continue-button">Continue</button>
+        </div>
+        <div class="title-screen">
+          <img src="./assets/images/wfh-logo.webp" alt="" />
+          <div class="game-screen__start-button">
+            <h2>Start</h2>
+          </div>
+        </div>
+      </div>
+      <canvas id="game-screen__canvas"></canvas>
+    </div>
+
+    <h2 class="center">Menu Screen</h2>
+    <div class="game-screen">
+      <div class="game-screen__overlay">
+        <div class="game-screen__menu">
+          <header><h2>Paused</h2></header>
+          <ul>
+            <li>
+              <label for="master-volume">
+                <img
+                  class="ui-icon"
+                  src="./assets/images/ui--volume-icon.svg"
+                  alt="Master Volume"
+              /></label>
+              <div class="range-container">
+                <input
+                  title="master-volume"
+                  type="range"
+                  min="1"
+                  max="100"
+                  value="50"
+                  class="slider"
+                  id="volume-range"
+                />
+              </div>
+            </li>
+
+            <li>
+              <label for="music-volume">
+                <img
+                  class="ui-icon"
+                  src="./assets/images/ui--music-icon.svg"
+                  alt="Music Volume"
+                />
+              </label>
+              <div class="range-container">
+                <input
+                  title="music-volume"
+                  type="range"
+                  min="1"
+                  max="100"
+                  value="50"
+                  class="slider"
+                  id="music-range"
+                />
+              </div>
+            </li>
+
+            <li>
+              <label for="ui-sfx_icon">
+                <img
+                  class="ui-icon"
+                  src="./assets/images/ui--sfx-icon.svg"
+                  alt="Sound Effects Volume"
+                />
+              </label>
+              <div class="range-container">
+                <input
+                  title="sfx-volume"
+                  type="range"
+                  min="1"
+                  max="100"
+                  value="50"
+                  class="slider"
+                  id="sfx-range"
+                />
+              </div>
+            </li>
+          </ul>
+
+          <div class="quit-button--stop-sign">
+            <div class="border">
+              <button>Quit</button>
+            </div>
+          </div>
+
+          <button class="continue-button">Continue</button>
+        </div>
+        <div class="title-screen hidden">
+          <img src="./assets/images/wfh-logo.webp" alt="" />
+          <div class="game-screen__start-button">
+            <h2>Start</h2>
           </div>
         </div>
       </div>
