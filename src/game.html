@@ -10,234 +10,15 @@
       href="https://fonts.googleapis.com/css2?family=Rammetto+One&family=Titan+One&display=swap"
       rel="stylesheet"
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Coiny&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Wieners From Heaven : Maple Syrup Edition</title>
-    <style>
-      /* Colour variables */
-      :root {
-        --clr-pink: oklch(70.58% 0.2641 359.47);
-        --clr-red: #f03668;
-        --clr-orange: #ff775a;
-        --clr-gold: #fcd224;
-        --clr-green: #a0cc50;
-        --clr-sky_blue: #0ad1ea;
-        --clr-violet: #460087;
-      }
-
-      /* google font */
-
-      .rammetto-one-regular {
-        font-family: "Rammetto One", sans-serif;
-        font-weight: 400;
-        font-style: normal;
-      }
-
-      /* Basic Reset */
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        overflow: hidden;
-        width: 100vw;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        font-size: calc(16px + 0.390625vw);
-      }
-
-      h1,
-      h2,
-      h3,
-      h4,
-      h5 {
-        font-family: "Rammetto One", sans-serif;
-      }
-      .hidden {
-        display: none;
-      }
-
-      .game-screen {
-        position: relative;
-        display: flex;
-        align-items: center;
-        vertical-align: middle;
-        aspect-ratio: 16 / 9;
-        width: 100%;
-        height: auto;
-        /* border: 5px solid magenta; */
-        /* background-color: black; */
-      }
-      .game-screen canvas {
-        position: absolute;
-        aspect-ratio: 16 / 9;
-        background: lightblue;
-        image-rendering: pixelated;
-        width: 100%;
-        height: auto;
-        top: 0;
-        left: 0;
-        z-index: -10;
-      }
-
-      .game-screen #ui {
-        z-index: 100;
-        /* TODO: Unhide menu */
-        display: flex;
-        /* align-items: center;
-      vertical-align: top; */
-
-        /* position: relative; */
-        width: 80%;
-        height: 80%;
-        margin: 0 auto;
-        top: 10%;
-        padding: 10vw 4vw 2vw 14vw;
-        overflow: hidden;
-        z-index: 10;
-        border-radius: 2.5vw;
-        background-color: var(--clr-sky_blue);
-        background: linear-gradient(
-          315deg,
-          rgba(153, 128, 217, 1) 12%,
-          rgba(10, 209, 234, 1) 57%
-        );
-        overflow: auto;
-
-        /* box-shadow: 0 0 0 1.5vw black; */
-        border: 0.6vw solid black;
-        outline: 0.6vw solid white;
-        flex-direction: column;
-        overflow: none;
-      }
-
-      button {
-        align-self: center;
-        align-items: center;
-        justify-items: center;
-        vertical-align: middle;
-        display: inline-block;
-        font-size: 2vw;
-        /* border: 1px solid magenta; */
-        text-align: center;
-        text-transform: uppercase;
-        padding: 1vw 1.2vw;
-        line-height: 100%;
-        border-radius: 1.5vw;
-        color: black;
-        letter-spacing: 0.1vw;
-        font-weight: normal;
-        border: 0.6vw solid black;
-        background: linear-gradient(
-          300deg,
-          var(--clr-green) 52%,
-          VAR(--clr-gold) 80%
-        );
-
-        outline: 0.4vw solid white;
-        font-family: "Rammetto One", sans-serif;
-      }
-
-      #continue-button {
-        position: absolute;
-        right: 5vw;
-        bottom: 3vw;
-        transform: rotate(-10deg);
-      }
-
-      #ui h2 {
-        align-self: center;
-        align-items: center;
-        justify-items: center;
-        vertical-align: middle;
-        display: inline-block;
-        font-size: calc(20px + 3vw);
-        /* border: 1px solid magenta; */
-        text-align: center;
-        text-transform: uppercase;
-        padding: 1.7vw 1.8vw;
-        line-height: 100%;
-        border-radius: 2.5vw;
-        color: var(--clr-violet);
-        letter-spacing: 0.1vw;
-        font-weight: normal;
-        -webkit-text-stroke: 3px white;
-        border: 0.8vw solid black;
-        background-color: var(--clr-sky_blue);
-        outline: 0.4vw solid white;
-        position: absolute;
-        left: 5%;
-        top: 5%;
-        overflow: none;
-        transform: rotate(-5deg);
-      }
-
-      #quit-button {
-        display: inline-block;
-        /* position: relative; */
-        position: absolute;
-        bottom: 5%;
-        left: 5%;
-        clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
-        width: 12vw;
-        height: 12vw;
-        box-sizing: border-box;
-        /* aspect-ratio: 46/40; */
-        background-color: black;
-        transform: rotate(10deg);
-      }
-
-      #quit-button #border {
-        display: inline-block;
-        position: relative;
-        left: 0.8vw;
-        top: 0.8vw;
-        clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
-        width: 10.4vw;
-        height: 10.4vw;
-        box-sizing: border-box;
-        /* aspect-ratio: 46/40; */
-        background-color: white;
-        transform: rotate(1vw);
-      }
-
-      #quit-button button {
-        position: absolute;
-        top: 0.6vw;
-        left: 0.6vw;
-        clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
-        width: calc(10.4vw - 1.2vw);
-        height: calc(10.4vw - 1.2vw);
-        background: red;
-        font-size: 2vw;
-        letter-spacing: 0.3vw;
-
-        color: white;
-        text-transform: uppercase;
-        text-align: center;
-        font-weight: 200;
-        border: none;
-        transform: rotate(1vw);
-        /* text-align-last: justify; */
-      }
-
-      .ui-icon {
-        width: 6vw;
-        height: auto;
-        max-width: 128px;
-        max-height: auto;
-      }
-
-      #ui ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-      }
-
-      #ui ul li {
-        padding: 1.5vw 0;
-      }
-    </style>
+    <style></style>
   </head>
   <body>
     <img
@@ -248,14 +29,27 @@
     />
     <div class="game-screen">
       <div id="ui">
-        <h2>Paused</h2>
+        <header><h2>Paused</h2></header>
         <ul>
           <li>
-            <img
-              class="ui-icon"
-              src="./assets/images/ui-music_icon.svg"
-              alt="Music Volume"
-            />
+            <label for="music-volume">
+              <img
+                class="ui-icon"
+                src="./assets/images/ui-music_icon.svg"
+                alt="Music Volume"
+              />
+            </label>
+            <div class="slidecontainer">
+              <input
+                title="music-volume"
+                type="range"
+                min="1"
+                max="100"
+                value="50"
+                class="slider"
+                id="myRange"
+              />
+            </div>
           </li>
           <li>
             <img
@@ -266,7 +60,7 @@
           </li>
         </ul>
 
-        <button id="continue-button">Continue</button>
+        <button class="continue-button">Continue</button>
         <div id="quit-button">
           <div id="border">
             <button>Quit</button>
