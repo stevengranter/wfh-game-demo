@@ -31,12 +31,13 @@
         font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
           sans-serif;
         overflow: auto;
+        overflow: auto;
+        height: 100%;
+        box-sizing: border-box;
       }
 
       img {
         max-width: 40vw;
-        /* max-height: 50vh; */
-        /* max-height: 40vh; */
         z-index: 10;
       }
 
@@ -44,35 +45,37 @@
         font-family: Coiny, system-ui;
         background-color: var(--clr-gold);
         color: black;
-        padding: 10px 20px;
+        padding: 20px 30px 26px;
         border-radius: 15px;
+        margin-top: 50px;
         display: block;
-        transform: translateY(30px) rotate(5deg);
-
-        /* margin: 30px auto; */
+        transform: translateY(50px) rotate(5deg);
         border: 10px solid black;
         outline: 5px solid white;
-        font-size: 4vw;
+        font-size: 6vw;
         z-index: -20;
         text-transform: uppercase;
-        text-shadow: 4px 4px 0 white;
+        width: fit-content;
       }
       h1:before {
         content: "! ";
+        font-size: 7vw;
       }
 
       h1:after {
         content: " !";
+        font-size: 7vw;
       }
 
       p {
         background: var(--clr-gold);
         color: black;
-        /* margin: 30px 10px 0px 10px; */
         padding: 30px;
         border-radius: 15px;
         border: 10px solid white;
-        max-width: 60ch;
+        outline: 10px solid black;
+        width: 60ch;
+        max-width: 80vw;
         transform: translateY(-40px) rotate(-2deg);
         z-index: -1;
       }
@@ -80,13 +83,13 @@
       button.red {
         background: var(--clr-red) !important;
         color: white;
-        /* margin: 30px 0; */
         outline: 0;
         padding: 30px;
-        border-radius: 30px;
+        border-radius: 4vw;
         cursor: pointer;
         font-family: Coiny, sans-serif;
-        font-size: 2vw;
+        font-size: 3vw;
+        margin: 10px 30px 40px;
       }
 
       button.red:hover {
@@ -111,7 +114,7 @@
     <a href="game.html">
       <button class="red">
         Play Wieners From
-        <span style="text-decoration: line-through">Hell</span> Heaven
+        <span style="text-decoration: line-through">Heaven</span> Hell
       </button>
     </a>
   </body>
