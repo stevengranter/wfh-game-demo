@@ -16,22 +16,28 @@ window.addEventListener('load', function () {
     const input = new InputHandler()
     const ui = new UI(canvas)
 
-    let paused = false
+    const startButton = document.getElementById('start-button')
+    const titleScreen = document.getElementById('title-screen')
+    const menuScreen = document.getElementById('menu-screen')
+
+
+    let isPaused = false
 
     let lastTime = 0
 
     window.addEventListener('keydown', (e) => {
         switch (e.key) {
             case "Escape":
-                paused = !paused
-                ui.toggleOverlay()
+                isPaused = !isPaused
+                console.log('pause toggled')
+                pauseGame()
                 break
         }
     })
 
     // game loop
     function animate(timeStamp) {
-        if (!paused) {
+        if (!isPaused) {
             const deltaTime = timeStamp - lastTime
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
@@ -39,12 +45,41 @@ window.addEventListener('load', function () {
             player.draw(ctx, deltaTime)
             drawStatusText(ctx, input)
             requestAnimationFrame(animate)
+        } else {
+            pauseGame()
         }
     }
 
     function startGame() {
+        // ui.toggleOverlay()
+        ui.hide(titleScreen)
+        canvas.classList.remove("hidden")
         animate(0)
     }
+
+
+
+    function pauseGame() {
+
+        if (isPaused) {
+            console.log("PAUSED")
+            console.log('in if (isPaused) condition ')
+            // canvas.classList.add("hidden")
+            // ui.toggleOverlay()
+            ui.show(menuScreen)
+            // document.getElementById('overlay').classList.remove("hidden")
+        }
+        else {
+            console.log("RUNNING")
+            canvas.classList.remove("hidden")
+            ui.hide(menuScreen)
+            animate(lastTime)
+        }
+    }
+
+    startButton.addEventListener('click', startGame)
+
+    //startGame()
 
     // startGame()
 

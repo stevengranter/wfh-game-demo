@@ -27,75 +27,9 @@
       alt=""
     />
 
-    <h2 class="center">Title / Home Screen</h2>
     <div class="game-screen">
-      <div class="game-screen__overlay">
-        <div class="game-screen__menu hidden">
-          <header><h2>Paused</h2></header>
-          <ul>
-            <li>
-              <label for="sfx-volume">
-                <img
-                  class="ui-icon"
-                  src="./assets/images/ui-sfx_icon.svg"
-                  alt="Sound Effects Volume"
-              /></label>
-              <div class="range-container">
-                <input
-                  title="sfx-volume"
-                  type="range"
-                  min="1"
-                  max="100"
-                  value="50"
-                  class="slider"
-                  id="sfx-range"
-                />
-              </div>
-            </li>
-            <li>
-              <label for="music-volume">
-                <img
-                  class="ui-icon"
-                  src="./assets/images/ui-music_icon.svg"
-                  alt="Music Volume"
-                />
-              </label>
-              <div class="range-container">
-                <input
-                  title="music-volume"
-                  type="range"
-                  min="1"
-                  max="100"
-                  value="50"
-                  class="slider"
-                  id="music-range"
-                />
-              </div>
-            </li>
-          </ul>
-
-          <div class="quit-button--stop-sign">
-            <div class="border">
-              <button>Quit</button>
-            </div>
-          </div>
-
-          <button class="continue-button">Continue</button>
-        </div>
-        <div class="title-screen">
-          <img src="./assets/images/wfh-logo.webp" alt="" />
-          <div class="game-screen__start-button">
-            <h2>Start</h2>
-          </div>
-        </div>
-      </div>
-      <canvas id="game-screen__canvas"></canvas>
-    </div>
-
-    <h2 class="center">Menu Screen</h2>
-    <div class="game-screen">
-      <div class="game-screen__overlay">
-        <div class="game-screen__menu">
+      <div id="overlay">
+        <div id="menu-screen" class="hidden">
           <header><h2>Paused</h2></header>
           <ul>
             <li>
@@ -103,8 +37,9 @@
                 <img
                   class="ui-icon"
                   src="./assets/images/ui--volume-icon.svg"
-                  alt="Master Volume"
-              /></label>
+                  alt="Music Volume"
+                />
+              </label>
               <div class="range-container">
                 <input
                   title="master-volume"
@@ -117,7 +52,6 @@
                 />
               </div>
             </li>
-
             <li>
               <label for="music-volume">
                 <img
@@ -138,15 +72,13 @@
                 />
               </div>
             </li>
-
             <li>
-              <label for="ui-sfx_icon">
+              <label for="sfx-volume">
                 <img
                   class="ui-icon"
                   src="./assets/images/ui--sfx-icon.svg"
                   alt="Sound Effects Volume"
-                />
-              </label>
+              /></label>
               <div class="range-container">
                 <input
                   title="sfx-volume"
@@ -169,15 +101,16 @@
 
           <button class="continue-button">Continue</button>
         </div>
-        <div class="title-screen hidden">
+        <div id="title-screen">
           <img src="./assets/images/wfh-logo.webp" alt="" />
-          <div class="game-screen__start-button">
+          <div id="start-button">
             <h2>Start</h2>
           </div>
         </div>
       </div>
-      <canvas id="game-screen__canvas"></canvas>
+      <canvas id="game-screen__canvas" class="hidden"></canvas>
     </div>
+
     <script type="module" src="./assets/js/game.js"></script>
   </body>
 </html>

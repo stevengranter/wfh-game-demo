@@ -74,9 +74,8 @@ h5 {
   display: flex;
   align-content: center;
   vertical-align: middle;
-
   aspect-ratio: 16 / 9;
-  width: 100%;
+  /* width: 100%; */
   height: auto;
 }
 
@@ -90,18 +89,17 @@ h5 {
   top: 0;
   left: 0;
   z-index: -10;
-  /* Hide canvas while working on user interface */
-  display: none;
+  display: flex;
 }
 
-.game-screen__overlay {
+#overlay {
   /* border: 1px solid magenta; */
   width: 100%;
   height: 100%;
   display: flex;
 }
 
-.game-screen__menu {
+#menu-screen {
   z-index: 100;
   align-self: center;
   width: 80%;
@@ -157,7 +155,7 @@ button:hover {
   transform: rotate(0deg) scale(120%);
 }
 
-.game-screen__menu header {
+#menu-screen header {
   align-self: center;
   align-items: center;
   vertical-align: middle;
@@ -174,7 +172,7 @@ button:hover {
   transform: rotate(-5deg);
 }
 
-.game-screen__menu h2 {
+#menu-screen h2 {
   text-align: center;
   text-transform: uppercase;
   font-size: calc(20px + 3vw);
@@ -234,7 +232,7 @@ button:hover {
   max-height: auto;
 }
 
-.game-screen__menu li {
+#menu-screen li {
   list-style-type: none;
   padding: 0.5vw 1vw;
   display: flex;
@@ -244,17 +242,15 @@ button:hover {
   vertical-align: middle;
 }
 
-.game-screen__menu li {
+#menu-screen li {
   list-style-type: none;
-  /* padding: 1.5vw 0; */
   display: flex;
   justify-content: space-between;
   text-align: center;
-  /* align-items: center; */
   vertical-align: middle;
 }
 
-.title-screen {
+#title-screen {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -262,11 +258,11 @@ button:hover {
   flex-direction: column;
 }
 
-.title-screen > img {
+#title-screen > img {
   max-width: 40vw;
 }
 
-.game-screen__start-button {
+#start-button {
   position: relative;
 
   padding: 12px 34px 0px 38px;
@@ -280,11 +276,11 @@ a {
   text-decoration: none;
   color: inherit;
 }
-.game-screen__start-button:hover {
+#start-button:hover {
   transform: scale(120%) rotate(-2deg);
 }
 
-.game-screen__start-button::before {
+#start-button::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -337,7 +333,7 @@ a {
   inherits: false;
 }
 
-.game-screen__start-button h2 {
+#start-button h2 {
   display: block;
   font-family: Silkscreen, sans-serif;
   font-size: 7vw;
