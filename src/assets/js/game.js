@@ -18,9 +18,10 @@ window.addEventListener('load', function () {
 
     const titleScreen = document.getElementById('title-screen')
     const menuScreen = document.getElementById('menu-screen')
+    const gameplayHUD = document.getElementById('gameplay-hud')
 
     const startButton = document.getElementById('start-button')
-    const resumeButton = document.getElementById('resume-button')
+    const pauseButton = document.getElementById('pause-button')
     const stopButton = document.getElementById('stop-button')
 
     let isPaused = false
@@ -55,6 +56,7 @@ window.addEventListener('load', function () {
     function startGame() {
         // ui.toggleOverlay()
         ui.hide(titleScreen)
+        ui.show(gameplayHUD)
         canvas.classList.remove("hidden")
         animate(lastTime)
     }
@@ -75,13 +77,16 @@ window.addEventListener('load', function () {
             console.log('in if (isPaused) condition ')
             // canvas.classList.add("hidden")
             // ui.toggleOverlay()
+            pauseButton.innerText = "Resume"
             ui.show(menuScreen)
             // document.getElementById('overlay').classList.remove("hidden")
         }
         else {
             console.log("RUNNING")
             canvas.classList.remove("hidden")
+            pauseButton.innerText = "Pause"
             ui.hide(menuScreen)
+
             animate(lastTime)
             isPaused = false
         }
@@ -91,7 +96,7 @@ window.addEventListener('load', function () {
 
     stopButton.addEventListener('click', stopGame)
 
-    resumeButton.addEventListener('click', (e) => {
+    pauseButton.addEventListener('click', (e) => {
         isPaused = !isPaused
         console.log('pause toggled')
         pauseGame()

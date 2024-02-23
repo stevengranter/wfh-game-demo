@@ -100,7 +100,7 @@ h5 {
 }
 
 #menu-screen {
-  z-index: 100;
+  /* z-index: 20; */
   align-self: center;
   width: 80%;
   height: 80%;
@@ -143,14 +143,16 @@ button {
   transition: all 0.1s;
 }
 
-#resume-button {
+#resume-button,
+#pause-button {
   position: absolute;
   right: 5vw;
-  bottom: 3vw;
+  top: 5vw;
   transform: rotate(5deg);
   transition: all 0.1s;
   font-size: 4vw;
   background: var(--clr-green);
+  z-index: ;
 }
 
 #resume-button:hover {
