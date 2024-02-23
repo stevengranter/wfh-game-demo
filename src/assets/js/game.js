@@ -16,10 +16,12 @@ window.addEventListener('load', function () {
     const input = new InputHandler()
     const ui = new UI(canvas)
 
-    const startButton = document.getElementById('start-button')
     const titleScreen = document.getElementById('title-screen')
     const menuScreen = document.getElementById('menu-screen')
 
+    const startButton = document.getElementById('start-button')
+    const resumeButton = document.getElementById('resume-button')
+    const stopButton = document.getElementById('stop-button')
 
     let isPaused = false
 
@@ -54,13 +56,20 @@ window.addEventListener('load', function () {
         // ui.toggleOverlay()
         ui.hide(titleScreen)
         canvas.classList.remove("hidden")
-        animate(0)
+        animate(lastTime)
+    }
+
+    function stopGame() {
+        // isPaused = true
+        // ui.toggleOverlay()
+        ui.hide(menuScreen)
+        ui.show(titleScreen)
+        canvas.classList.add("hidden")
+        lastTime = 0
     }
 
 
-
     function pauseGame() {
-
         if (isPaused) {
             console.log("PAUSED")
             console.log('in if (isPaused) condition ')
@@ -74,10 +83,21 @@ window.addEventListener('load', function () {
             canvas.classList.remove("hidden")
             ui.hide(menuScreen)
             animate(lastTime)
+            isPaused = false
         }
     }
 
     startButton.addEventListener('click', startGame)
+
+    stopButton.addEventListener('click', stopGame)
+
+    resumeButton.addEventListener('click', (e) => {
+        isPaused = !isPaused
+        console.log('pause toggled')
+        pauseGame()
+    })
+
+
 
     //startGame()
 
