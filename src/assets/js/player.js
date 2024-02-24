@@ -1,4 +1,4 @@
-import { StandingLeft, StandingRight, RunningLeft, RunningRight, Jump } from "./state.js"
+import { StandingLeft, StandingRight, RunningLeft, RunningRight, JumpingLeft, JumpingRight } from "./state.js"
 
 export default class Player {
 
@@ -10,11 +10,10 @@ export default class Player {
         this.gameHeight = gameHeight
 
 
-        this.states = [new StandingLeft(this), new StandingRight(this), new RunningLeft(this), new RunningRight(this), new Jump(this)]
+        this.states = [new StandingLeft(this), new StandingRight(this), new RunningLeft(this), new RunningRight(this), new JumpingLeft(this), new JumpingRight(this)]
         this.stateHistory = []
         // currentState is at index 0 of states array
         this.currentState = this.states[0]
-
 
 
         this.image = document.getElementById('player-sprite')
@@ -24,6 +23,9 @@ export default class Player {
 
         this.x = Math.floor((this.gameWidth - this.width) / 2)
         this.y = Math.floor(this.gameHeight - this.height)
+
+        this.vy = 0 /* velocityY */
+        this.weight = 0.8
 
         this.frameX = 0
         this.frameY = 0
@@ -69,18 +71,37 @@ export default class Player {
     update(input) {
 
         this.currentState.handleInput(input)
+
+        //horizontal movement
         this.x += this.speedX
-        this.y += this.speedY
+
+        //
         if (this.x <= 0) this.x = 0
         else if (this.x >= this.gameWidth - this.width) this.x = this.gameWidth - this.width
+
+        // vertical movement
+        this.y += this.vy
+        if (!this.onGround()) {
+            this.vy += this.weight
+        } else {
+            this.vy = 0
+        }
+        // Prevent player from falling through floor
+        if (this.y > this.gameHeight - this.height) this.y = this.gameHeight = this.height
     }
 
     setState(state) {
         this.currentState = this.states[state]
-        // Add currentState to stateHistory array
-        // TODO: Limit array size
-        this.stateHistory.unshift(this.currentState)
-        console.log(this.stateHistory)
+        // // Add currentState to stateHistory array
+        // this.stateHistory.unshift(this.currentState)
+        // console.log(this.stateHistory)
         this.currentState.enter()
     }
+
+    // Utility classes
+
+    onGround() {
+        return this.y >= this.gameHeight - this.height
+    }
+
 }

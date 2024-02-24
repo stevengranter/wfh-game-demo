@@ -67,7 +67,7 @@ window.addEventListener('load', function () {
     function stopGame() {
         isPaused = false
         lastTime = 0
-        location.reload() // TODO: Find better way of doing this
+        location.reload() // TODO: Find better way of resetting game
     }
 
 
