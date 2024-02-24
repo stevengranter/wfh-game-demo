@@ -152,10 +152,10 @@ button {
   transition: all 0.1s;
   font-size: 4vw;
   background: var(--clr-green);
-  z-index: ;
 }
 
-#resume-button:hover {
+#resume-button:hover,
+#pause-button:hover {
   transform: rotate(0deg) scale(120%);
 }
 
@@ -360,6 +360,7 @@ a {
 }
 
 .slider {
+  appearance: none;
   -webkit-appearance: none;
   width: 100%;
   height: 2.2vw;
@@ -405,4 +406,17 @@ a {
   border-radius: 20vw;
   border: 0.8vw solid black;
   outline: 0.5vw solid white;
+}
+
+/* || HUD element styles */
+
+#gameplay-hud {
+  margin: 2vw;
+}
+#hud--score {
+  color: var(--clr-violet);
+  font-size: 6vw;
+  font-family: Coiny, system-ui;
+  text-shadow: -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff,
+    3px 3px 0 #fff;
 }

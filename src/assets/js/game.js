@@ -22,6 +22,7 @@ window.addEventListener('load', function () {
 
     const startButton = document.getElementById('start-button')
     const pauseButton = document.getElementById('pause-button')
+    const resumeButton = document.getElementById('resume-button')
     const stopButton = document.getElementById('stop-button')
 
     let isPaused = false
@@ -46,7 +47,7 @@ window.addEventListener('load', function () {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             player.update(input.lastKey)
             player.draw(ctx, deltaTime)
-            drawStatusText(ctx, input)
+            // drawStatusText(ctx, input)
             requestAnimationFrame(animate)
         } else {
             pauseGame()
@@ -55,19 +56,18 @@ window.addEventListener('load', function () {
 
     function startGame() {
         // ui.toggleOverlay()
+        console.log('lastTime =' + lastTime)
         ui.hide(titleScreen)
+        ui.hide(menuScreen)
         ui.show(gameplayHUD)
         canvas.classList.remove("hidden")
-        animate(lastTime)
+        animate(0)
     }
 
     function stopGame() {
-        // isPaused = true
-        // ui.toggleOverlay()
-        ui.hide(menuScreen)
-        ui.show(titleScreen)
-        canvas.classList.add("hidden")
+        isPaused = false
         lastTime = 0
+        location.reload() // TODO: Find better way of doing this
     }
 
 
@@ -75,18 +75,21 @@ window.addEventListener('load', function () {
         if (isPaused) {
             console.log("PAUSED")
             console.log('in if (isPaused) condition ')
+            console.log('lastTime =' + lastTime)
             // canvas.classList.add("hidden")
             // ui.toggleOverlay()
-            pauseButton.innerText = "Resume"
+            // pauseButton.innerText = "Resume"
             ui.show(menuScreen)
+            ui.hide(gameplayHUD)
             // document.getElementById('overlay').classList.remove("hidden")
         }
         else {
             console.log("RUNNING")
+            console.log('in if (!isPaused) condition ')
             canvas.classList.remove("hidden")
-            pauseButton.innerText = "Pause"
+            // pauseButton.innerText = "Pause"
             ui.hide(menuScreen)
-
+            ui.show(gameplayHUD)
             animate(lastTime)
             isPaused = false
         }
@@ -99,6 +102,11 @@ window.addEventListener('load', function () {
     pauseButton.addEventListener('click', (e) => {
         isPaused = !isPaused
         console.log('pause toggled')
+        pauseGame()
+    })
+
+    resumeButton.addEventListener('click', (e) => {
+        isPaused = !isPaused
         pauseGame()
     })
 

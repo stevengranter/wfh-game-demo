@@ -46,7 +46,7 @@
                   type="range"
                   min="1"
                   max="100"
-                  value="50"
+                  value="100"
                   class="slider"
                   id="volume-range"
                 />
@@ -66,7 +66,7 @@
                   type="range"
                   min="1"
                   max="100"
-                  value="50"
+                  value="100"
                   class="slider"
                   id="music-range"
                 />
@@ -85,13 +85,14 @@
                   type="range"
                   min="1"
                   max="100"
-                  value="50"
+                  value="100"
                   class="slider"
                   id="sfx-range"
                 />
               </div>
             </li>
           </ul>
+          <button id="resume-button">Resume</button>
 
           <div id="stop-button">
             <div class="border">
@@ -108,6 +109,7 @@
           </div>
         </div>
         <div id="gameplay-hud" class="hidden">
+          <div id="hud--score">0000</div>
           <button id="pause-button">Pause</button>
         </div>
       </div>
