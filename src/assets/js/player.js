@@ -16,7 +16,7 @@ export default class Player {
         this.currentState = this.states[0]
 
 
-        this.image = document.getElementById('player-sprite')
+        this.image = document.getElementById("player-sprite")
 
         this.width = 48
         this.height = 48

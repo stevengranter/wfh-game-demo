@@ -2,7 +2,7 @@ export default class UI {
 
     constructor(canvas) {
         this.canvas = canvas
-        this.overlay = document.getElementById('overlay')
+        this.overlay = document.getElementById("overlay")
         console.log(overlay)
     }
 
@@ -10,10 +10,10 @@ export default class UI {
     toggleOverlay() {
         if (this.overlay.classList.contains("hidden")) {
             this.overlay.classList.remove("hidden")
-            console.log('toggleOverlay(on)')
+            console.log("toggleOverlay(on)")
         } else {
             this.overlay.classList.add("hidden")
-            console.log('toggleOverlay(off)')
+            console.log("toggleOverlay(off)")
         }
 
     }
@@ -25,6 +25,7 @@ export default class UI {
     hide(element) {
         element.classList.add("hidden")
     }
+
 
 
 }

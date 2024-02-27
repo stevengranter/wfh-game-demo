@@ -16,7 +16,7 @@ class State {
 
 export class StandingLeft extends State {
     constructor(player) {
-        super('STANDING LEFT')
+        super("STANDING LEFT")
         this.player = player
     }
     enter() {
@@ -27,16 +27,16 @@ export class StandingLeft extends State {
     }
 
     handleInput(input) {
-        if (input === 'PRESS right') this.player.setState(states.RUNNING_RIGHT)
-        else if (input === 'PRESS left') this.player.setState(states.RUNNING_LEFT)
-        else if (input === 'PRESS up') this.player.setState(states.JUMPING_LEFT)
+        if (input === "PRESS right") this.player.setState(states.RUNNING_RIGHT)
+        else if (input === "PRESS left") this.player.setState(states.RUNNING_LEFT)
+        else if (input === "PRESS up") this.player.setState(states.JUMPING_LEFT)
 
     }
 }
 
 export class StandingRight extends State {
     constructor(player) {
-        super('STANDING RIGHT')
+        super("STANDING RIGHT")
         this.player = player
     }
     enter() {
@@ -46,15 +46,15 @@ export class StandingRight extends State {
     }
 
     handleInput(input) {
-        if (input === 'PRESS left') this.player.setState(states.RUNNING_LEFT)
-        else if (input === 'PRESS right') this.player.setState(states.RUNNING_RIGHT)
-        else if (input === 'PRESS up') this.player.setState(states.JUMPING_RIGHT)
+        if (input === "PRESS left") this.player.setState(states.RUNNING_LEFT)
+        else if (input === "PRESS right") this.player.setState(states.RUNNING_RIGHT)
+        else if (input === "PRESS up") this.player.setState(states.JUMPING_RIGHT)
     }
 }
 
 export class RunningLeft extends State {
     constructor(player) {
-        super('RUNNING LEFT')
+        super("RUNNING LEFT")
         this.player = player
 
 
@@ -66,17 +66,17 @@ export class RunningLeft extends State {
     }
 
     handleInput(input) {
-        if (input === 'PRESS right') this.player.setState(states.RUNNING_RIGHT)
-        else if (input === 'RELEASE left') this.player.setState(states.STANDING_LEFT)
-        else if (input === 'PRESS up') this.player.setState(states.JUMPING_LEFT)
-        // if (input === 'PRESS Escape') this.player.setState(states.PAUSE)
+        if (input === "PRESS right") this.player.setState(states.RUNNING_RIGHT)
+        else if (input === "RELEASE left") this.player.setState(states.STANDING_LEFT)
+        else if (input === "PRESS up") this.player.setState(states.JUMPING_LEFT)
+        // if (input === "PRESS Escape") this.player.setState(states.PAUSE)
 
     }
 }
 
 export class RunningRight extends State {
     constructor(player) {
-        super('RUNNING RIGHT')
+        super("RUNNING RIGHT")
         this.player = player
 
 
@@ -88,16 +88,16 @@ export class RunningRight extends State {
     }
 
     handleInput(input) {
-        if (input === 'PRESS left') this.player.setState(states.RUNNING_LEFT)
-        else if (input === 'RELEASE right') this.player.setState(states.STANDING_RIGHT)
-        else if (input === 'PRESS up') this.player.setState(states.JUMPING_RIGHT)
-        // if (input === 'PRESS Escape') this.player.setState(states.PAUSE)
+        if (input === "PRESS left") this.player.setState(states.RUNNING_LEFT)
+        else if (input === "RELEASE right") this.player.setState(states.STANDING_RIGHT)
+        else if (input === "PRESS up") this.player.setState(states.JUMPING_RIGHT)
+        // if (input === "PRESS Escape") this.player.setState(states.PAUSE)
     }
 }
 
 export class JumpingLeft extends State {
     constructor(player) {
-        super('JUMPING LEFT')
+        super("JUMPING LEFT")
         this.player = player
     }
     enter() {
@@ -113,7 +113,7 @@ export class JumpingLeft extends State {
 
 export class JumpingRight extends State {
     constructor(player) {
-        super('JUMPING RIGHT')
+        super("JUMPING RIGHT")
         this.player = player
     }
     enter() {
