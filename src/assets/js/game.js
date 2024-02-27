@@ -13,6 +13,9 @@ window.addEventListener('load', function () {
     canvas.width = 475 //* this.devicePixelRatio
     canvas.height = 270 //*
 
+    const body = document.getElementsByTagName('body')[0]
+    console.log(body)
+
     const player = new Player(canvas.width, canvas.height)
     const input = new InputHandler()
     const ui = new UI(canvas)
@@ -80,6 +83,7 @@ window.addEventListener('load', function () {
         ui.hide(menuScreen)
         initScore()
         ui.show(gameplayHUD)
+        body.classList.add("green-bg")
         canvas.classList.remove("hidden")
         animate(0)
     }

@@ -71,6 +71,10 @@ h5 {
   text-align: center;
 }
 
+.green-bg {
+  background-color: var(--clr-green);
+}
+
 /* Game Screen classes */
 
 .game-screen {
