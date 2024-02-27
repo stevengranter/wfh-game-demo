@@ -1,5 +1,6 @@
 import Player from './player.js'
 import InputHandler from './input.js'
+import Collectible from './collectible.js'
 import { drawStatusText } from './utils.js'
 import UI from './ui.js'
 
@@ -25,6 +26,13 @@ window.addEventListener('load', function () {
     const resumeButton = document.getElementById('resume-button')
     const stopButton = document.getElementById('stop-button')
 
+
+    // define our collectibles //
+
+    const wienerImage = document.getElementById('wiener-sprite-01')
+
+    const wiener = new Collectible(wienerImage, 0, 0, 48, 48, 50)
+
     let isPaused = false
 
     let lastTime = 0
@@ -39,6 +47,8 @@ window.addEventListener('load', function () {
         }
     })
 
+
+
     // game loop
     function animate(timeStamp) {
         if (!isPaused) {
@@ -47,6 +57,10 @@ window.addEventListener('load', function () {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             player.update(input.lastKey)
             player.draw(ctx, deltaTime)
+            wiener.update()
+            wiener.draw(ctx, deltaTime, 220, -100, 32, 32)
+            console.log(detectCollision(player, wiener))
+
             // drawStatusText(ctx, input)
             requestAnimationFrame(animate)
         } else {
@@ -110,11 +124,30 @@ window.addEventListener('load', function () {
         pauseGame()
     })
 
+    function detectCollision(object1, object2) {
+        // console.log(object2.y + object2.height)
+        // console.log(object2.y)
+        // console.log((object1.x + object1.width))
+        // console.log(object2.x)
+        return (
 
+            // (object2.y + object2.height) >= object1.y
+            //     &&
+            (object1.y + object1.height) <= object2.y
 
-    //startGame()
+            //     ((object1.x + object1.width) >= object2.x &&
+
+            //         // object1 Right Side collides with object1 Left side 
+            //         (object2.x + object2.width) >= object1.x)
+            // 
+        )
+
+    }
 
     // startGame()
+
+
+
 
 
 })

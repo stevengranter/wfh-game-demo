@@ -21,15 +21,42 @@
   </head>
   <body>
     <img
-      class="hidden"
       id="player-sprite"
+      class="hidden"
       src="./assets/images/nan-sprite-walk.png"
+      alt=""
+    />
+    <img
+      id="wiener-sprite-01"
+      class="hidden"
+      src="./assets/images/wiener-ani-01.gif"
+    />
+    <img
+      src="./assets/images/broken-01.png"
+      class="hidden"
+      id="broken-sprite"
       alt=""
     />
 
     <div class="game-screen">
+      <canvas id="game-screen__canvas" class="hidden"></canvas>
+
       <div id="overlay">
-        <div id="menu-screen" class="hidden">
+        <div id="gameplay-hud" class="hidden">
+          <div id="hud--score">0000</div>
+          <button id="pause-button">Pause</button>
+        </div>
+
+        <div id="title-screen">
+          <img src="./assets/images/wfh-logo.webp" alt="" />
+          <div id="start-button">
+            <h2>Start</h2>
+          </div>
+        </div>
+
+        <!-- START: #menu-screen -->
+
+        <div id="menu-screen" class="ui-panel hidden">
           <header><h2>Options</h2></header>
           <ul>
             <li>
@@ -99,21 +126,12 @@
               <button>Stop</button>
             </div>
           </div>
-
-          <!-- <button id="resume-button">Resume</button> -->
         </div>
-        <div id="title-screen">
-          <img src="./assets/images/wfh-logo.webp" alt="" />
-          <div id="start-button">
-            <h2>Start</h2>
-          </div>
-        </div>
-        <div id="gameplay-hud" class="hidden">
-          <div id="hud--score">0000</div>
-          <button id="pause-button">Pause</button>
+        <!-- #menu-screen :END -->
+        <div id="intro-screen" class="ui-panel hidden">
+          <img src="./assets/images/ui-controls-directional-01.png" alt="" />
         </div>
       </div>
-      <canvas id="game-screen__canvas" class="hidden"></canvas>
     </div>
 
     <script type="module" src="./assets/js/game.js"></script>
