@@ -1,3 +1,4 @@
+// Import modules
 import Player from "./player.js"
 import InputHandler from "./input.js"
 import Collectible from "./collectible.js"
@@ -6,42 +7,45 @@ import UI from "./ui.js"
 
 // wait for page to fully load
 window.addEventListener("load", function () {
+
+    // Initialize canvas 🎨 //
     const canvas = document.getElementById("game-screen__canvas")
-
     const ctx = canvas.getContext("2d")
-    ctx.imageSmoothingEnabled = false
-    canvas.width = 475 //* this.devicePixelRatio
-    canvas.height = 270 //*
+    canvas.width = 475
+    canvas.height = 270
+    ctx.imageSmoothingEnabled = false // keeps sprites pixelated
 
+    // DOM UI elements //
     const body = document.getElementsByTagName("body")[0]
-
-    const player = new Player(canvas.width, canvas.height)
-    const input = new InputHandler()
-    const ui = new UI(canvas)
-
-    const scoreDisplay = document.getElementById("hud-score")
-
     const titleScreen = document.getElementById("title-screen")
-    const menuScreen = document.getElementById("menu-screen")
-    const gameplayHUD = document.getElementById("gameplay-hud")
 
+    // Menu DOM elements
+    const menuScreen = document.getElementById("menu-screen")
     const startButton = document.getElementById("start-button")
     const pauseButton = document.getElementById("pause-button")
     const resumeButton = document.getElementById("resume-button")
     const stopButton = document.getElementById("stop-button")
 
+    // In-game DOM elements
+    const gameplayHUD = document.getElementById("gameplay-hud")
+    const scoreDisplay = document.getElementById("hud-score")
 
-    // define our collectibles //
+    // Game objects
+    const player = new Player(canvas.width, canvas.height)
+    const input = new InputHandler()
+    const ui = new UI(canvas)
 
+    // Collectibles 
     const wienerImage = document.getElementById("wiener-sprite-01")
-
     const wiener = new Collectible(wienerImage, 0, 0, 48, 48, 50)
 
-
-    let isPaused = false
+    // Initialize game variables
     let currentScore = 0
     let lastTime = 0
+    let isPaused = false
 
+
+    // Event listeners
     window.addEventListener("keydown", (e) => {
         switch (e.key) {
             case "Escape":
@@ -52,9 +56,22 @@ window.addEventListener("load", function () {
         }
     })
 
+    startButton.addEventListener("click", startGame)
+
+    stopButton.addEventListener("click", stopGame)
+
+    pauseButton.addEventListener("click", (e) => {
+        isPaused = !isPaused
+        pauseGame()
+    })
+
+    resumeButton.addEventListener("click", (e) => {
+        isPaused = !isPaused
+        pauseGame()
+    })
 
 
-    // game loop
+    // Game loop
     function animate(timeStamp) {
         if (!isPaused) {
             const deltaTime = timeStamp - lastTime
@@ -76,6 +93,8 @@ window.addEventListener("load", function () {
         }
     }
 
+
+    // Game state functions
     function startGame() {
         ui.hide(titleScreen)
         ui.hide(menuScreen)
@@ -92,7 +111,6 @@ window.addEventListener("load", function () {
         location.reload() // TODO: Find better way of resetting game
     }
 
-
     function pauseGame() {
         if (isPaused) {
             ui.show(menuScreen)
@@ -106,20 +124,8 @@ window.addEventListener("load", function () {
         }
     }
 
-    startButton.addEventListener("click", startGame)
 
-    stopButton.addEventListener("click", stopGame)
-
-    pauseButton.addEventListener("click", (e) => {
-        isPaused = !isPaused
-        pauseGame()
-    })
-
-    resumeButton.addEventListener("click", (e) => {
-        isPaused = !isPaused
-        pauseGame()
-    })
-
+    // Collision detection
     function detectCollision(object1, object2) {
         // console.log(object2.y + object2.height)
         // console.log(object2.y)
@@ -141,6 +147,11 @@ window.addEventListener("load", function () {
     }
 
 
+    // Score-keeping
+    function initScore() {
+        scoreDisplay.innerHTML = String(currentScore).padStart(4, "0")
+    }
+
     function updateScore(object) {
         if (object) {
             if (!object.isScored) {
@@ -151,9 +162,9 @@ window.addEventListener("load", function () {
         }
     }
 
-    function initScore() {
-        scoreDisplay.innerHTML = String(currentScore).padStart(4, "0")
-    }
+
+
+    // Uncomment to bypass title screen
     // startGame()
 
 
