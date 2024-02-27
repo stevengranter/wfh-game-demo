@@ -7,6 +7,7 @@ export default class Collectible {
         sWidth,
         sHeight,
         pointValue = 0,
+        isScored = false,
         speedX = 1,
         speedY = 1
     ) {
@@ -18,8 +19,11 @@ export default class Collectible {
         this.speedX = speedX
         this.speedY = speedY
 
-        this.width = sWidth,
-            this.height = sHeight
+        this.pointValue = pointValue
+        this.isScored = isScored
+
+        this.width = sWidth
+        this.height = sHeight
 
     }
 

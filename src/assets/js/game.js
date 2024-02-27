@@ -17,6 +17,8 @@ window.addEventListener('load', function () {
     const input = new InputHandler()
     const ui = new UI(canvas)
 
+    const scoreDisplay = document.getElementById("hud-score")
+
     const titleScreen = document.getElementById('title-screen')
     const menuScreen = document.getElementById('menu-screen')
     const gameplayHUD = document.getElementById('gameplay-hud')
@@ -33,8 +35,9 @@ window.addEventListener('load', function () {
 
     const wiener = new Collectible(wienerImage, 0, 0, 48, 48, 50)
 
-    let isPaused = false
 
+    let isPaused = false
+    let currentScore = 0
     let lastTime = 0
 
     window.addEventListener('keydown', (e) => {
@@ -59,9 +62,11 @@ window.addEventListener('load', function () {
             player.draw(ctx, deltaTime)
             wiener.update()
             wiener.draw(ctx, deltaTime, 220, -100, 32, 32)
-            console.log(detectCollision(player, wiener))
+            if (detectCollision(player, wiener)) {
+                updateScore(wiener)
+            }
 
-            // drawStatusText(ctx, input)
+
             requestAnimationFrame(animate)
         } else {
             pauseGame()
@@ -73,6 +78,7 @@ window.addEventListener('load', function () {
         console.log('lastTime =' + lastTime)
         ui.hide(titleScreen)
         ui.hide(menuScreen)
+        initScore()
         ui.show(gameplayHUD)
         canvas.classList.remove("hidden")
         animate(0)
@@ -133,9 +139,9 @@ window.addEventListener('load', function () {
 
             // (object2.y + object2.height) >= object1.y
             //     &&
-            (object1.y + object1.height) <= object2.y
+            ((object1.y + object1.height) <= object2.y) &&
 
-            //     ((object1.x + object1.width) >= object2.x &&
+            ((object1.x + object1.width) >= object2.x)
 
             //         // object1 Right Side collides with object1 Left side 
             //         (object2.x + object2.width) >= object1.x)
@@ -144,6 +150,20 @@ window.addEventListener('load', function () {
 
     }
 
+
+    function updateScore(object) {
+        if (object) {
+            if (!object.isScored) {
+                currentScore += object.pointValue
+                scoreDisplay.innerHTML = String(currentScore).padStart(4, '0')
+                object.isScored = true
+            }
+        }
+    }
+
+    function initScore() {
+        scoreDisplay.innerHTML = String(currentScore).padStart(4, '0')
+    }
     // startGame()
 
 

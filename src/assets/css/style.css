@@ -415,7 +415,7 @@ a {
 #gameplay-hud {
   margin: 2vw;
 }
-#hud--score {
+#hud-score {
   font-family: Coiny, system-ui;
   font-size: 6vw;
   text-shadow: -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff,
