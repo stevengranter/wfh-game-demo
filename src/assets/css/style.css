@@ -203,21 +203,17 @@ button {
   align-items: center;
   align-self: center;
   position: absolute;
-  left: 5%;
-  top: 5%;
-  border: 0.8vw solid black;
-  border-radius: 2.5vw;
-  outline: 0.4vw solid white;
+  left: 14%;
+  top: 3.5%;
   background-color: var(--clr-sky-blue);
   color: var(--clr-violet);
-  transform: rotate(-5deg);
   vertical-align: middle;
   overflow: none;
 }
 
 #menu-screen h2 {
   padding: 1.7vw 1.8vw 0.8vw;
-  font-size: calc(20px + 3vw);
+  font-size: calc(20px + 5vw);
   font-weight: normal;
   text-align: center;
   text-shadow: -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff,
@@ -225,6 +221,8 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.1vw;
   line-height: 100%;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 #stop-button {
