@@ -36,8 +36,8 @@ window.addEventListener("load", function () {
     const ui = new UI(canvas)
 
     // Collectibles 
-    const wienerImage = document.getElementById("wiener-sprite-01")
-    const wiener = new Collectible(wienerImage, 0, 0, 48, 48, 50)
+    const wienerImageSmall = document.getElementById("wiener-sprite--16px-spin")
+    const wienerSpriteSmall = new Collectible(wienerImageSmall, 250, 0, 16, 16, 50)
 
     // Initialize game variables
     let currentScore = 0
@@ -79,11 +79,11 @@ window.addEventListener("load", function () {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             player.update(input.lastKey)
             player.draw(ctx, deltaTime)
-            wiener.update()
+            wienerSpriteSmall.update()
 
-            wiener.draw(ctx, deltaTime, 220, -100, 32, 32)
-            if (detectCollision(player, wiener)) {
-                updateScore(wiener)
+            wienerSpriteSmall.draw(ctx, deltaTime)
+            if (detectCollision(player, wienerSpriteSmall)) {
+                updateScore(wienerSpriteSmall)
             }
 
 
