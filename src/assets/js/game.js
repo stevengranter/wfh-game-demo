@@ -1,6 +1,7 @@
 // Import modules
 import Player from "./player.js"
 import InputHandler from "./input.js"
+// import { ObjectPool, Pickup } from "./objectpool.js"
 import Collectible from "./collectible.js"
 import { drawStatusText } from "./utils.js"
 import UI from "./ui.js"
@@ -14,6 +15,8 @@ window.addEventListener("load", function () {
     canvas.width = 475
     canvas.height = 270
     ctx.imageSmoothingEnabled = false // keeps sprites pixelated
+
+    let deltaTime = 0
 
     // DOM UI elements //
     const body = document.getElementsByTagName("body")[0]
@@ -38,6 +41,21 @@ window.addEventListener("load", function () {
     // Collectibles 
     const wienerImageSmall = document.getElementById("wiener-sprite--16px-spin")
     const wienerSpriteSmall = new Collectible(wienerImageSmall, 250, 0, 16, 16, 50)
+
+    const jumboImage = document.getElementById("jumbo-sprite--32px-spin")
+    const jumboSprite = new Collectible(jumboImage, 100, 0, 32, 32, 250, undefined, 2, 4)
+
+    const bolognaImage = document.getElementById("bologna-sprite--64px-spin")
+    const bolognaSprite = new Collectible(bolognaImage, 150, 0, 64, 64, 1000, undefined, 2, 2)
+
+    const jumboGlowImage = document.getElementById("jumbo-sprite--40px-spin-glow")
+    const jumboGlowSprite = new Collectible(jumboGlowImage, 125, 0, 40, 40, 250, undefined, 4, 2)
+
+    // Pickups
+    // const wienerImage = document.getElementById("wiener-static-TEST")
+    // const wiener = new Pickup(canvas, wienerImage, 32, 32,)
+    // const wienerPool = new ObjectPool(wiener, 10)
+    // console.log(wienerPool.objectPool)
 
     // Initialize game variables
     let currentScore = 0
@@ -74,11 +92,14 @@ window.addEventListener("load", function () {
     // Game loop
     function animate(timeStamp) {
         if (!isPaused) {
-            const deltaTime = timeStamp - lastTime
+            deltaTime = timeStamp - lastTime
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             player.update(input.lastKey)
             player.draw(ctx, deltaTime)
+            // console.log(deltaTime)
+            drawStatusText(ctx, deltaTime)
+
             wienerSpriteSmall.update()
 
             wienerSpriteSmall.draw(ctx, deltaTime)
@@ -86,6 +107,26 @@ window.addEventListener("load", function () {
                 updateScore(wienerSpriteSmall)
             }
 
+            jumboSprite.update()
+
+            jumboSprite.draw(ctx, deltaTime)
+            if (detectCollision(player, wienerSpriteSmall)) {
+                updateScore(wienerSpriteSmall)
+            }
+
+            bolognaSprite.update()
+
+            bolognaSprite.draw(ctx, deltaTime)
+            if (detectCollision(player, wienerSpriteSmall)) {
+                updateScore(wienerSpriteSmall)
+            }
+
+            jumboGlowSprite.update()
+
+            jumboGlowSprite.draw(ctx, deltaTime)
+            if (detectCollision(player, wienerSpriteSmall)) {
+                updateScore(wienerSpriteSmall)
+            }
 
             requestAnimationFrame(animate)
         } else {
@@ -165,7 +206,7 @@ window.addEventListener("load", function () {
 
 
     // Uncomment to bypass title screen
-    // startGame()
+    startGame()
 
 
 

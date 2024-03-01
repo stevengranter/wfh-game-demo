@@ -8,7 +8,7 @@ export default class Collectible {
         sHeight,
         pointValue = 0,
         isScored = false,
-        speedX = 1,
+        speedX = 0,
         speedY = 1
     ) {
 
@@ -29,11 +29,7 @@ export default class Collectible {
         this.frameY = 0
 
         this.maxFrame = 28
-
-        this.speedX = 0
         this.maxSpeedX = 1
-
-        this.speedY = 1
         this.maxSpeedY = 1
 
 
