@@ -13,21 +13,25 @@ export default class Spawner {
         // console.log(this.timeSinceSpawn)
         if (this.timeSinceSpawn >= this.spawnInterval) {
             let e = this.objectPool.getElement()
-            console.log(`Just got: ${e.data}`)
+            // console.log(`Just got: ${e.data}`)
             this.timeSinceSpawn = 0
+        }
+
+        for (let e = 0; e < this.objectPool.poolArray.length; e++) {
+            this.objectPool.poolArray[e].data.update()
         }
     }
 
     draw(context, deltaTime) {
         for (let e = 0; e < this.objectPool.poolArray.length; e++) {
             if (this.objectPool.poolArray[e].free == false) {
-                if (this.objectPool.poolArray[e].data.dy < 275) {
-                    this.objectPool.poolArray[e].data.update()
+                if (this.objectPool.poolArray[e].data.dy < 275 && this.objectPool.poolArray[e].data.dx < 475 && this.objectPool.poolArray[e].data.dx > 0) {
                     this.objectPool.poolArray[e].data.draw(context, deltaTime)
                 }
-                else if (this.objectPool.poolArray[e].data.dy >= 275) {
+                else {
                     this.objectPool.releaseElement(this.objectPool.poolArray[e])
-                    console.log(`Just released: ${this.objectPool.poolArray[e].data}`)
+                    // console.log('Just released:')
+                    // console.log(this.objectPool.poolArray[e])
                 }
             }
         }

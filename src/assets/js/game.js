@@ -2,7 +2,7 @@
 import Player from "./player.js"
 import InputHandler from "./input.js"
 // import { ObjectPool, Pickup } from "./objectpool.js"
-// import Collectible from "./collectible.js"
+import { SpriteImage, SpriteSheet, Sprite } from "./sprite.js"
 import Pickup from "./pickup.js"
 import ObjectPool from "./objectpool.js"
 import Spawner from './spawner.js'
@@ -42,13 +42,19 @@ window.addEventListener("load", function () {
     const scoreDisplay = document.getElementById("hud-score")
 
     // Game objects
-    const player = new Player(canvas.width, canvas.height)
+    //const player = new Player(canvas.width, canvas.height)
+    //const playerImage = document.getElementById("player-sprite")
+    const playerSpriteImage = new SpriteImage(document.getElementById("player-sprite"), 0, 0, 48, 48)
+    const playerSpriteSheet = new SpriteSheet(playerSpriteImage, 0, 0, 0)
+    const player = new Player(playerSpriteSheet, 48, 48, canvas.width, canvas.height)
+    console.log(player)
+
     const input = new InputHandler()
     const ui = new UI(canvas)
 
-    // Collectibles 
-    // const wienerImageSmall = document.getElementById("wiener-sprite--16px-spin")
-    // const wienerSpriteSmall = new Collectible(wienerImageSmall, 250, 0, 16, 16, 50)
+    // Sprites
+    // const wienerImageRegular = document.getElementById("wiener-sprite--16px-spin")
+    // const wienerSpriteRegular = new Sprite(wienerImageRegular, 0, 0, 16, 16, 0, 0, 16, 16, 0, 0, 28, 60)
 
     // const jumboImage = document.getElementById("jumbo-sprite--32px-spin")
     // const jumboSprite = new Collectible(jumboImage, 100, 0, 32, 32, 250, undefined, 2, 4)
@@ -59,36 +65,40 @@ window.addEventListener("load", function () {
     // const jumboGlowImage = document.getElementById("jumbo-sprite--40px-spin-glow")
     // const jumboGlowSprite = new Collectible(jumboGlowImage, 125, 0, 40, 40, 250, undefined, 4, 2)
 
-    // Pickups
-    const wienerImage = document.getElementById("wiener-sprite--16px")
-    // console.log(typeof (wiener))
-    // const creatorFunc = () => {
-    //     new Pickup(canvas, wienerImage, 32, 32, Math.random() * 450, Math.random() * 274, Math.random() * 10, Math.random() * 10)
-    // }
+    const wienerImageRegular = document.getElementById("wiener-sprite--16px-spin")
+    const wienerSpriteSource = new SpriteImage(wienerImageRegular, 0, 0, 16, 16)
 
-    const makeWiener = () => new Pickup(wienerImage, 0, 0, 48, 48, getRandomInt(0, 450), 0, 48, 48, 0, getRandomInt(1, 3))
+    const makeWiener = () => new Sprite(new SpriteSheet(wienerSpriteSource, 0, 0, 28), getRandomInt(0, 450), getRandomInt(-500, -100), 16, 16, 0, 2, getRandomInt(5, 60), 50)
 
     const resetFunc = (wiener) => {
+        wiener.isScored = false
+        wiener.isVisible = true
         wiener.dx = getRandomInt(0, 450)
-        wiener.dy = 0
+        wiener.dy = getRandomInt(-10, -100)
         wiener.velocityX = 0
-        wiener.velocityY = getRandomInt(1, 3)
+        wiener.velocityY = 2
     }
-    const wienerPool = new ObjectPool(makeWiener, resetFunc, 12)
+    const wienerPool = new ObjectPool(makeWiener, resetFunc, 50)
 
-    const wienerSpawner = new Spawner(1, wienerPool)
+    const wienerSpawner = new Spawner(0.005, wienerPool)
+
+    const jumboImage = document.getElementById("jumbo-sprite--32px-spin")
+    const jumboSpriteSource = new SpriteImage(jumboImage, 0, 0, 32, 32)
+    const makeJumbo = () => new Sprite(new SpriteSheet(jumboSpriteSource, 0, 0, 28), getRandomInt(0, 450), getRandomInt(-500, -100), 32, 32, getRandomInt(-2, +2), getRandomInt(0, +4), getRandomInt(5, 60), 500)
+
+    const jumboResetFunc = (jumbo) => {
+        jumbo.isScored = false
+        jumbo.isVisible = true
+        jumbo.dx = getRandomInt(0, 450)
+        jumbo.dy = getRandomInt(-25, -100)
+        jumbo.velocityX = getRandomInt(-1, +1)
+        jumbo.velocityY = getRandomInt(2, 4)
+    }
+
+    const jumboPool = new ObjectPool(makeJumbo, jumboResetFunc, 15)
+    const jumboSpawner = new Spawner(0.5, jumboPool)
 
     let numFreeObjects = 0
-
-    // console.log(wienerPool)
-
-    const objectThatIsReadyToUse = wienerPool.getElement()
-    // console.log("🚀 ~ objectThatIsReadyToUse:", objectThatIsReadyToUse)
-
-    // ... doing stuff with objectThatIsReadyToUse.data
-    wienerPool.releaseElement(objectThatIsReadyToUse)
-    // console.log("🚀 ~ objectThatIsReadyToUse:", objectThatIsReadyToUse)
-    // console.log(wienerPool)
 
     // Initialize game variables
     let currentScore = 0
@@ -128,43 +138,43 @@ window.addEventListener("load", function () {
             deltaTime = timeStamp - lastTime
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
-            player.update(input.lastKey)
-            player.draw(ctx, deltaTime)
+
             // console.log(deltaTime)
             numFreeObjects = wienerSpawner.getFreeObjects()
-            drawStatusText(ctx, "Free objects:" + numFreeObjects)
+            // drawStatusText(ctx, currentScore, 10, 60)
+            // drawStatusText(ctx, "frameTimer:" + wienerSpriteSheet.frameTimer, 10, 90)
 
+            // drawStatusText(ctx, "frameInterval:" + wienerSpriteSheet.frameInterval, 10, 110)
+            player.update(input.lastKey)
             wienerSpawner.update(deltaTime)
+            jumboSpawner.update(deltaTime)
+
+
+
+
             wienerSpawner.draw(ctx, deltaTime)
+            player.draw(ctx, deltaTime)
+            jumboSpawner.draw(ctx, deltaTime)
 
 
-            // wienerSpriteSmall.update()
-
-            // wienerSpriteSmall.draw(ctx, deltaTime)
-            // if (detectCollision(player, wienerSpriteSmall)) {
-            //     updateScore(wienerSpriteSmall)
+            // detect collisions
+            // for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
+            //     if (detectBoxCollision(player, wienerSpawner.objectPool.poolArray[i].data)) {
+            //         updateScore(wienerSpawner.objectPool.poolArray[i].data)
+            //         wienerSpawner.objectPool.poolArray[i].data.isVisible = false
+            //         console.log(wienerSpawner.objectPool.poolArray[i].data)
+            //         wienerSpawner.objectPool.releaseElement(wienerSpawner.objectPool.poolArray[i])
+            //     }
             // }
 
-            // jumboSprite.update()
+            for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {
+                if (detectBoxCollision(player, jumboSpawner.objectPool.poolArray[i].data)) {
+                    jumboSpawner.objectPool.poolArray[i].data.isVisible = false
+                    updateScore(jumboSpawner.objectPool.poolArray[i].data)
+                    jumboSpawner.objectPool.releaseElement(jumboSpawner.objectPool.poolArray[i])
 
-            // jumboSprite.draw(ctx, deltaTime)
-            // if (detectCollision(player, wienerSpriteSmall)) {
-            //     updateScore(wienerSpriteSmall)
-            // }
-
-            // bolognaSprite.update()
-
-            // bolognaSprite.draw(ctx, deltaTime)
-            // if (detectCollision(player, wienerSpriteSmall)) {
-            //     updateScore(wienerSpriteSmall)
-            // }
-
-            // jumboGlowSprite.update()
-
-            // jumboGlowSprite.draw(ctx, deltaTime)
-            // if (detectCollision(player, wienerSpriteSmall)) {
-            //     updateScore(wienerSpriteSmall)
-            // }
+                }
+            }
 
             requestAnimationFrame(animate)
         } else {
@@ -204,24 +214,20 @@ window.addEventListener("load", function () {
     }
 
 
+
     // Collision detection
-    function detectCollision(object1, object2) {
-        // console.log(object2.y + object2.height)
-        // console.log(object2.y)
-        // console.log((object1.x + object1.width))
-        // console.log(object2.x)
-        return (
+    function detectBoxCollision(object1, object2) {
+        if (
+            object1.dx + object1.dWidth >= object2.dx &&
+            object1.dx <= object2.dx + object2.dWidth &&
+            object1.dy + object1.dHeight >= object2.dy &&
+            object1.dy <= object2.dy + object2.dHeight
+        ) {
+            // console.log("COLLISION!")
+            return true
 
-            // (object2.y + object2.height) >= object1.y
-            //     &&
-            ((object1.y + object1.height) <= object2.y) &&
+        }
 
-            ((object1.x + object1.width) >= object2.x)
-
-            //         // object1 Right Side collides with object1 Left side 
-            //         (object2.x + object2.width) >= object1.x)
-            // 
-        )
 
     }
 
@@ -234,6 +240,7 @@ window.addEventListener("load", function () {
     function updateScore(object) {
         if (object) {
             if (!object.isScored) {
+                // console.log("SCORE")
                 currentScore += object.pointValue
                 scoreDisplay.innerHTML = String(currentScore).padStart(4, "0")
                 object.isScored = true
@@ -244,7 +251,7 @@ window.addEventListener("load", function () {
 
 
     // Uncomment to bypass title screen
-    startGame()
+    // startGame()
 
 
 

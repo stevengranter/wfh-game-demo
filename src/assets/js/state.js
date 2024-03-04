@@ -20,8 +20,8 @@ export class StandingLeft extends State {
         this.player = player
     }
     enter() {
-        this.player.maxFrame = 0
-        this.player.frameY = 1
+        this.player.spriteSheetObj.endFrame = 0
+        this.player.spriteSheetObj.frameY = 1
         this.player.speedX = 0
 
     }
@@ -40,8 +40,8 @@ export class StandingRight extends State {
         this.player = player
     }
     enter() {
-        this.player.maxFrame = 0
-        this.player.frameY = 0
+        this.player.spriteSheetObj.endFrame = 0
+        this.player.spriteSheetObj.frameY = 0
         this.player.speedX = 0
     }
 
@@ -60,8 +60,8 @@ export class RunningLeft extends State {
 
     }
     enter() {
-        this.player.maxFrame = 4
-        this.player.frameY = 1
+        this.player.spriteSheetObj.endFrame = 4
+        this.player.spriteSheetObj.frameY = 1
         this.player.speedX = -(this.player.maxSpeedX + this.player.speedBonus)
     }
 
@@ -82,8 +82,8 @@ export class RunningRight extends State {
 
     }
     enter() {
-        this.player.maxFrame = 4
-        this.player.frameY = 0
+        this.player.spriteSheetObj.endFrame = 4
+        this.player.spriteSheetObj.frameY = 0
         this.player.speedX = this.player.maxSpeedX + this.player.speedBonus
     }
 

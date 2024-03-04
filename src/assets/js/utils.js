@@ -1,6 +1,6 @@
-export function drawStatusText(context, input) {
+export function drawStatusText(context, input, x, y) {
     context.font = "10px Verdana"
-    context.fillText(input, 10, 20)
+    context.fillText(input, x, y)
 }
 
 export function getRandomInt(min, max) {

@@ -18,7 +18,7 @@ export default class ObjectPool {
             .fill('blerg', 0, initialSize)
             .map(() => this.createElement())
 
-        this.poolArray.forEach((e) => console.log(e))
+        // this.poolArray.forEach((e) => console.log(e))
 
     }
 
