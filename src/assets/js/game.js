@@ -24,9 +24,17 @@ window.addEventListener("load", function () {
     canvas.height = 270
     ctx.imageSmoothingEnabled = false // keeps sprites pixelated
 
+    // Initialize game variables
+    let currentScore = 0
+    let lastTime = 0
+    let isPaused = false
     let deltaTime = 0
 
+
+
+
     // DOM UI elements //
+    const ui = new UI(canvas)
     const body = document.getElementsByTagName("body")[0]
     const titleScreen = document.getElementById("title-screen")
 
@@ -41,70 +49,75 @@ window.addEventListener("load", function () {
     const gameplayHUD = document.getElementById("gameplay-hud")
     const scoreDisplay = document.getElementById("hud-score")
 
-    // Game objects
-    //const player = new Player(canvas.width, canvas.height)
-    //const playerImage = document.getElementById("player-sprite")
+    // Player Object
+
     const playerSpriteImage = new SpriteImage(document.getElementById("player-sprite"), 0, 0, 48, 48)
     const playerSpriteSheet = new SpriteSheet(playerSpriteImage, 0, 0, 0)
     const player = new Player(playerSpriteSheet, 48, 48, canvas.width, canvas.height)
-    console.log(player)
-
-    const input = new InputHandler()
-    const ui = new UI(canvas)
 
     // Sprites
-    // const wienerImageRegular = document.getElementById("wiener-sprite--16px-spin")
-    // const wienerSpriteRegular = new Sprite(wienerImageRegular, 0, 0, 16, 16, 0, 0, 16, 16, 0, 0, 28, 60)
 
-    // const jumboImage = document.getElementById("jumbo-sprite--32px-spin")
-    // const jumboSprite = new Collectible(jumboImage, 100, 0, 32, 32, 250, undefined, 2, 4)
+    // Seagull 🐦
 
-    // const bolognaImage = document.getElementById("bologna-sprite--64px-spin")
-    // const bolognaSprite = new Collectible(bolognaImage, 150, 0, 64, 64, 1000, undefined, 2, 2)
+    const seagullImage = document.getElementById("seagull-sprite")
+    const seagullSpriteImage = new SpriteImage(seagullImage, 0, 0, 44, 51)
+    const makeSeagull = () => new Sprite(
+        new SpriteSheet(seagullSpriteImage, 0, 0, 7), // spritesheet
+        getRandomInt(465, 500), // dx
+        getRandomInt(10, 50), //dy
+        44, // dWidth
+        51, // dHeight
+        getRandomInt(-4, -2), // velocityX
+        Math.random() < 0.5 ? -0.2 : 0.2, // velocityY 
+        30,  // fps
+        0 // pointValue
+    )
 
-    // const jumboGlowImage = document.getElementById("jumbo-sprite--40px-spin-glow")
-    // const jumboGlowSprite = new Collectible(jumboGlowImage, 125, 0, 40, 40, 250, undefined, 4, 2)
+    const seagullResetFunc = (seagull) => {
+        seagull.isScored = false
+        seagull.isVisible = true
+        seagull.dx = getRandomInt(465, 500)
+        seagull.dy = getRandomInt(10, 50)
+        seagull.velocityX = getRandomInt(-4, -2)
+        seagull.velocityY = Math.random() < 0.5 ? -0.3 : 0.2
+    }
 
-    const wienerImageRegular = document.getElementById("wiener-sprite--16px-spin")
-    const wienerSpriteSource = new SpriteImage(wienerImageRegular, 0, 0, 16, 16)
+    const seagullPool = new ObjectPool(makeSeagull, seagullResetFunc, 10)
+    const seagullSpawner = new Spawner(2, seagullPool)
 
-    const makeWiener = () => new Sprite(new SpriteSheet(wienerSpriteSource, 0, 0, 28), getRandomInt(0, 450), getRandomInt(-500, -100), 16, 16, 0, 2, getRandomInt(5, 60), 50)
+    // Wiener 🌭
 
-    const resetFunc = (wiener) => {
+    const wienerImage = new Image()
+    wienerImage.src = "./assets/images/wiener-32-spin-01.png"
+    const wienerSpriteImage = new SpriteImage(wienerImage, 0, 0, 32, 32)
+    const makeWiener = () => new Sprite(
+        new SpriteSheet(wienerSpriteImage, 0, 0, 28),
+        getRandomInt(20, 460), // dx
+        -40, // dy
+        32, // dWidth
+        32, // dHeight
+        getRandomInt(-2, 2), // velocityX
+        getRandomInt(1, 3), // velocityY
+        getRandomInt(5, 60), // fps
+        100 // pointValue
+    )
+
+    const wienerResetFunc = (wiener) => {
         wiener.isScored = false
         wiener.isVisible = true
-        wiener.dx = getRandomInt(0, 450)
-        wiener.dy = getRandomInt(-10, -100)
+        wiener.dx = getRandomInt(20, 460)
+        wiener.dy = -40
         wiener.velocityX = 0
-        wiener.velocityY = 2
-    }
-    const wienerPool = new ObjectPool(makeWiener, resetFunc, 50)
-
-    const wienerSpawner = new Spawner(0.005, wienerPool)
-
-    const jumboImage = document.getElementById("jumbo-sprite--32px-spin")
-    const jumboSpriteSource = new SpriteImage(jumboImage, 0, 0, 32, 32)
-    const makeJumbo = () => new Sprite(new SpriteSheet(jumboSpriteSource, 0, 0, 28), getRandomInt(0, 450), getRandomInt(-500, -100), 32, 32, getRandomInt(-2, +2), getRandomInt(0, +4), getRandomInt(5, 60), 500)
-
-    const jumboResetFunc = (jumbo) => {
-        jumbo.isScored = false
-        jumbo.isVisible = true
-        jumbo.dx = getRandomInt(0, 450)
-        jumbo.dy = getRandomInt(-25, -100)
-        jumbo.velocityX = getRandomInt(-1, +1)
-        jumbo.velocityY = getRandomInt(2, 4)
+        wiener.velocityY = getRandomInt(1, 3)
     }
 
-    const jumboPool = new ObjectPool(makeJumbo, jumboResetFunc, 15)
-    const jumboSpawner = new Spawner(0.5, jumboPool)
+    const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, 10)
+    const wienerSpawner = new Spawner(1, wienerPool)
 
-    let numFreeObjects = 0
 
-    // Initialize game variables
-    let currentScore = 0
-    let lastTime = 0
-    let isPaused = false
 
+    // Input Handler
+    const input = new InputHandler()
 
     // Event listeners
     window.addEventListener("keydown", (e) => {
@@ -139,42 +152,54 @@ window.addEventListener("load", function () {
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-            // console.log(deltaTime)
-            numFreeObjects = wienerSpawner.getFreeObjects()
-            // drawStatusText(ctx, currentScore, 10, 60)
-            // drawStatusText(ctx, "frameTimer:" + wienerSpriteSheet.frameTimer, 10, 90)
 
-            // drawStatusText(ctx, "frameInterval:" + wienerSpriteSheet.frameInterval, 10, 110)
-            player.update(input.lastKey)
+
+            drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, 60)
+            drawStatusText(ctx, "🐦 active:" + seagullSpawner.getActiveObjects(), 10, 75)
+            drawStatusText(ctx, "🐦 spawn interval:" + seagullSpawner.spawnInterval, 10, 90)
+            drawStatusText(ctx, "🐦 time since spawn:" + Math.floor(seagullSpawner.timeSinceSpawn), 10, 105)
+
+            drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, 135)
+            drawStatusText(ctx, "🌭 active:" + wienerSpawner.getActiveObjects(), 10, 150)
+            drawStatusText(ctx, "🌭 spawn interval:" + wienerSpawner.spawnInterval, 10, 165)
+            drawStatusText(ctx, "🌭 time since spawn:" + Math.floor(wienerSpawner.timeSinceSpawn), 10, 180)
+
+
+            seagullSpawner.update(deltaTime)
             wienerSpawner.update(deltaTime)
-            jumboSpawner.update(deltaTime)
+
+            player.update(input.lastKey)
 
 
 
 
+            seagullSpawner.draw(ctx, deltaTime)
             wienerSpawner.draw(ctx, deltaTime)
             player.draw(ctx, deltaTime)
-            jumboSpawner.draw(ctx, deltaTime)
+
+
+
+
 
 
             // detect collisions
-            // for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
-            //     if (detectBoxCollision(player, wienerSpawner.objectPool.poolArray[i].data)) {
-            //         updateScore(wienerSpawner.objectPool.poolArray[i].data)
-            //         wienerSpawner.objectPool.poolArray[i].data.isVisible = false
-            //         console.log(wienerSpawner.objectPool.poolArray[i].data)
-            //         wienerSpawner.objectPool.releaseElement(wienerSpawner.objectPool.poolArray[i])
-            //     }
-            // }
-
-            for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {
-                if (detectBoxCollision(player, jumboSpawner.objectPool.poolArray[i].data)) {
-                    jumboSpawner.objectPool.poolArray[i].data.isVisible = false
-                    updateScore(jumboSpawner.objectPool.poolArray[i].data)
-                    jumboSpawner.objectPool.releaseElement(jumboSpawner.objectPool.poolArray[i])
-
+            for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
+                if (detectBoxCollision(player, wienerSpawner.objectPool.poolArray[i].data)) {
+                    updateScore(wienerSpawner.objectPool.poolArray[i].data)
+                    wienerSpawner.objectPool.poolArray[i].data.isVisible = false
+                    console.log(wienerSpawner.objectPool.poolArray[i].data)
+                    wienerSpawner.objectPool.releaseElement(wienerSpawner.objectPool.poolArray[i])
                 }
             }
+
+            // for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {
+            //     if (detectBoxCollision(player, jumboSpawner.objectPool.poolArray[i].data)) {
+            //         jumboSpawner.objectPool.poolArray[i].data.isVisible = false
+            //         updateScore(jumboSpawner.objectPool.poolArray[i].data)
+            //         jumboSpawner.objectPool.releaseElement(jumboSpawner.objectPool.poolArray[i])
+
+            //     }
+            // }
 
             requestAnimationFrame(animate)
         } else {

@@ -96,6 +96,9 @@ h5 {
   z-index: -10;
   width: 100%;
   height: auto;
+  /* background-image: url("../images/basic-beach-01.png"); */
+  background-size: cover;
+  background-position: center;
   background: var(--clr-sky-blue);
   aspect-ratio: 16 / 9;
   image-rendering: pixelated;

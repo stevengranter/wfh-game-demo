@@ -12,21 +12,27 @@ export default class Spawner {
         this.timeSinceSpawn += deltaTime
         // console.log(this.timeSinceSpawn)
         if (this.timeSinceSpawn >= this.spawnInterval) {
-            let e = this.objectPool.getElement()
-            // console.log(`Just got: ${e.data}`)
+            let element = this.objectPool.getElement()
+            //element.data.update()
             this.timeSinceSpawn = 0
         }
 
-        for (let e = 0; e < this.objectPool.poolArray.length; e++) {
-            this.objectPool.poolArray[e].data.update()
+        for (let i = 0; i < this.objectPool.poolArray.length; i++) {
+            if (!this.objectPool.poolArray[i].free) {
+                // if (this.objectPool.poolArray[i].free == false) {
+                this.objectPool.poolArray[i].data.update()
+            }
+            // }
         }
     }
 
     draw(context, deltaTime) {
+
         for (let e = 0; e < this.objectPool.poolArray.length; e++) {
             if (this.objectPool.poolArray[e].free == false) {
-                if (this.objectPool.poolArray[e].data.dy < 275 && this.objectPool.poolArray[e].data.dx < 475 && this.objectPool.poolArray[e].data.dx > 0) {
+                if (this.objectPool.poolArray[e].data.dx < 500 && this.objectPool.poolArray[e].data.dx > -50 && this.objectPool.poolArray[e].data.dy > -50 && this.objectPool.poolArray[e].data.dy < 275) {
                     this.objectPool.poolArray[e].data.draw(context, deltaTime)
+                    //console.log(this.objectPool.poolArray[e].data)
                 }
                 else {
                     this.objectPool.releaseElement(this.objectPool.poolArray[e])
@@ -37,12 +43,22 @@ export default class Spawner {
         }
     }
 
+    getActiveObjects() {
+        let numActiveObjects = 0
+        for (let e = 0; e < this.objectPool.poolArray.length; e++) {
+            if (this.objectPool.poolArray[e].free == false) {
+                numActiveObjects = numActiveObjects + 1
+            }
+
+        }
+        return numActiveObjects
+    }
+
     getFreeObjects() {
         let numFreeObjects = 0
         for (let e = 0; e < this.objectPool.poolArray.length; e++) {
             if (this.objectPool.poolArray[e].free == true) {
                 numFreeObjects = numFreeObjects + 1
-
             }
 
         }

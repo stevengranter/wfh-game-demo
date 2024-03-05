@@ -15,7 +15,7 @@ export default class ObjectPool {
         this.constructorFunction = constructorFunction
         this.resetFunction = resetFunction
         this.poolArray = new Array(initialSize)
-            .fill('blerg', 0, initialSize)
+            .fill('0', 0, initialSize)
             .map(() => this.createElement())
 
         // this.poolArray.forEach((e) => console.log(e))
@@ -33,13 +33,14 @@ export default class ObjectPool {
         for (let i = 0; i < this.poolArray.length; i++) {
             if (this.poolArray[i].free) {
                 this.poolArray[i].free = false
+                console.log(this.poolArray[i])
                 return this.poolArray[i]
             }
         }
     }
     releaseElement(element) {
-        element.free = true
         this.resetFunction(element.data)
+        element.free = true
     }
 }
 export class ObjectPoolMember {
