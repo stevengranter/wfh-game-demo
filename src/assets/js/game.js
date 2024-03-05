@@ -99,7 +99,7 @@ window.addEventListener("load", function () {
         -40, // dy
         32, // dWidth
         32, // dHeight
-        getRandomInt(-2, 2), // velocityX
+        getRandomInt(-1, 1), // velocityX
         getRandomInt(1, 3), // velocityY
         getRandomInt(5, 60), // fps
         100 // pointValue
@@ -110,7 +110,7 @@ window.addEventListener("load", function () {
         wiener.isVisible = true
         wiener.dx = getRandomInt(20, 460)
         wiener.dy = -40
-        wiener.velocityX = 0
+        wiener.velocityX = getRandomInt(-1, 1)
         wiener.velocityY = getRandomInt(1, 3)
     }
 
