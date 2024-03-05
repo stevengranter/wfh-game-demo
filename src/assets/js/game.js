@@ -2,7 +2,7 @@
 import Player from "./player.js"
 import InputHandler from "./input.js"
 // import { ObjectPool, Pickup } from "./objectpool.js"
-import { SpriteImage, SpriteSheet, Sprite } from "./sprite.js"
+import { SpriteFrame, SpriteAnimation, Sprite } from "./sprite.js"
 import Pickup from "./pickup.js"
 import ObjectPool from "./objectpool.js"
 import Spawner from './spawner.js'
@@ -51,18 +51,21 @@ window.addEventListener("load", function () {
 
     // Player Object
 
-    const playerSpriteImage = new SpriteImage(document.getElementById("player-sprite"), 0, 0, 48, 48)
-    const playerSpriteSheet = new SpriteSheet(playerSpriteImage, 0, 0, 0)
+    const playerImage = new Image()
+    playerImage.src = "./assets/images/nan-sprite-walk.png"
+    const playerSpriteImage = new SpriteFrame(playerImage, 0, 0, 48, 48)
+    const playerSpriteSheet = new SpriteAnimation(playerSpriteImage, 0, 0, 0)
     const player = new Player(playerSpriteSheet, 48, 48, canvas.width, canvas.height)
 
     // Sprites
 
     // Seagull 🐦
 
-    const seagullImage = document.getElementById("seagull-sprite")
-    const seagullSpriteImage = new SpriteImage(seagullImage, 0, 0, 44, 51)
+    const seagullImage = new Image()
+    seagullImage.src = "./assets/images/seagull-flying-sprite-01.png"
+    const seagullSpriteImage = new SpriteFrame(seagullImage, 0, 0, 44, 51)
     const makeSeagull = () => new Sprite(
-        new SpriteSheet(seagullSpriteImage, 0, 0, 7), // spritesheet
+        new SpriteAnimation(seagullSpriteImage, 0, 0, 7), // spritesheet
         getRandomInt(465, 500), // dx
         getRandomInt(10, 50), //dy
         44, // dWidth
@@ -89,9 +92,9 @@ window.addEventListener("load", function () {
 
     const wienerImage = new Image()
     wienerImage.src = "./assets/images/wiener-32-spin-01.png"
-    const wienerSpriteImage = new SpriteImage(wienerImage, 0, 0, 32, 32)
+    const wienerSpriteImage = new SpriteFrame(wienerImage, 0, 0, 32, 32)
     const makeWiener = () => new Sprite(
-        new SpriteSheet(wienerSpriteImage, 0, 0, 28),
+        new SpriteAnimation(wienerSpriteImage, 0, 0, 28),
         getRandomInt(20, 460), // dx
         -40, // dy
         32, // dWidth
@@ -153,16 +156,15 @@ window.addEventListener("load", function () {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
 
+            let statusBottomY = 260
+            drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, statusBottomY - 60)
+            drawStatusText(ctx, "     active:" + seagullSpawner.getActiveObjects(), 10, statusBottomY - 50)
+            drawStatusText(ctx, "     timer: " + Math.floor(seagullSpawner.timeSinceSpawn) + " / " + seagullSpawner.spawnInterval, 10, statusBottomY - 40)
 
-            drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, 60)
-            drawStatusText(ctx, "🐦 active:" + seagullSpawner.getActiveObjects(), 10, 75)
-            drawStatusText(ctx, "🐦 spawn interval:" + seagullSpawner.spawnInterval, 10, 90)
-            drawStatusText(ctx, "🐦 time since spawn:" + Math.floor(seagullSpawner.timeSinceSpawn), 10, 105)
+            drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
+            drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
+            drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
 
-            drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, 135)
-            drawStatusText(ctx, "🌭 active:" + wienerSpawner.getActiveObjects(), 10, 150)
-            drawStatusText(ctx, "🌭 spawn interval:" + wienerSpawner.spawnInterval, 10, 165)
-            drawStatusText(ctx, "🌭 time since spawn:" + Math.floor(wienerSpawner.timeSinceSpawn), 10, 180)
 
 
             seagullSpawner.update(deltaTime)
@@ -276,7 +278,7 @@ window.addEventListener("load", function () {
 
 
     // Uncomment to bypass title screen
-    // startGame()
+    startGame()
 
 
 

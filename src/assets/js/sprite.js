@@ -12,7 +12,8 @@ export class Sprite {
         velocityX = 0,
         velocityY = 0,
         fps = 15,
-        pointValue = 0
+        pointValue = 0,
+        healthValue = 0
     ) {
         this.spriteSheetObj = spriteSheetObj,
 
@@ -86,7 +87,7 @@ export class Sprite {
 
 }
 
-export class SpriteImage {
+export class SpriteFrame {
     constructor(image, sx, sy, sWidth, sHeight) {
         this.image = image,
             this.sx = sx,
@@ -97,8 +98,8 @@ export class SpriteImage {
     }
 }
 
-export class SpriteSheet {
-    constructor(spriteImageObj = SpriteImage, frameX, frameY, endFrame) {
+export class SpriteAnimation {
+    constructor(spriteImageObj = SpriteFrame, frameX, frameY, endFrame) {
         this.spriteImageObj = spriteImageObj,
             this.frameX = frameX,
             this.frameY = frameY,

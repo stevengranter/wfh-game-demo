@@ -1,5 +1,5 @@
 export function drawStatusText(context, input, x, y) {
-    context.font = "10px Verdana"
+    context.font = "8px Verdana"
     context.fillText(input, x, y)
 }
 

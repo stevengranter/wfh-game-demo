@@ -1,6 +1,6 @@
 import { StandingLeft, StandingRight, RunningLeft, RunningRight, JumpingLeft, JumpingRight } from "./state.js"
 import { Sprite } from "./sprite.js"
-import { SpriteSheet } from "./sprite.js"
+import { SpriteAnimation } from "./sprite.js"
 
 export default class Player extends Sprite {
     constructor(spriteSheetObj, dWidth, dHeight, canvasWidth, canvasHeight) {
