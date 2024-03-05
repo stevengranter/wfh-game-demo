@@ -6,6 +6,7 @@ import { SpriteFrame, SpriteAnimation, Sprite } from "./sprite.js"
 import Pickup from "./pickup.js"
 import ObjectPool from "./objectpool.js"
 import Spawner from './spawner.js'
+import Projectile from "./projectile.js"
 import { drawStatusText, getRandomInt } from "./utils.js"
 import UI from "./ui.js"
 
@@ -59,6 +60,35 @@ window.addEventListener("load", function () {
 
     // Sprites
 
+    // Wiener 🌭
+
+    const wienerImage = new Image()
+    wienerImage.src = "./assets/images/wiener-32-spin-01.png"
+    const wienerSpriteImage = new SpriteFrame(wienerImage, 0, 0, 32, 32)
+    const makeWiener = () => new Sprite(
+        new SpriteAnimation(wienerSpriteImage, 0, 0, 28),
+        getRandomInt(20, 460), // dx
+        -40, // dy
+        32, // dWidth
+        32, // dHeight
+        getRandomInt(-1, 1), // velocityX
+        getRandomInt(1, 3), // velocityY
+        getRandomInt(5, 60), // fps
+        100 // pointValue
+    )
+
+    const wienerResetFunc = (wiener) => {
+        wiener.isScored = false
+        wiener.isVisible = true
+        wiener.dx = getRandomInt(20, 460)
+        wiener.dy = -40
+        wiener.velocityX = getRandomInt(-1, 1)
+        wiener.velocityY = getRandomInt(1, 3)
+    }
+
+    const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, 10)
+    const wienerSpawner = new Spawner(1, wienerPool)
+
     // Seagull 🐦
 
     const seagullImage = new Image()
@@ -88,34 +118,37 @@ window.addEventListener("load", function () {
     const seagullPool = new ObjectPool(makeSeagull, seagullResetFunc, 10)
     const seagullSpawner = new Spawner(2, seagullPool)
 
-    // Wiener 🌭
+    // Seagull poop 
 
-    const wienerImage = new Image()
-    wienerImage.src = "./assets/images/wiener-32-spin-01.png"
-    const wienerSpriteImage = new SpriteFrame(wienerImage, 0, 0, 32, 32)
-    const makeWiener = () => new Sprite(
-        new SpriteAnimation(wienerSpriteImage, 0, 0, 28),
-        getRandomInt(20, 460), // dx
-        -40, // dy
-        32, // dWidth
-        32, // dHeight
-        getRandomInt(-1, 1), // velocityX
-        getRandomInt(1, 3), // velocityY
-        getRandomInt(5, 60), // fps
-        100 // pointValue
+    const gullPoopImage = new Image()
+    gullPoopImage.src = "./assets/images/seagull-poop-sprite-01.png"
+    const gullPoopSpriteImage = new SpriteFrame(gullPoopImage, 0, 0, 16, 16)
+    const makeGullPoop = () => new Sprite(
+        new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0),
+        getRandomInt(20, 455), // dx
+        0, // getRandomInt(-100, -50), //dy
+        16, // dWidth
+        16, // dHeight
+        0, // velocityX
+        6, // velocityY 
+        30,  // fps
+        -100 // pointValue
     )
 
-    const wienerResetFunc = (wiener) => {
-        wiener.isScored = false
-        wiener.isVisible = true
-        wiener.dx = getRandomInt(20, 460)
-        wiener.dy = -40
-        wiener.velocityX = getRandomInt(-1, 1)
-        wiener.velocityY = getRandomInt(1, 3)
+    const gullPoopResetFunc = (gullPoop) => {
+        gullPoop.isScored = false
+        gullPoop.isVisible = true
+        gullPoop.dx = getRandomInt(20, 455)
+        gullPoop.dy = 0 // getRandomInt(-100, -50)
+        gullPoop.velocityX = 0
+        gullPoop.velocityY = 6
     }
 
-    const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, 10)
-    const wienerSpawner = new Spawner(1, wienerPool)
+    const gullPoopPool = new ObjectPool(makeGullPoop, gullPoopResetFunc, 5)
+    const gullPoopSpawner = new Spawner(3, gullPoopPool)
+
+
+
 
 
 
@@ -166,7 +199,7 @@ window.addEventListener("load", function () {
             drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
 
 
-
+            gullPoopSpawner.update(deltaTime)
             seagullSpawner.update(deltaTime)
             wienerSpawner.update(deltaTime)
 
@@ -174,7 +207,7 @@ window.addEventListener("load", function () {
 
 
 
-
+            gullPoopSpawner.draw(ctx, deltaTime)
             seagullSpawner.draw(ctx, deltaTime)
             wienerSpawner.draw(ctx, deltaTime)
             player.draw(ctx, deltaTime)
@@ -191,6 +224,15 @@ window.addEventListener("load", function () {
                     wienerSpawner.objectPool.poolArray[i].data.isVisible = false
                     console.log(wienerSpawner.objectPool.poolArray[i].data)
                     wienerSpawner.objectPool.releaseElement(wienerSpawner.objectPool.poolArray[i])
+                }
+            }
+
+            for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
+                if (detectBoxCollision(player, gullPoopSpawner.objectPool.poolArray[i].data)) {
+                    updateScore(gullPoopSpawner.objectPool.poolArray[i].data)
+                    gullPoopSpawner.objectPool.poolArray[i].data.isVisible = false
+                    console.log(gullPoopSpawner.objectPool.poolArray[i].data)
+                    gullPoopSpawner.objectPool.releaseElement(gullPoopSpawner.objectPool.poolArray[i])
                 }
             }
 

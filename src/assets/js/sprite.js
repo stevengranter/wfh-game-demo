@@ -107,8 +107,8 @@ export class SpriteAnimation {
     }
     animate() {
         let frameTimer = 0
-        const frameInterval = 62.5
-        const fps = 15
+        const frameInterval = this.frameInterval
+        const fps = this.fps
         if (frameTimer > frameInterval) {
             if (this.spriteSheetObj.frameX < this.spriteSheetObj.endFrame) {
                 this.spriteSheetObj.frameX += 1
@@ -118,7 +118,7 @@ export class SpriteAnimation {
                 frameTimer = 0
             }
         } else {
-            frameTimer += 16
+            frameTimer += deltaTime
         }
     }
 }
