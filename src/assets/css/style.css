@@ -131,11 +131,11 @@ h5 {
 
 .ui-panel {
   align-self: center;
-  top: 10%;
+  top: 20%;
   width: 80%;
-  height: 80%;
-  margin: 0 auto;
-  padding: 8vw;
+  height: 10%;
+  margin: 30px auto 10px auto;
+  padding: 8vw 8vw 4vw 8vw;
   border: 0.6vw solid black;
   border-radius: 2.5vw;
   outline: 0.6vw solid white;
@@ -214,6 +214,10 @@ button {
   transition: all 0.1s;
 }
 
+#pause-button {
+  display: none;
+}
+
 #resume-button:hover,
 #pause-button:hover {
   transform: rotate(0deg) scale(120%);
@@ -224,9 +228,9 @@ button {
   align-items: center;
   align-self: center;
   position: absolute;
-  left: 14%;
-  top: 3.5%;
-  background-color: var(--clr-sky-blue);
+  left: 12%;
+  top: 8%;
+  /* background-color: var(--clr-sky-blue); */
   color: var(--clr-violet);
   vertical-align: middle;
   overflow: none;
@@ -234,7 +238,7 @@ button {
 
 #menu-screen h2 {
   padding: 1.7vw 1.8vw 0.8vw;
-  font-size: calc(20px + 5vw);
+  font-size: calc(20px + 4vw);
   font-weight: normal;
   text-align: center;
   text-shadow: -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff,
@@ -250,7 +254,7 @@ button {
   display: inline-block;
   position: absolute;
   left: 5vw;
-  bottom: 2vh;
+  bottom: 0.5vh;
   width: 11vw;
   height: 11vw;
   background-color: white;

@@ -3,42 +3,42 @@ export default class InputHandler {
         this.lastKey = ""
 
         //  Mouse controls
-        window.addEventListener('contextmenu', event => {
-            event.preventDefault()
-        })
-        window.addEventListener("mousedown", (e) => {
-            let log = document.querySelector("#log")
-            switch (e.button) {
-                case 0:
-                    this.lastKey = "PRESS left"
-                    break
-                case 1:
-                    this.lastKey = "PRESS up"
-                    break
-                case 2:
-                    this.lastKey = "PRESS right"
-                    break
-                default:
-                    log.textContent = `Unknown button code: ${e.button}`
-            }
-        })
+        // window.addEventListener('contextmenu', event => {
+        //     event.preventDefault()
+        // })
+        // window.addEventListener("mousedown", (e) => {
+        //     let log = document.querySelector("#log")
+        //     switch (e.button) {
+        //         case 0:
+        //             this.lastKey = "PRESS left"
+        //             break
+        //         case 1:
+        //             this.lastKey = "PRESS up"
+        //             break
+        //         case 2:
+        //             this.lastKey = "PRESS right"
+        //             break
+        //         default:
+        //             log.textContent = `Unknown button code: ${e.button}`
+        //     }
+        // })
 
-        window.addEventListener("mouseup", (e) => {
-            let log = document.querySelector("#log")
-            switch (e.button) {
-                case 0:
-                    this.lastKey = "RELEASE left"
-                    break
-                case 1:
-                    this.lastKey = "RELEASE up"
-                    break
-                case 2:
-                    this.lastKey = "RELEASE right"
-                    break
-                default:
-                    log.textContent = `Unknown button code: ${e.button}`
-            }
-        })
+        // window.addEventListener("mouseup", (e) => {
+        //     let log = document.querySelector("#log")
+        //     switch (e.button) {
+        //         case 0:
+        //             this.lastKey = "RELEASE left"
+        //             break
+        //         case 1:
+        //             this.lastKey = "RELEASE up"
+        //             break
+        //         case 2:
+        //             this.lastKey = "RELEASE right"
+        //             break
+        //         default:
+        //             log.textContent = `Unknown button code: ${e.button}`
+        //     }
+        // })
 
         // Keyboard controls
         window.addEventListener("keydown", (e) => {
