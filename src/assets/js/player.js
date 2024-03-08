@@ -1,17 +1,17 @@
-import { StandingLeft, StandingRight, RunningLeft, RunningRight, JumpingLeft, JumpingRight } from "./state.js"
+import { StandingLeft, StandingRight, WalkingLeft, WalkingRight, JumpingLeft, JumpingRight } from "./state.js"
 import { Sprite } from "./sprite.js"
 import { SpriteAnimation } from "./sprite.js"
 
 export default class Player extends Sprite {
-    constructor(spriteSheetObj, dWidth, dHeight, canvasWidth, canvasHeight) {
+    constructor(context, dWidth, dHeight, canvasWidth, canvasHeight, spriteSheetObj) {
 
 
 
-        super(spriteSheetObj, Math.floor((canvasWidth - dWidth) / 2), Math.floor(canvasHeight - dHeight), 48, 48)
+        super(context, Math.floor((canvasWidth - dWidth) / 2), 0, 48, 48, spriteSheetObj,)
 
 
 
-        this.states = [new StandingLeft(this), new StandingRight(this), new RunningLeft(this), new RunningRight(this), new JumpingLeft(this), new JumpingRight(this)]
+        this.states = [new StandingLeft(this), new StandingRight(this), new WalkingLeft(this), new WalkingRight(this), new JumpingLeft(this), new JumpingRight(this)]
         this.stateHistory = []
 
         // currentState is at index 0 of states array
@@ -19,16 +19,17 @@ export default class Player extends Sprite {
 
         this.image = spriteSheetObj.spriteImageObj.image
 
-        this.fps = 16,
-            this.frameTimer = 0,
-            this.frameInterval = 1000 / this.fps,
+        this.fps = 16
+        this.frameTimer = 0
+        this.frameInterval = 1000 / this.fps
 
-            this.gameWidth = canvasWidth
+        this.gameWidth = canvasWidth
         this.gameHeight = canvasHeight
+        this.floorHeight = 15
 
         this.velocityX = 0
         this.velocityY = 0
-        this.weight = 0.8
+        this.weight = 1
 
         this.speedX = 0
         this.speedY = 0
@@ -82,13 +83,13 @@ export default class Player extends Sprite {
             this.velocityY = 0
         }
         // Prevent player from falling through floor
-        if (this.dy > this.gameHeight - this.dHeight) this.dy = this.gameHeight = this.dHeight
+        if (this.dy > this.gameHeight - this.dHeight) this.dy = this.gameHeight - this.dHeight - this.floorHeight
     }
 
     // Utility classes
 
     onGround() {
-        return this.dy >= this.gameHeight - this.dHeight
+        return this.dy >= this.gameHeight - this.dHeight - this.floorHeight
     }
 }
 

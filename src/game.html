@@ -19,7 +19,17 @@
 
     <title>🌭 Wieners From Heaven: Maple Syrup Edition 🇨🇦</title>
   </head>
-
+  <body>
+    <img
+      src="./assets/images/ui--overlay-screen-border-01.svg"
+      style="
+        position: absolute;
+        width: 100%;
+        height: auto;
+        pointer-events: none;
+        z-index: 50;
+      "
+    />
     <div class="game-screen">
       <canvas id="game-screen__canvas" class="hidden"></canvas>
 
@@ -116,6 +126,13 @@
       </div>
     </div>
 
+    <div id="controls-panel" style="max-width: 70%">
+      <div style="display: flex; flex-direction: row">
+        <img src="./assets/images/ui--overlay-d-pad-01.png" alt="" srcset="" />
+        <img src="./assets/images/ui--overlay-main-button-01.png" alt="" />
+      </div>
+      <img src="./assets/images/ui--controls--pause-button-01.png" alt="" />
+    </div>
     <div id="debug-panel">
       <div id=""></div>
     </div>

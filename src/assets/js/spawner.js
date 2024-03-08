@@ -9,35 +9,37 @@ export default class Spawner {
     }
 
     update(deltaTime) {
-        this.timeSinceSpawn += deltaTime
-        // console.log(this.timeSinceSpawn)
+        this.timeSinceSpawn += deltaTime * 1000
+        //console.log(this.timeSinceSpawn)
         if (this.timeSinceSpawn >= this.spawnInterval) {
             let element = this.objectPool.getElement()
-            //element.data.update()
+            console.log(element)
+            // element.data.update()
             this.timeSinceSpawn = 0
         }
 
         for (let i = 0; i < this.objectPool.poolArray.length; i++) {
             if (!this.objectPool.poolArray[i].free) {
                 // if (this.objectPool.poolArray[i].free == false) {
-                this.objectPool.poolArray[i].data.update()
+                this.objectPool.poolArray[i].data.update(deltaTime)
             }
             // }
         }
     }
 
-    draw(context, deltaTime) {
+    draw(context) {
 
-        for (let e = 0; e < this.objectPool.poolArray.length; e++) {
-            if (this.objectPool.poolArray[e].free == false) {
-                if (this.objectPool.poolArray[e].data.dx < 500 && this.objectPool.poolArray[e].data.dx > -50 && this.objectPool.poolArray[e].data.dy > -50 && this.objectPool.poolArray[e].data.dy < 275) {
-                    this.objectPool.poolArray[e].data.draw(context, deltaTime)
-                    //console.log(this.objectPool.poolArray[e].data)
+        for (let i = 0; i < this.objectPool.poolArray.length; i++) {
+            if (this.objectPool.poolArray[i].free === false) {
+                const element = this.objectPool.poolArray[i]
+                if (element.data.dx < 500 && element.data.dx > -50 && element.data.dy > -50 && element.data.dy < 275) {
+                    element.data.draw(context)
+                    // console.log(element)
                 }
                 else {
-                    this.objectPool.releaseElement(this.objectPool.poolArray[e])
-                    // console.log('Just released:')
-                    // console.log(this.objectPool.poolArray[e])
+                    this.objectPool.releaseElement(element)
+                    console.log('Just released:')
+                    console.log(element)
                 }
             }
         }

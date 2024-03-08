@@ -1,42 +1,41 @@
-export class Sprite {
+import GameObject from "./gameobject.js"
+
+export class Sprite extends GameObject {
 
 
     constructor(
-        // spriteImageObj,
-        spriteSheetObj,
-        // destination (canvas) x,y, width and height
+        context,
         dx = 0,
         dy = 0,
         dWidth = 16,
         dHeight = 16,
+        spriteSheetObj,
         velocityX = 0,
         velocityY = 0,
         fps = 15,
         pointValue = 0,
         healthValue = 0
     ) {
-        this.spriteSheetObj = spriteSheetObj,
+        super(context, dx, dy, dWidth, dHeight)
 
-            this.spriteImageObj = spriteSheetObj.spriteImageObj,
+        this.spriteSheetObj = spriteSheetObj
 
+        this.spriteImageObj = this.spriteSheetObj.spriteImageObj
 
-            this.dx = dx,
-            this.dy = dy,
-            this.dWidth = dWidth,
-            this.dHeight = dHeight,
+        this.velocityX = velocityX
+        this.velocityY = velocityY
 
-            this.velocityX = velocityX,
-            this.velocityY = velocityY,
+        this.fps = fps
+        this.frameTimer = 0
+        this.frameInterval = 1000 / this.fps
 
-            this.fps = fps,
-            this.frameTimer = 0,
-            this.frameInterval = 1000 / this.fps,
+        this.pointValue = pointValue
 
-            this.pointValue = pointValue,
+        this.healthValue = healthValue
 
-            this.isVisible = true,
+        this.isVisible = true
 
-            this.isScored = false
+        this.isScored = false
 
         // console.log(this)
 
@@ -44,7 +43,7 @@ export class Sprite {
 
 
 
-    draw(context, deltaTime) {
+    draw(context) {
 
         // console.log(spriteSheet)
         // draw sprite to canvas
@@ -62,10 +61,10 @@ export class Sprite {
                 this.dHeight
             )
         }
-        // console.log('sprite drawn')
+
     }
 
-    update() {
+    update(deltaTime) {
         // animate cels in spritesheet
         if (this.frameTimer > this.frameInterval) {
             if (this.spriteSheetObj.frameX < this.spriteSheetObj.endFrame) {
@@ -77,23 +76,22 @@ export class Sprite {
                 this.frameTimer = 0
             }
         } else {
-            this.frameTimer += 16
+            this.frameTimer += deltaTime * 1000
 
         }
-
-        this.dx += this.velocityX
-        this.dy += this.velocityY
+        this.dx += this.velocityX * deltaTime
+        this.dy += this.velocityY * deltaTime
     }
 
 }
 
 export class SpriteFrame {
     constructor(image, sx, sy, sWidth, sHeight) {
-        this.image = image,
-            this.sx = sx,
-            this.sy = sy,
-            this.sWidth = sWidth,
-            this.sHeight = sHeight
+        this.image = image
+        this.sx = sx
+        this.sy = sy
+        this.sWidth = sWidth
+        this.sHeight = sHeight
 
     }
 }

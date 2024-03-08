@@ -31,16 +31,18 @@ export default class ObjectPool {
 
     getElement() {
         for (let i = 0; i < this.poolArray.length; i++) {
-            if (this.poolArray[i].free) {
-                this.poolArray[i].free = false
-                console.log(this.poolArray[i])
-                return this.poolArray[i]
+            let element = this.poolArray[i]
+            if (element.free) {
+                element.free = false
+                // console.log(this.poolArray[i])
+                return element
             }
         }
     }
     releaseElement(element) {
         this.resetFunction(element.data)
         element.free = true
+        console.log(element)
     }
 }
 export class ObjectPoolMember {

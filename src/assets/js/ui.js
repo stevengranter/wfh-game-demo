@@ -3,7 +3,7 @@ export default class UI {
     constructor(canvas) {
         this.canvas = canvas
         this.overlay = document.getElementById("overlay")
-        console.log(overlay)
+        // console.log(overlay)
     }
 
 

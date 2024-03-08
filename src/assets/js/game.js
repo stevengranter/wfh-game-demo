@@ -1,4 +1,5 @@
 // Import modules
+import GameObject from "./gameobject.js"
 import Player from "./player.js"
 import InputHandler from "./input.js"
 // import { ObjectPool, Pickup } from "./objectpool.js"
@@ -29,7 +30,7 @@ window.addEventListener("load", function () {
     let currentScore = 0
     let lastTime = 0
     let isPaused = false
-    let deltaTime = 0
+    let deltaTime = 1
 
 
 
@@ -55,8 +56,55 @@ window.addEventListener("load", function () {
     const playerImage = new Image()
     playerImage.src = "./assets/images/nan-sprite-walk.png"
     const playerSpriteImage = new SpriteFrame(playerImage, 0, 0, 48, 48)
-    const playerSpriteSheet = new SpriteAnimation(playerSpriteImage, 0, 0, 0)
-    const player = new Player(playerSpriteSheet, 48, 48, canvas.width, canvas.height)
+
+    const playerStandingLeftAnimation = new SpriteAnimation(
+        playerSpriteImage,
+        0, // frameX
+        1, // frameY
+        0 // endFrame
+    )
+    const playerWalkingLeftAnimation = new SpriteAnimation(
+        playerSpriteImage,
+        0, // frameX
+        1, // frameY
+        4 // endFrame
+    )
+    const playerStandingRightAnimation = new SpriteAnimation(
+        playerSpriteImage,
+        0, // frameX
+        0, // frameY
+        0 // endFrame
+    )
+    const playerWalkingRightAnimation = new SpriteAnimation(
+        playerSpriteImage,
+        0, // frameX
+        0, // frameY
+        4 // endFrame
+    )
+
+    const playerAnimations = {
+        "StandingRight": {
+            animation: playerStandingRightAnimation,
+        },
+        "WalkingRight": {
+            animation: playerWalkingLeftAnimation,
+        },
+        "StandingLeft": {
+            animation: playerStandingLeftAnimation,
+        },
+        "WalkingLeft": {
+            animation: playerWalkingLeftAnimation
+        }
+
+    }
+
+    const player = new Player(
+        ctx,
+        48,
+        48,
+        canvas.width,
+        canvas.height,
+        playerStandingLeftAnimation)
 
     // Sprites
 
@@ -66,14 +114,15 @@ window.addEventListener("load", function () {
     wienerImage.src = "./assets/images/wiener-32-spin-01.png"
     const wienerSpriteImage = new SpriteFrame(wienerImage, 0, 0, 32, 32)
     const makeWiener = () => new Sprite(
-        new SpriteAnimation(wienerSpriteImage, 0, 0, 28),
+        ctx,
         getRandomInt(20, 460), // dx
-        -40, // dy
+        -50, // dy
         32, // dWidth
         32, // dHeight
-        getRandomInt(-1, 1), // velocityX
-        getRandomInt(1, 3), // velocityY
-        getRandomInt(5, 60), // fps
+        new SpriteAnimation(wienerSpriteImage, 0, 0, 28),
+        getRandomInt(-75, 75), //getRandomInt(-1, 1), // velocityX
+        getRandomInt(50, 200), //getRandomInt(1, 3), // velocityY
+        getRandomInt(15, 120), // fps
         100 // pointValue
     )
 
@@ -81,13 +130,14 @@ window.addEventListener("load", function () {
         wiener.isScored = false
         wiener.isVisible = true
         wiener.dx = getRandomInt(20, 460)
-        wiener.dy = -40
-        wiener.velocityX = getRandomInt(-1, 1)
-        wiener.velocityY = getRandomInt(1, 3)
+        wiener.dy = -50
+        wiener.velocityX = getRandomInt(-75, 75)
+        wiener.velocityY = getRandomInt(50, 200)
     }
 
     const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, 10)
     const wienerSpawner = new Spawner(1, wienerPool)
+    // console.log(wienerPool)
 
     // Seagull 🐦
 
@@ -95,13 +145,14 @@ window.addEventListener("load", function () {
     seagullImage.src = "./assets/images/seagull-flying-sprite-01.png"
     const seagullSpriteImage = new SpriteFrame(seagullImage, 0, 0, 44, 51)
     const makeSeagull = () => new Sprite(
-        new SpriteAnimation(seagullSpriteImage, 0, 0, 7), // spritesheet
+        ctx, // spritesheet
         getRandomInt(465, 500), // dx
         getRandomInt(10, 50), //dy
         44, // dWidth
         51, // dHeight
-        getRandomInt(-4, -2), // velocityX
-        Math.random() < 0.5 ? -0.2 : 0.2, // velocityY 
+        new SpriteAnimation(seagullSpriteImage, 0, 0, 7),
+        getRandomInt(-300, -75), // velocityX
+        Math.random() < 0.5 ? -10 : 10, // velocityY 
         30,  // fps
         0 // pointValue
     )
@@ -111,11 +162,12 @@ window.addEventListener("load", function () {
         seagull.isVisible = true
         seagull.dx = getRandomInt(465, 500)
         seagull.dy = getRandomInt(10, 50)
-        seagull.velocityX = getRandomInt(-4, -2)
-        seagull.velocityY = Math.random() < 0.5 ? -0.3 : 0.2
+        seagull.velocityX = getRandomInt(-300, -75)
+        seagull.velocityY = Math.random() < 0.5 ? -10 : 10
     }
 
     const seagullPool = new ObjectPool(makeSeagull, seagullResetFunc, 10)
+    // console.log(seagullPool)
     const seagullSpawner = new Spawner(2, seagullPool)
 
     // Seagull poop 
@@ -123,29 +175,45 @@ window.addEventListener("load", function () {
     const gullPoopImage = new Image()
     gullPoopImage.src = "./assets/images/seagull-poop-sprite-01.png"
     const gullPoopSpriteImage = new SpriteFrame(gullPoopImage, 0, 0, 16, 16)
-    const makeGullPoop = () => new Sprite(
-        new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0),
-        getRandomInt(20, 455), // dx
-        0, // getRandomInt(-100, -50), //dy
+    const gullPoopSpriteAnimation = new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0)
+
+
+    const makeGullPoop = () => new Projectile(
+        ctx,
+        0,
+        0,
         16, // dWidth
         16, // dHeight
+        new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0),
         0, // velocityX
         6, // velocityY 
         30,  // fps
-        -100 // pointValue
+        -100, // pointValue
+        -25, // healthValue
     )
 
-    const gullPoopResetFunc = (gullPoop) => {
-        gullPoop.isScored = false
-        gullPoop.isVisible = true
-        gullPoop.dx = getRandomInt(20, 455)
-        gullPoop.dy = 0 // getRandomInt(-100, -50)
-        gullPoop.velocityX = 0
-        gullPoop.velocityY = 6
-    }
 
-    const gullPoopPool = new ObjectPool(makeGullPoop, gullPoopResetFunc, 5)
-    const gullPoopSpawner = new Spawner(3, gullPoopPool)
+    seagullPool.poolArray.forEach(seagull => {
+        seagull.data.projectile = new Projectile(
+
+            new SpriteAnimation(
+                gullPoopSpriteImage, 0, 0, 0),
+            0,
+            0,
+            16, // dWidth
+            16, // dHeight
+            0, // velocityX
+            6, // velocityY 
+            30,  // fps
+            -100, // pointValue
+            -25, // healthValue
+            seagull.data, // parentSprite
+            250
+        )
+    })
+
+
+
 
 
 
@@ -160,7 +228,7 @@ window.addEventListener("load", function () {
         switch (e.key) {
             case "Escape":
                 isPaused = !isPaused
-                console.log("pause toggled")
+                // console.log("pause toggled")
                 pauseGame()
                 break
         }
@@ -180,11 +248,13 @@ window.addEventListener("load", function () {
         pauseGame()
     })
 
+    let projectileTimer = 0
+    const projectileInterval = 250
 
     // Game loop
     function animate(timeStamp) {
         if (!isPaused) {
-            deltaTime = timeStamp - lastTime
+            deltaTime = (timeStamp - lastTime) / 1000
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -199,18 +269,16 @@ window.addEventListener("load", function () {
             drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
 
 
-            gullPoopSpawner.update(deltaTime)
+            // gullPoopSpawner.update(deltaTime)
             seagullSpawner.update(deltaTime)
             wienerSpawner.update(deltaTime)
-
             player.update(input.lastKey)
 
 
-
-            gullPoopSpawner.draw(ctx, deltaTime)
-            seagullSpawner.draw(ctx, deltaTime)
-            wienerSpawner.draw(ctx, deltaTime)
-            player.draw(ctx, deltaTime)
+            // gullPoopSpawner.draw(ctx, deltaTime)
+            seagullSpawner.draw(ctx)
+            wienerSpawner.draw(ctx)
+            player.draw(ctx)
 
 
 
@@ -219,22 +287,23 @@ window.addEventListener("load", function () {
 
             // detect collisions
             for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
-                if (detectBoxCollision(player, wienerSpawner.objectPool.poolArray[i].data)) {
-                    updateScore(wienerSpawner.objectPool.poolArray[i].data)
-                    wienerSpawner.objectPool.poolArray[i].data.isVisible = false
-                    console.log(wienerSpawner.objectPool.poolArray[i].data)
-                    wienerSpawner.objectPool.releaseElement(wienerSpawner.objectPool.poolArray[i])
+                let element = wienerSpawner.objectPool.poolArray[i]
+                if (detectBoxCollision(player, element.data)) {
+                    updateScore(element.data)
+                    element.data.isVisible = false
+                    // console.log(wienerSpawner.element.data)
+                    wienerSpawner.objectPool.releaseElement(element)
                 }
             }
 
-            for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
-                if (detectBoxCollision(player, gullPoopSpawner.objectPool.poolArray[i].data)) {
-                    updateScore(gullPoopSpawner.objectPool.poolArray[i].data)
-                    gullPoopSpawner.objectPool.poolArray[i].data.isVisible = false
-                    console.log(gullPoopSpawner.objectPool.poolArray[i].data)
-                    gullPoopSpawner.objectPool.releaseElement(gullPoopSpawner.objectPool.poolArray[i])
-                }
-            }
+            // for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
+            //     if (detectBoxCollision(player, gullPoopSpawner.objectPool.poolArray[i].data)) {
+            //         updateScore(gullPoopSpawner.objectPool.poolArray[i].data)
+            //         gullPoopSpawner.objectPool.poolArray[i].data.isVisible = false
+            //         // console.log(gullPoopSpawner.objectPool.poolArray[i].data)
+            //         gullPoopSpawner.objectPool.releaseElement(gullPoopSpawner.objectPool.poolArray[i])
+            //     }
+            // }
 
             // for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {
             //     if (detectBoxCollision(player, jumboSpawner.objectPool.poolArray[i].data)) {
@@ -258,7 +327,7 @@ window.addEventListener("load", function () {
         ui.hide(menuScreen)
         initScore()
         ui.show(gameplayHUD)
-        body.classList.add("green-bg")
+        body.classList.add("teal-bg")
         canvas.classList.remove("hidden")
         animate(0)
     }
