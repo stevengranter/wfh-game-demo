@@ -20,123 +20,132 @@
     <title>🌭 Wieners From Heaven: Maple Syrup Edition 🇨🇦</title>
   </head>
   <body>
-    <img
-      src="./assets/images/ui--overlay-screen-border-01.svg"
-      style="
-        position: absolute;
-        width: 100%;
-        height: auto;
-        pointer-events: none;
-        z-index: 50;
-        padding: 25px 25px 0px 25px;
-      "
-    />
-    <div class="game-screen">
-      <canvas id="game-screen__canvas" class="hidden"></canvas>
+    <div id="ui--super-nantendo" style="z-index: -150">
+      <div class="game-screen">
+        <img
+          src="./assets/images/ui--overlay-screen-border-01.svg"
+          id="game-screen--border-overlay"
+        />
+        <div id="overlay">
+          <canvas id="game-screen__canvas"></canvas>
 
-      <div id="overlay">
-        <div id="gameplay-hud" class="hidden">
-          <div id="hud-score"></div>
-          <button id="pause-button">Pause</button>
-        </div>
-
-        <div id="title-screen">
-          <img src="./assets/images/wfh-logo.webp" alt="" />
-          <div id="start-button">
-            <h2>Start</h2>
+          <div id="gameplay-hud" class="hidden">
+            <div id="hud-score"></div>
+            <button id="pause-button">Pause</button>
           </div>
-        </div>
 
-        <!-- START: #menu-screen -->
-
-        <div id="menu-screen" class="ui-panel hidden">
-          <header><h2>Options</h2></header>
-          <ul>
-            <li>
-              <label for="master-volume">
-                <img
-                  class="ui-icon"
-                  src="./assets/images/ui--volume-icon.svg"
-                  alt="Music Volume"
-                />
-              </label>
-              <div class="range-container">
-                <input
-                  title="master-volume"
-                  type="range"
-                  min="1"
-                  max="100"
-                  value="100"
-                  class="slider"
-                  id="volume-range"
-                />
-              </div>
-            </li>
-            <li>
-              <label for="music-volume">
-                <img
-                  class="ui-icon"
-                  src="./assets/images/ui--music-icon.svg"
-                  alt="Music Volume"
-                />
-              </label>
-              <div class="range-container">
-                <input
-                  title="music-volume"
-                  type="range"
-                  min="1"
-                  max="100"
-                  value="100"
-                  class="slider"
-                  id="music-range"
-                />
-              </div>
-            </li>
-            <li>
-              <label for="sfx-volume">
-                <img
-                  class="ui-icon"
-                  src="./assets/images/ui--sfx-icon.svg"
-                  alt="Sound Effects Volume"
-              /></label>
-              <div class="range-container">
-                <input
-                  title="sfx-volume"
-                  type="range"
-                  min="1"
-                  max="100"
-                  value="100"
-                  class="slider"
-                  id="sfx-range"
-                />
-              </div>
-            </li>
-          </ul>
-          <button id="resume-button">Resume</button>
-
-          <div id="stop-button">
-            <div class="border">
-              <button>Stop</button>
+          <div id="title-screen">
+            <img src="./assets/images/wfh-logo.webp" alt="" />
+            <div id="start-button">
+              <h2>Start</h2>
             </div>
           </div>
-        </div>
-        <!-- #menu-screen :END -->
-        <div id="intro-screen" class="ui-panel hidden">
-          <img src="./assets/images/ui-controls-directional-01.png" alt="" />
-        </div>
-      </div>
-    </div>
 
-    <div id="controls-panel" style="max-width: 70%; margin-top: 15%">
-      <div style="display: flex; flex-direction: row">
-        <img src="./assets/images/ui--overlay-d-pad-01.png" alt="" srcset="" />
-        <img src="./assets/images/ui--overlay-main-button-01.png" alt="" />
+          <!-- START: #menu-screen -->
+
+          <div id="menu-screen" class="ui-panel hidden">
+            <header><h2>Options</h2></header>
+            <ul>
+              <li>
+                <label for="master-volume">
+                  <img
+                    class="ui-icon"
+                    src="./assets/images/ui--volume-icon.svg"
+                    alt="Music Volume"
+                  />
+                </label>
+                <div class="range-container">
+                  <input
+                    title="master-volume"
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="100"
+                    class="slider"
+                    id="volume-range"
+                  />
+                </div>
+              </li>
+              <li>
+                <label for="music-volume">
+                  <img
+                    class="ui-icon"
+                    src="./assets/images/ui--music-icon.svg"
+                    alt="Music Volume"
+                  />
+                </label>
+                <div class="range-container">
+                  <input
+                    title="music-volume"
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="100"
+                    class="slider"
+                    id="music-range"
+                  />
+                </div>
+              </li>
+              <li>
+                <label for="sfx-volume">
+                  <img
+                    class="ui-icon"
+                    src="./assets/images/ui--sfx-icon.svg"
+                    alt="Sound Effects Volume"
+                /></label>
+                <div class="range-container">
+                  <input
+                    title="sfx-volume"
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="100"
+                    class="slider"
+                    id="sfx-range"
+                  />
+                </div>
+              </li>
+            </ul>
+            <button id="resume-button">Resume</button>
+
+            <div id="stop-button">
+              <div class="border">
+                <button>Stop</button>
+              </div>
+            </div>
+          </div>
+          <!-- #menu-screen :END -->
+          <div id="intro-screen" class="ui-panel hidden">
+            <img src="./assets/images/ui-controls-directional-01.png" alt="" />
+          </div>
+        </div>
       </div>
-      <img src="./assets/images/ui--controls--pause-button-01.png" alt="" />
+
+      <div id="ui--controls-panel">
+        <div id="ui--controller-buttons" style="">
+          <img
+            id="control--dpad"
+            src="./assets/images/ui--overlay-d-pad-01.png"
+            alt=""
+            srcset=""
+          />
+          <img
+            id="control--button-primary"
+            src="./assets/images/ui--overlay-main-button-01.png"
+            alt=""
+          />
+        </div>
+        <img
+          id="control--pause-button"
+          src="./assets/images/ui--controls--pause-button-01.png"
+          alt=""
+        />
+      </div>
+
+      <div id="debug-panel">
+        <div id=""></div>
+      </div>
+      <script type="module" src="./assets/js/game.js"></script>
     </div>
-    <div id="debug-panel">
-      <div id=""></div>
-    </div>
-    <script type="module" src="./assets/js/game.js"></script>
   </body>
 </html>

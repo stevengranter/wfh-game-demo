@@ -327,7 +327,8 @@ window.addEventListener("load", function () {
         ui.hide(menuScreen)
         initScore()
         ui.show(gameplayHUD)
-        body.classList.add("teal-bg")
+        const superNantendo = document.getElementById("ui--super-nantendo")
+        superNantendo.classList.add("teal-bg")
         canvas.classList.remove("hidden")
         animate(0)
     }
