@@ -49,7 +49,9 @@ window.addEventListener("load", function () {
 
     // In-game DOM elements
     const gameplayHUD = document.getElementById("gameplay-hud")
-    const scoreDisplay = document.getElementById("hud-score")
+    const scoreCounter = document.getElementById("hud-score")
+    const healthMeter = document.querySelector("#hud-health-meter span")
+    console.log(healthMeter)
 
     // Player Object
 
@@ -100,11 +102,13 @@ window.addEventListener("load", function () {
 
     const player = new Player(
         ctx,
+        225,
+        200,
         48,
         48,
+        playerStandingLeftAnimation,
         canvas.width,
-        canvas.height,
-        playerStandingLeftAnimation)
+        canvas.height)
 
     // Sprites
 
@@ -178,39 +182,54 @@ window.addEventListener("load", function () {
     const gullPoopSpriteAnimation = new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0)
 
 
-    const makeGullPoop = () => new Projectile(
+    const makeGullPoop = () => new Sprite(
         ctx,
-        0,
-        0,
+        canvas.width / 2, //getRandomInt(20, 460),
+        getRandomInt(-10, 40),
         16, // dWidth
         16, // dHeight
         new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0),
         0, // velocityX
-        6, // velocityY 
+        400, // velocityY 
         30,  // fps
-        -100, // pointValue
+        0, // pointValue
         -25, // healthValue
     )
 
+    const gullPoopResetFunc = (poop) => {
+        poop.isScored = false
+        poop.isVisible = true
+        poop.dx = canvas.width / 2
+        poop.dy = getRandomInt(-10, 40)
+        poop.velocityX = 0
+        poop.velocityY = getRandomInt(300, 500)
+    }
 
-    seagullPool.poolArray.forEach(seagull => {
-        seagull.data.projectile = new Projectile(
 
-            new SpriteAnimation(
-                gullPoopSpriteImage, 0, 0, 0),
-            0,
-            0,
-            16, // dWidth
-            16, // dHeight
-            0, // velocityX
-            6, // velocityY 
-            30,  // fps
-            -100, // pointValue
-            -25, // healthValue
-            seagull.data, // parentSprite
-            250
-        )
-    })
+
+    const gullPoopPool = new ObjectPool(makeGullPoop, gullPoopResetFunc, 10)
+
+    const gullPoopSpawner = new Spawner(2, gullPoopPool)
+
+    // seagullPool.poolArray.forEach(seagull => {
+    //     seagull.data.projectile = new Projectile(
+
+    //         new SpriteAnimation(
+    //             gullPoopSpriteImage, 0, 0, 0),
+    //         0,
+    //         0,
+    //         16, // dWidth
+    //         16, // dHeight
+    //         0, // velocityX
+    //         6, // velocityY 
+    //         30,  // fps
+    //         -100, // pointValue
+    //         -25, // healthValue
+    //         seagull.data, // parentSprite
+    //         250
+    //     )
+    // })
+
 
 
 
@@ -251,6 +270,8 @@ window.addEventListener("load", function () {
     let projectileTimer = 0
     const projectileInterval = 250
 
+
+
     // Game loop
     function animate(timeStamp) {
         if (!isPaused) {
@@ -260,6 +281,11 @@ window.addEventListener("load", function () {
 
 
             let statusBottomY = 260
+
+            drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
+            drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
+            drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
+
             drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, statusBottomY - 60)
             drawStatusText(ctx, "     active:" + seagullSpawner.getActiveObjects(), 10, statusBottomY - 50)
             drawStatusText(ctx, "     timer: " + Math.floor(seagullSpawner.timeSinceSpawn) + " / " + seagullSpawner.spawnInterval, 10, statusBottomY - 40)
@@ -269,13 +295,13 @@ window.addEventListener("load", function () {
             drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
 
 
-            // gullPoopSpawner.update(deltaTime)
+            gullPoopSpawner.update(deltaTime)
             seagullSpawner.update(deltaTime)
             wienerSpawner.update(deltaTime)
             player.update(input.lastKey)
 
 
-            // gullPoopSpawner.draw(ctx, deltaTime)
+            gullPoopSpawner.draw(ctx)
             seagullSpawner.draw(ctx)
             wienerSpawner.draw(ctx)
             player.draw(ctx)
@@ -287,23 +313,29 @@ window.addEventListener("load", function () {
 
             // detect collisions
             for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
-                let element = wienerSpawner.objectPool.poolArray[i]
-                if (detectBoxCollision(player, element.data)) {
-                    updateScore(element.data)
-                    element.data.isVisible = false
-                    // console.log(wienerSpawner.element.data)
-                    wienerSpawner.objectPool.releaseElement(element)
+                let collider = wienerSpawner.objectPool.poolArray[i]
+                if (detectBoxCollision(player, collider.data)) {
+                    let playerStats = player.updateScore(collider.data)
+                    scoreCounter.innerHTML = String(playerStats.currentScore).padStart(4, "0")
+                    collider.data.isVisible = false
+                    // console.log(wienerSpawner.collider.data)
+                    wienerSpawner.objectPool.releaseElement(collider)
                 }
             }
 
-            // for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
-            //     if (detectBoxCollision(player, gullPoopSpawner.objectPool.poolArray[i].data)) {
-            //         updateScore(gullPoopSpawner.objectPool.poolArray[i].data)
-            //         gullPoopSpawner.objectPool.poolArray[i].data.isVisible = false
-            //         // console.log(gullPoopSpawner.objectPool.poolArray[i].data)
-            //         gullPoopSpawner.objectPool.releaseElement(gullPoopSpawner.objectPool.poolArray[i])
-            //     }
-            // }
+            for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
+                let collider = gullPoopSpawner.objectPool.poolArray[i]
+                if (detectBoxCollision(player, collider.data)) {
+                    let playerStats = player.updateScore(collider.data)
+                    scoreCounter.innerHTML = String(playerStats.currentScore).padStart(4, "0")
+                    // healthMeter.style.backgroundColor = "#000000"
+                    healthMeter.style.width = playerStats.currentHealth
+                    console.log("healthMeter.width: " + healthMeter.width)
+                    collider.data.isVisible = false
+                    // console.log(collider.data)
+                    gullPoopSpawner.objectPool.releaseElement(collider)
+                }
+            }
 
             // for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {
             //     if (detectBoxCollision(player, jumboSpawner.objectPool.poolArray[i].data)) {
@@ -313,7 +345,7 @@ window.addEventListener("load", function () {
 
             //     }
             // }
-
+            console.log(player.currentHealth)
             requestAnimationFrame(animate)
         } else {
             pauseGame()
@@ -325,7 +357,7 @@ window.addEventListener("load", function () {
     function startGame() {
         ui.hide(titleScreen)
         ui.hide(menuScreen)
-        initScore()
+        scoreCounter.innerHTML = String(0).padStart(4, "0")
         ui.show(gameplayHUD)
         const superNantendo = document.getElementById("ui--super-nantendo")
         superNantendo.classList.add("teal-bg")
@@ -371,21 +403,7 @@ window.addEventListener("load", function () {
     }
 
 
-    // Score-keeping
-    function initScore() {
-        scoreDisplay.innerHTML = String(currentScore).padStart(4, "0")
-    }
 
-    function updateScore(object) {
-        if (object) {
-            if (!object.isScored) {
-                // console.log("SCORE")
-                currentScore += object.pointValue
-                scoreDisplay.innerHTML = String(currentScore).padStart(4, "0")
-                object.isScored = true
-            }
-        }
-    }
 
 
 
