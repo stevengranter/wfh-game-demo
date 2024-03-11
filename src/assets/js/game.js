@@ -18,7 +18,7 @@ window.addEventListener("load", function () {
 
     const debugPanel = document.getElementById("debug-panel")
     const debug = new DebugMode(true, debugPanel)
-    console.log("Debug mode is " + debug.isOn)
+    // console.log("Debug mode is " + debug.isOn)
     // Initialize canvas 🎨 //
     const canvas = document.getElementById("game-screen__canvas")
     const ctx = canvas.getContext("2d")
@@ -51,9 +51,24 @@ window.addEventListener("load", function () {
     const gameplayHUD = document.getElementById("gameplay-hud")
     const scoreCounter = document.getElementById("hud-score")
     const healthMeter = document.querySelector("#hud-health-meter span")
-    console.log(healthMeter)
+    // console.log(healthMeter)
+
+    // Virtual control button elements
+    // const virtualButtons = document.querySelectorAll(".touchable")
+
+    // for (let i = 0; i < virtualButtons.length; i++) {
+    //     virtualButtons[i].addEventListener("touchstart", handleTouch())
+    // }
 
 
+    const controllerStartButton = document.getElementById("virtual-controller--button-start")
+    const controllerSelectButton = document.getElementById("virtual-controller--button-select")
+    const controllerDpad = document.getElementById("virtual-controller--button-dpad")
+    const controllerPrimaryButton = document.getElementById("virtual-controller--button-primary")
+
+
+
+    // }
     // Player Object
 
     const playerImage = new Image()
@@ -265,7 +280,9 @@ window.addEventListener("load", function () {
 
 
     // Input Handler
-    const input = new InputHandler()
+    // console.log(this.document)
+    const input = new InputHandler(this.document)
+
 
     // Event listeners
     window.addEventListener("keydown", (e) => {
@@ -291,6 +308,81 @@ window.addEventListener("load", function () {
         isPaused = !isPaused
         pauseGame()
     })
+
+    controllerStartButton.addEventListener("click", (e) => {
+        isPaused = !isPaused
+        pauseGame()
+        console.log('Start Button')
+    })
+
+    controllerStartButton.addEventListener("touchstart", (e) => {
+        e.preventDefault()
+        isPaused = !isPaused
+        pauseGame()
+        console.log('Start Button')
+    })
+
+    // controllerSelectButton.addEventListener("click", (e) => {
+    //     if (!isPaused) {
+    //         isPaused = !isPaused
+    //         pauseGame()
+    //     } else {
+    //         console.log('Select Button')
+    //     }
+    // })
+
+    // controllerSelectButton.addEventListener("touchstart", (e) => {
+    //     e.preventDefault()
+    //     if (!isPaused) {
+    //         isPaused = !isPaused
+    //         pauseGame()
+    //     } else {
+    //         console.log('Select Button')
+    //     }
+    // })
+
+    // controllerDpad.addEventListener("click", (e) => {
+
+    //     this.player.setState(this.states.WalkingLeft)
+    // })
+
+    // controllerDpad.addEventListener("touchstart", (e) => {
+    //     player.setState(states.WalkingLeft)
+    // })
+
+
+    // controllerPrimaryButton.addEventListener("click", (e) => {
+    //     if (!isPaused) {
+    //         isPaused = !isPaused
+    //         pauseGame()
+    //     } else {
+    //         console.log('Primary Button')
+    //     }
+    // })
+
+    // controllerPrimaryButton.addEventListener("touchstart", (e) => {
+    //     e.preventDefault()
+    //     if (!isPaused) {
+    //         isPaused = !isPaused
+    //         pauseGame()
+    //     } else {
+    //         console.log('Primary Button')
+    //     }
+    // })
+
+
+    // this.document.addEventListener("touchstart", (e) => {
+    //     e.preventDefault()
+    //     console.log("touchstart")
+    // })
+    // this.document.addEventListener("touchmove", (e) => {
+    //     e.preventDefault()
+    //     console.log("touchmove")
+    // })
+    // this.document.addEventListener("touchend", (e) => {
+    //     e.preventDefault()
+    //     console.log("touchend")
+    // })
 
     let projectileTimer = 0
     const projectileInterval = 250
@@ -365,26 +457,14 @@ window.addEventListener("load", function () {
                     scoreCounter.innerHTML = String(playerStats.currentScore).padStart(4, "0")
                     // healthMeter.style.backgroundColor = "#000000"
                     healthMeter.style.width = playerStats.currentHealth
-                    console.log("healthMeter.width: " + healthMeter.width)
+                    console.log("healthMeter:d " + healthMeter.style.width)
                     collider.data.isVisible = false
                     // console.log(collider.data)
                     gullPoopSpawner.objectPool.releaseElement(collider)
                 }
             }
 
-            for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
-                let collider = gullPoopSpawner.objectPool.poolArray[i]
-                if (detectBoxCollision(player, collider.data)) {
-                    let playerStats = player.updateScore(collider.data)
-                    scoreCounter.innerHTML = String(playerStats.currentScore).padStart(4, "0")
-                    // healthMeter.style.backgroundColor = "#000000"
-                    healthMeter.style.width = playerStats.currentHealth
-                    console.log("healthMeter.width: " + healthMeter.width)
-                    collider.data.isVisible = false
-                    // console.log(collider.data)
-                    gullPoopSpawner.objectPool.releaseElement(collider)
-                }
-            }
+
 
             // for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {
             //     if (detectBoxCollision(player, jumboSpawner.objectPool.poolArray[i].data)) {

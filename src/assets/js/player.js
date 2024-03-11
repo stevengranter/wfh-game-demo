@@ -39,6 +39,7 @@ export default class Player extends Sprite {
 
         this.currentHealth = 100
         this.currentScore = 0
+        this.currentLives = 3
 
         this.isAlive = true
 

@@ -1,44 +1,72 @@
 export default class InputHandler {
-    constructor() {
+
+
+
+
+    constructor(document) {
         this.lastKey = ""
-
-        //  Mouse controls
-        // window.addEventListener('contextmenu', event => {
-        //     event.preventDefault()
-        // })
-        // window.addEventListener("mousedown", (e) => {
-        //     let log = document.querySelector("#log")
-        //     switch (e.button) {
-        //         case 0:
-        //             this.lastKey = "PRESS left"
-        //             break
-        //         case 1:
-        //             this.lastKey = "PRESS up"
-        //             break
-        //         case 2:
-        //             this.lastKey = "PRESS right"
-        //             break
-        //         default:
-        //             log.textContent = `Unknown button code: ${e.button}`
-        //     }
+        // const virtualButtons = document.querySelectorAll(".touchable")
+        // const buttonsArray = Array.from(virtualButtons)
+        // buttonsArray[0].addEventListener("touchstart", (e) => {
+        //     console.log("touchstart")
         // })
 
-        // window.addEventListener("mouseup", (e) => {
-        //     let log = document.querySelector("#log")
-        //     switch (e.button) {
-        //         case 0:
-        //             this.lastKey = "RELEASE left"
-        //             break
-        //         case 1:
-        //             this.lastKey = "RELEASE up"
-        //             break
-        //         case 2:
-        //             this.lastKey = "RELEASE right"
-        //             break
-        //         default:
-        //             log.textContent = `Unknown button code: ${e.button}`
-        //     }
-        // })
+
+
+
+        //Touch controls
+        const dPadLeft = document.getElementById("virtual-controller--button-dpad-left")
+        const dPadRight = document.getElementById("virtual-controller--button-dpad-right")
+
+
+        dPadLeft.addEventListener("touchstart", (e) => {
+            e.preventDefault()
+            this.lastKey = "PRESS left"
+            // this.handleTouches(e)
+        })
+
+        dPadLeft.addEventListener("touchend", (e) => {
+            e.preventDefault()
+            this.lastKey = "RELEASE left"
+
+        })
+
+
+        dPadRight.addEventListener("touchstart", (e) => {
+            e.preventDefault()
+            this.lastKey = "PRESS right"
+            // this.handleTouches(e)
+        })
+        dPadRight.addEventListener("touchend", (e) => {
+            e.preventDefault()
+            this.lastKey = "RELEASE right"
+
+        })
+
+        // Mouse controls
+
+        dPadLeft.addEventListener("mousedown", (e) => {
+            e.preventDefault()
+            this.lastKey = "PRESS left"
+
+        })
+        dPadLeft.addEventListener("mouseup", (e) => {
+            e.preventDefault()
+            this.lastKey = "RELEASE left"
+
+        })
+
+        dPadRight.addEventListener("mousedown", (e) => {
+            e.preventDefault()
+            this.lastKey = "PRESS right"
+
+        })
+        dPadRight.addEventListener("mouseup", (e) => {
+            e.preventDefault()
+            this.lastKey = "RELEASE right"
+
+        })
+
 
         // Keyboard controls
         window.addEventListener("keydown", (e) => {
@@ -101,5 +129,19 @@ export default class InputHandler {
         })
 
 
+
+
+
+        // handleTouches(button) {
+        //     if (button.touches) {
+        //         console.log(button.touches)
+        //     }
+
+        // }
+
+    }
+
+    handleTouches(event) {
+        console.log(event)
     }
 }
