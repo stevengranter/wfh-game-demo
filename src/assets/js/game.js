@@ -52,9 +52,7 @@ window.addEventListener("load", function () {
     const scoreCounter = document.getElementById("hud-score")
     const healthMeter = document.querySelector("#hud-health-meter span")
     console.log(healthMeter)
-    const scoreCounter = document.getElementById("hud-score")
-    const healthMeter = document.querySelector("#hud-health-meter span")
-    console.log(healthMeter)
+
 
     // Player Object
 
@@ -107,274 +105,250 @@ window.addEventListener("load", function () {
         ctx,
         225,
         200,
-        225,
-        200,
         48,
         48,
-        playerStandingLeftAnimation,
         playerStandingLeftAnimation,
         canvas.width,
         canvas.height)
-    canvas.height)
 
-// Sprites
+    // Sprites
 
-// Wiener 🌭
+    // Wiener 🌭
 
-const wienerImage = new Image()
-wienerImage.src = "./assets/images/wiener-32-spin-01.png"
-const wienerSpriteImage = new SpriteFrame(wienerImage, 0, 0, 32, 32)
-const makeWiener = () => new Sprite(
-    ctx,
-    getRandomInt(20, 460), // dx
-    -50, // dy
-    32, // dWidth
-    32, // dHeight
-    new SpriteAnimation(wienerSpriteImage, 0, 0, 28),
-    getRandomInt(-75, 75), //getRandomInt(-1, 1), // velocityX
-    getRandomInt(50, 200), //getRandomInt(1, 3), // velocityY
-    getRandomInt(15, 120), // fps
-    100 // pointValue
-)
+    const wienerImage = new Image()
+    wienerImage.src = "./assets/images/wiener-32-spin-01.png"
+    const wienerSpriteImage = new SpriteFrame(wienerImage, 0, 0, 32, 32)
+    const makeWiener = () => new Sprite(
+        ctx,
+        getRandomInt(20, 460), // dx
+        -50, // dy
+        32, // dWidth
+        32, // dHeight
+        new SpriteAnimation(wienerSpriteImage, 0, 0, 28),
+        getRandomInt(-75, 75), //getRandomInt(-1, 1), // velocityX
+        getRandomInt(50, 200), //getRandomInt(1, 3), // velocityY
+        getRandomInt(15, 120), // fps
+        100 // pointValue
+    )
 
-const wienerResetFunc = (wiener) => {
-    wiener.isScored = false
-    wiener.isVisible = true
-    wiener.dx = getRandomInt(20, 460)
-    wiener.dy = -50
-    wiener.velocityX = getRandomInt(-75, 75)
-    wiener.velocityY = getRandomInt(50, 200)
-}
-
-const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, 10)
-const wienerSpawner = new Spawner(1, wienerPool)
-// console.log(wienerPool)
-
-// Seagull 🐦
-
-const seagullImage = new Image()
-seagullImage.src = "./assets/images/seagull-flying-sprite-01.png"
-const seagullSpriteImage = new SpriteFrame(seagullImage, 0, 0, 44, 51)
-const makeSeagull = () => new Sprite(
-    ctx, // spritesheet
-    getRandomInt(465, 500), // dx
-    getRandomInt(10, 50), //dy
-    44, // dWidth
-    51, // dHeight
-    new SpriteAnimation(seagullSpriteImage, 0, 0, 7),
-    getRandomInt(-300, -75), // velocityX
-    Math.random() < 0.5 ? -10 : 10, // velocityY 
-    30,  // fps
-    0 // pointValue
-)
-
-const seagullResetFunc = (seagull) => {
-    seagull.isScored = false
-    seagull.isVisible = true
-    seagull.dx = getRandomInt(465, 500)
-    seagull.dy = getRandomInt(10, 50)
-    seagull.velocityX = getRandomInt(-300, -75)
-    seagull.velocityY = Math.random() < 0.5 ? -10 : 10
-}
-
-const seagullPool = new ObjectPool(makeSeagull, seagullResetFunc, 10)
-// console.log(seagullPool)
-const seagullSpawner = new Spawner(2, seagullPool)
-
-// Seagull poop 
-
-const gullPoopImage = new Image()
-gullPoopImage.src = "./assets/images/seagull-poop-sprite-01.png"
-const gullPoopSpriteImage = new SpriteFrame(gullPoopImage, 0, 0, 16, 16)
-const gullPoopSpriteAnimation = new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0)
-
-
-const makeGullPoop = () => new Sprite(
-    const makeGullPoop = () => new Sprite(
-    ctx,
-    canvas.width / 2, //getRandomInt(20, 460),
-    getRandomInt(-10, 40),
-    getRandomInt(20, 460),
-    getRandomInt(-10, 40),
-    16, // dWidth
-    16, // dHeight
-    new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0),
-    0, // velocityX
-    400, // velocityY 
-    400, // velocityY 
-    30,  // fps
-    0, // pointValue
-    0, // pointValue
-    -25, // healthValue
-)
-
-const gullPoopResetFunc = (poop) => {
-    poop.isScored = false
-    poop.isVisible = true
-    poop.dx = canvas.width / 2
-    poop.dy = getRandomInt(-10, 40)
-    poop.velocityX = 0
-    poop.velocityY = getRandomInt(300, 500)
-}
-
-
-
-const gullPoopPool = new ObjectPool(makeGullPoop, gullPoopResetFunc, 10)
-
-const gullPoopSpawner = new Spawner(2, gullPoopPool)
-
-// seagullPool.poolArray.forEach(seagull => {
-//     seagull.data.projectile = new Projectile(
-const gullPoopResetFunc = (poop) => {
-    poop.isScored = false
-    poop.isVisible = true
-    poop.dx = getRandomInt(20, 460)
-    poop.dy = getRandomInt(-10, 40)
-    poop.velocityX = 0
-    poop.velocityY = getRandomInt(300, 500)
-}
-
-
-
-const gullPoopPool = new ObjectPool(makeGullPoop, gullPoopResetFunc, 10)
-
-const gullPoopSpawner = new Spawner(2, gullPoopPool)
-
-// seagullPool.poolArray.forEach(seagull => {
-//     seagull.data.projectile = new Projectile(
-
-//         new SpriteAnimation(
-//             gullPoopSpriteImage, 0, 0, 0),
-//         0,
-//         0,
-//         16, // dWidth
-//         16, // dHeight
-//         0, // velocityX
-//         6, // velocityY 
-//         30,  // fps
-//         -100, // pointValue
-//         -25, // healthValue
-//         seagull.data, // parentSprite
-//         250
-//     )
-// })
-
-//         new SpriteAnimation(
-//             gullPoopSpriteImage, 0, 0, 0),
-//         0,
-//         0,
-//         16, // dWidth
-//         16, // dHeight
-//         0, // velocityX
-//         6, // velocityY 
-//         30,  // fps
-//         -100, // pointValue
-//         -25, // healthValue
-//         seagull.data, // parentSprite
-//         250
-//     )
-// })
-
-
-
-
-
-
-
-
-
-
-// Input Handler
-const input = new InputHandler()
-
-// Event listeners
-window.addEventListener("keydown", (e) => {
-    switch (e.key) {
-        case "Escape":
-            isPaused = !isPaused
-            // console.log("pause toggled")
-            pauseGame()
-            break
+    const wienerResetFunc = (wiener) => {
+        wiener.isScored = false
+        wiener.isVisible = true
+        wiener.dx = getRandomInt(20, 460)
+        wiener.dy = -50
+        wiener.velocityX = getRandomInt(-75, 75)
+        wiener.velocityY = getRandomInt(50, 200)
     }
-})
 
-startButton.addEventListener("click", startGame)
+    const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, 10)
+    const wienerSpawner = new Spawner(1, wienerPool)
+    // console.log(wienerPool)
 
-stopButton.addEventListener("click", stopGame)
+    // Seagull 🐦
 
-pauseButton.addEventListener("click", (e) => {
-    isPaused = !isPaused
-    pauseGame()
-})
+    const seagullImage = new Image()
+    seagullImage.src = "./assets/images/seagull-flying-sprite-01.png"
+    const seagullSpriteImage = new SpriteFrame(seagullImage, 0, 0, 44, 51)
+    const makeSeagull = () => new Sprite(
+        ctx, // spritesheet
+        getRandomInt(465, 500), // dx
+        getRandomInt(10, 50), //dy
+        44, // dWidth
+        51, // dHeight
+        new SpriteAnimation(seagullSpriteImage, 0, 0, 7),
+        getRandomInt(-300, -75), // velocityX
+        Math.random() < 0.5 ? -10 : 10, // velocityY 
+        30,  // fps
+        0 // pointValue
+    )
 
-resumeButton.addEventListener("click", (e) => {
-    isPaused = !isPaused
-    pauseGame()
-})
+    const seagullResetFunc = (seagull) => {
+        seagull.isScored = false
+        seagull.isVisible = true
+        seagull.dx = getRandomInt(465, 500)
+        seagull.dy = getRandomInt(10, 50)
+        seagull.velocityX = getRandomInt(-300, -75)
+        seagull.velocityY = Math.random() < 0.5 ? -10 : 10
+    }
 
-let projectileTimer = 0
-const projectileInterval = 250
+    const seagullPool = new ObjectPool(makeSeagull, seagullResetFunc, 10)
+    // console.log(seagullPool)
+    const seagullSpawner = new Spawner(2, seagullPool)
 
+    // Seagull poop 
 
-
-
-
-// Game loop
-function animate(timeStamp) {
-    if (!isPaused) {
-        deltaTime = (timeStamp - lastTime) / 1000
-        lastTime = timeStamp
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-
-        let statusBottomY = 260
-
-        drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
-        drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
-        drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
-
-
-        drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
-        drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
-        drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
-
-        drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, statusBottomY - 60)
-        drawStatusText(ctx, "     active:" + seagullSpawner.getActiveObjects(), 10, statusBottomY - 50)
-        drawStatusText(ctx, "     timer: " + Math.floor(seagullSpawner.timeSinceSpawn) + " / " + seagullSpawner.spawnInterval, 10, statusBottomY - 40)
-
-        drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
-        drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
-        drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
+    const gullPoopImage = new Image()
+    gullPoopImage.src = "./assets/images/seagull-poop-sprite-01.png"
+    const gullPoopSpriteImage = new SpriteFrame(gullPoopImage, 0, 0, 16, 16)
+    const gullPoopSpriteAnimation = new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0)
 
 
-        gullPoopSpawner.update(deltaTime)
-        gullPoopSpawner.update(deltaTime)
-        seagullSpawner.update(deltaTime)
-        wienerSpawner.update(deltaTime)
-        player.update(input.lastKey)
+    const makeGullPoop = () => new Sprite(
+        ctx,
 
-
-        gullPoopSpawner.draw(ctx)
-        gullPoopSpawner.draw(ctx)
-        seagullSpawner.draw(ctx)
-        wienerSpawner.draw(ctx)
-        player.draw(ctx)
+        getRandomInt(20, 460),
+        getRandomInt(-10, -40),
+        16, // dWidth
+        16, // dHeight
+        new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0),
+        0, // velocityX
+        getRandomInt(200, 400), // velocityY 
+        30,  // fps
+        0, // pointValue
+        -25, // healthValue
+    )
 
 
 
 
 
 
-        // detect collisions
-        for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
-            let collider = wienerSpawner.objectPool.poolArray[i]
-            if (detectBoxCollision(player, collider.data)) {
-                let playerStats = player.updateScore(collider.data)
-                scoreCounter.innerHTML = String(playerStats.currentScore).padStart(4, "0")
-                collider.data.isVisible = false
-                // console.log(wienerSpawner.collider.data)
-                wienerSpawner.objectPool.releaseElement(collider)
+    // seagullPool.poolArray.forEach(seagull => {
+    //     seagull.data.projectile = new Projectile(
+    const gullPoopResetFunc = (poop) => {
+        poop.isScored = false
+        poop.isVisible = true
+        poop.dx = getRandomInt(20, 460)
+        poop.dy = getRandomInt(-10, -40)
+        poop.velocityX = 0
+        poop.velocityY = getRandomInt(200, 400)
+    }
+
+
+
+    const gullPoopPool = new ObjectPool(makeGullPoop, gullPoopResetFunc, 10)
+
+    const gullPoopSpawner = new Spawner(2, gullPoopPool)
+
+    // seagullPool.poolArray.forEach(seagull => {
+    //     seagull.data.projectile = new Projectile(
+
+    //         new SpriteAnimation(
+    //             gullPoopSpriteImage, 0, 0, 0),
+    //         0,
+    //         0,
+    //         16, // dWidth
+    //         16, // dHeight
+    //         0, // velocityX
+    //         6, // velocityY 
+    //         30,  // fps
+    //         -100, // pointValue
+    //         -25, // healthValue
+    //         seagull.data, // parentSprite
+    //         250
+    //     )
+    // })
+
+    //         new SpriteAnimation(
+    //             gullPoopSpriteImage, 0, 0, 0),
+    //         0,
+    //         0,
+    //         16, // dWidth
+    //         16, // dHeight
+    //         0, // velocityX
+    //         6, // velocityY 
+    //         30,  // fps
+    //         -100, // pointValue
+    //         -25, // healthValue
+    //         seagull.data, // parentSprite
+    //         250
+    //     )
+    // })
+
+
+
+
+
+
+
+
+
+
+    // Input Handler
+    const input = new InputHandler()
+
+    // Event listeners
+    window.addEventListener("keydown", (e) => {
+        switch (e.key) {
+            case "Escape":
+                isPaused = !isPaused
+                // console.log("pause toggled")
+                pauseGame()
+                break
+        }
+    })
+
+    startButton.addEventListener("click", startGame)
+
+    stopButton.addEventListener("click", stopGame)
+
+    pauseButton.addEventListener("click", (e) => {
+        isPaused = !isPaused
+        pauseGame()
+    })
+
+    resumeButton.addEventListener("click", (e) => {
+        isPaused = !isPaused
+        pauseGame()
+    })
+
+    let projectileTimer = 0
+    const projectileInterval = 250
+
+
+
+
+
+    // Game loop
+    function animate(timeStamp) {
+        if (!isPaused) {
+            deltaTime = (timeStamp - lastTime) / 1000
+            lastTime = timeStamp
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+
+            let statusBottomY = 260
+
+            drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
+            drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
+            drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
+
+
+            drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
+            drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
+            drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
+
+            drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, statusBottomY - 60)
+            drawStatusText(ctx, "     active:" + seagullSpawner.getActiveObjects(), 10, statusBottomY - 50)
+            drawStatusText(ctx, "     timer: " + Math.floor(seagullSpawner.timeSinceSpawn) + " / " + seagullSpawner.spawnInterval, 10, statusBottomY - 40)
+
+            drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
+            drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
+            drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
+
+
+            gullPoopSpawner.update(deltaTime)
+            gullPoopSpawner.update(deltaTime)
+            seagullSpawner.update(deltaTime)
+            wienerSpawner.update(deltaTime)
+            player.update(input.lastKey)
+
+
+            gullPoopSpawner.draw(ctx)
+            gullPoopSpawner.draw(ctx)
+            seagullSpawner.draw(ctx)
+            wienerSpawner.draw(ctx)
+            player.draw(ctx)
+
+
+
+
+
+
+            // detect collisions
+            for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
                 let collider = wienerSpawner.objectPool.poolArray[i]
+
                 if (detectBoxCollision(player, collider.data)) {
                     let playerStats = player.updateScore(collider.data)
                     scoreCounter.innerHTML = String(playerStats.currentScore).padStart(4, "0")
@@ -397,6 +371,7 @@ function animate(timeStamp) {
                     gullPoopSpawner.objectPool.releaseElement(collider)
                 }
             }
+
             for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
                 let collider = gullPoopSpawner.objectPool.poolArray[i]
                 if (detectBoxCollision(player, collider.data)) {
@@ -419,8 +394,7 @@ function animate(timeStamp) {
 
             //     }
             // }
-            console.log(player.currentHealth)
-            console.log(player.currentHealth)
+
             requestAnimationFrame(animate)
         } else {
             pauseGame()
