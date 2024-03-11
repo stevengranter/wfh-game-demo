@@ -184,7 +184,7 @@ window.addEventListener("load", function () {
 
     const makeGullPoop = () => new Sprite(
         ctx,
-        canvas.width / 2, //getRandomInt(20, 460),
+        getRandomInt(20, 460),
         getRandomInt(-10, 40),
         16, // dWidth
         16, // dHeight
@@ -199,7 +199,7 @@ window.addEventListener("load", function () {
     const gullPoopResetFunc = (poop) => {
         poop.isScored = false
         poop.isVisible = true
-        poop.dx = canvas.width / 2
+        poop.dx = getRandomInt(20, 460)
         poop.dy = getRandomInt(-10, 40)
         poop.velocityX = 0
         poop.velocityY = getRandomInt(300, 500)
