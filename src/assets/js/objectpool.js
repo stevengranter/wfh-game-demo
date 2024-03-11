@@ -42,7 +42,7 @@ export default class ObjectPool {
     releaseElement(element) {
         this.resetFunction(element.data)
         element.free = true
-        console.log(element)
+        // console.log(element)
     }
 }
 export class ObjectPoolMember {

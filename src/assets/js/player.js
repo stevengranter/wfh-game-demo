@@ -3,11 +3,11 @@ import { Sprite } from "./sprite.js"
 import { SpriteAnimation } from "./sprite.js"
 
 export default class Player extends Sprite {
-    constructor(context, dWidth, dHeight, canvasWidth, canvasHeight, spriteSheetObj) {
+    constructor(context, dx, dy, dWidth, dHeight, spriteSheetObj, canvasWidth, canvasHeight) {
 
 
 
-        super(context, Math.floor((canvasWidth - dWidth) / 2), 0, 48, 48, spriteSheetObj,)
+        super(context, dx, dy, dWidth, dHeight, spriteSheetObj)
 
 
 
@@ -37,6 +37,10 @@ export default class Player extends Sprite {
         this.maxSpeedX = 1
         this.speedBonus = 0
 
+        this.currentHealth = 100
+        this.currentScore = 0
+
+        this.isAlive = true
 
 
     }
@@ -91,6 +95,30 @@ export default class Player extends Sprite {
     onGround() {
         return this.dy >= this.gameHeight - this.dHeight - this.floorHeight
     }
+
+    // Score-keeping
+    initScore(score) {
+        scoreDisplay.innerHTML = String(currentScore).padStart(4, "0")
+    }
+
+    updateScore(object) {
+        if (object) {
+            if (!object.isScored) {
+                // console.log("SCORE")
+                this.currentScore += object.pointValue
+                this.currentHealth += object.healthValue
+                let currentStats = {
+                    currentScore: this.currentScore,
+                    currentHealth: this.currentHealth + "%"
+                }
+                object.isScored = true
+                return currentStats
+
+
+            }
+        }
+    }
+
 }
 
 

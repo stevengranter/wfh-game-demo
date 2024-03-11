@@ -13,7 +13,7 @@ export default class Spawner {
         //console.log(this.timeSinceSpawn)
         if (this.timeSinceSpawn >= this.spawnInterval) {
             let element = this.objectPool.getElement()
-            console.log(element)
+            // console.log(element)
             // element.data.update()
             this.timeSinceSpawn = 0
         }
@@ -38,8 +38,8 @@ export default class Spawner {
                 }
                 else {
                     this.objectPool.releaseElement(element)
-                    console.log('Just released:')
-                    console.log(element)
+                    // console.log('Just released:')
+                    // console.log(element)
                 }
             }
         }
