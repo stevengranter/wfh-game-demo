@@ -5,6 +5,7 @@ export const states = {
     WALKING_RIGHT: 3,
     JUMPING_LEFT: 4,
     JUMPING_RIGHT: 5,
+    DEAD: 6
 }
 
 class State {
@@ -62,7 +63,7 @@ export class WalkingLeft extends State {
     enter() {
         this.player.spriteSheetObj.endFrame = 4
         this.player.spriteSheetObj.frameY = 1
-        this.player.speedX = -(this.player.maxSpeedX + this.player.speedBonus)
+        this.player.speedX += Math.floor(-(this.player.maxSpeedX + this.player.speedBonus))
     }
 
     handleInput(input) {
@@ -84,7 +85,7 @@ export class WalkingRight extends State {
     enter() {
         this.player.spriteSheetObj.endFrame = 4
         this.player.spriteSheetObj.frameY = 0
-        this.player.speedX = this.player.maxSpeedX + this.player.speedBonus
+        this.player.speedX = Math.floor(this.player.maxSpeedX + this.player.speedBonus)
     }
 
     handleInput(input) {
@@ -101,8 +102,8 @@ export class JumpingLeft extends State {
         this.player = player
     }
     enter() {
-        if (this.player.onGround()) this.player.vy -= 10
-        this.player.speed = this.player.maxSpeed * 0.5
+        if (this.player.onGround()) this.player.velocityY -= 5
+        this.player.speedX = this.player.maxSpeedX * -2
     }
 
     handleInput(input) {
@@ -117,13 +118,33 @@ export class JumpingRight extends State {
         this.player = player
     }
     enter() {
-        if (this.player.onGround()) this.player.vy -= 10
-        this.player.speed = this.player.maxSpeed * 0.5
+        if (this.player.onGround()) this.player.velocityY -= 5
+        this.player.speedX = this.player.maxSpeedX * 2
     }
 
     handleInput(input) {
-        if (input === "PRESS left") this.player.setState(states.JUMPING_LEFT)
-        else if (this.player.onGround()) this.player.setState(states.STANDING_RIGHT)
+        if (input === "PRESS left") {
+            this.player.setState(states.JUMPING_LEFT)
+        } else if (this.player.onGround()) {
+            this.player.setState(states.STANDING_RIGHT)
+        }
+    }
+}
+
+export class Dead extends State {
+    constructor(player) {
+        super("DEAD")
+        this.player = player
+    }
+    enter() {
+        this.player.spriteSheetObj.endFrame = 0
+        this.player.spriteSheetObj.frameY = 0
+        this.player.speedX = 0
+
+    }
+
+    handleInput(input) {
+        console.log(input)
     }
 }
 

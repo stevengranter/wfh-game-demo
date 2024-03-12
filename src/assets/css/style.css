@@ -72,6 +72,10 @@ h5 {
   text-align: center;
 }
 
+.pixelated {
+  image-rendering: pixelated;
+}
+
 .green-bg {
   background-color: var(--clr-green);
 }
@@ -124,7 +128,7 @@ h5 {
   right: 0;
   text-align: center;
   aspect-ratio: 16 / 9;
-  image-rendering: pixelated;
+  
   /* border: 2px solid magenta; */
 }
 
@@ -503,26 +507,38 @@ a {
   width: 20%;
   flex-direction: column;
   margin: 2vw;
+  position:relative;
 
   /* border: 1px solid magenta; */
   /* justify-content: left; */
 }
-#hud-score {
-  font-family: Coiny, system-ui;
-  font-size: 2rch;
-  text-shadow: -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff,
-    3px 3px 0 #fff;
-  color: var(--clr-violet);
-  align-self: center;
 
+#hud-lives-remaining {
+  background-image: url("../images/nan-portrait-pixel-01.png");
+  background-repeat: no-repeat;
+  min-width: 45px;
+  height: 28px;
+  margin-bottom:5px;
   /* border: 1px solid magenta; */
 }
 
+#hud-lives-remaining div {
+  /* position:absolute; */
+  font-family: Coiny, sans-serif;
+  font-size: 0.8rem;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+    1px 1px 0 #fff;
+  transform: translate(0px, -3px)
+
+}
+
+
+
 #hud-health-meter {
-  height: 2vh;
+  height: 20px;
   width: 100%;
   position: relative;
-  background: #000;
+  background: var(--clr-violet);
   border-radius: 25px;
   border: 2px solid #fff;
   padding: 3px;
@@ -546,6 +562,36 @@ a {
   /* box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3),inset 0 -2px 3px rgba(0, 0, 0, 0.4); */
   position: relative;
   overflow: hidden;
+}
+
+#hud-score {
+  font-family: Coiny, sans-serif;
+  font-size: 2vh;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+    1px 1px 0 #fff;
+  color: var(--clr-violet);
+  align-self: left;
+  margin:0;
+  padding:0;
+  /* border: 1px solid magenta; */
+}
+
+#hud-combo {
+    font-family: Coiny, sans-serif;
+  font-size: 1rem;
+  height:fit-content;
+  width: fit-content;
+  line-height: 0.5rem;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+    margin:0;
+    padding:0
+    border: 1px solid magenta;
+}
+
+#hud-combo span {
+  color: #ccc;
+  opacity: 50%;
 }
 
 /* ||||  Virtual Controller styles |||| */

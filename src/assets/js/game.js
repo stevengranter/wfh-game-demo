@@ -27,10 +27,11 @@ window.addEventListener("load", function () {
     ctx.imageSmoothingEnabled = false // keeps sprites pixelated
 
     // Initialize game variables
-    let currentScore = 0
     let lastTime = 0
-    let isPaused = false
     let deltaTime = 1
+    let isPaused = false
+
+    let comboCounter = 0
 
 
 
@@ -49,8 +50,10 @@ window.addEventListener("load", function () {
 
     // In-game DOM elements
     const gameplayHUD = document.getElementById("gameplay-hud")
-    const scoreCounter = document.getElementById("hud-score")
-    const healthMeter = document.querySelector("#hud-health-meter span")
+    const scoreCounterHUD = document.getElementById("hud-score")
+    const healthMeterHUD = document.querySelector("#hud-health-meter span")
+    const livesCounterHUD = document.querySelector("#hud-lives-remaining div")
+    const comboCounterHUD = document.querySelector("#hud-combo")
     // console.log(healthMeter)
 
     // Virtual control button elements
@@ -126,6 +129,9 @@ window.addEventListener("load", function () {
         canvas.width,
         canvas.height)
 
+    let playerLives = player.currentLives
+    let playerHealth = player.currentHealth
+    let playerScore = player.currentScore
     // Sprites
 
     // Wiener 🌭
@@ -143,7 +149,8 @@ window.addEventListener("load", function () {
         getRandomInt(-75, 75), //getRandomInt(-1, 1), // velocityX
         getRandomInt(50, 200), //getRandomInt(1, 3), // velocityY
         getRandomInt(15, 120), // fps
-        100 // pointValue
+        100, // pointValue
+        5 // healthValue
     )
 
     const wienerResetFunc = (wiener) => {
@@ -207,10 +214,10 @@ window.addEventListener("load", function () {
         16, // dHeight
         new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0),
         0, // velocityX
-        getRandomInt(200, 400), // velocityY 
+        getRandomInt(50, 150), // velocityY 
         30,  // fps
         0, // pointValue
-        -25, // healthValue
+        -10, // healthValue
     )
 
 
@@ -226,7 +233,7 @@ window.addEventListener("load", function () {
         poop.dx = getRandomInt(20, 460)
         poop.dy = getRandomInt(-10, -40)
         poop.velocityX = 0
-        poop.velocityY = getRandomInt(200, 400)
+        poop.velocityY = getRandomInt(50, 150)
     }
 
 
@@ -442,9 +449,62 @@ window.addEventListener("load", function () {
                 let collider = wienerSpawner.objectPool.poolArray[i]
 
                 if (detectBoxCollision(player, collider.data)) {
-                    let playerStats = player.updateScore(collider.data)
-                    scoreCounter.innerHTML = String(playerStats.currentScore).padStart(4, "0")
+
+
+                    playerHealth = player.updateHealth(collider.data)
+                    healthMeterHUD.style.width = player.updateHealth(collider.data) + "%"
+                    livesCounterHUD.innerText = playerLives
+
+                    playerScore = player.updateScore(collider.data)
+                    console.log(playerScore)
+                    scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
+
+
+
                     collider.data.isVisible = false
+                    // if (player.currentScore >= 500 && player.currentScore < 1000) {
+                    //     player.maxSpeedX = 2
+                    // } else if (player.currentScore >= 1000) {
+                    //     player.maxSpeedX = 3
+                    // } else {
+                    //     player.maxSpeedX = 1
+                    // }
+                    comboCounter++
+                    if (comboCounter > 0 && comboCounter <= 5) {
+                        for (let i = 1; i <= comboCounter; i++) {
+                            let nthChildSelector = `:nth-child(${i})`
+                            let nthChildSelectorString = nthChildSelector.toString()
+                            // console.log(nthChildSelectorString)
+                            let letter = comboCounterHUD.querySelector(nthChildSelectorString)
+                            console.dir(letter)
+                            letter.style.color = "var(--clr-purple)"
+                            letter.style.opacity = "100%"
+                        }
+                    } else if (comboCounter > 5 && comboCounter <= 10) {
+                        for (let i = 6; i <= comboCounter; i++) {
+                            let nthChildSelectorIndex = i - 5
+                            let nthChildSelector = `:nth-child(${nthChildSelectorIndex})`
+                            let nthChildSelectorString = nthChildSelector.toString()
+                            // console.log(nthChildSelectorString)
+                            let letter = comboCounterHUD.querySelector(nthChildSelectorString)
+                            console.dir(letter)
+                            letter.style.color = "var(--clr-gold)"
+                            letter.style.opacity = "100%"
+                        }
+                    }
+                    if (comboCounter < 5) {
+                        player.maxSpeedX = 1
+                    } else if (comboCounter >= 5 && comboCounter < 10) {
+                        player.maxSpeedX = 2
+                    } else if (comboCounter >= 10) {
+                        player.maxSpeedX = 4
+                    }
+
+
+                    if (comboCounter === 10) {
+                        console.log("COMBO!!!")
+                    }
+
                     // console.log(wienerSpawner.collider.data)
                     wienerSpawner.objectPool.releaseElement(collider)
                 }
@@ -453,12 +513,27 @@ window.addEventListener("load", function () {
             for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
                 let collider = gullPoopSpawner.objectPool.poolArray[i]
                 if (detectBoxCollision(player, collider.data)) {
-                    let playerStats = player.updateScore(collider.data)
-                    scoreCounter.innerHTML = String(playerStats.currentScore).padStart(4, "0")
-                    // healthMeter.style.backgroundColor = "#000000"
-                    healthMeter.style.width = playerStats.currentHealth
-                    console.log("healthMeter:d " + healthMeter.style.width)
+                    playerHealth = player.updateHealth(collider.data)
+                    healthMeterHUD.style.width = player.updateHealth(collider.data) + "%"
+                    livesCounterHUD.innerText = playerLives
+
+                    playerScore = player.updateScore(collider.data)
+                    console.log(playerScore)
+                    scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
+
+
                     collider.data.isVisible = false
+
+
+                    let letters = comboCounterHUD.querySelectorAll("span")
+                    letters.forEach((letter) => {
+                        letter.style.color = ""
+                        letter.style.opacity = "50%"
+                    })
+
+                    comboCounter = 0
+                    player.maxSpeedX = 1
+
                     // console.log(collider.data)
                     gullPoopSpawner.objectPool.releaseElement(collider)
                 }
@@ -486,8 +561,8 @@ window.addEventListener("load", function () {
     function startGame() {
         ui.hide(titleScreen)
         ui.hide(menuScreen)
-        scoreCounter.innerHTML = String(0).padStart(4, "0")
-        scoreCounter.innerHTML = String(0).padStart(4, "0")
+        scoreCounterHUD.innerHTML = String(0).padStart(4, "0")
+        scoreCounterHUD.innerHTML = String(0).padStart(4, "0")
         ui.show(gameplayHUD)
         const superNantendo = document.getElementById("ui--super-nantendo")
         superNantendo.classList.add("teal-bg")

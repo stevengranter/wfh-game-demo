@@ -1,4 +1,4 @@
-import { StandingLeft, StandingRight, WalkingLeft, WalkingRight, JumpingLeft, JumpingRight } from "./state.js"
+import { StandingLeft, StandingRight, WalkingLeft, WalkingRight, JumpingLeft, JumpingRight, Dead } from "./state.js"
 import { Sprite } from "./sprite.js"
 import { SpriteAnimation } from "./sprite.js"
 
@@ -11,7 +11,7 @@ export default class Player extends Sprite {
 
 
 
-        this.states = [new StandingLeft(this), new StandingRight(this), new WalkingLeft(this), new WalkingRight(this), new JumpingLeft(this), new JumpingRight(this)]
+        this.states = [new StandingLeft(this), new StandingRight(this), new WalkingLeft(this), new WalkingRight(this), new JumpingLeft(this), new JumpingRight(this), new Dead(this)]
         this.stateHistory = []
 
         // currentState is at index 0 of states array
@@ -25,7 +25,7 @@ export default class Player extends Sprite {
 
         this.gameWidth = canvasWidth
         this.gameHeight = canvasHeight
-        this.floorHeight = 15
+        this.floorHeight = 30
 
         this.velocityX = 0
         this.velocityY = 0
@@ -106,18 +106,32 @@ export default class Player extends Sprite {
         if (object) {
             if (!object.isScored) {
                 // console.log("SCORE")
+
                 this.currentScore += object.pointValue
-                this.currentHealth += object.healthValue
-                let currentStats = {
-                    currentScore: this.currentScore,
-                    currentHealth: this.currentHealth + "%"
-                }
                 object.isScored = true
-                return currentStats
+                return this.currentScore
 
 
             }
         }
+    }
+
+    updateHealth(object) {
+        if (object) {
+            this.currentHealth += object.healthValue
+            if (this.currentHealth > 100) this.currentHealth = 100
+            if (this.currentHealth === 0) {
+                this.isAlive = false
+                this.setState(6)
+                this.updateLives(-1)
+            }
+
+            return this.currentHealth
+        }
+    }
+
+    updateLives(number) {
+        this.currentLives += number
     }
 
 }

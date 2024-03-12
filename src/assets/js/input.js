@@ -26,7 +26,7 @@ export default class InputHandler {
         })
 
         dPadLeft.addEventListener("touchend", (e) => {
-            e.preventDefault()
+            // e.preventDefault()
             this.lastKey = "RELEASE left"
 
         })
@@ -38,7 +38,7 @@ export default class InputHandler {
             // this.handleTouches(e)
         })
         dPadRight.addEventListener("touchend", (e) => {
-            e.preventDefault()
+            // e.preventDefault()
             this.lastKey = "RELEASE right"
 
         })

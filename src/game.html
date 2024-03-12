@@ -27,12 +27,16 @@
           id="game-screen--border-overlay"
         />
 
-        <canvas id="game-screen__canvas"></canvas>
+        <canvas id="game-screen__canvas" class="pixelated"></canvas>
 
         <div id="overlay">
           <div id="gameplay-hud" class="hidden">
+            <div id="hud-lives-remaining" class="pixelated"><div>X</div></div>
             <div id="hud-health-meter"><span></span></div>
             <div id="hud-score"></div>
+            <div id="hud-combo">
+              <span>C</span><span>O</span><span>M</span><span>B</span><span>O</span>
+            </div>
             <button id="pause-button">Pause</button>
           </div>
 
