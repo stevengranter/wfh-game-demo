@@ -37,7 +37,7 @@ export default class Player extends Sprite {
         this.maxSpeedX = 1
         this.speedBonus = 0
 
-        this.currentHealth = 10
+        this.currentHealth = 100
         this.currentScore = 0
         this.currentLives = 3
 
