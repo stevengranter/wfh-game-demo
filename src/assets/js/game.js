@@ -404,26 +404,26 @@ window.addEventListener("load", function () {
             deltaTime = (timeStamp - lastTime) / 1000
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-
+            // player.setState(6)
+            // player.resetPlayer()
             let statusBottomY = 260
 
-            drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
-            drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
-            drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
+            // drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
+            // drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
+            // drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
 
 
-            drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
-            drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
-            drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
+            // drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
+            // drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
+            // drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
 
-            drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, statusBottomY - 60)
-            drawStatusText(ctx, "     active:" + seagullSpawner.getActiveObjects(), 10, statusBottomY - 50)
-            drawStatusText(ctx, "     timer: " + Math.floor(seagullSpawner.timeSinceSpawn) + " / " + seagullSpawner.spawnInterval, 10, statusBottomY - 40)
+            // drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, statusBottomY - 60)
+            // drawStatusText(ctx, "     active:" + seagullSpawner.getActiveObjects(), 10, statusBottomY - 50)
+            // drawStatusText(ctx, "     timer: " + Math.floor(seagullSpawner.timeSinceSpawn) + " / " + seagullSpawner.spawnInterval, 10, statusBottomY - 40)
 
-            drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
-            drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
-            drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
+            // drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
+            // drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
+            // drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
 
 
             gullPoopSpawner.update(deltaTime)
@@ -443,102 +443,107 @@ window.addEventListener("load", function () {
 
 
 
+            if (player.isAlive) {
+                // detect collisions
+                for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
+                    let collider = wienerSpawner.objectPool.poolArray[i]
 
-            // detect collisions
-            for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
-                let collider = wienerSpawner.objectPool.poolArray[i]
-
-                if (detectBoxCollision(player, collider.data)) {
-
-
-                    playerHealth = player.updateHealth(collider.data)
-                    healthMeterHUD.style.width = player.updateHealth(collider.data) + "%"
-                    livesCounterHUD.innerText = playerLives
-
-                    playerScore = player.updateScore(collider.data)
-                    console.log(playerScore)
-                    scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
+                    if (detectBoxCollision(player, collider.data)) {
 
 
+                        playerHealth = player.updateHealth(collider.data)
+                        healthMeterHUD.style.width = playerHealth + "%"
 
-                    collider.data.isVisible = false
-                    // if (player.currentScore >= 500 && player.currentScore < 1000) {
-                    //     player.maxSpeedX = 2
-                    // } else if (player.currentScore >= 1000) {
-                    //     player.maxSpeedX = 3
-                    // } else {
-                    //     player.maxSpeedX = 1
-                    // }
-                    comboCounter++
-                    if (comboCounter > 0 && comboCounter <= 5) {
-                        for (let i = 1; i <= comboCounter; i++) {
-                            let nthChildSelector = `:nth-child(${i})`
-                            let nthChildSelectorString = nthChildSelector.toString()
-                            // console.log(nthChildSelectorString)
-                            let letter = comboCounterHUD.querySelector(nthChildSelectorString)
-                            console.dir(letter)
-                            letter.style.color = "var(--clr-purple)"
-                            letter.style.opacity = "100%"
+                        livesCounterHUD.innerText = playerLives
+
+                        playerScore = player.updateScore(collider.data)
+                        // console.log(playerScore)
+                        scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
+
+
+
+                        collider.data.isVisible = false
+                        // if (player.currentScore >= 500 && player.currentScore < 1000) {
+                        //     player.maxSpeedX = 2
+                        // } else if (player.currentScore >= 1000) {
+                        //     player.maxSpeedX = 3
+                        // } else {
+                        //     player.maxSpeedX = 1
+                        // }
+                        comboCounter++
+                        if (comboCounter > 0 && comboCounter <= 5) {
+                            for (let i = 1; i <= comboCounter; i++) {
+                                let nthChildSelector = `:nth-child(${i})`
+                                let nthChildSelectorString = nthChildSelector.toString()
+                                // console.log(nthChildSelectorString)
+                                let letter = comboCounterHUD.querySelector(nthChildSelectorString)
+                                // console.dir(letter)
+                                letter.style.color = "var(--clr-purple)"
+                                letter.style.opacity = "100%"
+                            }
+                        } else if (comboCounter > 5 && comboCounter <= 10) {
+                            for (let i = 6; i <= comboCounter; i++) {
+                                let nthChildSelectorIndex = i - 5
+                                let nthChildSelector = `:nth-child(${nthChildSelectorIndex})`
+                                let nthChildSelectorString = nthChildSelector.toString()
+                                // console.log(nthChildSelectorString)
+                                let letter = comboCounterHUD.querySelector(nthChildSelectorString)
+                                // console.dir(letter)
+                                letter.style.color = "var(--clr-gold)"
+                                letter.style.opacity = "100%"
+                            }
                         }
-                    } else if (comboCounter > 5 && comboCounter <= 10) {
-                        for (let i = 6; i <= comboCounter; i++) {
-                            let nthChildSelectorIndex = i - 5
-                            let nthChildSelector = `:nth-child(${nthChildSelectorIndex})`
-                            let nthChildSelectorString = nthChildSelector.toString()
-                            // console.log(nthChildSelectorString)
-                            let letter = comboCounterHUD.querySelector(nthChildSelectorString)
-                            console.dir(letter)
-                            letter.style.color = "var(--clr-gold)"
-                            letter.style.opacity = "100%"
+                        if (comboCounter < 5) {
+                            player.maxSpeedX = 1
+                        } else if (comboCounter >= 5 && comboCounter < 10) {
+                            player.maxSpeedX = 2
+                        } else if (comboCounter >= 10) {
+                            player.maxSpeedX = 4
                         }
+
+
+                        if (comboCounter === 10) {
+                            console.log("COMBO!!!")
+                        }
+
+
+                        // console.log(wienerSpawner.collider.data)
+                        wienerSpawner.objectPool.releaseElement(collider)
                     }
-                    if (comboCounter < 5) {
+                }
+
+                for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
+                    let collider = gullPoopSpawner.objectPool.poolArray[i]
+                    if (detectBoxCollision(player, collider.data)) {
+                        playerHealth = player.updateHealth(collider.data)
+                        healthMeterHUD.style.width = playerHealth + "%"
+                        playerScore = player.updateScore(collider.data)
+                        // console.log(playerScore)
+                        scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
+
+
+                        collider.data.isVisible = false
+
+
+                        let letters = comboCounterHUD.querySelectorAll("span")
+                        letters.forEach((letter) => {
+                            letter.style.color = ""
+                            letter.style.opacity = "50%"
+                        })
+
+                        comboCounter = 0
                         player.maxSpeedX = 1
-                    } else if (comboCounter >= 5 && comboCounter < 10) {
-                        player.maxSpeedX = 2
-                    } else if (comboCounter >= 10) {
-                        player.maxSpeedX = 4
+                        if (!player.isAlive) {
+                            console.log("Player dead")
+                            playerLives--
+                            console.log(playerLives + " lives left")
+                            livesCounterHUD.innerText = playerLives
+                        }
+                        // console.log(collider.data)
+                        gullPoopSpawner.objectPool.releaseElement(collider)
                     }
-
-
-                    if (comboCounter === 10) {
-                        console.log("COMBO!!!")
-                    }
-
-                    // console.log(wienerSpawner.collider.data)
-                    wienerSpawner.objectPool.releaseElement(collider)
                 }
             }
-
-            for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
-                let collider = gullPoopSpawner.objectPool.poolArray[i]
-                if (detectBoxCollision(player, collider.data)) {
-                    playerHealth = player.updateHealth(collider.data)
-                    healthMeterHUD.style.width = player.updateHealth(collider.data) + "%"
-                    livesCounterHUD.innerText = playerLives
-
-                    playerScore = player.updateScore(collider.data)
-                    console.log(playerScore)
-                    scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
-
-
-                    collider.data.isVisible = false
-
-
-                    let letters = comboCounterHUD.querySelectorAll("span")
-                    letters.forEach((letter) => {
-                        letter.style.color = ""
-                        letter.style.opacity = "50%"
-                    })
-
-                    comboCounter = 0
-                    player.maxSpeedX = 1
-
-                    // console.log(collider.data)
-                    gullPoopSpawner.objectPool.releaseElement(collider)
-                }
-            }
-
 
 
             // for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {
@@ -562,7 +567,7 @@ window.addEventListener("load", function () {
         ui.hide(titleScreen)
         ui.hide(menuScreen)
         scoreCounterHUD.innerHTML = String(0).padStart(4, "0")
-        scoreCounterHUD.innerHTML = String(0).padStart(4, "0")
+        livesCounterHUD.innerText = player.currentLives
         ui.show(gameplayHUD)
         const superNantendo = document.getElementById("ui--super-nantendo")
         superNantendo.classList.add("teal-bg")
@@ -587,6 +592,10 @@ window.addEventListener("load", function () {
             animate(lastTime)
             isPaused = false
         }
+    }
+
+    function resetPlayer() {
+        console.log("Reset Player")
     }
 
 

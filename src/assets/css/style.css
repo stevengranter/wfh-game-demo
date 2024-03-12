@@ -114,6 +114,7 @@ h5 {
 
 .game-screen canvas {
   position: absolute;
+  z-index: 0;
   background-color: var(--clr-sky-blue);
   background-image: url("../images/bg01-flattened.png");
   background-size: cover;
@@ -150,7 +151,7 @@ h5 {
   /* left: 50%; position the top  edge of the element at the middle of the parent */
   /* height: auto;
   max-height: auto; */
-  z-index: 10;
+  z-index: 1;
   padding: 0;
   overflow: hidden;
   /* transform: translate(-50%, 0); */
@@ -163,7 +164,7 @@ h5 {
 
 .ui-panel {
   align-self: center;
-  z-index: 11;
+  z-index: 3;
   width: 80%;
   /* height: 10%; */
   margin: 20px auto 10px auto;
@@ -253,6 +254,10 @@ button {
 #resume-button:hover,
 #pause-button:hover {
   transform: rotate(0deg) scale(120%);
+}
+
+#menu-screen {
+  z-index:100
 }
 
 #menu-screen header {
@@ -503,52 +508,68 @@ a {
 /* |||| HUD element styles |||| */
 
 #gameplay-hud {
-  display: flex;
-  width: 20%;
-  flex-direction: column;
+  /* display: flex; */
+  /* flex-direction: column; */
+  width: 30%;
+ 
   margin: 2vw;
   position:relative;
+  
 
   /* border: 1px solid magenta; */
   /* justify-content: left; */
 }
-
-#hud-lives-remaining {
-  background-image: url("../images/nan-portrait-pixel-01.png");
-  background-repeat: no-repeat;
-  min-width: 45px;
-  height: 28px;
-  margin-bottom:5px;
+#hud-player-stats {
+  display:flex;
+  /* flex-direction:row; */
+  /* align-items: flex-start; */
+  /* flex-flow:column; */
+  vertical-align: middle;
+  align-items: center;
+  width: 100%;
+}
+#hud-lives-remaining img {
+  width: 6vw;
+  height: auto;
   /* border: 1px solid magenta; */
+  z-index:1000;
 }
 
 #hud-lives-remaining div {
-  /* position:absolute; */
+  position:absolute;
   font-family: Coiny, sans-serif;
-  font-size: 0.8rem;
+  font-size: 2vw;
   text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
     1px 1px 0 #fff;
-  transform: translate(0px, -3px)
+    top:0.5vw;
+    left:0.5vw;
+    line-height: 1.5vw;
+  /* transform: translate(0px, -2vh) */
 
 }
 
 
 
 #hud-health-meter {
-  height: 20px;
+  height: 2vw;
+  /* min-height: 10px; */
   width: 100%;
-  position: relative;
   background: var(--clr-violet);
   border-radius: 25px;
   border: 2px solid #fff;
   padding: 3px;
+  /* border: 1px solid magenta; */
+  vertical-align: middle;
+  transform: translateX(-1vw);
+  z-index: -1;
   /* box-shadow: inset 0 -1px 1px rgba(255, 255, 255, 0.3); */
 }
 
 #hud-health-meter span {
   display: block;
   height: 100%;
-  width: 100%;
+  min-height: 2px;
+  /* width: auto; */
   border-top-right-radius: 20px;
   border-bottom-right-radius: 20px;
   border-top-left-radius: 20px;
@@ -561,7 +582,7 @@ a {
   ); */
   /* box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3),inset 0 -2px 3px rgba(0, 0, 0, 0.4); */
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 #hud-score {
@@ -570,18 +591,20 @@ a {
   text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
     1px 1px 0 #fff;
   color: var(--clr-violet);
-  align-self: left;
+  display:block;
   margin:0;
   padding:0;
+  line-height:2.5vh;
   /* border: 1px solid magenta; */
 }
 
 #hud-combo {
     font-family: Coiny, sans-serif;
   font-size: 1rem;
+  display:block;
   height:fit-content;
   width: fit-content;
-  line-height: 0.5rem;
+  line-height: 1rem;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
     margin:0;

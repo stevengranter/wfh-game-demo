@@ -31,14 +31,21 @@
 
         <div id="overlay">
           <div id="gameplay-hud" class="hidden">
-            <div id="hud-lives-remaining" class="pixelated"><div>X</div></div>
+            
+           <div id="hud-player-stats">
+              <div id="hud-lives-remaining" class="pixelated">
+                <img src="./assets/images/nan-portrait-pixel-01.png" alt="">
+                <div>3</div>
+              </div>
             <div id="hud-health-meter"><span></span></div>
+            </div>
+  
             <div id="hud-score"></div>
             <div id="hud-combo">
               <span>C</span><span>O</span><span>M</span><span>B</span><span>O</span>
             </div>
-            <button id="pause-button">Pause</button>
-          </div>
+
+          
 
           <div id="title-screen">
             <img src="./assets/images/wfh-logo.webp" alt="" />
@@ -47,8 +54,14 @@
             </div>
           </div>
 
-          <!-- START: #menu-screen -->
+          </div>
+            <button id="pause-button">Pause</button>
+          
+          <div id="intro-screen" class="ui-panel hidden">
+            <img src="./assets/images/ui-controls-directional-01.png" alt="" />
+          </div>
 
+          <!-- START: #menu-screen -->
           <div id="menu-screen" class="ui-panel hidden">
             <header><h2>Options</h2></header>
             <ul>
@@ -121,11 +134,15 @@
             </div>
           </div>
           <!-- #menu-screen :END -->
-          <div id="intro-screen" class="ui-panel hidden">
-            <img src="./assets/images/ui-controls-directional-01.png" alt="" />
           </div>
+          
+          
+
+          
+
+          
         </div>
-      </div>
+      
 
       <div id="ui--virtual-controller">
         <div id="ui--virtual-controller-menu-buttons">

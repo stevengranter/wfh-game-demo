@@ -137,14 +137,16 @@ export class Dead extends State {
         this.player = player
     }
     enter() {
+        this.player.isAlive = false
         this.player.spriteSheetObj.endFrame = 0
         this.player.spriteSheetObj.frameY = 0
+        this.player.velocityY = 500
         this.player.speedX = 0
 
     }
 
     handleInput(input) {
-        console.log(input)
+        // console.log(input)
     }
 }
 

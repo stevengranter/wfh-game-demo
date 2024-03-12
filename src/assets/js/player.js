@@ -37,7 +37,7 @@ export default class Player extends Sprite {
         this.maxSpeedX = 1
         this.speedBonus = 0
 
-        this.currentHealth = 100
+        this.currentHealth = 10
         this.currentScore = 0
         this.currentLives = 3
 
@@ -51,44 +51,77 @@ export default class Player extends Sprite {
         this.currentState.enter()
     }
 
+    resetPlayer() {
+        this.isAlive = true
+        this.currentHealth = 100
+        this.setState(0)
+    }
 
 
     update(input) {
+        if (this.isAlive) {
+            if (this.frameTimer > this.frameInterval) {
+                if (this.spriteSheetObj.frameX < this.spriteSheetObj.endFrame) {
 
-        if (this.frameTimer > this.frameInterval) {
-            if (this.spriteSheetObj.frameX < this.spriteSheetObj.endFrame) {
-
-                this.spriteSheetObj.frameX += 1
-                this.frameTimer = 0
+                    this.spriteSheetObj.frameX += 1
+                    this.frameTimer = 0
+                } else {
+                    this.spriteSheetObj.frameX = 0
+                    this.frameTimer = 0
+                }
             } else {
-                this.spriteSheetObj.frameX = 0
-                this.frameTimer = 0
+                this.frameTimer += 16
+
             }
+            this.dx += this.velocityX
+            this.dy += this.velocityY
+
+            this.currentState.handleInput(input)
+
+            //horizontal movement
+            this.dx += this.speedX
+
+            //
+            if (this.dx <= 0) this.dx = 0
+            else if (this.dx >= this.gameWidth - this.dWidth) this.dx = this.gameWidth - this.dWidth
+
+            // vertical movement
+            this.dy += this.velocityY
+            if (!this.onGround()) {
+                this.velocityY += this.weight
+            } else {
+                this.velocityY = 0
+            }
+            // Prevent player from falling through floor
+            if (this.dy > this.gameHeight - this.dHeight) this.dy = this.gameHeight - this.dHeight - this.floorHeight
         } else {
-            this.frameTimer += 16
+            this.dy -= 2
 
         }
-        this.dx += this.velocityX
-        this.dy += this.velocityY
+    }
 
-        this.currentState.handleInput(input)
+    draw(context) {
 
-        //horizontal movement
-        this.dx += this.speedX
+        // console.log(spriteSheet)
+        // draw sprite to canvas
+        // console.log("in player.draw()")
+        if (this.isVisible) {
+            if (!this.isAlive) { context.filter = "opacity(65%) grayscale(100) blur(0.5px)" }
+            context.drawImage(
 
-        //
-        if (this.dx <= 0) this.dx = 0
-        else if (this.dx >= this.gameWidth - this.dWidth) this.dx = this.gameWidth - this.dWidth
-
-        // vertical movement
-        this.dy += this.velocityY
-        if (!this.onGround()) {
-            this.velocityY += this.weight
-        } else {
-            this.velocityY = 0
+                this.spriteImageObj.image,
+                this.spriteImageObj.sWidth * this.spriteSheetObj.frameX,
+                this.spriteImageObj.sHeight * this.spriteSheetObj.frameY, //this.spriteImageObj.sHeight, // * 0,
+                this.spriteImageObj.sWidth,
+                this.spriteImageObj.sHeight,
+                this.dx,
+                this.dy,
+                this.dWidth,
+                this.dHeight
+            )
         }
-        // Prevent player from falling through floor
-        if (this.dy > this.gameHeight - this.dHeight) this.dy = this.gameHeight - this.dHeight - this.floorHeight
+        context.filter = "none"
+
     }
 
     // Utility classes
@@ -120,12 +153,17 @@ export default class Player extends Sprite {
         if (object) {
             this.currentHealth += object.healthValue
             if (this.currentHealth > 100) this.currentHealth = 100
-            if (this.currentHealth === 0) {
+            if (this.currentHealth <= 0) {
+                this.currentHealth = 0
                 this.isAlive = false
                 this.setState(6)
-                this.updateLives(-1)
+                console.log(this.currentState)
+                this.weight = 0
+                this.currentLives--
+                setTimeout(() => {
+                    this.resetPlayer()
+                }, "3000")
             }
-
             return this.currentHealth
         }
     }
@@ -133,6 +171,7 @@ export default class Player extends Sprite {
     updateLives(number) {
         this.currentLives += number
     }
+
 
 }
 
