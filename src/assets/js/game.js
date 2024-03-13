@@ -205,7 +205,7 @@ window.addEventListener("load", function () {
     //Seagull poop(Random locations)
 
     const gullPoopImage = new Image()
-    gullPoopImage.src = "./assets/images/seagull-poop-sprite-01.png"
+    gullPoopImage.src = "./assets/images/seagull-poop-sprite-02.png"
     const gullPoopSpriteImage = new SpriteFrame(gullPoopImage, 0, 0, 16, 16)
     const gullPoopSpriteAnimation = new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0)
 

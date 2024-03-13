@@ -26,10 +26,13 @@
   }
   #overlay {
     margin-top: 12%;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
+
+    margin-left: 15%;
+    margin-right: 10%;
+    left: 15%;
     right: 0;
+    width: 80%;
+    /* padding: 40%; */
   }
 
   #controller-container {
@@ -76,6 +79,11 @@
   }
   #overlay {
     top: 0;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
   }
 
   #controller-container {
@@ -234,10 +242,11 @@ h5 {
 #overlay {
   position: absolute;
   display: flex;
-
-  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
   /* max-height: 60%; */
-
   /* text-align: center; */
   /* aspect-ratio: 16 / 9; */
   /* width: 80%; */
@@ -245,9 +254,9 @@ h5 {
   /* left: 50%; position the top  edge of the element at the middle of the parent */
   /* height: auto;
   max-height: auto; */
-  z-index: 1;
+  z-index: 100;
   padding: 0;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* transform: translate(-50%, 0); */
   /* margin-top: 6%; */
   /* transform: translate(-50%, 0%); */
@@ -256,11 +265,11 @@ h5 {
 }
 
 .ui-panel {
-  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
   z-index: 3;
-  width: 80%;
   /* height: 10%; */
-  margin: 20px auto 10px auto;
+  /* margin: 20px auto 10px auto; */
   padding: 8% 8% 4% 8%;
   border: 0.6vw solid black;
   border-radius: 2.5vw;
@@ -351,6 +360,7 @@ button {
 
 #menu-screen {
   z-index: 100;
+  width: 70%;
 }
 
 #menu-screen header {
@@ -451,11 +461,17 @@ button {
 }
 
 #title-screen {
+  /* position: absolute; */
   display: flex;
-  flex-direction: column;
+  right: 0;
+  left: 0;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 4vh;
   align-items: center;
-  justify-content: center;
+  justify-items: center;
   width: 100%;
+  /* z-index: 100; */
 }
 
 #title-screen > img {
@@ -536,7 +552,7 @@ a {
   margin: 0;
   padding: 0 2vw 2vw 2vw;
   font-family: Silkscreen, sans-serif;
-  font-size: 7rem;
+  font-size: 4vh;
   font-weight: 400;
   text-align: center;
   text-transform: uppercase;
