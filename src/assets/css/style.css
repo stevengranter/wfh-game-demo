@@ -12,7 +12,7 @@
 
 /* Media Queries */
 
-@media only screen and (max-width: 800px) {
+@media only screen and (max-width: 600px) {
   #game-screen--border-overlay {
     display: block;
   }
@@ -39,6 +39,8 @@
   }
 
   #ui--virtual-controller {
+    display: flex;
+    flex-direction: column-reverse;
     height: 100%;
   }
 
@@ -61,7 +63,7 @@
   }
 }
 
-@media only screen and (min-width: 800px) {
+@media only screen and (min-width: 600px) {
   #game-screen--border-overlay {
     display: none;
   }
@@ -84,6 +86,7 @@
     justify-content: flex-start;
     align-content: flex-start;
     height: 35%;
+    display: none;
   }
 
   #ui--virtual-controller-buttons {
@@ -706,8 +709,6 @@ a {
 /* ||||  Virtual Controller styles |||| */
 
 #ui--virtual-controller {
-  display: flex;
-  flex-direction: column-reverse;
   /* align-items: flex-end; */
   /* height: 100%; */
   /* width: 100%; */
@@ -812,5 +813,5 @@ a {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
