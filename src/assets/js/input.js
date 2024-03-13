@@ -68,31 +68,53 @@ export default class InputHandler {
         })
 
 
-        // Keyboard controls
+        // Keyboard controls (Arrow and WASD)
         window.addEventListener("keydown", (e) => {
             // console.log(e.key)
             switch (e.key) {
+
                 case "ArrowLeft":
                     this.lastKey = "PRESS left"
+                case "a":
+                    this.lastKey = "PRESS left"
+                case "A":
+                    this.lastKey = "PRESS left"
                     break
+
                 case "ArrowRight":
                     this.lastKey = "PRESS right"
+                case "d":
+                    this.lastKey = "PRESS right"
+                case "D":
+                    this.lastKey = "PRESS right"
                     break
+
                 case "ArrowUp":
                     this.lastKey = "PRESS up"
-                    break
+                case "w":
+                    this.lastKey = "PRESS up"
+                case "W":
+                    this.lastKey = "PRESS up"
                 case " ":
                     this.lastKey = "PRESS up"
                     break
+
                 case "ArrowDown":
                     this.lastKey = "PRESS down"
+                case "s":
+                    this.lastKey = "PRESS down"
+                case "S":
+                    this.lastKey = "PRESS down"
                     break
+
                 case "Shift":
                     this.lastKey = "PRESS shift"
                     break
+
                 case "Escape":
                     this.lastKey = "PRESS Escape"
                     break
+
                 default:
                     break
             }
@@ -103,22 +125,42 @@ export default class InputHandler {
             switch (e.key) {
                 case "ArrowLeft":
                     this.lastKey = "RELEASE left"
+                case "a":
+                    this.lastKey = "RELEASE left"
+                case "A":
+                    this.lastKey = "RELEASE left"
                     break
+
                 case "ArrowRight":
                     this.lastKey = "RELEASE right"
+                case "d":
+                    this.lastKey = "RELEASE right"
+                case "D":
+                    this.lastKey = "RELEASE right"
                     break
+
                 case "ArrowUp":
                     this.lastKey = "RELEASE up"
-                    break
+                case "w":
+                    this.lastKey = "RELEASE up"
+                case "W":
+                    this.lastKey = "RELEASE up"
                 case " ":
                     this.lastKey = "RELEASE up"
                     break
+
                 case "ArrowDown":
                     this.lastKey = "RELEASE down"
+                case "s":
+                    this.lastKey = "RELEASE down"
+                case "S":
+                    this.lastKey = "RELEASE down"
                     break
+
                 case "Shift":
                     this.lastKey = "RELEASE shift"
                     break
+
                 default:
                     break
 
