@@ -13,7 +13,13 @@ export default class Spawner {
         //console.log(this.timeSinceSpawn)
         if (this.timeSinceSpawn >= this.spawnInterval) {
             let element = this.objectPool.getElement()
-            // console.log(element)
+            if (element.data.setInitialPosition) {
+                element.data.setInitialPosition()
+            }
+            if (element.data.setInitialVelocity) {
+                element.data.setInitialVelocity()
+            }
+
             // element.data.update()
             this.timeSinceSpawn = 0
         }
@@ -21,6 +27,7 @@ export default class Spawner {
         for (let i = 0; i < this.objectPool.poolArray.length; i++) {
             if (!this.objectPool.poolArray[i].free) {
                 // if (this.objectPool.poolArray[i].free == false) {
+
                 this.objectPool.poolArray[i].data.update(deltaTime)
             }
             // }

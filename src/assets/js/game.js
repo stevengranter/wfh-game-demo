@@ -12,6 +12,7 @@ import { drawStatusText, getRandomInt } from "./utils.js"
 import UI from "./ui.js"
 
 import { DebugMode } from "./debug.js"
+import Seagull from "./seagull.js"
 
 // wait for page to fully load
 window.addEventListener("load", function () {
@@ -171,7 +172,7 @@ window.addEventListener("load", function () {
     const seagullImage = new Image()
     seagullImage.src = "./assets/images/seagull-flying-sprite-01.png"
     const seagullSpriteImage = new SpriteFrame(seagullImage, 0, 0, 44, 51)
-    const makeSeagull = () => new Sprite(
+    const makeSeagull = () => new Seagull(
         ctx, // spritesheet
         getRandomInt(465, 500), // dx
         getRandomInt(10, 50), //dy
@@ -196,8 +197,12 @@ window.addEventListener("load", function () {
     const seagullPool = new ObjectPool(makeSeagull, seagullResetFunc, 10)
     // console.log(seagullPool)
     const seagullSpawner = new Spawner(2, seagullPool)
+    console.log(seagullPool)
 
-    // Seagull poop 
+
+
+
+    //Seagull poop(Random locations)
 
     const gullPoopImage = new Image()
     gullPoopImage.src = "./assets/images/seagull-poop-sprite-01.png"
@@ -205,77 +210,53 @@ window.addEventListener("load", function () {
     const gullPoopSpriteAnimation = new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0)
 
 
-    const makeGullPoop = () => new Sprite(
+    const makeGullPoop = () => new Projectile(
         ctx,
-
         getRandomInt(20, 460),
         getRandomInt(-10, -40),
         16, // dWidth
         16, // dHeight
         new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0),
-        0, // velocityX
-        getRandomInt(50, 150), // velocityY 
+        25, // velocityX
+        200, // velocityY
         30,  // fps
         0, // pointValue
         -10, // healthValue
     )
 
-
-
-
-
-
-    // seagullPool.poolArray.forEach(seagull => {
-    //     seagull.data.projectile = new Projectile(
-    const gullPoopResetFunc = (poop) => {
-        poop.isScored = false
-        poop.isVisible = true
-        poop.dx = getRandomInt(20, 460)
-        poop.dy = getRandomInt(-10, -40)
-        poop.velocityX = 0
-        poop.velocityY = getRandomInt(50, 150)
+    const gullPoopResetFunc = (gullPoop) => {
+        gullPoop.isScored = false
+        gullPoop.isVisible = true
+        gullPoop.dx = getRandomInt(20, 460)
+        gullPoop.dy = getRandomInt(-10, -40)
+        gullPoop.velocityX = 25
+        gullPoop.velocityY = 200
     }
-
-
 
     const gullPoopPool = new ObjectPool(makeGullPoop, gullPoopResetFunc, 10)
 
-    const gullPoopSpawner = new Spawner(2, gullPoopPool)
+    for (let i = 0; i < 10; i++) {
+        seagullPool.poolArray[i].data.projectile = gullPoopPool.poolArray[i]
+        gullPoopPool.poolArray[i].data.parentSprite = seagullPool.poolArray[i].data
+        gullPoopPool.poolArray[i].data.dx = gullPoopPool.poolArray[i].data.parentSprite.dx
+        gullPoopPool.poolArray[i].data.dy = gullPoopPool.poolArray[i].data.parentSprite.dy
+    }
 
-    // seagullPool.poolArray.forEach(seagull => {
-    //     seagull.data.projectile = new Projectile(
+    const gullPoopSpawner = new Spawner(1, gullPoopPool)
 
-    //         new SpriteAnimation(
-    //             gullPoopSpriteImage, 0, 0, 0),
-    //         0,
-    //         0,
-    //         16, // dWidth
-    //         16, // dHeight
-    //         0, // velocityX
-    //         6, // velocityY 
-    //         30,  // fps
-    //         -100, // pointValue
-    //         -25, // healthValue
-    //         seagull.data, // parentSprite
-    //         250
-    //     )
-    // })
 
-    //         new SpriteAnimation(
-    //             gullPoopSpriteImage, 0, 0, 0),
-    //         0,
-    //         0,
-    //         16, // dWidth
-    //         16, // dHeight
-    //         0, // velocityX
-    //         6, // velocityY 
-    //         30,  // fps
-    //         -100, // pointValue
-    //         -25, // healthValue
-    //         seagull.data, // parentSprite
-    //         250
-    //     )
-    // })
+
+    // Seagull poop (delivered by gull)
+
+    // const gullPoopImage = new Image()
+    // gullPoopImage.src = "./assets/images/seagull-poop-sprite-01.png"
+    // const gullPoopSpriteImage = new SpriteFrame(gullPoopImage, 0, 0, 16, 16)
+    // const gullPoopSpriteAnimation = new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0)
+
+
+
+
+
 
 
 
@@ -396,8 +377,6 @@ window.addEventListener("load", function () {
 
 
 
-
-
     // Game loop
     function animate(timeStamp) {
         if (!isPaused) {
@@ -427,15 +406,41 @@ window.addEventListener("load", function () {
 
 
             gullPoopSpawner.update(deltaTime)
-            gullPoopSpawner.update(deltaTime)
             seagullSpawner.update(deltaTime)
             wienerSpawner.update(deltaTime)
             player.update(input.lastKey)
 
+            // for (let i = 0; i < 10; i++) {
+            //     if (!seagullPool.poolArray[i].free) {
+
+
+
+
+            //         // console.log(seagullPool.poolArray[i].data.projectile.dx)
+            //         seagullPool.poolArray[i].data.projectile.update()
+
+
+
+            //     }
+            // }
+            // seagullPool.poolArray[i].data.poopSprite.update(deltaTime)
+            // console.log("seagull" + i + " DX: " + seagullPool.poolArray[i].data.dx)
+            // console.log("poop " + i + " DX: " + seagullPool.poolArray[i].data.poopSprite.dx)
+            // console.log("seagull" + i + " DY: " + seagullPool.poolArray[i].data.dx)
+            // console.log("poop " + i + " DY: " + seagullPool.poolArray[i].data.poopSprite.dx)
+            //}
+
+
 
             gullPoopSpawner.draw(ctx)
-            gullPoopSpawner.draw(ctx)
             seagullSpawner.draw(ctx)
+            // for (let i = 0; i < 10; i++) {
+            //     if (!seagullPool.poolArray[i].free) {
+            //         seagullPool.poolArray[i].data.projectile.draw(ctx)
+            //     }
+            // }
+
+
             wienerSpawner.draw(ctx)
             player.draw(ctx)
 
@@ -543,7 +548,8 @@ window.addEventListener("load", function () {
                         gullPoopSpawner.objectPool.releaseElement(collider)
                     }
                 }
-            }
+
+            } // end if (player.isAlive)
 
 
             // for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {

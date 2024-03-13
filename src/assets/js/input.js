@@ -161,6 +161,10 @@ export default class InputHandler {
                     this.lastKey = "RELEASE shift"
                     break
 
+                case "Escape":
+                    this.lastKey = "PRESS Escape"
+                    break
+
                 default:
                     break
 
