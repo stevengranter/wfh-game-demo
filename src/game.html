@@ -31,32 +31,29 @@
 
         <div id="overlay">
           <div id="gameplay-hud" class="hidden">
-            
-           <div id="hud-player-stats">
+            <div id="hud-player-stats">
               <div id="hud-lives-remaining" class="pixelated">
-                <img src="./assets/images/nan-portrait-pixel-01.png" alt="">
+                <img src="./assets/images/nan-portrait-pixel-01.png" alt="" />
                 <div>3</div>
               </div>
-            <div id="hud-health-meter"><span></span></div>
+              <div id="hud-health-meter"><span></span></div>
             </div>
-  
+
             <div id="hud-score"></div>
             <div id="hud-combo">
-              <span>C</span><span>O</span><span>M</span><span>B</span><span>O</span>
+              <span>C</span><span>O</span><span>M</span><span>B</span
+              ><span>O</span>
             </div>
 
-          
-
-          <div id="title-screen">
-            <img src="./assets/images/wfh-logo.webp" alt="" />
-            <div id="start-button">
-              <h2>Start</h2>
+            <div id="title-screen">
+              <img src="./assets/images/wfh-logo.webp" alt="" />
+              <div id="start-button">
+                <h2>Start</h2>
+              </div>
             </div>
           </div>
+          <button id="pause-button">Pause</button>
 
-          </div>
-            <button id="pause-button">Pause</button>
-          
           <div id="intro-screen" class="ui-panel hidden">
             <img src="./assets/images/ui-controls-directional-01.png" alt="" />
           </div>
@@ -134,16 +131,10 @@
             </div>
           </div>
           <!-- #menu-screen :END -->
-          </div>
-          
-          
-
-          
-
-          
         </div>
-      
+      </div>
 
+      <!-- <div id="controller-container"> -->
       <div id="ui--virtual-controller">
         <div id="ui--virtual-controller-menu-buttons">
           <img
@@ -160,29 +151,25 @@
           />
         </div>
         <div id="ui--virtual-controller-buttons" style="">
-          <div
-            id="virtual-controller--button-dpad"
-            alt=""
-            srcset=""
-          />
-          <img src="./assets/images/ui--dpad-left.svg" id="virtual-controller--button-dpad-left">
-          <img src="./assets/images/ui--dpad-right.svg" id="virtual-controller--button-dpad-right">
-
-        
-        </div>
+          <div id="virtual-controller--button-dpad" alt="" srcset="" />
           <img
-            id="virtual-controller--button-primary"
-            class="touchable"
-            src="./assets/images/ui--overlay-main-button-01.png"
-            alt=""
+            src="./assets/images/ui--dpad-left.svg"
+            id="virtual-controller--button-dpad-left"
+          />
+          <img
+            src="./assets/images/ui--dpad-right.svg"
+            id="virtual-controller--button-dpad-right"
           />
         </div>
+        <img
+          id="virtual-controller--button-primary"
+          class="touchable"
+          src="./assets/images/ui--overlay-main-button-01.png"
+          alt=""
+        />
       </div>
-
-      <div id="debug-panel">
-        <div id=""></div>
-      </div>
-      <script type="module" src="./assets/js/game.js"></script>
+      <!-- </div> -->
     </div>
   </body>
+  <script type="module" src="./assets/js/game.js"></script>
 </html>
