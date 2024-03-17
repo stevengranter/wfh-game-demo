@@ -1,5 +1,6 @@
 // Import modules
 import GameObject from "./gameobject.js"
+import Layer from "./layer.js"
 import Player from "./player.js"
 import InputHandler from "./input.js"
 // import { ObjectPool, Pickup } from "./objectpool.js"
@@ -34,6 +35,18 @@ window.addEventListener("load", function () {
 
     let comboCounter = 0
 
+    const music = new Audio()
+    let isMusicLoaded = false
+    music.src = "./assets/audio/music/song_01-i_equals_da_by.ogg"
+    music.loop = true
+
+    music.addEventListener("canplaythrough", () => {
+        let duration = music.duration
+        isMusicLoaded = true
+        console.log("music is loaded")
+    })
+
+
 
 
 
@@ -45,7 +58,7 @@ window.addEventListener("load", function () {
     // Menu DOM elements
     const menuScreen = document.getElementById("menu-screen")
     const startButton = document.getElementById("start-button")
-    const pauseButton = document.getElementById("pause-button")
+    //const pauseButton = document.getElementById("pause-button")
     const resumeButton = document.getElementById("resume-button")
     const stopButton = document.getElementById("stop-button")
 
@@ -73,6 +86,8 @@ window.addEventListener("load", function () {
 
 
     // }
+
+
     // Player Object
 
     const playerImage = new Image()
@@ -133,6 +148,20 @@ window.addEventListener("load", function () {
     let playerLives = player.currentLives
     let playerHealth = player.currentHealth
     let playerScore = player.currentScore
+
+    // Background Image
+
+    const backgroundImage = new Image()
+    backgroundImage.src = "./assets/images/background-01-main.png"
+
+    const backgroundLayer01 = new Layer(backgroundImage, 0, 0, 6650, 270, 0, 0, 6650, 270, 0, 0)
+
+    // const backgroundRocksImage = new Image()
+    // backgroundRocksImage.src = "./assets/images/bg02-rocks.png"
+
+    // const backgroundLayer02 = new Layer(backgroundRocksImage, 0, 0, 2760, 270, 0, 0, 2760, 270, 0, 0)
+
+
     // Sprites
 
     // Wiener 🌭
@@ -221,7 +250,7 @@ window.addEventListener("load", function () {
         200, // velocityY
         30,  // fps
         0, // pointValue
-        -10, // healthValue
+        -25, // healthValue
     )
 
     const gullPoopResetFunc = (gullPoop) => {
@@ -287,10 +316,10 @@ window.addEventListener("load", function () {
 
     stopButton.addEventListener("click", stopGame)
 
-    pauseButton.addEventListener("click", (e) => {
-        isPaused = !isPaused
-        pauseGame()
-    })
+    // pauseButton.addEventListener("click", (e) => {
+    //     isPaused = !isPaused
+    //     pauseGame()
+    // })
 
     resumeButton.addEventListener("click", (e) => {
         isPaused = !isPaused
@@ -383,9 +412,13 @@ window.addEventListener("load", function () {
             deltaTime = (timeStamp - lastTime) / 1000
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
+            // ctx.drawImage(backgroundImage, 0, 0)
+
             // player.setState(6)
             // player.resetPlayer()
             let statusBottomY = 260
+
+
 
             // drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
             // drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
@@ -404,11 +437,18 @@ window.addEventListener("load", function () {
             // drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
             // drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
 
+            backgroundLayer01.velocityX = -player.speedX / 4
+
+            backgroundLayer01.update(deltaTime)
+
+            // backgroundLayer02.velocityX = -player.speedX / 2
+            // backgroundLayer02.update(deltaTime)
+
 
             gullPoopSpawner.update(deltaTime)
             seagullSpawner.update(deltaTime)
             wienerSpawner.update(deltaTime)
-            player.update(input.lastKey)
+            player.update(input, deltaTime)
 
             // for (let i = 0; i < 10; i++) {
             //     if (!seagullPool.poolArray[i].free) {
@@ -431,6 +471,11 @@ window.addEventListener("load", function () {
             //}
 
 
+            backgroundLayer01.draw(ctx)
+
+            // backgroundLayer02.draw(ctx)
+
+
 
             gullPoopSpawner.draw(ctx)
             seagullSpawner.draw(ctx)
@@ -444,7 +489,15 @@ window.addEventListener("load", function () {
             wienerSpawner.draw(ctx)
             player.draw(ctx)
 
+            drawStatusText(ctx, "player.dx: " + player.dx, 10, statusBottomY - 50)
+            drawStatusText(ctx, "player.speedX: " + player.speedX, 10, statusBottomY - 40)
+            drawStatusText(ctx, "player.speedY: " + player.speedY, 10, statusBottomY - 30)
+            drawStatusText(ctx, "player.velocityX: " + player.velocityX, 10, statusBottomY - 20)
+            drawStatusText(ctx, "input" + input.left, 10, statusBottomY - 100)
 
+            // drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
+            // drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
+            // drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
 
 
 
@@ -458,8 +511,9 @@ window.addEventListener("load", function () {
 
                         playerHealth = player.updateHealth(collider.data)
                         healthMeterHUD.style.width = playerHealth + "%"
-
-                        livesCounterHUD.innerText = playerLives
+                        if (playerLives > 1) {
+                            livesCounterHUD.innerText = "x" + playerLives
+                        }
 
                         playerScore = player.updateScore(collider.data)
                         // console.log(playerScore)
@@ -499,11 +553,11 @@ window.addEventListener("load", function () {
                             }
                         }
                         if (comboCounter < 5) {
-                            player.maxSpeedX = 1
+                            player.maxSpeedX = 100
                         } else if (comboCounter >= 5 && comboCounter < 10) {
-                            player.maxSpeedX = 2
+                            player.maxSpeedX = 200
                         } else if (comboCounter >= 10) {
-                            player.maxSpeedX = 4
+                            player.maxSpeedX = 400
                         }
 
 
@@ -537,12 +591,14 @@ window.addEventListener("load", function () {
                         })
 
                         comboCounter = 0
-                        player.maxSpeedX = 1
+                        player.maxSpeedX = 100
                         if (!player.isAlive) {
-                            console.log("Player dead")
+
                             playerLives--
-                            console.log(playerLives + " lives left")
-                            livesCounterHUD.innerText = playerLives
+
+                            if (playerLives > 1) {
+                                livesCounterHUD.innerText = "x" + playerLives
+                            }
                         }
                         // console.log(collider.data)
                         gullPoopSpawner.objectPool.releaseElement(collider)
@@ -573,12 +629,22 @@ window.addEventListener("load", function () {
         ui.hide(titleScreen)
         ui.hide(menuScreen)
         scoreCounterHUD.innerHTML = String(0).padStart(4, "0")
-        livesCounterHUD.innerText = player.currentLives
+        if (playerLives > 1) {
+            livesCounterHUD.innerText = "x" + playerLives
+        }
         ui.show(gameplayHUD)
         const superNantendo = document.getElementById("ui--super-nantendo")
         superNantendo.classList.add("teal-bg")
         canvas.classList.remove("hidden")
-        animate(0)
+        if (isMusicLoaded) {
+            music.play()
+            setTimeout(() => {
+                animate(0)
+            }, "4000")
+        }
+
+
+
     }
 
     function stopGame() {
@@ -591,10 +657,12 @@ window.addEventListener("load", function () {
         if (isPaused) {
             ui.show(menuScreen)
             ui.hide(gameplayHUD)
+            music.pause()
         }
         else {
             ui.hide(menuScreen)
             ui.show(gameplayHUD)
+            music.play()
             animate(lastTime)
             isPaused = false
         }

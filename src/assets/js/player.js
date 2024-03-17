@@ -34,12 +34,13 @@ export default class Player extends Sprite {
         this.speedX = 0
         this.speedY = 0
 
-        this.maxSpeedX = 1
+        const initialmaxSpeedX = 100
+        this.maxSpeedX = initialmaxSpeedX
         this.speedBonus = 0
 
         this.currentHealth = 100
         this.currentScore = 0
-        this.currentLives = 3
+        this.currentLives = 1
 
         this.isAlive = true
 
@@ -58,7 +59,7 @@ export default class Player extends Sprite {
     }
 
 
-    update(input) {
+    update(input, deltaTime) {
         if (this.isAlive) {
             if (this.frameTimer > this.frameInterval) {
                 if (this.spriteSheetObj.frameX < this.spriteSheetObj.endFrame) {
@@ -73,13 +74,14 @@ export default class Player extends Sprite {
                 this.frameTimer += 16
 
             }
-            this.dx += this.velocityX
+            // this.dx += this.velocityX
             this.dy += this.velocityY
 
             this.currentState.handleInput(input)
 
             //horizontal movement
-            this.dx += this.speedX
+            this.dx += (this.speedX * deltaTime)
+            // console.log(deltaTime * 1000)
 
             //
             if (this.dx <= 0) this.dx = 0
@@ -107,6 +109,8 @@ export default class Player extends Sprite {
         // console.log("in player.draw()")
         if (this.isVisible) {
             if (!this.isAlive) { context.filter = "opacity(65%) grayscale(100) blur(0.5px)" }
+            if (this.dx <= 75) this.dx = 75
+            if (this.dx >= 350) this.dx = 350
             context.drawImage(
 
                 this.spriteImageObj.image,
@@ -160,9 +164,13 @@ export default class Player extends Sprite {
                 console.log(this.currentState)
                 this.weight = 0
                 this.currentLives--
-                setTimeout(() => {
-                    this.resetPlayer()
-                }, "3000")
+                if (this.currentLives >= 1) {
+                    setTimeout(() => {
+                        this.resetPlayer()
+                    }, "3000")
+                } else {
+                    console.log("Game Over")
+                }
             }
             return this.currentHealth
         }

@@ -8,7 +8,7 @@ export default class Spawner {
         this.timeSinceSpawn = 0
     }
 
-    update(deltaTime) {
+    update(deltaTime, playerVelocityX = 0, playerVelocityY = 0) {
         this.timeSinceSpawn += deltaTime * 1000
         //console.log(this.timeSinceSpawn)
         if (this.timeSinceSpawn >= this.spawnInterval) {
@@ -28,7 +28,7 @@ export default class Spawner {
             if (!this.objectPool.poolArray[i].free) {
                 // if (this.objectPool.poolArray[i].free == false) {
 
-                this.objectPool.poolArray[i].data.update(deltaTime)
+                this.objectPool.poolArray[i].data.update(deltaTime, playerVelocityX, playerVelocityY)
             }
             // }
         }

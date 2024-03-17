@@ -28,9 +28,9 @@ export class StandingLeft extends State {
     }
 
     handleInput(input) {
-        if (input === "PRESS right") this.player.setState(states.WALKING_RIGHT)
-        else if (input === "PRESS left") this.player.setState(states.WALKING_LEFT)
-        else if (input === "PRESS up") this.player.setState(states.JUMPING_LEFT)
+        if (input.right) this.player.setState(states.WALKING_RIGHT)
+        else if (input.left) this.player.setState(states.WALKING_LEFT)
+        else if (input.up) this.player.setState(states.JUMPING_LEFT)
 
     }
 }
@@ -47,9 +47,9 @@ export class StandingRight extends State {
     }
 
     handleInput(input) {
-        if (input === "PRESS left") this.player.setState(states.WALKING_LEFT)
-        else if (input === "PRESS right") this.player.setState(states.WALKING_RIGHT)
-        else if (input === "PRESS up") this.player.setState(states.JUMPING_RIGHT)
+        if (input.left) this.player.setState(states.WALKING_LEFT)
+        else if (input.right) this.player.setState(states.WALKING_RIGHT)
+        else if (input.up) this.player.setState(states.JUMPING_RIGHT)
     }
 }
 
@@ -63,13 +63,14 @@ export class WalkingLeft extends State {
     enter() {
         this.player.spriteSheetObj.endFrame = 4
         this.player.spriteSheetObj.frameY = 1
-        this.player.speedX += Math.floor(-(this.player.maxSpeedX + this.player.speedBonus))
+        this.player.speedX = Math.floor(-(this.player.maxSpeedX + this.player.speedBonus))
+        this.player.velocityX = -10
     }
 
     handleInput(input) {
-        if (input === "PRESS right") this.player.setState(states.WALKING_RIGHT)
-        else if (input === "RELEASE left") this.player.setState(states.STANDING_LEFT)
-        else if (input === "PRESS up") this.player.setState(states.JUMPING_LEFT)
+        if (input.right) this.player.setState(states.WALKING_RIGHT)
+        else if (!input.left) this.player.setState(states.STANDING_LEFT)
+        else if (input.up) this.player.setState(states.JUMPING_LEFT)
         // if (input === "PRESS Escape") this.player.setState(states.PAUSE)
 
     }
@@ -86,12 +87,13 @@ export class WalkingRight extends State {
         this.player.spriteSheetObj.endFrame = 4
         this.player.spriteSheetObj.frameY = 0
         this.player.speedX = Math.floor(this.player.maxSpeedX + this.player.speedBonus)
+        this.player.velocityX = 10
     }
 
     handleInput(input) {
-        if (input === "PRESS left") this.player.setState(states.WALKING_LEFT)
-        else if (input === "RELEASE right") this.player.setState(states.STANDING_RIGHT)
-        else if (input === "PRESS up") this.player.setState(states.JUMPING_RIGHT)
+        if (input.left) this.player.setState(states.WALKING_LEFT)
+        else if (!input.right) this.player.setState(states.STANDING_RIGHT)
+        else if (input.up) this.player.setState(states.JUMPING_RIGHT)
         // if (input === "PRESS Escape") this.player.setState(states.PAUSE)
     }
 }
@@ -107,7 +109,7 @@ export class JumpingLeft extends State {
     }
 
     handleInput(input) {
-        if (input === "PRESS right") this.player.setState(states.JUMPING_RIGHT)
+        if (input.right) this.player.setState(states.JUMPING_RIGHT)
         else if (this.player.onGround()) this.player.setState(states.STANDING_LEFT)
     }
 }
@@ -123,7 +125,7 @@ export class JumpingRight extends State {
     }
 
     handleInput(input) {
-        if (input === "PRESS left") {
+        if (input.left) {
             this.player.setState(states.JUMPING_LEFT)
         } else if (this.player.onGround()) {
             this.player.setState(states.STANDING_RIGHT)

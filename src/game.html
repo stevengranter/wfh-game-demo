@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
     <!-- <link rel="stylesheet" href="./assets/css/style.css" /> -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -10,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Coiny&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="stylesheet" href="./assets/css/style-02.css" />
 
     <link
       href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
@@ -20,23 +21,22 @@
     <title>🌭 Wieners From Heaven: Maple Syrup Edition 🇨🇦</title>
   </head>
   <body>
-    <div id="ui--super-nantendo" style="z-index: -150">
-      <div class="game-screen">
-        <img
-          src="./assets/images/ui--overlay-screen-border-01.svg"
-          id="game-screen--border-overlay"
-        />
-
+    <div class="interface__super-nantendo" id="ui--super-nantendo">
+      <div class="game-screen" id="game-screen">
         <canvas id="game-screen__canvas" class="pixelated"></canvas>
-
-        <div id="overlay">
+        <img
+          src="./assets/images/ui--overlay-screen-border-02.svg"
+          class="game-screen__border-overlay"
+          id="game-screen-border"
+        />
+        <div class="game-screen__ingame-overlay">
           <div id="gameplay-hud" class="hidden">
             <div id="hud-player-stats">
               <div id="hud-lives-remaining" class="pixelated">
                 <img src="./assets/images/nan-portrait-pixel-01.png" alt="" />
-                <div>3</div>
+                <div></div>
               </div>
-              <div id="hud-health-meter"><span></span></div>
+              <div id="hud-health-meter"><span style="width: 100%"></span></div>
             </div>
 
             <div id="hud-score"></div>
@@ -45,8 +45,8 @@
               ><span>O</span>
             </div>
           </div>
-          <button id="pause-button">Pause</button>
-          <div id="title-screen">
+
+          <div id="title-screen" class="hidden">
             <img src="./assets/images/wfh-logo.webp" alt="" />
             <div id="start-button">
               <h2>Start</h2>
@@ -86,15 +86,8 @@
                   />
                 </label>
                 <div class="range-container">
-                  <input
-                    title="music-volume"
-                    type="range"
-                    min="1"
-                    max="100"
-                    value="100"
-                    class="slider"
-                    id="music-range"
-                  />
+                  <input title="music-volume" type="range" min="1"'' max="100"
+                  value="100" class="slider" id="music-range" />
                 </div>
               </li>
               <li>
@@ -131,20 +124,6 @@
 
       <!-- <div id="controller-container"> -->
       <div id="ui--virtual-controller">
-        <div id="ui--virtual-controller-menu-buttons">
-          <img
-            id="virtual-controller--button-select"
-            class="touchable"
-            src="./assets/images/ui--controls--select-button-01.png"
-            alt=""
-          />
-          <img
-            id="virtual-controller--button-start"
-            class="touchable"
-            src="./assets/images/ui--controls--start-button-01.png"
-            alt=""
-          />
-        </div>
         <div id="ui--virtual-controller-buttons" style="">
           <div id="virtual-controller--button-dpad" alt="" srcset="" />
           <img
@@ -160,6 +139,20 @@
           id="virtual-controller--button-primary"
           class="touchable"
           src="./assets/images/ui--overlay-main-button-01.png"
+          alt=""
+        />
+      </div>
+      <div id="ui--virtual-controller-menu-buttons">
+        <img
+          id="virtual-controller--button-select"
+          class="touchable"
+          src="./assets/images/ui--controls--select-button-01.png"
+          alt=""
+        />
+        <img
+          id="virtual-controller--button-start"
+          class="touchable"
+          src="./assets/images/ui--controls--start-button-01.png"
           alt=""
         />
       </div>

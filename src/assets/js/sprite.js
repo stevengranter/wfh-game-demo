@@ -64,7 +64,7 @@ export class Sprite extends GameObject {
 
     }
 
-    update(deltaTime) {
+    update(deltaTime, playerSpeedX = 0, playerSpeedY = 0) {
         // animate cels in spritesheet
         if (this.frameTimer > this.frameInterval) {
             if (this.spriteSheetObj.frameX < this.spriteSheetObj.endFrame) {
@@ -79,8 +79,8 @@ export class Sprite extends GameObject {
             this.frameTimer += deltaTime * 1000
 
         }
-        this.dx += this.velocityX * deltaTime
-        this.dy += this.velocityY * deltaTime
+        this.dx += (this.velocityX + playerSpeedX * 1000) * deltaTime
+        this.dy += (this.velocityY + playerSpeedY * 1000) * deltaTime
     }
 
 }
