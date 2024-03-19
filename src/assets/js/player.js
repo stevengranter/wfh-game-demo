@@ -34,13 +34,14 @@ export default class Player extends Sprite {
         this.speedX = 0
         this.speedY = 0
 
-        const initialmaxSpeedX = 100
+        const initialmaxSpeedX = 75
         this.maxSpeedX = initialmaxSpeedX
         this.speedBonus = 0
 
         this.currentHealth = 100
         this.currentScore = 0
         this.currentLives = 1
+        this.currentProgress = 0
 
         this.isAlive = true
 
@@ -75,17 +76,17 @@ export default class Player extends Sprite {
 
             }
             // this.dx += this.velocityX
-            this.dy += this.velocityY
+            this.dy += Math.floor(this.velocityY)
 
             this.currentState.handleInput(input)
 
             //horizontal movement
-            this.dx += (this.speedX * deltaTime)
+            this.dx += Math.floor(this.speedX * deltaTime)
             // console.log(deltaTime * 1000)
 
             //
             if (this.dx <= 0) this.dx = 0
-            else if (this.dx >= this.gameWidth - this.dWidth) this.dx = this.gameWidth - this.dWidth
+            else if (this.dx >= this.gameWidth - this.dWidth) this.dx = Math.floor(this.gameWidth - this.dWidth)
 
             // vertical movement
             this.dy += this.velocityY
@@ -95,7 +96,7 @@ export default class Player extends Sprite {
                 this.velocityY = 0
             }
             // Prevent player from falling through floor
-            if (this.dy > this.gameHeight - this.dHeight) this.dy = this.gameHeight - this.dHeight - this.floorHeight
+            if (this.dy > this.gameHeight - this.dHeight) this.dy = Math.floor(this.gameHeight - this.dHeight - this.floorHeight)
         } else {
             this.dy -= 2
 
@@ -109,8 +110,8 @@ export default class Player extends Sprite {
         // console.log("in player.draw()")
         if (this.isVisible) {
             if (!this.isAlive) { context.filter = "opacity(65%) grayscale(100) blur(0.5px)" }
-            if (this.dx <= 75) this.dx = 75
-            if (this.dx >= 350) this.dx = 350
+            // if (this.dx <= 75) this.dx = 75
+            // if (this.dx >= 325) this.dx = 325
             context.drawImage(
 
                 this.spriteImageObj.image,
@@ -140,18 +141,11 @@ export default class Player extends Sprite {
     }
 
     updateScore(object) {
-        if (object) {
-            if (!object.isScored) {
-                // console.log("SCORE")
-
-                this.currentScore += object.pointValue
-                object.isScored = true
-                return this.currentScore
-
-
-            }
-        }
+        this.currentScore += object.pointValue
+        return this.currentScore
     }
+
+
 
     updateHealth(object) {
         if (object) {

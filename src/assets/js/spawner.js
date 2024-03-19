@@ -73,4 +73,7 @@ export default class Spawner {
         }
         return numFreeObjects
     }
+
+
 }
+

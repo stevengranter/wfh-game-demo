@@ -44,19 +44,20 @@ export default class Projectile extends Sprite {
 
     draw(context) {
         // console.log("draw projectile")
-        context.drawImage(
+        if (this.isVisible) {
+            context.drawImage(
 
-            this.spriteImageObj.image,
-            this.spriteImageObj.sWidth * this.spriteSheetObj.frameX,
-            this.spriteImageObj.sHeight * this.spriteSheetObj.frameY, //this.spriteImageObj.sHeight, // * 0,
-            this.spriteImageObj.sWidth,
-            this.spriteImageObj.sHeight,
-            this.dx,
-            this.dy,
-            this.dWidth,
-            this.dHeight
-        )
-
+                this.spriteImageObj.image,
+                this.spriteImageObj.sWidth * this.spriteSheetObj.frameX,
+                this.spriteImageObj.sHeight * this.spriteSheetObj.frameY, //this.spriteImageObj.sHeight, // * 0,
+                this.spriteImageObj.sWidth,
+                this.spriteImageObj.sHeight,
+                this.dx,
+                this.dy,
+                this.dWidth,
+                this.dHeight
+            )
+        }
     }
 
     setInitialPosition() {

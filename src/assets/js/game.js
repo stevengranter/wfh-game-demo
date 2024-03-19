@@ -1,87 +1,67 @@
 // Import modules
 import GameObject from "./gameobject.js"
+import GameWorld from "./gameworld.js"
+import GameScene from "./gamescene.js"
 import Layer from "./layer.js"
 import Player from "./player.js"
 import InputHandler from "./input.js"
-// import { ObjectPool, Pickup } from "./objectpool.js"
-import { SpriteFrame, SpriteAnimation, Sprite } from "./sprite.js"
-import Pickup from "./pickup.js"
+import { spriteTypes, SpriteFrame, SpriteAnimation, Sprite } from "./sprite.js"
 import ObjectPool from "./objectpool.js"
 import Spawner from './spawner.js'
 import Projectile from "./projectile.js"
+import CollisionDetector from "./collision-detector.js"
 import { drawStatusText, getRandomInt } from "./utils.js"
 import UI from "./ui.js"
 
 import { DebugMode } from "./debug.js"
 import Seagull from "./seagull.js"
 
-// wait for page to fully load
+
+
 window.addEventListener("load", function () {
 
-    const debugPanel = document.getElementById("debug-panel")
-    const debug = new DebugMode(true, debugPanel)
+    // const debugPanel = document.getElementById("debug-panel")
+    // const debug = new DebugMode(true, debugPanel)
     // console.log("Debug mode is " + debug.isOn)
     // Initialize canvas 🎨 //
-    const canvas = document.getElementById("game-screen__canvas")
-    const ctx = canvas.getContext("2d")
-    canvas.width = 475
-    canvas.height = 270
-    ctx.imageSmoothingEnabled = false // keeps sprites pixelated
+    // const canvas = document.getElementById("game-screen__canvas")
+    // const ctx = canvas.getContext("2d")
+    // canvas.width = 475
+    // canvas.height = 270
+    // ctx.imageSmoothingEnabled = false // keeps sprites pixelated
 
     // Initialize game variables
     let lastTime = 0
     let deltaTime = 1
-    let isPaused = false
-
     let comboCounter = 0
 
-    const music = new Audio()
-    let isMusicLoaded = false
-    music.src = "./assets/audio/music/song_01-i_equals_da_by.ogg"
-    music.loop = true
 
-    music.addEventListener("canplaythrough", () => {
-        let duration = music.duration
-        isMusicLoaded = true
-        console.log("music is loaded")
-    })
+
+    let isPaused = false
+
+    const canvas = document.getElementById("game-screen__canvas")
+    canvas.width = 475
+    canvas.height = 270
+    const ctx = canvas.getContext("2d")
 
 
 
 
+
+    // const uiDOMElements = document.querySelectorAll("[data-ui]")
+    // console.dir(document.querySelectorAll("[data-ui]"))
+
+    // uiDOMElements.forEach((element) => {
+    //     let constName = element.id.toString()
+    //     console.log(constName)
+    // })
 
     // DOM UI elements //
-    const ui = new UI(canvas)
-    const body = document.getElementsByTagName("body")[0]
-    const titleScreen = document.getElementById("title-screen")
-
-    // Menu DOM elements
-    const menuScreen = document.getElementById("menu-screen")
-    const startButton = document.getElementById("start-button")
-    //const pauseButton = document.getElementById("pause-button")
-    const resumeButton = document.getElementById("resume-button")
-    const stopButton = document.getElementById("stop-button")
-
-    // In-game DOM elements
-    const gameplayHUD = document.getElementById("gameplay-hud")
-    const scoreCounterHUD = document.getElementById("hud-score")
-    const healthMeterHUD = document.querySelector("#hud-health-meter span")
-    const livesCounterHUD = document.querySelector("#hud-lives-remaining div")
-    const comboCounterHUD = document.querySelector("#hud-combo")
-    // console.log(healthMeter)
-
-    // Virtual control button elements
-    // const virtualButtons = document.querySelectorAll(".touchable")
-
-    // for (let i = 0; i < virtualButtons.length; i++) {
-    //     virtualButtons[i].addEventListener("touchstart", handleTouch())
-    // }
+    const ui = new UI(this.document)
 
 
-    const controllerStartButton = document.getElementById("virtual-controller--button-start")
-    const controllerSelectButton = document.getElementById("virtual-controller--button-select")
-    const controllerDpad = document.getElementById("virtual-controller--button-dpad")
-    const controllerPrimaryButton = document.getElementById("virtual-controller--button-primary")
+
+
 
 
 
@@ -138,7 +118,7 @@ window.addEventListener("load", function () {
     const player = new Player(
         ctx,
         225,
-        200,
+        0,
         48,
         48,
         playerStandingLeftAnimation,
@@ -148,13 +128,7 @@ window.addEventListener("load", function () {
     let playerLives = player.currentLives
     let playerHealth = player.currentHealth
     let playerScore = player.currentScore
-
-    // Background Image
-
-    const backgroundImage = new Image()
-    backgroundImage.src = "./assets/images/background-01-main.png"
-
-    const backgroundLayer01 = new Layer(backgroundImage, 0, 0, 6650, 270, 0, 0, 6650, 270, 0, 0)
+    let playerProgress = player.currentProgress
 
     // const backgroundRocksImage = new Image()
     // backgroundRocksImage.src = "./assets/images/bg02-rocks.png"
@@ -177,10 +151,12 @@ window.addEventListener("load", function () {
         32, // dHeight
         new SpriteAnimation(wienerSpriteImage, 0, 0, 28),
         getRandomInt(-75, 75), //getRandomInt(-1, 1), // velocityX
-        getRandomInt(50, 200), //getRandomInt(1, 3), // velocityY
+        getRandomInt(25, 200), //getRandomInt(1, 3), // velocityY
         getRandomInt(15, 120), // fps
         100, // pointValue
-        5 // healthValue
+        5, // healthValue
+        spriteTypes.PROP, // sprite Type
+        [spriteTypes.PLAYER]
     )
 
     const wienerResetFunc = (wiener) => {
@@ -189,17 +165,18 @@ window.addEventListener("load", function () {
         wiener.dx = getRandomInt(20, 460)
         wiener.dy = -50
         wiener.velocityX = getRandomInt(-75, 75)
-        wiener.velocityY = getRandomInt(50, 200)
+        wiener.velocityY = getRandomInt(25, 200)
     }
 
     const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, 10)
-    const wienerSpawner = new Spawner(1, wienerPool)
+    const wienerSpawner = new Spawner(0.75, wienerPool)
     // console.log(wienerPool)
 
     // Seagull 🐦
 
     const seagullImage = new Image()
     seagullImage.src = "./assets/images/seagull-flying-sprite-01.png"
+
     const seagullSpriteImage = new SpriteFrame(seagullImage, 0, 0, 44, 51)
     const makeSeagull = () => new Seagull(
         ctx, // spritesheet
@@ -211,7 +188,10 @@ window.addEventListener("load", function () {
         getRandomInt(-300, -75), // velocityX
         Math.random() < 0.5 ? -10 : 10, // velocityY 
         30,  // fps
-        0 // pointValue
+        0, // pointValue
+        0, // healthValue
+        spriteTypes.ENEMY, // spriteType
+        [spriteTypes.PLAYER] // collidesWith
     )
 
     const seagullResetFunc = (seagull) => {
@@ -228,7 +208,7 @@ window.addEventListener("load", function () {
     const seagullSpawner = new Spawner(2, seagullPool)
     console.log(seagullPool)
 
-
+    const collision = new CollisionDetector()
 
 
     //Seagull poop(Random locations)
@@ -274,6 +254,39 @@ window.addEventListener("load", function () {
     const gullPoopSpawner = new Spawner(1, gullPoopPool)
 
 
+    const scene01Spawners = [wienerSpawner, seagullSpawner, gullPoopSpawner]
+    // Scene Objects
+
+    const backgroundLayer01 = new Layer(player, false, "./assets/images/bg01-flattened.png", 0, 0)
+    backgroundLayer01.velocityX = 0
+
+
+
+
+    const scene01 = new GameScene(0, 'Bonavista', player, [backgroundLayer01], [], scene01Spawners, "./assets/audio/music/song_01-i_equals_da_by.ogg", [])
+
+    const backgroundLayer02 = new Layer(player, false, "./assets/images/bg02-rocks.png")
+    backgroundLayer02.velocityX = 0
+
+    const scene02 = new GameScene(0, 'new', player, [backgroundLayer02], [], "./assets/audio/music/song_01-i_equals_da_by.ogg", [])
+
+    let currentScene = scene01
+
+
+    console.log(scene01)
+    let gameWorld = new GameWorld(canvas, 475, 270, player, currentScene)
+
+
+
+
+
+
+
+
+
+
+
+
 
     // Seagull poop (delivered by gull)
 
@@ -312,80 +325,32 @@ window.addEventListener("load", function () {
         }
     })
 
-    startButton.addEventListener("click", startGame)
+    ui.startButton.addEventListener("click", startGame)
 
-    stopButton.addEventListener("click", stopGame)
+    ui.stopButton.addEventListener("click", stopGame)
 
     // pauseButton.addEventListener("click", (e) => {
     //     isPaused = !isPaused
     //     pauseGame()
     // })
 
-    resumeButton.addEventListener("click", (e) => {
+    ui.resumeButton.addEventListener("click", (e) => {
         isPaused = !isPaused
         pauseGame()
     })
 
-    controllerStartButton.addEventListener("click", (e) => {
+    ui.controllerStartButton.addEventListener("click", (e) => {
         isPaused = !isPaused
         pauseGame()
-        console.log('Start Button')
+        // console.log('Start Button')
     })
 
-    controllerStartButton.addEventListener("touchstart", (e) => {
+    ui.controllerStartButton.addEventListener("touchstart", (e) => {
         e.preventDefault()
         isPaused = !isPaused
         pauseGame()
-        console.log('Start Button')
+        // console.log('Start Button')
     })
-
-    // controllerSelectButton.addEventListener("click", (e) => {
-    //     if (!isPaused) {
-    //         isPaused = !isPaused
-    //         pauseGame()
-    //     } else {
-    //         console.log('Select Button')
-    //     }
-    // })
-
-    // controllerSelectButton.addEventListener("touchstart", (e) => {
-    //     e.preventDefault()
-    //     if (!isPaused) {
-    //         isPaused = !isPaused
-    //         pauseGame()
-    //     } else {
-    //         console.log('Select Button')
-    //     }
-    // })
-
-    // controllerDpad.addEventListener("click", (e) => {
-
-    //     this.player.setState(this.states.WalkingLeft)
-    // })
-
-    // controllerDpad.addEventListener("touchstart", (e) => {
-    //     player.setState(states.WalkingLeft)
-    // })
-
-
-    // controllerPrimaryButton.addEventListener("click", (e) => {
-    //     if (!isPaused) {
-    //         isPaused = !isPaused
-    //         pauseGame()
-    //     } else {
-    //         console.log('Primary Button')
-    //     }
-    // })
-
-    // controllerPrimaryButton.addEventListener("touchstart", (e) => {
-    //     e.preventDefault()
-    //     if (!isPaused) {
-    //         isPaused = !isPaused
-    //         pauseGame()
-    //     } else {
-    //         console.log('Primary Button')
-    //     }
-    // })
 
 
     // this.document.addEventListener("touchstart", (e) => {
@@ -406,244 +371,306 @@ window.addEventListener("load", function () {
 
 
 
-    // Game loop
-    function animate(timeStamp) {
+    // // Game loop
+    // function animate(timeStamp) {
+    //     if (!isPaused) {
+    //         deltaTime = (timeStamp - lastTime) / 1000
+    //         lastTime = timeStamp
+    //         ctx.clearRect(0, 0, canvas.width, canvas.height)
+    //         // ctx.drawImage(backgroundImage, 0, 0)
+    //         if (music.currentTime === 0) {
+    //             console.log("Time's Up!")
+    //             return
+    //         }
+    //         // player.setState(6)
+    //         // player.resetPlayer()
+    //         let statusBottomY = 260
+
+
+
+    //         // drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
+    //         // drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
+    //         // drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
+
+
+    //         // drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
+    //         // drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
+    //         // drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
+
+    //         // drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, statusBottomY - 60)
+    //         // drawStatusText(ctx, "     active:" + seagullSpawner.getActiveObjects(), 10, statusBottomY - 50)
+    //         // drawStatusText(ctx, "     timer: " + Math.floor(seagullSpawner.timeSinceSpawn) + " / " + seagullSpawner.spawnInterval, 10, statusBottomY - 40)
+
+    //         // drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
+    //         // drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
+    //         // drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
+
+    //         // backgroundLayer01.velocityX = -Math.round(player.speedX)
+
+    //         scene01.update(deltaTime)
+
+    //         // backgroundLayer02.velocityX = -player.speedX / 2
+    //         // backgroundLayer02.update(deltaTime)
+
+
+    //         gullPoopSpawner.update(deltaTime)
+    //         seagullSpawner.update(deltaTime)
+    //         wienerSpawner.update(deltaTime)
+    //         player.update(input, deltaTime)
+
+    //         // for (let i = 0; i < 10; i++) {
+    //         //     if (!seagullPool.poolArray[i].free) {
+
+
+
+
+    //         //         // console.log(seagullPool.poolArray[i].data.projectile.dx)
+    //         //         seagullPool.poolArray[i].data.projectile.update()
+
+
+
+    //         //     }
+    //         // }
+    //         // seagullPool.poolArray[i].data.poopSprite.update(deltaTime)
+    //         // console.log("seagull" + i + " DX: " + seagullPool.poolArray[i].data.dx)
+    //         // console.log("poop " + i + " DX: " + seagullPool.poolArray[i].data.poopSprite.dx)
+    //         // console.log("seagull" + i + " DY: " + seagullPool.poolArray[i].data.dx)
+    //         // console.log("poop " + i + " DY: " + seagullPool.poolArray[i].data.poopSprite.dx)
+    //         //}
+
+
+    //         scene01.draw(ctx)
+
+    //         // backgroundLayer02.draw(ctx)
+
+
+
+    //         gullPoopSpawner.draw(ctx)
+    //         seagullSpawner.draw(ctx)
+    //         // for (let i = 0; i < 10; i++) {
+    //         //     if (!seagullPool.poolArray[i].free) {
+    //         //         seagullPool.poolArray[i].data.projectile.draw(ctx)
+    //         //     }
+    //         // }
+
+
+    //         wienerSpawner.draw(ctx)
+    //         player.draw(ctx)
+
+    //         drawStatusText(ctx, "music.currentTime: " + music.currentTime, 10, statusBottomY - 80)
+    //         drawStatusText(ctx, "music time left " + Math.floor(music.duration - music.currentTime), 10, statusBottomY - 70)
+
+    //         drawStatusText(ctx, "player.dx: " + player.dx, 10, statusBottomY - 50)
+    //         drawStatusText(ctx, "player.speedX: " + player.speedX, 10, statusBottomY - 40)
+    //         drawStatusText(ctx, "player.speedY: " + player.speedY, 10, statusBottomY - 30)
+    //         drawStatusText(ctx, "player.velocityX: " + player.velocityX, 10, statusBottomY - 20)
+    //         drawStatusText(ctx, "input" + input.left, 10, statusBottomY - 100)
+
+    //         // drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
+    //         // drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
+    //         // drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
+
+
+    //         ui.timerHUD.innerText = Math.floor(music.duration - music.currentTime)
+
+    //         if (player.isAlive) {
+    //             // detect collisions
+    //             for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
+    //                 let collider = wienerSpawner.objectPool.poolArray[i]
+
+    //                 if (detectBoxCollision(player, collider.data)) {
+
+
+    //                     playerHealth = player.updateHealth(collider.data)
+    //                     healthMeterHUD.style.width = playerHealth + "%"
+    //                     if (playerLives > 1) {
+    //                         livesCounterHUD.innerText = "x" + playerLives
+    //                     }
+
+    //                     playerScore = player.updateScore(collider.data)
+    //                     // console.log(playerScore)
+    //                     ui.scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
+
+
+
+    //                     collider.data.isVisible = false
+    //                     // if (player.currentScore >= 500 && player.currentScore < 1000) {
+    //                     //     player.maxSpeedX = 2
+    //                     // } else if (player.currentScore >= 1000) {
+    //                     //     player.maxSpeedX = 3
+    //                     // } else {
+    //                     //     player.maxSpeedX = 1
+    //                     // }
+    //                     comboCounter++
+    //                     if (comboCounter > 0 && comboCounter <= 5) {
+    //                         for (let i = 1; i <= comboCounter; i++) {
+    //                             let nthChildSelector = `:nth-child(${i})`
+    //                             let nthChildSelectorString = nthChildSelector.toString()
+    //                             // console.log(nthChildSelectorString)
+    //                             let letter = comboCounterHUD.querySelector(nthChildSelectorString)
+    //                             // console.dir(letter)
+    //                             letter.style.color = "var(--clr-purple)"
+    //                             letter.style.opacity = "100%"
+    //                         }
+    //                     } else if (comboCounter > 5 && comboCounter <= 10) {
+    //                         for (let i = 6; i <= comboCounter; i++) {
+    //                             let nthChildSelectorIndex = i - 5
+    //                             let nthChildSelector = `:nth-child(${nthChildSelectorIndex})`
+    //                             let nthChildSelectorString = nthChildSelector.toString()
+    //                             // console.log(nthChildSelectorString)
+    //                             let letter = comboCounterHUD.querySelector(nthChildSelectorString)
+    //                             // console.dir(letter)
+    //                             letter.style.color = "var(--clr-gold)"
+    //                             letter.style.opacity = "100%"
+    //                         }
+    //                     }
+    //                     if (comboCounter < 5) {
+    //                         player.maxSpeedX = 75
+    //                     } else if (comboCounter >= 5 && comboCounter < 10) {
+    //                         player.maxSpeedX = 150
+    //                     } else if (comboCounter >= 10) {
+    //                         player.maxSpeedX = 225
+    //                     }
+
+
+    //                     if (comboCounter === 10) {
+    //                         console.log("COMBO!!!")
+    //                     }
+
+
+    //                     // console.log(wienerSpawner.collider.data)
+    //                     wienerSpawner.objectPool.releaseElement(collider)
+    //                 }
+    //             }
+
+    //             for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
+    //                 let collider = gullPoopSpawner.objectPool.poolArray[i]
+    //                 if (detectBoxCollision(player, collider.data)) {
+    //                     playerHealth = player.updateHealth(collider.data)
+    //                     healthMeterHUD.style.width = playerHealth + "%"
+    //                     playerScore = player.updateScore(collider.data)
+    //                     // console.log(playerScore)
+    //                     ui.scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
+
+
+    //                     collider.data.isVisible = false
+
+
+    //                     let letters = comboCounterHUD.querySelectorAll("span")
+    //                     letters.forEach((letter) => {
+    //                         letter.style.color = ""
+    //                         letter.style.opacity = "50%"
+    //                     })
+
+    //                     comboCounter = 0
+    //                     player.maxSpeedX = 75
+    //                     if (!player.isAlive) {
+
+    //                         playerLives--
+
+    //                         if (playerLives > 1) {
+    //                             livesCounterHUD.innerText = "x" + playerLives
+
+    //                         } else if (playerLives = 1) {
+    //                             livesCounterHUD.innerText = ""
+    //                         } else if (playerLives = 0) {
+    //                             player.isAlive = false
+    //                         }
+    //                         resetPlayer()
+    //                     }
+    //                     // console.log(collider.data)
+    //                     gullPoopSpawner.objectPool.releaseElement(collider)
+    //                 }
+    //             }
+
+    //         } // end if (player.isAlive)
+
+
+    //         // for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {
+    //         //     if (detectBoxCollision(player, jumboSpawner.objectPool.poolArray[i].data)) {
+    //         //         jumboSpawner.objectPool.poolArray[i].data.isVisible = false
+    //         //         updateScore(jumboSpawner.objectPool.poolArray[i].data)
+    //         //         jumboSpawner.objectPool.releaseElement(jumboSpawner.objectPool.poolArray[i])
+
+    //         //     }
+    //         // }
+
+    //         requestAnimationFrame(animate)
+    //     } else {
+    //         pauseGame()
+    //     }
+    // }
+
+    console.log(currentScene.player)
+    currentScene.spawners.forEach((spawner) => {
+        console.log(spawner)
+    })
+    function loop(timeStamp) {
         if (!isPaused) {
             deltaTime = (timeStamp - lastTime) / 1000
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
-            // ctx.drawImage(backgroundImage, 0, 0)
-
-            // player.setState(6)
-            // player.resetPlayer()
-            let statusBottomY = 260
-
-
-
-            // drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
-            // drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
-            // drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
-
-
-            // drawStatusText(ctx, "💩 free:" + gullPoopSpawner.getFreeObjects(), 10, statusBottomY - 100)
-            // drawStatusText(ctx, "     active:" + gullPoopSpawner.getActiveObjects(), 10, statusBottomY - 90)
-            // drawStatusText(ctx, "     timer:" + Math.floor(gullPoopSpawner.timeSinceSpawn) + " / " + gullPoopSpawner.spawnInterval, 10, statusBottomY - 80)
-
-            // drawStatusText(ctx, "🐦 free:" + seagullSpawner.getFreeObjects(), 10, statusBottomY - 60)
-            // drawStatusText(ctx, "     active:" + seagullSpawner.getActiveObjects(), 10, statusBottomY - 50)
-            // drawStatusText(ctx, "     timer: " + Math.floor(seagullSpawner.timeSinceSpawn) + " / " + seagullSpawner.spawnInterval, 10, statusBottomY - 40)
-
-            // drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
-            // drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
-            // drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
-
-            backgroundLayer01.velocityX = -player.speedX / 4
-
-            backgroundLayer01.update(deltaTime)
-
-            // backgroundLayer02.velocityX = -player.speedX / 2
-            // backgroundLayer02.update(deltaTime)
-
-
-            gullPoopSpawner.update(deltaTime)
-            seagullSpawner.update(deltaTime)
-            wienerSpawner.update(deltaTime)
-            player.update(input, deltaTime)
-
-            // for (let i = 0; i < 10; i++) {
-            //     if (!seagullPool.poolArray[i].free) {
-
-
-
-
-            //         // console.log(seagullPool.poolArray[i].data.projectile.dx)
-            //         seagullPool.poolArray[i].data.projectile.update()
-
-
-
-            //     }
-            // }
-            // seagullPool.poolArray[i].data.poopSprite.update(deltaTime)
-            // console.log("seagull" + i + " DX: " + seagullPool.poolArray[i].data.dx)
-            // console.log("poop " + i + " DX: " + seagullPool.poolArray[i].data.poopSprite.dx)
-            // console.log("seagull" + i + " DY: " + seagullPool.poolArray[i].data.dx)
-            // console.log("poop " + i + " DY: " + seagullPool.poolArray[i].data.poopSprite.dx)
-            //}
-
-
-            backgroundLayer01.draw(ctx)
-
-            // backgroundLayer02.draw(ctx)
-
-
-
-            gullPoopSpawner.draw(ctx)
-            seagullSpawner.draw(ctx)
-            // for (let i = 0; i < 10; i++) {
-            //     if (!seagullPool.poolArray[i].free) {
-            //         seagullPool.poolArray[i].data.projectile.draw(ctx)
-            //     }
-            // }
-
-
-            wienerSpawner.draw(ctx)
-            player.draw(ctx)
-
-            drawStatusText(ctx, "player.dx: " + player.dx, 10, statusBottomY - 50)
-            drawStatusText(ctx, "player.speedX: " + player.speedX, 10, statusBottomY - 40)
-            drawStatusText(ctx, "player.speedY: " + player.speedY, 10, statusBottomY - 30)
-            drawStatusText(ctx, "player.velocityX: " + player.velocityX, 10, statusBottomY - 20)
-            drawStatusText(ctx, "input" + input.left, 10, statusBottomY - 100)
-
-            // drawStatusText(ctx, "🌭 free:" + wienerSpawner.getFreeObjects(), 10, statusBottomY - 20)
-            // drawStatusText(ctx, "     active:" + wienerSpawner.getActiveObjects(), 10, statusBottomY - 10)
-            // drawStatusText(ctx, "     timer:" + Math.floor(wienerSpawner.timeSinceSpawn) + " / " + wienerSpawner.spawnInterval, 10, statusBottomY)
-
-
+            ui.timerHUD.innerText = Math.floor(currentScene.soundTrack.duration - currentScene.soundTrack.currentTime)
+            currentScene.update(deltaTime)
+            currentScene.player.update(input, deltaTime)
 
             if (player.isAlive) {
-                // detect collisions
-                for (let i = 0; i < wienerSpawner.objectPool.poolArray.length; i++) {
-                    let collider = wienerSpawner.objectPool.poolArray[i]
+                currentScene.spawners.forEach((spawner) => {
+                    let collisionDetected = collision.detectBoxCollision(player, spawner.objectPool.poolArray)
+                    // console.log(collisionDetected)
+                    if (typeof collisionDetected !== "undefined") {
+                        // console.dir(collisionDetected)
+                        // console.log("collision")
+                        playerScore = player.updateScore(collisionDetected)
+                        ui.scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
 
-                    if (detectBoxCollision(player, collider.data)) {
+                        playerHealth = player.updateHealth(collisionDetected)
+                        ui.healthMeterHUD.style.width = playerHealth + "%"
 
-
-                        playerHealth = player.updateHealth(collider.data)
-                        healthMeterHUD.style.width = playerHealth + "%"
-                        if (playerLives > 1) {
-                            livesCounterHUD.innerText = "x" + playerLives
-                        }
-
-                        playerScore = player.updateScore(collider.data)
-                        // console.log(playerScore)
-                        scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
-
-
-
-                        collider.data.isVisible = false
-                        // if (player.currentScore >= 500 && player.currentScore < 1000) {
-                        //     player.maxSpeedX = 2
-                        // } else if (player.currentScore >= 1000) {
-                        //     player.maxSpeedX = 3
-                        // } else {
-                        //     player.maxSpeedX = 1
-                        // }
-                        comboCounter++
-                        if (comboCounter > 0 && comboCounter <= 5) {
-                            for (let i = 1; i <= comboCounter; i++) {
-                                let nthChildSelector = `:nth-child(${i})`
-                                let nthChildSelectorString = nthChildSelector.toString()
-                                // console.log(nthChildSelectorString)
-                                let letter = comboCounterHUD.querySelector(nthChildSelectorString)
-                                // console.dir(letter)
-                                letter.style.color = "var(--clr-purple)"
-                                letter.style.opacity = "100%"
-                            }
-                        } else if (comboCounter > 5 && comboCounter <= 10) {
-                            for (let i = 6; i <= comboCounter; i++) {
-                                let nthChildSelectorIndex = i - 5
-                                let nthChildSelector = `:nth-child(${nthChildSelectorIndex})`
-                                let nthChildSelectorString = nthChildSelector.toString()
-                                // console.log(nthChildSelectorString)
-                                let letter = comboCounterHUD.querySelector(nthChildSelectorString)
-                                // console.dir(letter)
-                                letter.style.color = "var(--clr-gold)"
-                                letter.style.opacity = "100%"
-                            }
-                        }
-                        if (comboCounter < 5) {
-                            player.maxSpeedX = 100
-                        } else if (comboCounter >= 5 && comboCounter < 10) {
-                            player.maxSpeedX = 200
-                        } else if (comboCounter >= 10) {
-                            player.maxSpeedX = 400
-                        }
-
-
-                        if (comboCounter === 10) {
-                            console.log("COMBO!!!")
-                        }
-
-
-                        // console.log(wienerSpawner.collider.data)
-                        wienerSpawner.objectPool.releaseElement(collider)
                     }
-                }
+                })
+            }
 
-                for (let i = 0; i < gullPoopSpawner.objectPool.poolArray.length; i++) {
-                    let collider = gullPoopSpawner.objectPool.poolArray[i]
-                    if (detectBoxCollision(player, collider.data)) {
-                        playerHealth = player.updateHealth(collider.data)
-                        healthMeterHUD.style.width = playerHealth + "%"
-                        playerScore = player.updateScore(collider.data)
-                        // console.log(playerScore)
-                        scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
-
-
-                        collider.data.isVisible = false
-
-
-                        let letters = comboCounterHUD.querySelectorAll("span")
-                        letters.forEach((letter) => {
-                            letter.style.color = ""
-                            letter.style.opacity = "50%"
-                        })
-
-                        comboCounter = 0
-                        player.maxSpeedX = 100
-                        if (!player.isAlive) {
-
-                            playerLives--
-
-                            if (playerLives > 1) {
-                                livesCounterHUD.innerText = "x" + playerLives
-                            }
-                        }
-                        // console.log(collider.data)
-                        gullPoopSpawner.objectPool.releaseElement(collider)
-                    }
-                }
-
-            } // end if (player.isAlive)
-
-
-            // for (let i = 0; i < jumboSpawner.objectPool.poolArray.length; i++) {
-            //     if (detectBoxCollision(player, jumboSpawner.objectPool.poolArray[i].data)) {
-            //         jumboSpawner.objectPool.poolArray[i].data.isVisible = false
-            //         updateScore(jumboSpawner.objectPool.poolArray[i].data)
-            //         jumboSpawner.objectPool.releaseElement(jumboSpawner.objectPool.poolArray[i])
-
-            //     }
-            // }
-
-            requestAnimationFrame(animate)
+            currentScene.draw(ctx)
+            currentScene.player.draw(ctx)
+            requestAnimationFrame(loop)
         } else {
             pauseGame()
         }
+
     }
 
 
     // Game state functions
     function startGame() {
-        ui.hide(titleScreen)
-        ui.hide(menuScreen)
-        scoreCounterHUD.innerHTML = String(0).padStart(4, "0")
+        ui.hide(ui.titleScreen)
+        ui.hide(ui.menuScreen)
+        ui.hide(ui.menuOverlay)
+
+        ui.show(ui.gameplayHUD)
+        ui.show(ui.ingameOverlay)
+
+
+        ui.scoreCounterHUD.innerHTML = String(0).padStart(4, "0")
         if (playerLives > 1) {
             livesCounterHUD.innerText = "x" + playerLives
         }
-        ui.show(gameplayHUD)
+
+        // ui.show(gameplayHUD)
         const superNantendo = document.getElementById("ui--super-nantendo")
         superNantendo.classList.add("teal-bg")
         canvas.classList.remove("hidden")
-        if (isMusicLoaded) {
-            music.play()
+
+
+
+
+        if (currentScene.isMusicLoaded) {
+            console.log("music is loaded")
+            currentScene.soundTrack.play()
             setTimeout(() => {
-                animate(0)
+                loop(0)
             }, "4000")
         }
-
-
 
     }
 
@@ -655,15 +682,22 @@ window.addEventListener("load", function () {
 
     function pauseGame() {
         if (isPaused) {
-            ui.show(menuScreen)
-            ui.hide(gameplayHUD)
-            music.pause()
+            // titleScreen.classList.add("hidden")
+
+            ui.hide(ui.ingameOverlay)
+            ui.hide(ui.titleScreen)
+            ui.show(ui.menuScreen)
+            ui.show(ui.menuOverlay)
+            currentScene.soundTrack.pause()
         }
         else {
-            ui.hide(menuScreen)
-            ui.show(gameplayHUD)
-            music.play()
-            animate(lastTime)
+
+            ui.show(ui.ingameOverlay)
+            ui.hide(ui.menuScreen)
+            ui.hide(ui.menuOverlay)
+            ui.show(ui.gameplayHUD)
+            currentScene.soundTrack.play()
+            loop(lastTime)
             isPaused = false
         }
     }
@@ -674,22 +708,6 @@ window.addEventListener("load", function () {
 
 
 
-    // Collision detection
-    function detectBoxCollision(object1, object2) {
-        if (
-            object1.dx + object1.dWidth >= object2.dx &&
-            object1.dx <= object2.dx + object2.dWidth &&
-            object1.dy + object1.dHeight >= object2.dy &&
-            object1.dy <= object2.dy + object2.dHeight
-        ) {
-            // console.log("COLLISION!")
-            return true
-
-        }
-
-
-    }
-
 
 
 
@@ -697,7 +715,7 @@ window.addEventListener("load", function () {
 
 
     // Uncomment to bypass title screen
-    startGame()
+    //startGame()
 
 
 

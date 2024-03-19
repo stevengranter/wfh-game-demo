@@ -1,18 +1,23 @@
 export default class Layer {
     constructor(
-        backgroundImageSource,
-        sx,
-        sy,
-        sWidth,
-        sHeight,
-        dx,
-        dy,
-        dWidth,
-        dHeight,
-        velocityX,
-        velocityY,
+        player,
+        playerScrollFactor = false,
+        backgroundImageFile,
+        sx = 0,
+        sy = 0,
+        sWidth = 0,
+        sHeight = 0,
+        dx = sx,
+        dy = sy,
+        dWidth = sWidth,
+        dHeight = sHeight,
+        velocityX = 0,
+        velocityY = 0,
+
     ) {
-        this.backgroundImageSource = backgroundImageSource
+        this.player = player
+        this.playerScrollFactor = playerScrollFactor
+        this.backgroundImageFile = backgroundImageFile
         this.sx = sx
         this.sy = sy
         this.sWidth = sWidth
@@ -24,11 +29,24 @@ export default class Layer {
         this.velocityX = velocityX
         this.velocityY = velocityY
 
+
+        this.init()
+
+    }
+    init() {
+        const bgImage = new Image()
+        bgImage.src = `${this.backgroundImageFile}`
+        this.sWidth = bgImage.naturalWidth
+        this.sHeight = bgImage.naturalHeight
+        if (this.dWidth == false) this.dWidth = this.sWidth
+        if (this.dHeight == false) this.dHeight = this.sHeight
+        this.backgroundImageObject = bgImage
+        // if (this.playerScrollFactor) this.playerScrollFactor = 1 / this.playerScrollFactor
     }
 
     draw(context) {
         context.drawImage(
-            this.backgroundImageSource,
+            this.backgroundImageObject,
             this.sx,
             this.sy,
             this.sWidth,
@@ -40,7 +58,14 @@ export default class Layer {
     }
 
     update(deltaTime) {
-        this.dx += this.velocityX * deltaTime
-        this.dy += this.velocityY * deltaTime
+        // console.log(this.playerScrollFactor)
+        if (!this.playerScrollFactor) {
+            this.dx += Math.floor(this.velocityX * deltaTime)
+            this.dy += Math.floor(this.velocityY * deltaTime)
+        } else {
+            this.dx += ((-this.player.speedX * this.playerScrollFactor + this.velocityX) * deltaTime)
+            this.dy += ((-this.player.speedY * this.playerScrollFactor + this.velocityY) * deltaTime)
+        }
     }
 }
+

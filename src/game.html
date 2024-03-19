@@ -4,33 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <!-- <link rel="stylesheet" href="./assets/css/style.css" /> -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Coiny&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./assets/css/style-02.css" />
-
     <link
       href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
       rel="stylesheet"
     />
 
+    <link rel="stylesheet" href="./assets/css/style.css" />
+
     <title>🌭 Wieners From Heaven: Maple Syrup Edition 🇨🇦</title>
   </head>
   <body>
     <div class="interface__super-nantendo" id="ui--super-nantendo">
-      <div class="game-screen" id="game-screen">
+      <div class="game-screen" id="game-screen" data-ui="true">
         <canvas id="game-screen__canvas" class="pixelated"></canvas>
         <img
           src="./assets/images/ui--overlay-screen-border-02.svg"
-          class="game-screen__border-overlay"
+          class="game-screen__border"
           id="game-screen-border"
         />
-        <div class="game-screen__ingame-overlay">
-          <div id="gameplay-hud" class="hidden">
+        <div id="game-screen__ingame-overlay" class="hidden" data-ui="true">
+          <div id="level-stats">
+            <div id="level-timer"></div>
+          </div>
+          <div id="gameplay-hud" class="hidden" data-ui="true">
             <div id="hud-player-stats">
               <div id="hud-lives-remaining" class="pixelated">
                 <img src="./assets/images/nan-portrait-pixel-01.png" alt="" />
@@ -45,11 +47,14 @@
               ><span>O</span>
             </div>
           </div>
-
-          <div id="title-screen" class="hidden">
-            <img src="./assets/images/wfh-logo.webp" alt="" />
-            <div id="start-button">
-              <h2>Start</h2>
+        </div>
+        <div id="game-screen__menu-overlay" class="">
+          <div id="title-screen" class="block">
+            <div>
+              <img src="./assets/images/wfh-logo.webp" alt="" />
+              <div id="start-button">
+                <h2>Start</h2>
+              </div>
             </div>
           </div>
 

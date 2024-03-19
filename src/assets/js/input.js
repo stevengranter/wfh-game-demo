@@ -12,20 +12,22 @@ export default class InputHandler {
         window.addEventListener("keydown", (e) => this.listenForKeys(e))
         window.addEventListener("keyup", (e) => this.listenForKeys(e))
 
-        const gameScreen = document.getElementById("game-screen")
+        const canvas = document.getElementById("game-screen__ingame-overlay")
 
-        gameScreen.addEventListener('contextmenu', event => {
+        canvas.addEventListener('contextmenu', event => {
             event.preventDefault()
         })
-        gameScreen.addEventListener("mousedown", (e) => {
+        canvas.addEventListener("mousedown", (e) => {
             e.preventDefault()
             this.listenForMouse(e)
 
         })
-        gameScreen.addEventListener("mouseup", (e) => {
+        canvas.addEventListener("mouseup", (e) => {
             this.listenForMouse(e)
 
         })
+
+
 
 
         //Touch controls
@@ -144,23 +146,23 @@ export default class InputHandler {
     listenForMouse(e) {
 
         e.preventDefault()
-        console.dir(e)
+        // console.dir(e)
 
         let isButtonPressed = (e.type == "mousedown") ? true : false
-        console.log(isButtonPressed)
+        // console.log(isButtonPressed)
 
         switch (e.button) {
             case 0:
                 this.left = isButtonPressed
-                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
+                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
                 break
             case 1:
                 this.up = isButtonPressed
-                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.up:", this.up)
+                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.up:", this.up)
                 break
             case 2:
                 this.right = isButtonPressed
-                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
+                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
                 break
             default:
                 break
@@ -170,6 +172,6 @@ export default class InputHandler {
 
 
     handleTouches(event) {
-        console.log(event)
+        // console.log(event)
     }
 }

@@ -104,8 +104,8 @@ export class JumpingLeft extends State {
         this.player = player
     }
     enter() {
-        if (this.player.onGround()) this.player.velocityY -= 5
-        this.player.speedX = this.player.maxSpeedX * -2
+        if (this.player.onGround()) this.player.velocityY -= 6
+        // this.player.speedX = this.player.maxSpeedX * -2
     }
 
     handleInput(input) {
@@ -120,8 +120,8 @@ export class JumpingRight extends State {
         this.player = player
     }
     enter() {
-        if (this.player.onGround()) this.player.velocityY -= 5
-        this.player.speedX = this.player.maxSpeedX * 2
+        if (this.player.onGround()) this.player.velocityY -= 6
+        // this.player.speedX = this.player.maxSpeedX * 2
     }
 
     handleInput(input) {

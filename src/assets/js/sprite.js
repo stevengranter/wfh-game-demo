@@ -1,5 +1,13 @@
 import GameObject from "./gameobject.js"
 
+
+export const spriteTypes = Object.freeze({
+    PLAYER: 'player',
+    ENEMY: 'enemy',
+    PROP: 'prop',
+    ENVIRONMENT: 'environment'
+})
+
 export class Sprite extends GameObject {
 
 
@@ -14,7 +22,9 @@ export class Sprite extends GameObject {
         velocityY = 0,
         fps = 15,
         pointValue = 0,
-        healthValue = 0
+        healthValue = 0,
+        spriteType,
+        collidesWith = []
     ) {
         super(context, dx, dy, dWidth, dHeight)
 
@@ -33,9 +43,13 @@ export class Sprite extends GameObject {
 
         this.healthValue = healthValue
 
+        this.collidesWith = collidesWith
+
         this.isVisible = true
 
         this.isScored = false
+
+        this.spriteType = spriteType
 
         // console.log(this)
 
