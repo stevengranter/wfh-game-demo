@@ -15,11 +15,14 @@ export default class Projectile extends Sprite {
         fps = 15,
         pointValue = 0,
         healthValue = 0,
+        spriteType,
+        spriteTag,
+        collidesWith,
         parentSprite,
         interval
     ) {
 
-        super(context, dx, dy, dWidth, dHeight, spriteSheetObj, velocityX, velocityY, fps, pointValue, healthValue, parentSprite)
+        super(context, dx, dy, dWidth, dHeight, spriteSheetObj, velocityX, velocityY, fps, pointValue, healthValue, spriteType, spriteTag, collidesWith, parentSprite)
 
         this.spriteSheetObj = spriteSheetObj
 

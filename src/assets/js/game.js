@@ -5,7 +5,7 @@ import GameScene from "./gamescene.js"
 import Layer from "./layer.js"
 import Player from "./player.js"
 import InputHandler from "./input.js"
-import { spriteTypes, SpriteFrame, SpriteAnimation, Sprite } from "./sprite.js"
+import { spriteTypes, spriteTags, SpriteFrame, SpriteAnimation, Sprite } from "./sprite.js"
 import ObjectPool from "./objectpool.js"
 import Spawner from './spawner.js'
 import Projectile from "./projectile.js"
@@ -156,7 +156,8 @@ window.addEventListener("load", function () {
         100, // pointValue
         5, // healthValue
         spriteTypes.PROP, // sprite Type
-        [spriteTypes.PLAYER]
+        spriteTags.WIENER,
+        [spriteTypes.PLAYER],
     )
 
     const wienerResetFunc = (wiener) => {
@@ -191,6 +192,7 @@ window.addEventListener("load", function () {
         0, // pointValue
         0, // healthValue
         spriteTypes.ENEMY, // spriteType
+        spriteTags.GULL, // spriteTag
         [spriteTypes.PLAYER] // collidesWith
     )
 
@@ -213,67 +215,69 @@ window.addEventListener("load", function () {
 
     //Seagull poop(Random locations)
 
-    const gullPoopImage = new Image()
-    gullPoopImage.src = "./assets/images/seagull-poop-sprite-02.png"
-    const gullPoopSpriteImage = new SpriteFrame(gullPoopImage, 0, 0, 16, 16)
-    const gullPoopSpriteAnimation = new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0)
+    const gullPooImage = new Image()
+    gullPooImage.src = "./assets/images/seagull-poo-sprite-02.png"
+    const gullPooSpriteImage = new SpriteFrame(gullPooImage, 0, 0, 16, 16)
+    // const gullPooSpriteAnimation = new SpriteAnimation(gullPooSpriteImage, 0, 0, 0)
 
 
-    const makeGullPoop = () => new Projectile(
+    const makeGullPoo = () => new Projectile(
         ctx,
         getRandomInt(20, 460),
         getRandomInt(-10, -40),
         16, // dWidth
         16, // dHeight
-        new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0),
+        new SpriteAnimation(gullPooSpriteImage, 0, 0, 0),
         25, // velocityX
         200, // velocityY
         30,  // fps
         0, // pointValue
         -25, // healthValue
+        spriteTypes.PROP,
+        spriteTags.POO,
+        [spriteTypes.PLAYER]
     )
 
-    const gullPoopResetFunc = (gullPoop) => {
-        gullPoop.isScored = false
-        gullPoop.isVisible = true
-        gullPoop.dx = getRandomInt(20, 460)
-        gullPoop.dy = getRandomInt(-10, -40)
-        gullPoop.velocityX = 25
-        gullPoop.velocityY = 200
+    const gullPooResetFunc = (gullPoo) => {
+        gullPoo.isScored = false
+        gullPoo.isVisible = true
+        gullPoo.dx = getRandomInt(20, 460)
+        gullPoo.dy = getRandomInt(-10, -40)
+        gullPoo.velocityX = 25
+        gullPoo.velocityY = 200
     }
 
-    const gullPoopPool = new ObjectPool(makeGullPoop, gullPoopResetFunc, 10)
+    const gullPooPool = new ObjectPool(makeGullPoo, gullPooResetFunc, 10)
 
     for (let i = 0; i < 10; i++) {
-        seagullPool.poolArray[i].data.projectile = gullPoopPool.poolArray[i]
-        gullPoopPool.poolArray[i].data.parentSprite = seagullPool.poolArray[i].data
-        gullPoopPool.poolArray[i].data.dx = gullPoopPool.poolArray[i].data.parentSprite.dx
-        gullPoopPool.poolArray[i].data.dy = gullPoopPool.poolArray[i].data.parentSprite.dy
+        seagullPool.poolArray[i].data.projectile = gullPooPool.poolArray[i]
+        gullPooPool.poolArray[i].data.parentSprite = seagullPool.poolArray[i].data
+        gullPooPool.poolArray[i].data.dx = gullPooPool.poolArray[i].data.parentSprite.dx
+        gullPooPool.poolArray[i].data.dy = gullPooPool.poolArray[i].data.parentSprite.dy
     }
 
-    const gullPoopSpawner = new Spawner(1, gullPoopPool)
+    const gullPooSpawner = new Spawner(1, gullPooPool)
 
 
-    const scene01Spawners = [wienerSpawner, seagullSpawner, gullPoopSpawner]
+    const scene01Spawners = [wienerSpawner, seagullSpawner, gullPooSpawner]
     // Scene Objects
 
-    const backgroundLayer01 = new Layer(player, false, "./assets/images/bg01-flattened.png", 0, 0)
+    const backgroundLayer01 = new Layer(player, false, "./assets/images/bg01-basic.png", 0, 0)
+    const backgroundLayer02 = new Layer(player, false, "./assets/images/bg-clouds-01.png", -10, 0)
     backgroundLayer01.velocityX = 0
 
+    const scene01 = new GameScene(0, 'Bonavista', player, [backgroundLayer01, backgroundLayer02], [], scene01Spawners, "./assets/audio/music/song-01/song_01-i_equals_da_by.m4a", [])
 
+    // const scene02Spawners = [wienerSpawner]
+    // const backgroundLayer02 = new Layer(player, false, "./assets/images/bg02-rocks.png")
+    // backgroundLayer02.velocityX = 0
 
-
-    const scene01 = new GameScene(0, 'Bonavista', player, [backgroundLayer01], [], scene01Spawners, "./assets/audio/music/song_01-i_equals_da_by.ogg", [])
-
-    const backgroundLayer02 = new Layer(player, false, "./assets/images/bg02-rocks.png")
-    backgroundLayer02.velocityX = 0
-
-    const scene02 = new GameScene(0, 'new', player, [backgroundLayer02], [], "./assets/audio/music/song_01-i_equals_da_by.ogg", [])
+    // const scene02 = new GameScene(0, 'new', player, [backgroundLayer02], [], scene02Spawners, "./assets/audio/music/song_01-i_equals_da_by.ogg", [])
 
     let currentScene = scene01
 
 
-    console.log(scene01)
+    // console.log(scene01)
     let gameWorld = new GameWorld(canvas, 475, 270, player, currentScene)
 
 
@@ -288,7 +292,7 @@ window.addEventListener("load", function () {
 
 
 
-    // Seagull poop (delivered by gull)
+    // Seagull poo (delivered by gull)
 
     // const gullPoopImage = new Image()
     // gullPoopImage.src = "./assets/images/seagull-poop-sprite-01.png"
@@ -327,7 +331,7 @@ window.addEventListener("load", function () {
 
     ui.startButton.addEventListener("click", startGame)
 
-    ui.stopButton.addEventListener("click", stopGame)
+    ui.stopButton.addEventListener("click", resetGame)
 
     // pauseButton.addEventListener("click", (e) => {
     //     isPaused = !isPaused
@@ -507,7 +511,7 @@ window.addEventListener("load", function () {
     //                             let nthChildSelector = `:nth-child(${i})`
     //                             let nthChildSelectorString = nthChildSelector.toString()
     //                             // console.log(nthChildSelectorString)
-    //                             let letter = comboCounterHUD.querySelector(nthChildSelectorString)
+    //                             let letter = ui.comboCounterHUD.querySelector(nthChildSelectorString)
     //                             // console.dir(letter)
     //                             letter.style.color = "var(--clr-purple)"
     //                             letter.style.opacity = "100%"
@@ -616,20 +620,42 @@ window.addEventListener("load", function () {
 
             if (player.isAlive) {
                 currentScene.spawners.forEach((spawner) => {
-                    let collisionDetected = collision.detectBoxCollision(player, spawner.objectPool.poolArray)
-                    // console.log(collisionDetected)
-                    if (typeof collisionDetected !== "undefined") {
-                        // console.dir(collisionDetected)
+                    let collider = collision.detectBoxCollision(player, spawner.objectPool.poolArray)
+                    // console.log(spawner.objectPool.poolArray)
+                    if (collider) {
+                        console.dir(collider)
                         // console.log("collision")
-                        playerScore = player.updateScore(collisionDetected)
+                        playerScore = player.updateScore(collider)
                         ui.scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
 
-                        playerHealth = player.updateHealth(collisionDetected)
+                        playerHealth = player.updateHealth(collider)
                         ui.healthMeterHUD.style.width = playerHealth + "%"
+
+                        if (collider.spriteTag === "wiener") {
+                            calculateCombo()
+                        } else if (collider.spriteTag === "poo") {
+                            resetCombo()
+                        }
+
+
 
                     }
                 })
+            } else {
+                playerLives--
+
+                if (playerLives > 1) {
+                    ui.livesCounterHUD.innerText = "x" + playerLives
+
+                } else if (playerLives = 1) {
+                    ui.livesCounterHUD.innerText = ""
+                } else if (playerLives = 0) {
+                    player.isAlive = false
+                }
+                endGame()
+
             }
+
 
             currentScene.draw(ctx)
             currentScene.player.draw(ctx)
@@ -674,7 +700,13 @@ window.addEventListener("load", function () {
 
     }
 
-    function stopGame() {
+    function endGame() {
+        ui.hide(ui.ingameOverlay)
+        ui.show(ui.menuOverlay)
+        ui.show(ui.gameOverScreen)
+    }
+
+    function resetGame() {
         isPaused = false
         lastTime = 0
         location.reload() // TODO: Find better way of resetting game
@@ -686,6 +718,7 @@ window.addEventListener("load", function () {
 
             ui.hide(ui.ingameOverlay)
             ui.hide(ui.titleScreen)
+            ui.hide(ui.gameOverScreen)
             ui.show(ui.menuScreen)
             ui.show(ui.menuOverlay)
             currentScene.soundTrack.pause()
@@ -695,6 +728,7 @@ window.addEventListener("load", function () {
             ui.show(ui.ingameOverlay)
             ui.hide(ui.menuScreen)
             ui.hide(ui.menuOverlay)
+            ui.hide(ui.gameOverScreen)
             ui.show(ui.gameplayHUD)
             currentScene.soundTrack.play()
             loop(lastTime)
@@ -704,6 +738,53 @@ window.addEventListener("load", function () {
 
     function resetPlayer() {
         console.log("Reset Player")
+    }
+
+    function calculateCombo() {
+        comboCounter++
+        if (comboCounter > 0 && comboCounter <= 5) {
+            for (let i = 1; i <= comboCounter; i++) {
+                let nthChildSelector = `:nth-child(${i})`
+                let nthChildSelectorString = nthChildSelector.toString()
+                // console.log(nthChildSelectorString)
+                let letter = ui.comboCounterHUD.querySelector(nthChildSelectorString)
+                // console.dir(letter)
+                letter.style.color = "var(--clr-purple)"
+                letter.style.opacity = "100%"
+            }
+        } else if (comboCounter > 5 && comboCounter <= 10) {
+            for (let i = 6; i <= comboCounter; i++) {
+                let nthChildSelectorIndex = i - 5
+                let nthChildSelector = `:nth-child(${nthChildSelectorIndex})`
+                let nthChildSelectorString = nthChildSelector.toString()
+                // console.log(nthChildSelectorString)
+                let letter = ui.comboCounterHUD.querySelector(nthChildSelectorString)
+                // console.dir(letter)
+                letter.style.color = "var(--clr-gold)"
+                letter.style.opacity = "100%"
+            }
+        }
+        if (comboCounter < 5) {
+            player.maxSpeedX = 75
+        } else if (comboCounter >= 5 && comboCounter < 10) {
+            player.maxSpeedX = 150
+        } else if (comboCounter >= 10) {
+            player.maxSpeedX = 225
+        }
+
+
+        if (comboCounter === 10) {
+            console.log("COMBO!!!")
+        }
+    }
+
+    function resetCombo() {
+        comboCounter = 0
+        let letters = ui.comboCounterHUD.querySelectorAll("span")
+        letters.forEach((letter) => {
+            letter.style.color = ""
+            letter.style.opacity = "50%"
+        })
     }
 
 

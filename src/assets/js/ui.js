@@ -7,6 +7,7 @@ export default class UI {
         // Menu DOM elements
         this.menuOverlay = document.getElementById("game-screen__menu-overlay")
         this.menuScreen = document.getElementById("menu-screen")
+        this.gameOverScreen = document.getElementById("gameover-screen")
         this.startButton = document.getElementById("start-button")
         //this.pauseButton = document.getElementById("pause-button")
         this.resumeButton = document.getElementById("resume-button")

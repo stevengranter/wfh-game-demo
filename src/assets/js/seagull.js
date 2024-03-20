@@ -13,9 +13,12 @@ export default class Seagull extends Sprite {
         velocityY = 0,
         fps = 15,
         pointValue = 0,
-        healthValue = 0) {
+        healthValue = 0,
+        spriteType,
+        spriteTag,
+        collidesWith) {
 
-        super(context, dx, dy, dWidth, dHeight, spriteSheetObj, velocityX, velocityY, fps, pointValue, healthValue)
+        super(context, dx, dy, dWidth, dHeight, spriteSheetObj, velocityX, velocityY, fps, pointValue, healthValue, spriteType, spriteTag, collidesWith)
 
         this.projectile = this.createProjectile()
 
@@ -27,22 +30,22 @@ export default class Seagull extends Sprite {
     }
 
     createProjectile() {
-        const gullPoopImageFile = new Image()
-        gullPoopImageFile.src = "./assets/images/seagull-poop-sprite-01.png"
-        const gullPoopSpriteFrame = new SpriteFrame(
-            gullPoopImageFile,
+        const gullPooImageFile = new Image()
+        gullPooImageFile.src = "./assets/images/seagull-poo-sprite-01.png"
+        const gullPooSpriteFrame = new SpriteFrame(
+            gullPooImageFile,
             0,
             0,
             16,
             16
         )
-        const gullPoopSprite = new Projectile(
+        const gullPooSprite = new Projectile(
             this.context,
             8,
             8,
             16,
             16,
-            new SpriteAnimation(gullPoopSpriteFrame, 0, 0, 0),
+            new SpriteAnimation(gullPooSpriteFrame, 0, 0, 0),
             0,
             1,
             15,
@@ -50,7 +53,7 @@ export default class Seagull extends Sprite {
             -10,
             this
         )
-        return gullPoopSprite
+        return gullPooSprite
     }
 
     readyProjectile() {

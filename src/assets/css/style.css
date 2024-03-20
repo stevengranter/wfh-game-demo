@@ -172,7 +172,7 @@ img {
 }
 
 .block {
-  display: block;
+  /* display: block; */
 }
 
 .green-bg {
@@ -300,12 +300,13 @@ a {
   /* max-width: 30vw; */
 }
 
-#menu-screen {
+#menu-screen,
+#gameover-screen {
   /* display: block; */
   /* vertical-align: middle; */
   /* transform: translateY(-50%); */
-  height: 70%;
-  width: 70%;
+  height: 90%;
+  width: 80%;
   margin-left: auto;
   margin-right: auto;
   background-color: var(--clr-sky-blue);
@@ -319,14 +320,16 @@ a {
   border-radius: 3svw;
 }
 
-#menu-screen header {
+#menu-screen header,
+#gameover-screen header {
   display: inline-block;
   color: var(--clr-violet);
   vertical-align: middle;
   overflow: none;
 }
 
-#menu-screen h2 {
+#menu-screen h2,
+#gameover-screen h2 {
   padding: 1.7vw 1.8vw 0.8vw;
   font-size: 5svw;
   font-family: Coiny, sans-serif;
@@ -437,7 +440,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5vw 1vw;
+  /* padding: 0.5vw 1vw; */
   text-align: center;
   list-style-type: none;
   vertical-align: middle;

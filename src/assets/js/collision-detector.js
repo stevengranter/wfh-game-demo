@@ -7,22 +7,23 @@ export default class CollisionDetector {
     // console.log(subject)
 
     for (let i = 0; i < objectsArray.length; i++) {
-      let object = objectsArray[i]
+      let object = objectsArray[i].data
       if (
-        subject.dx + subject.dWidth >= object.data.dx &&
-        subject.dx <= object.data.dx + object.data.dWidth &&
-        subject.dy + subject.dHeight >= object.data.dy &&
-        subject.dy <= object.data.dy + object.data.dHeight
+        subject.dx + subject.dWidth >= object.dx &&
+        subject.dx <= object.dx + object.dWidth &&
+        subject.dy + subject.dHeight >= object.dy &&
+        subject.dy <= object.dy + object.dHeight
       ) {
-        if (!object.data.isScored) {
+        if (!object.isScored) {
           let scoreObject = {}
-          scoreObject.healthValue = object.data.healthValue
-          scoreObject.pointValue = object.data.pointValue
-          object.data.isScored = true
-          object.data.isVisible = false
-          return scoreObject
+          // console.dir(object)
+          scoreObject.healthValue = object.healthValue
+          scoreObject.pointValue = object.pointValue
+          object.isScored = true
+          object.isVisible = false
+          return object
         } else {
-          return
+          return false
         }
 
       }

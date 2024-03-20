@@ -8,6 +8,12 @@ export const spriteTypes = Object.freeze({
     ENVIRONMENT: 'environment'
 })
 
+export const spriteTags = Object.freeze({
+    WIENER: 'wiener',
+    GULL: 'gull',
+    POO: 'poo',
+})
+
 export class Sprite extends GameObject {
 
 
@@ -24,6 +30,7 @@ export class Sprite extends GameObject {
         pointValue = 0,
         healthValue = 0,
         spriteType,
+        spriteTag,
         collidesWith = []
     ) {
         super(context, dx, dy, dWidth, dHeight)
@@ -43,13 +50,15 @@ export class Sprite extends GameObject {
 
         this.healthValue = healthValue
 
-        this.collidesWith = collidesWith
+
 
         this.isVisible = true
 
         this.isScored = false
 
         this.spriteType = spriteType
+        this.spriteTag = spriteTag
+        this.collidesWith = collidesWith
 
         // console.log(this)
 

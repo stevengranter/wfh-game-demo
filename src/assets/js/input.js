@@ -28,36 +28,34 @@ export default class InputHandler {
         })
 
 
+        // Touch controls
+        const dPadLeft = document.getElementById("virtual-controller--button-dpad-left")
+        const dPadRight = document.getElementById("virtual-controller--button-dpad-right")
 
 
-        //Touch controls
-        // const dPadLeft = document.getElementById("virtual-controller--button-dpad-left")
-        // const dPadRight = document.getElementById("virtual-controller--button-dpad-right")
+        dPadLeft.addEventListener("touchstart", (e) => {
+            // console.log(e.touches)
+            this.listenForTouches(e)
+        })
+
+        dPadLeft.addEventListener("touchend", (e) => {
+            // e.preventDefault()
+            // console.log(e.touches)
+            this.listenForTouches(e)
+
+        })
 
 
-        // dPadLeft.addEventListener("touchstart", (e) => {
-        //     e.preventDefault()
-        //     this.lastKey = "PRESS left"
-        //     // this.handleTouches(e)
-        // })
+        dPadRight.addEventListener("touchstart", (e) => {
 
-        // dPadLeft.addEventListener("touchend", (e) => {
-        //     // e.preventDefault()
-        //     this.lastKey = "RELEASE left"
+            e.preventDefault()
+            this.listenForTouches(e)
+        })
+        dPadRight.addEventListener("touchend", (e) => {
+            // e.preventDefault()
+            this.listenForTouches(e)
 
-        // })
-
-
-        // dPadRight.addEventListener("touchstart", (e) => {
-        //     e.preventDefault()
-        //     this.lastKey = "PRESS right"
-        //     // this.handleTouches(e)
-        // })
-        // dPadRight.addEventListener("touchend", (e) => {
-        //     // e.preventDefault()
-        //     this.lastKey = "RELEASE right"
-
-        // })
+        })
 
         // Mouse controls
 
@@ -146,7 +144,7 @@ export default class InputHandler {
     listenForMouse(e) {
 
         e.preventDefault()
-        // console.dir(e)
+        console.dir(e)
 
         let isButtonPressed = (e.type == "mousedown") ? true : false
         // console.log(isButtonPressed)
@@ -171,7 +169,15 @@ export default class InputHandler {
 
 
 
-    handleTouches(event) {
-        // console.log(event)
+    listenForTouches(e) {
+
+        let isTouched = (e.type == "touchstart") ? true : false
+        console.dir(e.touches)
+
+        switch (e.touches) {
+            case 0:
+
+
+        }
     }
 }
