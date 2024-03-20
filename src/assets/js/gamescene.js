@@ -10,11 +10,14 @@ export default class GameScene {
         this.layers = layerArray
         this.sprites = spriteArray
         this.spawners = spawnerArray
-        this.musicFile = musicFile
+
+        this.soundTrack = musicFile
+
+        this.music = this.loadMusic(this.soundTrack)
         this.sfx = sfxArray
 
         this.isMusicLoaded = false
-        this.soundTrack = this.loadMusic(this.musicFile)
+
 
         this.sceneTime = 0
 

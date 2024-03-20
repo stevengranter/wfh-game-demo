@@ -44,7 +44,7 @@ window.addEventListener("load", function () {
     canvas.height = 270
     const ctx = canvas.getContext("2d")
 
-
+    let musicPausedTime = 0
 
 
 
@@ -275,6 +275,7 @@ window.addEventListener("load", function () {
     // const scene02 = new GameScene(0, 'new', player, [backgroundLayer02], [], scene02Spawners, "./assets/audio/music/song_01-i_equals_da_by.ogg", [])
 
     let currentScene = scene01
+    ui.music = currentScene.music
 
 
     // console.log(scene01)
@@ -614,7 +615,7 @@ window.addEventListener("load", function () {
             deltaTime = (timeStamp - lastTime) / 1000
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
-            ui.timerHUD.innerText = Math.floor(currentScene.soundTrack.duration - currentScene.soundTrack.currentTime)
+            ui.timerHUD.innerText = Math.floor(currentScene.music.duration - currentScene.music.currentTime)
             currentScene.update(deltaTime)
             currentScene.player.update(input, deltaTime)
 
@@ -692,7 +693,7 @@ window.addEventListener("load", function () {
 
         if (currentScene.isMusicLoaded) {
             console.log("music is loaded")
-            currentScene.soundTrack.play()
+            currentScene.music.play()
             setTimeout(() => {
                 loop(0)
             }, "4000")
@@ -721,7 +722,8 @@ window.addEventListener("load", function () {
             ui.hide(ui.gameOverScreen)
             ui.show(ui.menuScreen)
             ui.show(ui.menuOverlay)
-            currentScene.soundTrack.pause()
+            musicPausedTime = currentScene.music.currentTime
+            // currentScene.music.pause()
         }
         else {
 
@@ -730,7 +732,8 @@ window.addEventListener("load", function () {
             ui.hide(ui.menuOverlay)
             ui.hide(ui.gameOverScreen)
             ui.show(ui.gameplayHUD)
-            currentScene.soundTrack.play()
+            currentScene.music.currentTime = musicPausedTime
+            currentScene.music.play()
             loop(lastTime)
             isPaused = false
         }

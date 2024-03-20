@@ -13,6 +13,16 @@ export default class UI {
         this.resumeButton = document.getElementById("resume-button")
         this.stopButton = document.getElementById("stop-button")
 
+
+        this.musicVolumeSlider = document.getElementById("music-range")
+
+        this.musicVolumeSlider.addEventListener("input", () => {
+            console.log("range")
+            console.log(this.music)
+            this.adjustMusicVolume()
+        }
+        )
+
         // In-game DOM elements
         this.ingameOverlay = document.getElementById("game-screen__ingame-overlay")
         this.gameplayHUD = document.getElementById("gameplay-hud")
@@ -63,6 +73,13 @@ export default class UI {
     hide(element) {
         element.classList.add("hidden")
         element.classList.remove("block")
+    }
+
+    adjustMusicVolume() {
+        if (this.music) {
+            console.log(this.music)
+            this.music.volume = this.musicVolumeSlider.value / 100
+        }
     }
 
 
