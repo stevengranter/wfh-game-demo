@@ -34,7 +34,7 @@ export default class Player extends Sprite {
         this.speedX = 0
         this.speedY = 0
 
-        const initialmaxSpeedX = 75
+        const initialmaxSpeedX = 25
         this.maxSpeedX = initialmaxSpeedX
         this.speedBonus = 0
 
@@ -81,7 +81,9 @@ export default class Player extends Sprite {
             this.currentState.handleInput(input)
 
             //horizontal movement
-            this.dx += Math.floor(this.speedX * deltaTime)
+            // this.velocityX = this.speedX * this.velocity
+
+            this.dx += ((this.speedX) * this.velocityX) * deltaTime
             // console.log(deltaTime * 1000)
 
             //
@@ -119,10 +121,10 @@ export default class Player extends Sprite {
                 this.spriteImageObj.sHeight * this.spriteSheetObj.frameY, //this.spriteImageObj.sHeight, // * 0,
                 this.spriteImageObj.sWidth,
                 this.spriteImageObj.sHeight,
-                this.dx,
-                this.dy,
-                this.dWidth,
-                this.dHeight
+                Math.floor(this.dx),
+                Math.floor(this.dy),
+                Math.floor(this.dWidth),
+                Math.floor(this.dHeight)
             )
         }
         context.filter = "none"

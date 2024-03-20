@@ -8,6 +8,11 @@ export default class UI {
         this.menuOverlay = document.getElementById("game-screen__menu-overlay")
         this.menuScreen = document.getElementById("menu-screen")
         this.gameOverScreen = document.getElementById("gameover-screen")
+        this.congratsScreen = document.getElementById("congrats-screen")
+        this.endsceneScreen = document.getElementById("endscene-screen")
+
+        this.devModePanel = document.getElementById("debug-panel")
+
         this.startButton = document.getElementById("start-button")
         //this.pauseButton = document.getElementById("pause-button")
         this.resumeButton = document.getElementById("resume-button")
@@ -28,6 +33,7 @@ export default class UI {
         this.gameplayHUD = document.getElementById("gameplay-hud")
         this.timerHUD = document.getElementById("level-timer")
         this.scoreCounterHUD = document.getElementById("hud-score")
+        this.scoreStatusHUD = document.getElementById("hud-score-status")
         this.healthMeterHUD = document.querySelector("#hud-health-meter span")
         this.livesCounterHUD = document.querySelector("#hud-lives-remaining div")
         this.comboCounterHUD = document.querySelector("#hud-combo")

@@ -24,6 +24,8 @@ export class StandingLeft extends State {
         this.player.spriteSheetObj.endFrame = 0
         this.player.spriteSheetObj.frameY = 1
         this.player.speedX = 0
+        this.velocityX = 0
+
 
     }
 
@@ -44,6 +46,8 @@ export class StandingRight extends State {
         this.player.spriteSheetObj.endFrame = 0
         this.player.spriteSheetObj.frameY = 0
         this.player.speedX = 0
+        this.velocityX = 0
+
     }
 
     handleInput(input) {
@@ -63,8 +67,8 @@ export class WalkingLeft extends State {
     enter() {
         this.player.spriteSheetObj.endFrame = 4
         this.player.spriteSheetObj.frameY = 1
-        this.player.speedX = Math.floor(-(this.player.maxSpeedX + this.player.speedBonus))
-        this.player.velocityX = -10
+        this.player.speedX = this.player.maxSpeedX + this.player.speedBonus
+        this.player.velocityX = -2
     }
 
     handleInput(input) {
@@ -86,8 +90,8 @@ export class WalkingRight extends State {
     enter() {
         this.player.spriteSheetObj.endFrame = 4
         this.player.spriteSheetObj.frameY = 0
-        this.player.speedX = Math.floor(this.player.maxSpeedX + this.player.speedBonus)
-        this.player.velocityX = 10
+        this.player.speedX = this.player.maxSpeedX + this.player.speedBonus
+        this.player.velocityX = +2
     }
 
     handleInput(input) {

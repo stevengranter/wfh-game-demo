@@ -29,6 +29,11 @@
           id="game-screen-border"
         />
         <div id="game-screen__ingame-overlay" class="hidden" data-ui="true">
+          <div id="debug-panel" class="hidden">
+            <div id="debug-player-dx">player.dx = <span></span></div>
+            <div id="debug-player-speedX">player.speedX = <span></span></div>
+            <div id="debug-player-speedY">player.speedY = <span></span></div>
+          </div>
           <div id="level-stats">
             <div id="level-timer"></div>
           </div>
@@ -41,7 +46,11 @@
               <div id="hud-health-meter"><span style="width: 100%"></span></div>
             </div>
 
-            <div id="hud-score"></div>
+            <div id="hud-score-stats">
+              <div id="hud-score"></div>
+              <div id="hud-score-status">\ 5000</div>
+            </div>
+
             <div id="hud-combo">
               <span>C</span><span>O</span><span>M</span><span>B</span
               ><span>O</span>
@@ -96,7 +105,7 @@
                     type="range"
                     min="1"
                     max="100"
-                    value="100"
+                    value="80"
                     class="slider"
                     id="music-range"
                   />
@@ -115,7 +124,7 @@
                     type="range"
                     min="1"
                     max="100"
-                    value="100"
+                    value="80"
                     class="slider"
                     id="sfx-range"
                   />
@@ -130,7 +139,17 @@
               </div>
             </div>
           </div>
-
+          <div id="congrats-screen" class="ui-panel hidden">
+            <header><h2>Next level unlocked!</h2></header>
+            <p>
+              You have enough points to progress to the next level! Keep
+              collecting for bonus items
+            </p>
+          </div>
+          <div id="endscene-screen" class="ui-panel hidden">
+            <header><h2>Level end</h2></header>
+            <p></p>
+          </div>
           <div id="gameover-screen" class="ui-panel hidden">
             <header><h2>Game Over</h2></header>
           </div>

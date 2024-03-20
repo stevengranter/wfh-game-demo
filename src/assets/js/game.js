@@ -31,6 +31,7 @@ window.addEventListener("load", function () {
     // ctx.imageSmoothingEnabled = false // keeps sprites pixelated
 
     // Initialize game variables
+    let isDevMode = false
     let lastTime = 0
     let deltaTime = 1
     let comboCounter = 0
@@ -129,6 +130,8 @@ window.addEventListener("load", function () {
     let playerHealth = player.currentHealth
     let playerScore = player.currentScore
     let playerProgress = player.currentProgress
+    let wienersCollected = 0
+    let pooCaught = 0
 
     // const backgroundRocksImage = new Image()
     // backgroundRocksImage.src = "./assets/images/bg02-rocks.png"
@@ -141,7 +144,7 @@ window.addEventListener("load", function () {
     // Wiener 🌭
 
     const wienerImage = new Image()
-    wienerImage.src = "./assets/images/wiener-32-spin-01.png"
+    wienerImage.src = "./assets/images/wiener-32px-spin-01.png"
     const wienerSpriteImage = new SpriteFrame(wienerImage, 0, 0, 32, 32)
     const makeWiener = () => new Sprite(
         ctx,
@@ -232,7 +235,7 @@ window.addEventListener("load", function () {
         200, // velocityY
         30,  // fps
         0, // pointValue
-        -25, // healthValue
+        -20, // healthValue
         spriteTypes.PROP,
         spriteTags.POO,
         [spriteTypes.PLAYER]
@@ -262,8 +265,13 @@ window.addEventListener("load", function () {
     const scene01Spawners = [wienerSpawner, seagullSpawner, gullPooSpawner]
     // Scene Objects
 
-    const backgroundLayer01 = new Layer(player, false, "./assets/images/bg01-basic.png", 0, 0)
-    const backgroundLayer02 = new Layer(player, false, "./assets/images/bg-clouds-01.png", -10, 0)
+    const backgroundLayer01Img = new Image()
+    backgroundLayer01Img.src = "./assets/images/bg01-basic.png"
+    const backgroundLayer01 = new Layer(player, false, backgroundLayer01Img, 0, 0, 0, 0, 950, 270, 0, 0, 950, 270)
+
+    const backgroundLayer02Img = new Image()
+    backgroundLayer02Img.src = "./assets/images/bg-clouds-01.png"
+    const backgroundLayer02 = new Layer(player, false, backgroundLayer02Img, 0, 0, 0, 0, 978, 197, 0, 0, 978, 197)
     backgroundLayer01.velocityX = 0
 
     const scene01 = new GameScene(0, 'Bonavista', player, [backgroundLayer01, backgroundLayer02], [], scene01Spawners, "./assets/audio/music/song-01/song_01-i_equals_da_by.m4a", [])
@@ -275,6 +283,7 @@ window.addEventListener("load", function () {
     // const scene02 = new GameScene(0, 'new', player, [backgroundLayer02], [], scene02Spawners, "./assets/audio/music/song_01-i_equals_da_by.ogg", [])
 
     let currentScene = scene01
+
     ui.music = currentScene.music
 
 
@@ -610,56 +619,90 @@ window.addEventListener("load", function () {
     currentScene.spawners.forEach((spawner) => {
         console.log(spawner)
     })
+
+    console.log(currentScene)
     function loop(timeStamp) {
         if (!isPaused) {
             deltaTime = (timeStamp - lastTime) / 1000
             lastTime = timeStamp
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             ui.timerHUD.innerText = Math.floor(currentScene.music.duration - currentScene.music.currentTime)
+
+
             currentScene.update(deltaTime)
             currentScene.player.update(input, deltaTime)
 
-            if (player.isAlive) {
-                currentScene.spawners.forEach((spawner) => {
-                    let collider = collision.detectBoxCollision(player, spawner.objectPool.poolArray)
-                    // console.log(spawner.objectPool.poolArray)
-                    if (collider) {
-                        console.dir(collider)
-                        // console.log("collision")
-                        playerScore = player.updateScore(collider)
-                        ui.scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
+            if (currentScene.music.currentTime >= 0) {
+                if (player.isAlive) {
+                    currentScene.spawners.forEach((spawner) => {
+                        let collider = collision.detectBoxCollision(player, spawner.objectPool.poolArray)
+                        // console.log(spawner.objectPool.poolArray)
+                        if (collider) {
 
-                        playerHealth = player.updateHealth(collider)
-                        ui.healthMeterHUD.style.width = playerHealth + "%"
+                            if (collider.spriteTag === spriteTags.WIENER) {
+                                console.log("🌭")
+                                playerScore = player.updateScore(collider)
+                                ui.scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
+                                if (playerScore >= 5000) {
+                                    ui.scoreCounterHUD.style.color = "var(--clr-purple)"
+                                    ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
+                                    playerProgress = 1
+                                }
+                                calculateCombo()
+                            } else if (collider.spriteTag === spriteTags.POO) {
+                                console.log("💩")
+                                playerHealth = player.updateHealth(collider)
+                                ui.healthMeterHUD.style.width = playerHealth + "%"
+                                resetCombo()
+                            } else if (collider.spriteTag === spriteTags.GULL) {
+                                console.log("🐦")
+                            }
 
-                        if (collider.spriteTag === "wiener") {
-                            calculateCombo()
-                        } else if (collider.spriteTag === "poo") {
-                            resetCombo()
+                            // console.log("collision")
+                            // playerScore = player.updateScore(collider)
+                            // if (playerScore >= 500) {
+                            //     ui.show(ui.menuOverlay)
+                            //     ui.show(ui.congratsScreen)
+                            //     setTimeout(() => {
+                            //         ui.hide(ui.menuOverlay)
+                            //         ui.hide(ui.congratsScreen)
+                            //     }, 2000)
+                            // }
+
+
+
+
+
+
+
                         }
+                    })
+                } else {
+                    playerLives--
 
+                    if (playerLives > 1) {
+                        ui.livesCounterHUD.innerText = "x" + playerLives
 
-
+                    } else if (playerLives = 1) {
+                        ui.livesCounterHUD.innerText = ""
+                    } else if (playerLives = 0) {
+                        player.isAlive = false
                     }
-                })
-            } else {
-                playerLives--
+                    endGame()
 
-                if (playerLives > 1) {
-                    ui.livesCounterHUD.innerText = "x" + playerLives
-
-                } else if (playerLives = 1) {
-                    ui.livesCounterHUD.innerText = ""
-                } else if (playerLives = 0) {
-                    player.isAlive = false
                 }
-                endGame()
 
+            } else {
+                ui.show(ui.endsceneScreen)
             }
-
 
             currentScene.draw(ctx)
             currentScene.player.draw(ctx)
+
+            ui.devModePanel.querySelector("#debug-player-speedX span").innerText = player.speedX
+            // ui.devModePanel.querySelector("#debug-player-dx span").innerText = player.dx
+
+
             requestAnimationFrame(loop)
         } else {
             pauseGame()
@@ -676,6 +719,11 @@ window.addEventListener("load", function () {
 
         ui.show(ui.gameplayHUD)
         ui.show(ui.ingameOverlay)
+
+        if (isDevMode) {
+            ui.show(ui.devModePanel)
+
+        }
 
 
         ui.scoreCounterHUD.innerHTML = String(0).padStart(4, "0")
@@ -694,9 +742,10 @@ window.addEventListener("load", function () {
         if (currentScene.isMusicLoaded) {
             console.log("music is loaded")
             currentScene.music.play()
-            setTimeout(() => {
-                loop(0)
-            }, "4000")
+            loop(0)
+            // setTimeout(() => {
+
+            // }, "4000")
         }
 
     }
@@ -705,6 +754,10 @@ window.addEventListener("load", function () {
         ui.hide(ui.ingameOverlay)
         ui.show(ui.menuOverlay)
         ui.show(ui.gameOverScreen)
+    }
+
+    function endScene() {
+
     }
 
     function resetGame() {
@@ -723,7 +776,7 @@ window.addEventListener("load", function () {
             ui.show(ui.menuScreen)
             ui.show(ui.menuOverlay)
             musicPausedTime = currentScene.music.currentTime
-            // currentScene.music.pause()
+            currentScene.music.pause()
         }
         else {
 
@@ -768,11 +821,11 @@ window.addEventListener("load", function () {
             }
         }
         if (comboCounter < 5) {
-            player.maxSpeedX = 75
+            player.speedBonus = 0
         } else if (comboCounter >= 5 && comboCounter < 10) {
-            player.maxSpeedX = 150
+            player.speedBonus = 25
         } else if (comboCounter >= 10) {
-            player.maxSpeedX = 225
+            player.speedBonus = 50
         }
 
 
@@ -783,6 +836,7 @@ window.addEventListener("load", function () {
 
     function resetCombo() {
         comboCounter = 0
+        player.speedBonus = 0
         let letters = ui.comboCounterHUD.querySelectorAll("span")
         letters.forEach((letter) => {
             letter.style.color = ""
@@ -791,9 +845,11 @@ window.addEventListener("load", function () {
     }
 
 
+    function toggleDevMode() {
+        isDevMode = !isDevMode
+    }
 
-
-
+    toggleDevMode()
 
 
 

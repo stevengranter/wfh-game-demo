@@ -144,7 +144,7 @@ export default class InputHandler {
     listenForMouse(e) {
 
         e.preventDefault()
-        console.dir(e)
+        // console.dir(e)
 
         let isButtonPressed = (e.type == "mousedown") ? true : false
         // console.log(isButtonPressed)

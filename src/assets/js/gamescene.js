@@ -51,8 +51,6 @@ export default class GameScene {
             music.addEventListener("canplay", () => {
                 let duration = music.duration
                 this.isMusicLoaded = true
-                // music.play()
-                console.log("music file: " + musicFile + " is loaded")
                 this.sceneTime = Math.floor(duration)
                 console.log(this.sceneTime)
             })

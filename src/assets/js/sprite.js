@@ -78,8 +78,8 @@ export class Sprite extends GameObject {
                 this.spriteImageObj.sHeight * this.spriteSheetObj.frameY, //this.spriteImageObj.sHeight, // * 0,
                 this.spriteImageObj.sWidth,
                 this.spriteImageObj.sHeight,
-                this.dx,
-                this.dy,
+                Math.floor(this.dx),
+                Math.floor(this.dy),
                 this.dWidth,
                 this.dHeight
             )
