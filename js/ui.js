@@ -6,10 +6,23 @@ export default class UI {
         this.bindings = {}
         // this.readoutElements = this.initReadouts
         this.score = new DataBinder("score", "textContent")
-        this.health = new DataBinder("health", "style.width", (data) => {
+        this.healthBarWidth = new DataBinder("health", "style.width", (data) => {
             data = data + "%"
             return data
         })
+        this.healthBarColor = new DataBinder("health", "style.backgroundColor", (data) => {
+            if (data <= 30) {
+                data = "var(--clr-red)"
+            }
+            else if ((data > 30) && (data < 70)) {
+                console.log("color change")
+                data = "var(--clr-orange)"
+            } else {
+                data = "var(--clr-green)"
+            }
+            return data
+        })
+
         this.lives = new DataBinder("lives", "textContent")
         // console.log(this)
         // this.hudScore.update("1000")

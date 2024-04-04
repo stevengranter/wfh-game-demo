@@ -30,7 +30,7 @@ export default class Player extends Sprite {
         // this.setState(this.states[0])
         this.currentState = this.states[0]
 
-        this.floorHeight = 15 // TODO: This should not be here 🤮
+        this.floorHeight = 8 // TODO: This should not be here 🤮
 
         this.velocityX = 1
         this.velocityY = 100

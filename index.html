@@ -180,11 +180,23 @@
           data-gamestate="cutscene"
           display="block"
         >
-          <div id="title-screen">
+          <div id="title-screen" data-ui="true" class="block">
             <div>
               <img src="./images/wfh-logo.webp" alt="" />
               <div id="start-button" data-ui="true"><h2>Start</h2></div>
             </div>
+          </div>
+
+          <div id="intro-screen" data-ui="true" class="hidden">
+            <div>
+              <img
+                id="character-portrait"
+                src="./images/nan-portrait-3d.webp"
+                alt=""
+                data-ui="true"
+                class="hidden"
+              />
+              <div class="dialog-panel" id="intro-dialog" data-ui="true">Lorem ipsum dolor sit amet consectetur adipisicing elit.</div>
           </div>
           <!-- <div id="endscene-screen" class="ui-panel">
             <header><h2>Level end</h2></header>

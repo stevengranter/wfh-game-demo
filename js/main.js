@@ -84,8 +84,8 @@ window.addEventListener("load", function () {
     backgroundLayer01.velocityX = -20
 
     const backgroundLayer02Img = new Image()
-    backgroundLayer02Img.src = "./images/garden-background-masked.png"
-    const backgroundLayer02 = new Layer(player, false, backgroundLayer02Img, 0, 0, 0, 0, 480, 270, 0, 0, 480, 270)
+    backgroundLayer02Img.src = "./images/bg01-houses-ocean.png"
+    const backgroundLayer02 = new Layer(player, false, backgroundLayer02Img, 0, 0, 0, 0, 944, 512, 0, 0, 480, 270)
     backgroundLayer02.velocityX = 0
 
 
@@ -410,20 +410,27 @@ window.addEventListener("load", function () {
 
     function blurBackground() {
 
-        setTimeout(() => {
-            currentScene.layers[1].filter = "blur(6px)"
-        }, 4000)
+
+        currentScene.layers[1].filter = "blur(3px)"
         console.log(backgroundLayer01)
     }
+
+
 
     function playCutScene() {
 
     }
+
+    function runIntro() {
+        currentScene.draw(ctx)
+    }
     // blurBackground()
     function initPlayer() {
-        player.stats.subscribe(ui.score)
-        player.stats.subscribe(ui.health)
         player.stats.subscribe(ui.lives)
+        player.stats.subscribe(ui.score)
+        player.stats.subscribe(ui.healthBarWidth)
+        player.stats.subscribe(ui.healthBarColor)
+
         player.stats.lives = 3
         player.stats.score = 0
         player.stats.progress = 0
@@ -437,7 +444,16 @@ window.addEventListener("load", function () {
         console.log(player.stats)
 
         initPlayer()
-        ui.showUI("play")
+        ui.showUI("cutscene")
+        console.log(ui)
+        blurBackground()
+        ui.hide(ui.elements.titleScreen)
+        ui.show(ui.elements.introScreen)
+
+        ui.show(ui.elements.characterPortrait)
+        setTimeout(() => { ui.elements.introDialog.style.transform = "translateY(0)" }, 100)
+        setTimeout(() => { ui.elements.characterPortrait.style.transform = "translateY(0px)" }, 200)
+
 
         const superNantendo = document.getElementById("ui--super-nantendo")
         superNantendo.classList.add("teal-bg")
@@ -445,8 +461,9 @@ window.addEventListener("load", function () {
 
         if (currentScene.isMusicLoaded) {
             console.log("music is loaded")
-            currentScene.music.play()
-            loop(0)
+            runIntro()
+            // currentScene.music.play()
+            // loop(0)
 
         }
 
