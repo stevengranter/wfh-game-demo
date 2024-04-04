@@ -12,7 +12,8 @@ export default class Layer {
         dx = 0,
         dy = 0,
         dWidth = 0,
-        dHeight = 0
+        dHeight = 0,
+        filter = "none"
 
     ) {
 
@@ -30,36 +31,20 @@ export default class Layer {
         this.dHeight = dHeight
         this.dWidth = dWidth
 
+        this.filter = filter
+
         // console.log(this)
 
 
 
     }
-    // init(backgroundImageFile) {
-    //     let sWidth
-    //     let sHeight
-    //     const bgImage = new Image()
-    //     bgImage.src = backgroundImageFile.toString()
-    //     console.dir(bgImage)
-    //     // console.log(bgImage.src)
-    //     bgImage.onload = (bgImage) => {
-    //         console.log('background loaded')
-    //         console.log(bgImage.naturalHeight)
-    //         sWidth = this.naturalWidth
-    //         sHeight = this.naturalHeight
-    //     }
-    //     this.sWidth = bgImage.naturalWidth
-    //     this.sHeight = sHeight
-    //     if (!this.dWidth) this.dWidth = this.sWidth
-    //     if (!this.dHeight) this.dHeight = this.sHeight
-    //     console.log(this)
-    //     return bgImage
-
-
-    //     // if (this.playerScrollFactor) this.playerScrollFactor = 1 / this.playerScrollFactor
-    // }
 
     draw(context) {
+
+        if ((this.filter !== "none") || (this.filter !== undefined)) {
+            // console.log(this.filter)
+            context.filter = this.filter
+        }
         context.drawImage(
             this.backgroundImageObject,
             this.sx,
@@ -70,10 +55,11 @@ export default class Layer {
             Math.floor(this.dy),
             this.dWidth,
             this.dHeight,)
+        context.filter = "none"
     }
 
     update(deltaTime) {
-        // console.log(this.playerScrollFactor)
+
         if (!this.playerScrollFactor) {
             this.dx += this.velocityX * deltaTime
             this.dy += this.velocityY * deltaTime

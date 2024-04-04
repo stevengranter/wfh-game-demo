@@ -13,12 +13,15 @@ export default class Spawner {
         //console.log(this.timeSinceSpawn)
         if (this.timeSinceSpawn >= this.spawnInterval) {
             let element = this.objectPool.getElement()
-            if (element.data.setInitialPosition) {
-                element.data.setInitialPosition()
+            // console.log(element.data)
+            if ("parentSprite" in element.data) {
+                // console.log("has parent sprite")
+                // console.log(element.data.parentSprite)
+                element.data.getParentPosition(element.data.parentSprite)
             }
-            if (element.data.setInitialVelocity) {
-                element.data.setInitialVelocity()
-            }
+            // if (element.data.getParentVelocity) {
+            //     element.data.getParentVelocity()
+            // }
 
             // element.data.update()
             this.timeSinceSpawn = 0

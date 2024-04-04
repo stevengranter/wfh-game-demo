@@ -6,7 +6,10 @@ export default class UI {
         this.bindings = {}
         // this.readoutElements = this.initReadouts
         this.score = new DataBinder("score", "textContent")
-        this.health = new DataBinder("health", "textContent")
+        this.health = new DataBinder("health", "style.width", (data) => {
+            data = data + "%"
+            return data
+        })
         this.lives = new DataBinder("lives", "textContent")
         // console.log(this)
         // this.hudScore.update("1000")
@@ -116,20 +119,23 @@ export default class UI {
 
 export class DataBinder {
     constructor(elementId, attribute, formatFunction = null) {
-        // this.element = document.getElementById(elementId)
-        // console.log(this.element)
         this.elementId = elementId
         this.attribute = attribute
         this.formatFunction = formatFunction
     }
 
     update(data) {
+
         if (data.hasOwnProperty(this.elementId)) {
-            if (this.formatFunction) {
-                document.getElementById(this.elementId)[this.attribute] = this.formatFunction(data[this.elementId])
+            const element = document.getElementById(this.elementId)
+            let value = this.formatFunction ? this.formatFunction(data[this.elementId]) : data[this.elementId]
+            if (this.attribute.startsWith('style.')) {
+                const styleAttribute = this.attribute.slice(6)
+                element.style[styleAttribute] = value
             } else {
-                document.getElementById(this.elementId)[this.attribute] = data[this.elementId]
+                element[this.attribute] = value
             }
         }
     }
 }
+

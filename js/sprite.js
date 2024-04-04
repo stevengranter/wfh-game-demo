@@ -76,7 +76,7 @@ export default class Sprite {
         })
 
         this.currentState = this.states[0]
-        // console.dir(this.states)
+
 
 
 
@@ -87,6 +87,8 @@ export default class Sprite {
         this.isAnimating = true
 
         this.isScored = false
+
+        // console.dir(this)
 
 
     }
@@ -191,12 +193,13 @@ export default class Sprite {
     }
 
     getParentPosition(parentSprite) {
-        // console.log(this.parentSprite.dx)
+        // console.log(this.parentSprite.data.dx)
         if (!parentSprite) parentSprite = this.parentSprite
         if (this.parentSprite) {
-            this.dx = this.parentSprite.dx + this.parentSprite.dWidth / 2// + this.velocityX
-            this.dy = this.parentSprite.dy + this.parentSprite.dHeight / 2// + this.velocityY
+            this.dx = this.parentSprite.data.dx + this.parentSprite.data.dWidth / 2// + this.velocityX
+            this.dy = this.parentSprite.data.dy + this.parentSprite.data.dHeight / 2// + this.velocityY
         }
+        // console.log(this.dx)
     }
 
     getParentVelocity() {

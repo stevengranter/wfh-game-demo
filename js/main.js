@@ -11,7 +11,7 @@ import Spawner from './spawner.js'
 import CollisionDetector from "./collision-detector.js"
 import { drawStatusText, getRandomInt } from "./utils.js"
 import UI from "./ui.js"
-
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants.js"
 
 
 window.addEventListener("load", function () {
@@ -66,13 +66,12 @@ window.addEventListener("load", function () {
 
     const player = new Player(playerConfig)
 
-    let playerLives = player.stats.lives
-    let playerHealth = player.stats.health
-    let playerScore = player.stats.score
+    // let playerLives = player.stats.lives
+    // let playerHealth = player.stats.health
+    // let playerScore = player.stats.score
 
-    let playerProgress = player.stats.progress
-    let wienersCollected = 0
-    let pooCaught = 0
+    // let playerProgress = player.stats.progress
+
 
     // Initialize UI elements //
     const ui = new UI("[data-ui]", player)
@@ -80,13 +79,14 @@ window.addEventListener("load", function () {
     // Initialize background layers //
 
     const backgroundLayer01Img = new Image()
-    backgroundLayer01Img.src = "./images/bg01-basic.png"
-    const backgroundLayer01 = new Layer(player, false, backgroundLayer01Img, 0, 0, 0, 0, 950, 270, 0, 0, 950, 270)
+    backgroundLayer01Img.src = "./images/bg-clouds-01.png"
+    const backgroundLayer01 = new Layer(player, false, backgroundLayer01Img, 0, 0, 0, 0, 950, 270, 0, -75, 950, 270)
+    backgroundLayer01.velocityX = -20
 
     const backgroundLayer02Img = new Image()
-    backgroundLayer02Img.src = "./images/bg-clouds-01.png"
-    const backgroundLayer02 = new Layer(player, false, backgroundLayer02Img, 0, 0, 0, 0, 978, 197, 0, 0, 978, 197)
-    backgroundLayer02.velocityX = -15
+    backgroundLayer02Img.src = "./images/garden-background-masked.png"
+    const backgroundLayer02 = new Layer(player, false, backgroundLayer02Img, 0, 0, 0, 0, 480, 270, 0, 0, 480, 270)
+    backgroundLayer02.velocityX = 0
 
 
 
@@ -136,7 +136,7 @@ window.addEventListener("load", function () {
     const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, WIENER_POOL_SIZE)
     const wienerSpawner = new Spawner(SPAWNER_RATE, wienerPool, 0)
 
-    console.log(wienerSpawner)
+    // console.log(wienerSpawner)
 
     // Seagull 🐦
 
@@ -187,7 +187,80 @@ window.addEventListener("load", function () {
 
 
 
-    const scene01Spawners = [wienerSpawner, gullSpawner]
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //Seagull poo (delivered by gull)
+
+    const GULLPOO_CONFIG = {
+        spriteSrc: "./images/seagull-poo-sprite-02.png",
+        animationFrame: { x: 0, y: 0, width: 16, height: 16 },
+        animations: {
+            Falling: {
+                frameX: 0,
+                frameY: 0,
+                endFrame: 0
+            }
+        },
+        pointValue: 0,
+        healthValue: -25,
+        spriteTag: spriteTags.POO
+    }
+
+
+    const GULLPOO_POOL_SIZE = 10
+    const GULLPOO_SPAWNER_RATE = 1
+
+    function initializeGullPooProperties(poo) {
+        poo.dx = -50
+        poo.dy = -50
+        poo.velocityX = getRandomInt(0, 100)
+        poo.velocityY = getRandomInt(100, 200)
+    }
+
+    const makeGullPoo = () => {
+        let gullPoo = new Sprite(GULLPOO_CONFIG)
+        initializeGullPooProperties(gullPoo)
+        return gullPoo
+    }
+
+    const gullPooResetFunc = (gullPoo) => {
+        gullPoo.isScored = false
+        gullPoo.isVisible = true
+        gullPoo.velocityX = getRandomInt(0, 10)
+        gullPoo.velocityY = getRandomInt(100, 200)
+        initializeGullPooProperties(gullPoo)
+    }
+
+    const gullPooPool = new ObjectPool(makeGullPoo, gullPooResetFunc, GULLPOO_POOL_SIZE)
+    // console.log(gullPooPool)
+
+    for (let i = 0; i < gullPooPool.poolArray.length; i++) {
+        let gullPoo = gullPooPool.poolArray[i]
+        let gullParent = gullPool.poolArray[i]
+        gullPoo.data.parentSprite = gullParent
+        // console.log("gullPoo", gullPoo)
+        // console.log("gullParent", gullPoo.data.parentSprite)
+    }
+
+    const gullPooSpawner = new Spawner(GULLPOO_SPAWNER_RATE, gullPooPool)
+
+
+    const scene01Spawners = [wienerSpawner, gullSpawner, gullPooSpawner]
+
+
+
+
     // Scene Objects
 
 
@@ -206,36 +279,11 @@ window.addEventListener("load", function () {
 
 
 
-
-
-
-
-    // Seagull poo (delivered by gull)
-
-    // const gullPoopImage = new Image()
-    // gullPoopImage.src = "./images/seagull-poop-sprite-01.png"
-    // const gullPoopSpriteImage = new AnimationFrame(gullPoopImage, 0, 0, 16, 16)
-    // const gullPoopSpriteAnimation = new SpriteAnimation(gullPoopSpriteImage, 0, 0, 0)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // Input Handler
     // console.log(this.document)
     const input = new InputHandler(ui)
 
-    console.log(player)
+    // console.log(player)
 
     console.log(ui)
 
@@ -258,7 +306,7 @@ window.addEventListener("load", function () {
 
     console.log(currentScene)
     currentScene.spawners.forEach((spawner) => {
-        console.log(spawner)
+        // console.log(spawner)
     })
 
     console.log(currentScene)
@@ -268,33 +316,33 @@ window.addEventListener("load", function () {
             // console.log(deltaTime)
             deltaTime = (timeStamp - lastTime) / 1000
             lastTime = timeStamp
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
             // ui.timerHUD.innerText = Math.floor(currentScene.music.duration - currentScene.music.currentTime)
 
 
             currentScene.update(deltaTime)
-            player.update(input, deltaTime, 475, 270)
+            player.update(input, deltaTime, CANVAS_WIDTH, CANVAS_HEIGHT)
 
             if (currentScene.music.currentTime >= 0) {
                 if (player.isAlive) {
                     currentScene.spawners.forEach((spawner) => {
-                        // console.log("collision")
+
                         let collider = CollisionDetector.detectBoxCollision(player, spawner.objectPool.poolArray)
                         // console.log(spawner.objectPool.poolArray)
                         if (collider) {
-
+                            console.log("collision")
                             if (collider.spriteTag === spriteTags.WIENER) {
-                                console.log("🌭")
-                                console.log("healthValue", collider.healthValue)
-                                console.log("player.stats.score", player.stats.health)
+                                // console.log("🌭")
+                                // console.log("healthValue", collider.healthValue)
+                                // console.log("player.stats.score", player.stats.health)
                                 player.stats.health += collider.healthValue
 
                                 player.stats.score += collider.pointValue
                                 // ui.scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
-                                if (playerScore >= 5000) {
+                                if (player.stats.score >= 5000) {
                                     // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
                                     // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
-                                    playerProgress = 1
+                                    player.stats.progress = 1
                                 }
                                 // calculateCombo()
                             } else if (collider.spriteTag === spriteTags.POO) {
@@ -327,14 +375,14 @@ window.addEventListener("load", function () {
                         }
                     })
                 } else {
-                    playerLives--
+                    player.stats.lives--
 
-                    if (playerLives > 1) {
+                    if (player.stats.lives > 1) {
                         // ui.livesCounterHUD.innerText = "x" + playerLives
 
-                    } else if (playerLives = 1) {
+                    } else if (player.stats.lives = 1) {
                         // ui.livesCounterHUD.innerText = ""
-                    } else if (playerLives = 0) {
+                    } else if (player.stats.lives = 0) {
                         player.isAlive = false
                     }
                     endGame()
@@ -360,7 +408,18 @@ window.addEventListener("load", function () {
 
     }
 
+    function blurBackground() {
 
+        setTimeout(() => {
+            currentScene.layers[1].filter = "blur(6px)"
+        }, 4000)
+        console.log(backgroundLayer01)
+    }
+
+    function playCutScene() {
+
+    }
+    // blurBackground()
     function initPlayer() {
         player.stats.subscribe(ui.score)
         player.stats.subscribe(ui.health)
