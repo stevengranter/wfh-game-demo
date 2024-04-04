@@ -15,7 +15,7 @@ export const spriteTags = Object.freeze({
     POO: 'poo',
 })
 
-export class Sprite {
+export default class Sprite {
 
 
     constructor(spriteConfigObject) {
@@ -88,71 +88,8 @@ export class Sprite {
 
         this.isScored = false
 
-        // this.spriteType = ""
-        // this.spriteTag = ""
-        // this.collidesWith = ""
 
-        // console.dir(this)
     }
-
-    //     spriteImageObj,
-    //     spriteAnimations,
-    //     dx = 0,
-    //     dy = 0,
-    //     dWidth = 16,
-    //     dHeight = 16,
-    //     velocityX = 0,
-    //     velocityY = 0,
-    //     fps = 15,
-    //     pointValue = 0,
-    //     healthValue = 0,
-    //     spriteType,
-    //     spriteTag,
-    //     collidesWith = []
-    // ) 
-    // {
-
-    //     this.spriteImageObj = spriteImageObj
-    //     this.spriteAnimations = spriteAnimations
-    //     // console.dir(this.spriteAnimations)
-    //     this.velocityX = velocityX
-    //     this.velocityY = velocityY
-
-    //     this.dx = dx
-    //     this.dy = dy
-    //     this.dWidth = dWidth
-    //     this.dHeight = dHeight
-
-    //     this.sWidth = 0
-    //     this.sHeight = 0
-    //     this.frameX = 0
-    //     this.frameY = 0
-
-    //     this.fps = 16
-    //     this.frameTimer = 0
-    //     this.frameInterval = 1000 / this.fps
-
-    //     this.pointValue = pointValue
-
-    //     this.healthValue = healthValue
-
-
-
-
-    //     this.isVisible = true
-
-    //     this.isScored = false
-
-    //     this.spriteType = spriteType
-    //     this.spriteTag = spriteTag
-    //     this.collidesWith = collidesWith
-
-    //     // console.log(this.spriteImageObj.naturalWidth * this.spriteAnimation.frameX)
-
-    //     // console.log(this)
-
-    // }
-
 
     fetchSpriteJSON(filePath) {
         fetchJsonFile(filePath)
@@ -164,15 +101,17 @@ export class Sprite {
             })
     }
 
-    draw(context) {
-        // console.dir(this.spriteImageObj)
-        // console.log(spriteSheet)
-        // draw sprite to canvas
-        if (!this.isVisible) return
-        if (this.dx < (0 - this.dWidth) || this.dx > (475 + this.dWidth) || this.dy < (0 - this.dHeight) || this.dy > (270 + this.dHeight)) return
+    isOutOfBounds() {
+        // console.log(this.dx)
+        if (this.dx < (0 - this.dWidth) || this.dx > (475 + this.dWidth) || this.dy < (0 - this.dHeight) || this.dy > (270 + this.dHeight)) {
+            return true
+        } else {
+            return false
+        }
+    }
 
-        // console.log(this.frameX)
-        // console.log(this.spriteAnimations)
+    draw(context) {
+        if ((!this.isVisible) || (this.isOutOfBounds())) return
         context.drawImage(
 
             this.imageObject,
@@ -185,9 +124,9 @@ export class Sprite {
             this.dWidth,
             this.dHeight,
         )
-
-
     }
+
+
 
     update(deltaTime, playerSpeedX = 0, playerSpeedY = 0) {
         // animate cels in spritesheet
@@ -235,7 +174,7 @@ export class Sprite {
 
 
 
-            // console.log(persistFrame)
+
 
 
         }

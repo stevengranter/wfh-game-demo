@@ -1,6 +1,6 @@
 
-import { Sprite } from "./sprite.js"
-import PlayerStats from "./player-stats.js"
+import Sprite from "./sprite.js"
+import Stats from "./stats.js"
 import {
     StandingLeft,
     StandingRight,
@@ -45,7 +45,7 @@ export default class Player extends Sprite {
         this.maxSpeedX = initialmaxSpeedX
         this.speedBonus = 0
 
-        this.stats = new PlayerStats()
+        this.stats = new Stats()
 
 
         // this.scoreManager = new ScoreManager()

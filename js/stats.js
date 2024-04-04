@@ -1,6 +1,6 @@
 import Observable from "./observable.js"
 
-export default class PlayerStats extends Observable {
+export default class Stats extends Observable {
     #lives
     #progress
     #health
