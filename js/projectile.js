@@ -1,5 +1,5 @@
 
-import { Sprite, SpriteFrame, SpriteAnimation } from "./sprite.js"
+import { Sprite, AnimationFrame, SpriteAnimation } from "./sprite.js"
 
 
 export default class Projectile extends Sprite {

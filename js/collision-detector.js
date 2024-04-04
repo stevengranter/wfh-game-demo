@@ -3,7 +3,7 @@ export default class CollisionDetector {
 
   constructor() { }
 
-  detectBoxCollision(subject, objectsArray) {
+  static detectBoxCollision(subject, objectsArray) {
     // console.log(subject)
 
     for (let i = 0; i < objectsArray.length; i++) {
@@ -15,10 +15,10 @@ export default class CollisionDetector {
         subject.dy <= object.dy + object.dHeight
       ) {
         if (!object.isScored) {
-          let scoreObject = {}
-          // console.dir(object)
-          scoreObject.healthValue = object.healthValue
-          scoreObject.pointValue = object.pointValue
+          // let scoreObject = {}
+          // // console.dir(object)
+          // scoreObject.healthValue = object.healthValue
+          // scoreObject.pointValue = object.pointValue
           object.isScored = true
           object.isVisible = false
           return object

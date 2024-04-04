@@ -1,5 +1,5 @@
 import { Sprite } from "./sprite.js"
-import { SpriteAnimation, SpriteFrame } from "./sprite.js"
+import { SpriteAnimation, AnimationFrame } from "./sprite.js"
 import Projectile from "./projectile.js"
 
 export default class Seagull extends Sprite {
@@ -31,7 +31,7 @@ export default class Seagull extends Sprite {
 
     createProjectile() {
         const gullPooImageFile = new Image()
-        gullPooImageFile.src = "./assets/images/seagull-poo-sprite-01.png"
+        gullPooImageFile.src = "./images/seagull-poo-sprite-01.png"
         const gullPooSpriteFrame = new SpriteFrame(
             gullPooImageFile,
             0,

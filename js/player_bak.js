@@ -1,6 +1,7 @@
-import { StandingLeft, StandingRight, WalkingLeft, WalkingRight, JumpingLeft, JumpingRight, Dead } from "./state.js"
+import { StandingLeft, StandingRight, WalkingLeft, WalkingRight, JumpingLeft, JumpingRight, Dead } from "./player-states.js"
 import { Sprite } from "./sprite.js"
 import { SpriteAnimation } from "./sprite.js"
+import PlayerStats from "./player-stats.js"
 
 export default class Player extends Sprite {
     constructor(context, dx, dy, dWidth, dHeight, spriteSheetObj, canvasWidth, canvasHeight) {
@@ -25,11 +26,11 @@ export default class Player extends Sprite {
 
         this.gameWidth = canvasWidth
         this.gameHeight = canvasHeight
-        this.floorHeight = 30
+        this.floorHeight = 15
 
         this.velocityX = 0
         this.velocityY = 0
-        this.weight = 1
+        this.weight = 10
 
         this.speedX = 0
         this.speedY = 0
@@ -38,10 +39,11 @@ export default class Player extends Sprite {
         this.maxSpeedX = initialmaxSpeedX
         this.speedBonus = 0
 
-        this.currentHealth = 100
-        this.currentScore = 0
-        this.currentLives = 1
-        this.currentProgress = 0
+        this.stats = new PlayerStats()
+        // this.currentHealth = 100
+        // this.currentScore = 0
+        // this.currentLives = 1
+        // this.currentProgress = 0
 
         this.isAlive = true
 
@@ -59,51 +61,101 @@ export default class Player extends Sprite {
         this.setState(0)
     }
 
+    update(input, deltaTime, gameWidth, gameHeight) {
+        if (!this.isPaused) {
 
-    update(input, deltaTime) {
-        if (this.isAlive) {
             if (this.frameTimer > this.frameInterval) {
-                if (this.spriteSheetObj.frameX < this.spriteSheetObj.endFrame) {
-
-                    this.spriteSheetObj.frameX += 1
+                if (this.frameX < this.endFrame) {
+                    // console.log(this.frameX)
+                    this.frameX += 1
                     this.frameTimer = 0
                 } else {
-                    this.spriteSheetObj.frameX = 0
+                    this.frameX = 0
                     this.frameTimer = 0
                 }
             } else {
-                this.frameTimer += 16
+                // console.log(deltaTime)
+                this.frameTimer += deltaTime * 1000
+
 
             }
-            // this.dx += this.velocityX
-            this.dy += Math.floor(this.velocityY)
+
+            // Prevent player from moving off-screen
+            if (this.dx <= 0) {
+                this.dx = 0
+            } else if (this.dx >= gameWidth - this.dWidth) {
+                this.dx = gameWidth - this.dWidth
+            }
 
             this.currentState.handleInput(input)
 
-            //horizontal movement
-            // this.velocityX = this.speedX * this.velocity
+            // horizontal Movement
+            // this.dx += this.velocityX * deltaTime
+            // this.prevX = this.dx
+            this.dx += this.velocityX * deltaTime
+            // console.log(this.velocityX * deltaTime)
+            this.dy += this.velocityY * deltaTime
+            // console.log(this.velocityX)
 
-            this.dx += ((this.speedX) * this.velocityX) * deltaTime
-            // console.log(deltaTime * 1000)
 
-            //
-            if (this.dx <= 0) this.dx = 0
-            else if (this.dx >= this.gameWidth - this.dWidth) this.dx = Math.floor(this.gameWidth - this.dWidth)
 
-            // vertical movement
-            this.dy += this.velocityY
             if (!this.onGround()) {
                 this.velocityY += this.weight
             } else {
                 this.velocityY = 0
             }
             // Prevent player from falling through floor
-            if (this.dy > this.gameHeight - this.dHeight) this.dy = Math.floor(this.gameHeight - this.dHeight - this.floorHeight)
+            if (this.dy > gameHeight - this.dHeight) this.dy = Math.floor(gameHeight - this.dHeight - this.floorHeight)
         } else {
-            this.dy -= 2
+            // this.dy -= 2
 
         }
     }
+
+    // update(input, deltaTime) {
+    //     if (this.isAlive) {
+    //         if (this.frameTimer > this.frameInterval) {
+    //             if (this.spriteSheetObj.frameX < this.spriteSheetObj.endFrame) {
+
+    //                 this.spriteSheetObj.frameX += 1
+    //                 this.frameTimer = 0
+    //             } else {
+    //                 this.spriteSheetObj.frameX = 0
+    //                 this.frameTimer = 0
+    //             }
+    //         } else {
+    //             this.frameTimer += 16
+
+    //         }
+    //         // this.dx += this.velocityX
+    //         this.dy += Math.floor(this.velocityY)
+
+    //         this.currentState.handleInput(input)
+
+    //         //horizontal movement
+    //         // this.velocityX = this.speedX * this.velocity
+
+    //         this.dx += ((this.speedX) * this.velocityX) * deltaTime
+    //         // console.log(deltaTime * 1000)
+
+    //         //
+    //         if (this.dx <= 0) this.dx = 0
+    //         else if (this.dx >= this.gameWidth - this.dWidth) this.dx = Math.floor(this.gameWidth - this.dWidth)
+
+    //         // vertical movement
+    //         this.dy += this.velocityY
+    //         if (!this.onGround()) {
+    //             this.velocityY += this.weight
+    //         } else {
+    //             this.velocityY = 0
+    //         }
+    //         // Prevent player from falling through floor
+    //         if (this.dy > this.gameHeight - this.dHeight) this.dy = Math.floor(this.gameHeight - this.dHeight - this.floorHeight)
+    //     } else {
+    //         this.dy -= 2
+
+    //     }
+    // }
 
     draw(context) {
 

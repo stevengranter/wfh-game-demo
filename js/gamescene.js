@@ -13,7 +13,8 @@ export default class GameScene {
 
         this.soundTrack = musicFile
 
-        this.music = this.loadMusic(this.soundTrack)
+        this.music = this.loadMusic(musicFile)
+        // console.log(this.music)
         this.sfx = sfxArray
 
         this.isMusicLoaded = false

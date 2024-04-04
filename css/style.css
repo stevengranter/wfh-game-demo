@@ -1,0 +1,768 @@
+/* Color variables */
+:root {
+  --clr-pink: oklch(70.58% 0.2641 359.47);
+  --clr-red: #f03668;
+  --clr-orange: #ff775a;
+  --clr-gold: #fcd224;
+  --clr-green: #a0cc50;
+  --clr-sky-blue: #0ad1ea;
+  --clr-purple: #d379ff;
+  --clr-violet: #s;
+}
+
+/* Google font embed code */
+
+.coiny-regular {
+  font-family: Coiny, system-ui;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.silkscreen-regular {
+  font-family: "Silkscreen", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+}
+
+/* Basic Reset */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Media Queries for mobile (portrait and landscape modes) */
+
+@media (orientation: landscape) {
+  .game-screen__border {
+    display: none;
+  }
+
+  .game-screen canvas {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    aspect-ratio: 16/9;
+  }
+
+  .overlay {
+    width: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    aspect-ratio: 16/9;
+    /* border: 2px solid yellow; */
+  }
+
+  #ui--virtual-controller {
+    display: none;
+  }
+}
+
+@media (orientation: portrait) {
+  .game-screen__border {
+    position: absolute;
+    height: auto;
+    top: 0;
+    margin: 2.5% 2.5%;
+    z-index: 10;
+    pointer-events: none;
+  }
+
+  .game-screen canvas {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 12%;
+    margin-bottom: 12%;
+    width: 84%;
+    height: auto;
+    aspect-ratio: 16/9;
+  }
+
+  .overlay {
+    display: none;
+    position: absolute;
+    width: 83%;
+    height: auto;
+    top: 0;
+    margin-top: 12%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    /* border: 2px solid yellow; */
+  }
+
+  #ui--virtual-controller {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+  }
+}
+
+/* Element styles */
+
+body {
+  width: 100svw;
+  background-color: var(--clr-sky-blue);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: calc(16px + 0.3906vw);
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* User Interface Styles */
+
+#ui--super-nantendo {
+  height: 100vh;
+  max-height: 100svh;
+  margin: 0 auto;
+  background-color: #46fcff;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-screen {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/9;
+  position: relative;
+}
+
+/* Utility classes */
+
+.hidden {
+  display: none;
+}
+
+.center {
+  align-content: center;
+  justify-content: center;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.pixelated {
+  image-rendering: pixelated;
+}
+
+.flex {
+  display: flex;
+}
+
+.block {
+  /* display: block; */
+}
+
+.green-bg {
+  background-color: var(--clr-green);
+}
+
+.violet-bg {
+  background-color: var(--clr-violet);
+}
+
+.teal-bg {
+  background-color: #46fcff;
+}
+
+/* ID and CLASS styles */
+
+.interface__super-nantendo {
+  margin-top: 0%;
+}
+
+.game-screen canvas {
+  z-index: 0;
+  margin-left: auto;
+  margin-right: auto;
+  /* background-color: var(--clr-purple); */
+  background: rgb(0, 227, 255);
+  /* background: linear-gradient(
+    180deg,
+    rgba(0, 227, 255, 1) 8%,
+    rgba(183, 249, 255, 1) 59%
+  ); */
+  background-size: cover;
+  background-position: center;
+  aspect-ratio: 16/9;
+}
+
+embed {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#game-screen__ingame-overlay img {
+  max-height: 70%;
+  width: auto;
+}
+
+#title-screen div {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+#title-screen div img {
+  height: fit-content;
+  max-width: 50%;
+}
+
+#intro-cutscene {
+  height: 100%;
+  width: 100%;
+  background-color: black;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  z-index: 3;
+}
+
+#start-button {
+  display: block;
+  position: relative;
+  max-width: 40%;
+  /* margin: 12px auto 20px auto; */
+  padding: 12px 34px 12px 38px;
+  /* padding: 0; */
+  transition: 0.3s;
+  /* max-width: 30%; */
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+#start-button:hover {
+  transform: scale(120%) rotate(-2deg);
+}
+#start-button::before {
+  content: "";
+  position: absolute;
+  padding: 1vw;
+  border-radius: 3vw;
+  background: conic-gradient(
+    from var(--angle),
+    var(--clr-pink),
+    var(--clr-orange),
+    var(--clr-gold),
+    var(--clr-green),
+    var(--clr-purple),
+    magenta
+  );
+  animation: 4s rotate linear infinite;
+  inset: 0;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  cursor: pointer;
+}
+@keyframes rotate {
+  to {
+    --angle: 360deg;
+  }
+}
+@keyframes slideInFromTop {
+  0% {
+    transform: translateY(-200%);
+  }
+  70% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: rotate(2deg);
+  }
+  80% {
+    transform: rotate(-2deg);
+  }
+  85% {
+    transform: rotate(2deg);
+  }
+}
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+#start-button h2 {
+  display: block;
+  margin: 0;
+  padding: 0;
+  font-family: Silkscreen, sans-serif;
+  font-size: 5vw;
+  font-weight: 400;
+  text-align: center;
+  text-transform: uppercase;
+  color: #3f0279;
+  letter-spacing: 0.5rem;
+  /* max-width: 30vw; */
+}
+
+#debug-panel {
+  width: 40%;
+  height: 30%;
+  position: absolute;
+  bottom: 30%;
+  left: auto;
+  right: auto;
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 2px solid black;
+  color: white;
+  font-family: "Consolas", "Courier New", Courier, monospace;
+  font-size: 2svw;
+  padding-left: 2%;
+}
+.ui-panel {
+  /* display: block; */
+  /* vertical-align: middle; */
+  /* transform: translateY(-50%); */
+  height: 90%;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: var(--clr-sky-blue);
+  background: linear-gradient(
+    315deg,
+    rgba(153, 128, 217, 1) 12%,
+    rgba(10, 209, 234, 1) 57%
+  );
+  border: 1svw solid black;
+  outline: 0.5svw solid white;
+  border-radius: 3svw;
+}
+
+.ui-panel h2 {
+  /* padding: 1.7vw 1.8vw 0.8vw; */
+  color: var(--clr-violet);
+  font-size: 5svw;
+  font-family: Coiny, sans-serif;
+  font-weight: normal;
+  text-align: center;
+  text-shadow: -3px -1px 0 #fff, 3px -1px 0 #fff, -3px 1px 0 #fff,
+    3px 1px 0 #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.1vw;
+  line-height: 100%;
+  /* padding-left: 10px;
+  padding-right: 10px; */
+  margin: 0 auto;
+}
+
+.ui-panel p {
+  padding: 0 40px;
+}
+button {
+  display: inline-block;
+  align-items: center;
+  align-self: center;
+  padding: 1% 1.2% 0.6% 1.2%;
+  border: 0.6vw solid black;
+  border-radius: 1.5vw;
+  outline: 0.4vw solid white;
+  background: linear-gradient(
+    300deg,
+    var(--clr-green) 52%,
+    var(--clr-gold) 80%
+  );
+  font-family: Coiny, sans-serif;
+  font-size: 2rem;
+  font-weight: normal;
+  text-align: center;
+  text-transform: uppercase;
+  color: black;
+  transition: all 0.1s;
+  vertical-align: middle;
+  line-height: 100%;
+  letter-spacing: 0.1vw;
+}
+
+#resume-button,
+#pause-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: var(--clr-green);
+  font-size: 1svw;
+  transform: rotate(5deg);
+  transition: all 0.1s;
+}
+
+#resume-button:hover,
+#pause-button:hover {
+  transform: rotate(0deg) scale(120%);
+}
+
+#stop-button {
+  display: inline-block;
+  position: absolute;
+  left: 5vw;
+  bottom: 0.5vh;
+  width: 11vw;
+  height: 11vw;
+  background-color: white;
+  transform: rotate(-15deg);
+  transition: all 0.3s;
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+}
+
+#stop-button > .border {
+  display: inline-block;
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
+  width: 10vw;
+  height: 10vw;
+  background-color: black;
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+}
+
+#stop-button button {
+  position: absolute;
+  left: 0.6vw;
+  bottom: 0.6vw;
+  width: calc(10vw - 1.2vw);
+  height: calc(10vw - 1.2vw);
+  border: none;
+  background: red;
+  font-size: 1vh;
+  font-weight: 200;
+  text-align: center;
+  text-transform: uppercase;
+  color: white;
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
+  letter-spacing: 0.3vw;
+}
+
+#stop-button:hover {
+  transform: scale(130%);
+}
+
+.ui-icon {
+  width: 8vw;
+  max-width: 128px;
+  height: auto;
+  max-height: auto;
+}
+
+#menu-screen li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* padding: 0.5vw 1vw; */
+  text-align: center;
+  list-style-type: none;
+  vertical-align: middle;
+}
+
+#menu-screen li {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  list-style-type: none;
+  vertical-align: middle;
+}
+
+.range-container {
+  width: 85%;
+}
+
+.slider {
+  width: 100%;
+  height: 2.2vw;
+  border: 0.3vw solid black;
+  border-radius: 20px;
+  outline: none;
+  background: var(--clr-violet);
+  transition: all 0.2s;
+  appearance: none;
+  -webkit-appearance: none;
+  -webkit-transition: 0.2s;
+}
+
+.slider:hover {
+  border: 0.6vw solid black;
+  background-color: var(--clr-green);
+  box-shadow: 4px 4px 0px black;
+}
+
+.slider::-webkit-slider-thumb {
+  width: 10vw;
+  height: 3.5vw;
+  border: 0.5vw solid black;
+  border-radius: 20vw;
+  outline: 0.3vw solid white;
+  background: var(--clr-orange);
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  aspect-ratio: 1;
+}
+
+.slider::-webkit-slider-thumb:hover {
+  background-color: var(--clr-purple);
+  transform: scale(120%);
+}
+
+.slider::-moz-range-thumb {
+  width: 10vw;
+  height: 4vw;
+  border: 0.8vw solid black;
+  border-radius: 20vw;
+  outline: 0.5vw solid white;
+  background: var(--clr-orange);
+  appearance: none;
+  cursor: pointer;
+  aspect-ratio: 1;
+}
+
+/* #title-screen img {
+  max-height: 100%;
+} */
+
+/* #game-screen__ingame-overlay {
+  position: absolute;
+  top: 0;
+  left: auto;
+  right: auto;
+  
+  /* margin-left: auto;
+  margin-right: auto; 
+  z-index: 500;
+  overflow: hidden;
+  border: 1px solid aqua;
+} */
+
+/* In-Game HUD styles */
+#game-screen__ingame-overlay__hud {
+  position: absolute;
+  width: 30%;
+  left: 0;
+  top: 0;
+  width: 30%;
+  height: 30%;
+  margin-left: 5%;
+  margin-top: 5%;
+  position: absolute;
+  /* border: 2px solid cyan; */
+  text-align: left;
+}
+
+#level-stats {
+  right: 0;
+  top: 0;
+  width: 30%;
+  height: 30%;
+  margin-right: 5%;
+  margin-top: 5%;
+  position: absolute;
+  /* border: 2px solid cyan; */
+  text-align: right;
+  font-family: "Coiny", sans-serif;
+  font-size: 6svw;
+  line-height: 6svw;
+  opacity: 100%;
+  color: var(--clr-violet);
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+    1px 1px 0 #fff;
+}
+
+/* #level-timer::before {
+  content: "⏱️";
+} */
+
+#hud-player-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid magenta;
+}
+
+#hud-lives div {
+  font-family: Coiny, sans-serif;
+  font-size: 2vw;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+    1px 1px 0 #fff;
+  line-height: 1.5vw;
+  top: 5%;
+  /* left: 3%; */
+  /* /z-index: 6; */
+  position: absolute;
+}
+
+#hud-lives img {
+  width: 6vw;
+  height: auto;
+  z-index: 5;
+  display: block;
+  position: relative;
+  /* border: 1px solid magenta; */
+}
+
+#hud-health-meter {
+  height: 30px;
+  min-height: 10px;
+  width: 82%;
+  color: white;
+  background-color: white;
+  border-radius: 25px;
+  border: 5px solid #fff;
+  padding: 5px;
+  margin-left: -4%;
+  border: 1px solid magenta;
+  vertical-align: middle;
+  z-index: 3;
+  position: absolute;
+  /* top: 10%; */
+  right: 0%;
+  /* box-shadow: inset 0 -5px 5px rgba(255, 255, 255, 0.3); */
+}
+
+#hud-health-meter span {
+  display: block;
+  height: 100%;
+  min-height: 2px;
+  width: auto;
+  border-radius: 20px;
+  background-color: var(--clr-red);
+  background-image: linear-gradient(
+    center bottom,
+    rgb(43, 194, 83) 37%,
+    rgb(84, 240, 84) 69%
+  );
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    inset 0 -2px 3px rgba(0, 0, 0, 0.4);
+  position: relative;
+  z-index: 4;
+  overflow: hidden;
+}
+#hud-score-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  vertical-align: middle;
+}
+#score {
+  font-family: Coiny, sans-serif;
+  font-size: 3svw;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+    1px 1px 0 #fff;
+  color: var(--clr-violet);
+  display: block;
+  /* margin: 3%; */
+  padding-top: 0;
+  /* line-height: 2vh; */
+  /* border: 1px solid magenta; */
+}
+
+#hud-score-status {
+  font-family: Coiny, sans-serif;
+  font-size: 1.5svw;
+  margin-left: 10px;
+}
+
+#hud-combo {
+  font-family: Coiny, sans-serif;
+  font-size: 3svw;
+  display: block;
+  height: fit-content;
+  width: fit-content;
+  line-height: 1rem;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+  margin: 3%;
+  padding: 0;
+  /* border: 1px solid magenta; */
+}
+
+#hud-combo span {
+  color: #ccc;
+  opacity: 50%;
+}
+
+/* ||||  Virtual Controller styles |||| */
+
+#ui--virtual-controller {
+  width: 100%;
+  height: 100%;
+  /* border: 5px solid orange; */
+  z-index: 10;
+  padding-bottom: 5%;
+}
+
+#ui--virtual-controller img {
+  /* max-width: 100%; */
+  height: auto;
+}
+
+#ui--virtual-controller-buttons,
+#ui--virtual-controller-menu-buttons {
+  display: flex;
+  flex-direction: row;
+  /* border: 4px solid magenta; */
+}
+
+#ui--virtual-controller-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  /* border: 3px solid magenta; */
+  /* gap: 10vw; */
+
+  /* max-height: 150px; */
+}
+
+#virtual-controller--button-dpad {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  min-width: 40%;
+  height: auto;
+  /* border: 1px solid magenta; */
+}
+
+#virtual-controller--button-primary {
+  width: 40%;
+  /* border: 1px solid magenta; */
+}
+
+#ui--virtual-controller-menu-buttons {
+  justify-content: center;
+  display: flex;
+  /* vertical-align: bottom; */
+  /* margin-bottom: 15%; */
+  gap: 4vw;
+}
+#ui--virtual-controller-menu-buttons img {
+  /* max-width: 100%; */
+}
+
+#virtual-controller--button-select,
+#virtual-controller--button-start {
+  height: auto;
+  width: 25%;
+  max-height: auto;
+  align-self: center;
+  padding-top: 0;
+  padding-bottom: 0;
+}
