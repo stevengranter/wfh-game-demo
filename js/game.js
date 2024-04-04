@@ -1,20 +1,17 @@
 // Import modules
-import GameObject from "./gameobject.js"
+// import GameObject from "./gameobject.js"
 import GameWorld from "./gameworld.js"
 import GameScene from "./gamescene.js"
 import Layer from "./layer.js"
 import Player from "./player.js"
 import InputHandler from "./input.js"
-import { spriteTypes, spriteTags, AnimationFrame, SpriteAnimation, Sprite } from "./sprite.js"
+import { spriteTags, Sprite } from "./sprite.js"
 import ObjectPool from "./objectpool.js"
 import Spawner from './spawner.js'
-import Projectile from "./projectile.js"
+// import Projectile from "./projectile.js"
 import CollisionDetector from "./collision-detector.js"
 import { drawStatusText, getRandomInt } from "./utils.js"
 import UI from "./ui.js"
-
-import { DebugMode } from "./debug.js"
-import Seagull from "./seagull.js"
 
 
 
