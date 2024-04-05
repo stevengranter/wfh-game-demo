@@ -291,6 +291,10 @@ dialog-panel #intro-cutscene {
   /* white-space: pre-wrap; */
 }
 
+#debug-menu--container {
+  font-size: 0.5rem;
+}
+
 #start-button {
   display: block;
   position: relative;

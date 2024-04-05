@@ -3,6 +3,12 @@ export function drawStatusText(context, input, x, y) {
     context.fillText(input, x, y)
 }
 
+export function wait(delay) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, delay)
+    })
+}
+
 export function getRandomInt(min, max) {
     min = Math.ceil(min)
     max = Math.floor(max)
@@ -13,6 +19,20 @@ export function toCamelCase(str) {
     return str.replace(/[-_]+(.)?/g, function (match, chr) {
         return chr ? chr.toUpperCase() : ''
     })
+}
+
+export function toKebabCase(str) {
+    return str
+        // Remove all non-word characters (like punctuation) and replace with a hyphen
+        .replace(/[^a-zA-Z0-9]+/g, '-')
+        // Insert a hyphen before each uppercase letter (except at the start of the string)
+        .replace(/([a-z])([A-Z])/g, '$1-$2')
+        // Replace multiple hyphens with a single hyphen
+        .replace(/-+/g, '-')
+        // Remove leading and trailing hyphens
+        .replace(/^-+|-+$/g, '')
+        // Convert the whole string to lowercase
+        .toLowerCase()
 }
 
 export async function fetchJsonFile(url) {

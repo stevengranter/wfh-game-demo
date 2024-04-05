@@ -3,13 +3,15 @@ import { GameWorld, GameScene } from "./game.js"
 import Layer from "./layer.js"
 import Player from "./player.js"
 import InputHandler from "./input.js"
+import { PauseMenu } from "./pause-menu.js"
+import { DebugMenu } from "./debug-menu.js"
 import Sprite from "./sprite.js"
 import { spriteTags } from "./sprite.js"
 import ObjectPool from "./objectpool.js"
 import Spawner from './spawner.js'
 // import Projectile from "./projectile.js"
 import CollisionDetector from "./collision-detector.js"
-import { drawStatusText, getRandomInt } from "./utils.js"
+import { drawStatusText, getRandomInt, wait } from "./utils.js"
 import UI from "./ui.js"
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants.js"
 
@@ -18,7 +20,7 @@ window.addEventListener("load", function () {
 
 
     // Initialize game variables
-    let isDevMode = false
+    let isDebugMode = false
     let lastTime = 0
     let deltaTime = 1
     let comboCounter = 0
@@ -30,7 +32,7 @@ window.addEventListener("load", function () {
     canvas.height = 270
     const ctx = canvas.getContext("2d")
 
-
+    // Initialize player
     let playerConfig = {
         spriteSrc: "./images/nan-sprite-walk.png",
         animationFrame: {
@@ -62,19 +64,16 @@ window.addEventListener("load", function () {
             },
         }
     }
-
-
     const player = new Player(playerConfig)
-
-    // let playerLives = player.stats.lives
-    // let playerHealth = player.stats.health
-    // let playerScore = player.stats.score
-
-    // let playerProgress = player.stats.progress
-
 
     // Initialize UI elements //
     const ui = new UI("[data-ui]", player)
+    console.dir(ui)
+    const pauseMenu = new PauseMenu()
+    pauseMenu.init(ui.elements.pauseMenuContainer)
+
+
+
 
     // Initialize background layers //
 
@@ -88,9 +87,7 @@ window.addEventListener("load", function () {
     const backgroundLayer02 = new Layer(player, false, backgroundLayer02Img, 0, 0, 0, 0, 944, 512, 0, 0, 480, 270)
     backgroundLayer02.velocityX = 0
 
-
-
-    // Sprites
+    // Sprite configuration
 
     // Wiener 🌭
 
@@ -136,7 +133,6 @@ window.addEventListener("load", function () {
     const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, WIENER_POOL_SIZE)
     const wienerSpawner = new Spawner(SPAWNER_RATE, wienerPool, 0)
 
-    // console.log(wienerSpawner)
 
     // Seagull 🐦
 
@@ -184,23 +180,7 @@ window.addEventListener("load", function () {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //Seagull poo (delivered by gull)
+    //Seagull poo
 
     const GULLPOO_CONFIG = {
         spriteSrc: "./images/seagull-poo-sprite-02.png",
@@ -243,56 +223,38 @@ window.addEventListener("load", function () {
     }
 
     const gullPooPool = new ObjectPool(makeGullPoo, gullPooResetFunc, GULLPOO_POOL_SIZE)
-    // console.log(gullPooPool)
 
+    // Link gullpoo to gull
     for (let i = 0; i < gullPooPool.poolArray.length; i++) {
         let gullPoo = gullPooPool.poolArray[i]
         let gullParent = gullPool.poolArray[i]
         gullPoo.data.parentSprite = gullParent
-        // console.log("gullPoo", gullPoo)
-        // console.log("gullParent", gullPoo.data.parentSprite)
     }
 
     const gullPooSpawner = new Spawner(GULLPOO_SPAWNER_RATE, gullPooPool)
-
-
     const scene01Spawners = [wienerSpawner, gullSpawner, gullPooSpawner]
 
 
 
 
     // Scene Objects
-
-
     const scene01 = new GameScene(1, "Bonavista", player, [backgroundLayer02], [], scene01Spawners, "./audio/music/song-01/song_01-i_equals_da_by.mp3", [])
-
     let currentScene = scene01
     ui.music = currentScene.music
 
     let gameWorld = new GameWorld(canvas, 475, 270, player, currentScene)
 
-
-
-
-
-
-
-
-
     // Input Handler
     // console.log(this.document)
     const input = new InputHandler(ui)
 
-    // console.log(player)
-
     console.log(ui)
 
+    // Event listeners
     ui.elements.startButton.addEventListener("click", (e) => {
         runIntro()
     })
 
-    ui.showUI("cutscene")
-    // Event listeners
     window.addEventListener("keydown", (e) => {
         switch (e.key) {
             case "Escape":
@@ -303,14 +265,11 @@ window.addEventListener("load", function () {
         }
     })
 
+    ui.showUI("cutscene")
 
 
-    console.log(currentScene)
-    currentScene.spawners.forEach((spawner) => {
-        // console.log(spawner)
-    })
 
-    console.log(currentScene)
+
     function loop(timeStamp) {
         // console.log("in loop function")
         if (!isPaused) {
@@ -325,7 +284,7 @@ window.addEventListener("load", function () {
             player.update(input, deltaTime, CANVAS_WIDTH, CANVAS_HEIGHT)
 
             if (currentScene.music.currentTime >= 0) {
-                if (player.isAlive) {
+                if (player.isAlive === true) {
                     currentScene.spawners.forEach((spawner) => {
 
                         let collider = CollisionDetector.detectBoxCollision(player, spawner.objectPool.poolArray)
@@ -333,13 +292,10 @@ window.addEventListener("load", function () {
                         if (collider) {
                             console.log("collision")
                             if (collider.spriteTag === spriteTags.WIENER) {
-                                // console.log("🌭")
-                                // console.log("healthValue", collider.healthValue)
-                                // console.log("player.stats.score", player.stats.health)
+
                                 player.stats.health += collider.healthValue
 
                                 player.stats.score += collider.pointValue
-                                // ui.scoreCounterHUD.innerHTML = String(playerScore).padStart(4, "0")
                                 if (player.stats.score >= 5000) {
                                     // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
                                     // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
@@ -349,27 +305,10 @@ window.addEventListener("load", function () {
                             } else if (collider.spriteTag === spriteTags.POO) {
                                 console.log("💩")
                                 player.stats.health += collider.healthValue
-                                // playerHealth = player.updateHealth(collider)
-                                // ui.healthMeterHUD.style.width = playerHealth + "%"
-                                // resetCombo()
+
                             } else if (collider.spriteTag === spriteTags.GULL) {
                                 console.log("🐦")
                             }
-
-                            // console.log("collision")
-                            // playerScore = player.updateScore(collider)
-                            // if (playerScore >= 500) {
-                            //     ui.show(ui.menuOverlay)
-                            //     ui.show(ui.congratsScreen)
-                            //     setTimeout(() => {
-                            //         ui.hide(ui.menuOverlay)
-                            //         ui.hide(ui.congratsScreen)
-                            //     }, 2000)
-                            // }
-
-
-
-
 
 
 
@@ -377,16 +316,17 @@ window.addEventListener("load", function () {
                     })
                 } else {
                     player.stats.lives--
+                    player.isAlive = false
 
                     if (player.stats.lives > 1) {
                         // ui.livesCounterHUD.innerText = "x" + playerLives
 
                     } else if (player.stats.lives = 1) {
                         // ui.livesCounterHUD.innerText = ""
-                    } else if (player.stats.lives = 0) {
-                        player.isAlive = false
+                    } else if (player.stats.lives <= 0) {
+                        endGame()
                     }
-                    endGame()
+
 
                 }
 
@@ -397,9 +337,6 @@ window.addEventListener("load", function () {
             currentScene.draw(ctx)
             player.draw(ctx)
 
-            // ui.devModePanel.querySelector("#debug-player-speedX span").innerText = player.speedX
-            // ui.devModePanel.querySelector("#debug-player-dx span").innerText = player.dx
-
 
             requestAnimationFrame(loop)
         } else {
@@ -409,16 +346,12 @@ window.addEventListener("load", function () {
 
     }
 
-    function blurBackground() {
 
-
-        // currentScene.layers[0].filter = "blur(3px)"
-        console.log(backgroundLayer01)
-    }
 
     let blurValue = 0
     const maxBlur = 4
     const step = 0.2
+
     function animateBlur() {
 
 
@@ -433,8 +366,6 @@ window.addEventListener("load", function () {
         }
 
 
-        // ctx.clearRect(0, 0, canvas.width, canvas.height)
-        // ctx.fillRect(50, 50, 200, 200)
 
 
     }
@@ -490,7 +421,7 @@ window.addEventListener("load", function () {
         player.stats.score = 0
         player.stats.progress = 0
         player.stats.healthMax = 100
-        player.stats.health = 100
+        Pplayer.stats.health = 100
 
     }
     // Game state functions
@@ -507,14 +438,22 @@ window.addEventListener("load", function () {
         setTimeout(() => { ui.elements.characterPortrait.style.transform = "translateY(0px)" }, 700)
 
         currentScene.draw(ctx)
-        typeWriter('intro-dialog', dialogText, 25)
         setTimeout(() => { animateBlur() }, 1000)
+        typeWriter('intro-dialog', dialogText, 25)
+        document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
+            setTimeout(() => { ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
+            setTimeout(() => { ui.elements.characterPortrait.style.transform = "translateY(475px)" }, 700)
+            setTimeout(() => { startGame() }, 1300)
+
+        })
+
 
     }
     function startGame() {
 
         console.log(player.stats)
-        currentScene.layer[0].filter = "none"
+        ui.showUI("play")
+        currentScene.layers[0].filter = "none"
 
         initPlayer()
 
@@ -525,9 +464,9 @@ window.addEventListener("load", function () {
 
         if (currentScene.isMusicLoaded) {
             console.log("music is loaded")
-            runIntro()
-            // currentScene.music.play()
-            // loop(0)
+            // runIntro()
+            currentScene.music.play()
+            loop(0)
 
         }
 
@@ -620,11 +559,34 @@ window.addEventListener("load", function () {
     }
 
 
-    function toggleDevMode() {
-        isDevMode = !isDevMode
+    function toggleDebugMode() {
+        isDebugMode = !isDebugMode
+
+        function toggleDebugMenu() {
+            debugMenu.toggleVisibility()
+        }
+
+        setInterval(() => {
+            if (debugMenu.isVisible) {
+                debugMenu.update()
+            }
+        }, 100)
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === '`') {
+                toggleDebugMenu()
+            }
+        })
+
     }
 
-    toggleDevMode()
+    const debugMenu = new DebugMenu()
+    debugMenu.watch("player.isAlive", () => player.isAlive)
+
+    toggleDebugMode()
+
+
+
 
 
 

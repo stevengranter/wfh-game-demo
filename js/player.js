@@ -67,6 +67,13 @@ export default class Player extends Sprite {
         this.fps = 15
         this.frameTimer = 0
         this.frameInterval = 1000 / this.fps
+        document.addEventListener('playerZeroHealth', function (e) {
+            console.log(e.detail.message) // "Player has reached zero health!"
+            this.isAlive = false
+            // Handle the zero health situation (e.g., end game, respawn player)
+        })
+
+
     }
 
 
@@ -76,25 +83,6 @@ export default class Player extends Sprite {
         this.currentState.enter()
         // this.notify("player.currentState = " + this.currentState)
     }
-
-
-
-
-    // updateHealth(value) {
-    //     let newHealth = this.#currentHealth + value
-    //     // console.log(newHealth)s
-    //     if (newHealth > this.#maxHealth) {
-    //         newHealth = this.#maxHealth
-    //     }
-    //     this.#currentHealth = newHealth
-    // }
-
-
-
-    // updateScore(value) {
-    //     this.#currentScore += value
-    //     this.notify("score is =" + this.#currentScore)
-    // }
 
     update(input, deltaTime, gameWidth, gameHeight) {
         if (!this.isPaused) {
@@ -147,34 +135,7 @@ export default class Player extends Sprite {
         }
     }
 
-    // draw(context) {
-    //     if (true == true) {
-    //         // console.log(this.dx)
-    //         // if (!this.isAlive) { context.filter = "opacity(65%) grayscale(100) blur(0.5px)" }
-    //         // if (this.dx <= 75) this.dx = 75
-    //         // if (this.dx >= 325) this.dx = 325
-    //         // console.dir(this.playerSprite)
-    //         // console.log(animation.animationFrame)
-    //         context.drawImage(
 
-    //             this.imageObject,
-    //             this.sWidth * this.frameX,
-    //             this.sHeight * this.frameY,
-    //             this.sWidth,
-    //             this.sHeight,
-    //             Math.floor(this.dx),
-    //             Math.floor(this.dy),
-    //             this.dWidth,
-    //             this.dHeight,
-
-    //         )
-    //     }
-    //     context.filter = "none"
-    // }
-
-    setStats() {
-
-    }
 
     onGround() {
         return this.dy >= 270 - this.sHeight - this.floorHeight

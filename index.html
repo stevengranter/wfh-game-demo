@@ -90,79 +90,10 @@
           id="game-screen__menu-overlay"
           class="overlay"
           data-ui="true"
-          data-gamestate="paused"
-        >
+          data-gamestate="paused">
           <!-- START: #menu-screen -->
-          <div id="menu-screen" class="ui-panel" data-ui="true">
-            <header><h2>Options</h2></header>
-            <ul>
-              <!-- <li>
-                <label for="master-volume">
-                  <img
-                    class="ui-icon"
-                    src="./images/ui--volume-icon.svg"
-                    alt="Music Volume"
-                  />
-                </label>
-                <div class="range-container">
-                  <input
-                    title="master-volume"
-                    type="range"
-                    min="1"
-                    max="100"
-                    value="100"
-                    class="slider"
-                    id="volume-range"
-                  />
-                </div>
-              </li> -->
-              <li>
-                <label for="music-volume">
-                  <img
-                    class="ui-icon"
-                    src="./images/ui--music-icon.svg"
-                    alt="Music Volume"
-                  />
-                </label>
-                <div class="range-container">
-                  <input
-                    title="music-volume"
-                    type="range"
-                    min="1"
-                    max="100"
-                    value="80"
-                    class="slider"
-                    id="music-range"
-                  />
-                </div>
-              </li>
-              <li>
-                <label for="sfx-volume">
-                  <img
-                    class="ui-icon"
-                    src="./images/ui--sfx-icon.svg"
-                    alt="Sound Effects Volume"
-                /></label>
-                <div class="range-container">
-                  <input
-                    title="sfx-volume"
-                    type="range"
-                    min="1"
-                    max="100"
-                    value="80"
-                    class="slider"
-                    id="sfx-range"
-                  />
-                </div>
-              </li>
-            </ul>
-            <button id="resume-button" data-ui="true">Resume</button>
-
-            <div id="stop-button">
-              <div class="border">
-                <button>Stop</button>
-              </div>
-            </div>
+          <div id="pause-menu--container" class="ui-panel" data-ui="true">
+           
           </div>
           <!-- <div id="congrats-screen" class="ui-panel">
             <header><h2>Next level unlocked!</h2></header>
@@ -217,7 +148,7 @@
 
         <!-- #menu-screen :END -->
       </div>
-
+      <div id="debug-menu--container" data-ui="true"></div>
       <!-- <div id="controller-container"> -->
       <div id="ui--virtual-controller" data-ui="true" data-current-state="">
         <div id="ui--virtual-controller-buttons" style="">

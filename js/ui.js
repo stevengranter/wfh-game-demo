@@ -16,7 +16,7 @@ export default class UI {
             }
             else if ((data > 30) && (data < 70)) {
                 console.log("color change")
-                data = "var(--clr-orange)"
+                data = "var(--clr-gold)"
             } else {
                 data = "var(--clr-green)"
             }
@@ -40,6 +40,7 @@ export default class UI {
             let elementKey = currentElement.id
             let camelCaseKey = toCamelCase(elementKey)
             elements[camelCaseKey] = currentElement
+
         }
         // console.log(elements)
         // console.log(typeof elements)
