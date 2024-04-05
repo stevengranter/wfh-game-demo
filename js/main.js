@@ -78,10 +78,10 @@ window.addEventListener("load", function () {
 
     // Initialize background layers //
 
-    const backgroundLayer01Img = new Image()
-    backgroundLayer01Img.src = "./images/bg-clouds-01.png"
-    const backgroundLayer01 = new Layer(player, false, backgroundLayer01Img, 0, 0, 0, 0, 950, 270, 0, -75, 950, 270)
-    backgroundLayer01.velocityX = -20
+    // const backgroundLayer01Img = new Image()
+    // backgroundLayer01Img.src = "./images/bg-clouds-01.png"
+    // const backgroundLayer01 = new Layer(player, false, backgroundLayer01Img, 0, 0, 0, 0, 950, 270, 0, -75, 950, 270)
+    // backgroundLayer01.velocityX = -20
 
     const backgroundLayer02Img = new Image()
     backgroundLayer02Img.src = "./images/bg01-houses-ocean.png"
@@ -264,7 +264,7 @@ window.addEventListener("load", function () {
     // Scene Objects
 
 
-    const scene01 = new GameScene(1, "Bonavista", player, [backgroundLayer01, backgroundLayer02], [], scene01Spawners, "./audio/music/song-01/song_01-i_equals_da_by.mp3", [])
+    const scene01 = new GameScene(1, "Bonavista", player, [backgroundLayer02], [], scene01Spawners, "./audio/music/song-01/song_01-i_equals_da_by.mp3", [])
 
     let currentScene = scene01
     ui.music = currentScene.music
@@ -288,8 +288,9 @@ window.addEventListener("load", function () {
     console.log(ui)
 
     ui.elements.startButton.addEventListener("click", (e) => {
-        startGame()
+        runIntro()
     })
+
     ui.showUI("cutscene")
     // Event listeners
     window.addEventListener("keydown", (e) => {
@@ -411,19 +412,73 @@ window.addEventListener("load", function () {
     function blurBackground() {
 
 
-        currentScene.layers[1].filter = "blur(3px)"
+        // currentScene.layers[0].filter = "blur(3px)"
         console.log(backgroundLayer01)
     }
 
+    let blurValue = 0
+    const maxBlur = 4
+    const step = 0.2
+    function animateBlur() {
 
 
-    function playCutScene() {
 
-    }
+        blurValue += step
 
-    function runIntro() {
+
+        currentScene.layers[0].filter = `blur(${blurValue}px)`
         currentScene.draw(ctx)
+        if (blurValue < maxBlur) {
+            requestAnimationFrame(animateBlur)
+        }
+
+
+        // ctx.clearRect(0, 0, canvas.width, canvas.height)
+        // ctx.fillRect(50, 50, 200, 200)
+
+
     }
+
+    function typeWriter(elementId, text, typingDelay) {
+        let index = 0
+        const element = document.getElementById(elementId)
+
+        // Clear existing text
+        element.innerHTML = ''
+
+        // Function to add characters one by one
+        function addCharacter() {
+            // Handle HTML tags (like <strong>)
+            if (text[index] === '<') {
+                let tag = ''
+                do {
+                    tag += text[index]
+                    index++
+                } while (text[index] !== '>' && index < text.length)
+                tag += '>'
+                index++
+                element.innerHTML += tag
+            } else {
+                // Add text character
+                element.innerHTML += text[index++]
+            }
+
+            // Continue the effect if there are more characters
+            if (index < text.length) {
+                setTimeout(addCharacter, typingDelay)
+            }
+        }
+
+        // Start the typewriter effect
+        addCharacter()
+    }
+
+    // Extract the text content from the div without child elements like <strong>
+    const dialogText = document.querySelector('#intro-dialog div').textContent
+
+    // Start the typewriter effect
+
+
     // blurBackground()
     function initPlayer() {
         player.stats.subscribe(ui.lives)
@@ -439,20 +494,29 @@ window.addEventListener("load", function () {
 
     }
     // Game state functions
-    function startGame() {
 
-        console.log(player.stats)
-
-        initPlayer()
+    function runIntro() {
         ui.showUI("cutscene")
         console.log(ui)
-        blurBackground()
+
         ui.hide(ui.elements.titleScreen)
         ui.show(ui.elements.introScreen)
 
         ui.show(ui.elements.characterPortrait)
-        setTimeout(() => { ui.elements.introDialog.style.transform = "translateY(0)" }, 100)
-        setTimeout(() => { ui.elements.characterPortrait.style.transform = "translateY(0px)" }, 200)
+        setTimeout(() => { ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
+        setTimeout(() => { ui.elements.characterPortrait.style.transform = "translateY(0px)" }, 700)
+
+        currentScene.draw(ctx)
+        typeWriter('intro-dialog', dialogText, 25)
+        setTimeout(() => { animateBlur() }, 1000)
+
+    }
+    function startGame() {
+
+        console.log(player.stats)
+        currentScene.layer[0].filter = "none"
+
+        initPlayer()
 
 
         const superNantendo = document.getElementById("ui--super-nantendo")
