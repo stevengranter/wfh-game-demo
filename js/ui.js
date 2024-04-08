@@ -6,6 +6,10 @@ export default class UI {
         this.bindings = {}
         // this.readoutElements = this.initReadouts
         this.score = new DataBinder("score", "textContent")
+        this.scoreRemaining = new DataBinder("score-remaining", "textContent", (data) => {
+            data = 5000 - this.score
+            return data
+        })
         this.healthBarWidth = new DataBinder("health", "style.width", (data) => {
             data = data + "%"
             return data
@@ -16,7 +20,7 @@ export default class UI {
             }
             else if ((data > 30) && (data < 70)) {
                 console.log("color change")
-                data = "var(--clr-gold)"
+                data = "var(--clr-orange)"
             } else {
                 data = "var(--clr-green)"
             }
@@ -138,7 +142,7 @@ export class DataBinder {
         this.formatFunction = formatFunction
     }
 
-    update(data) {
+    message(data) {
 
         if (data.hasOwnProperty(this.elementId)) {
             const element = document.getElementById(this.elementId)

@@ -1,5 +1,7 @@
 // Import modules
-import { GameWorld, GameScene } from "./game.js"
+import { GameScene } from "./game-scene.js"
+import { GameWorld } from "./game-world.js"
+import GameObject from "./game-object.js"
 import Layer from "./layer.js"
 import Player from "./player.js"
 import InputHandler from "./input.js"
@@ -11,7 +13,7 @@ import ObjectPool from "./objectpool.js"
 import Spawner from './spawner.js'
 // import Projectile from "./projectile.js"
 import CollisionDetector from "./collision-detector.js"
-import { drawStatusText, getRandomInt, wait } from "./utils.js"
+import { drawStatusText, getRandomInt, wait, typeWriter } from "./utils.js"
 import UI from "./ui.js"
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants.js"
 
@@ -26,6 +28,8 @@ window.addEventListener("load", function () {
     let comboCounter = 0
     let isPaused = false
     let musicPausedTime = 0
+
+
 
     const canvas = document.getElementById("game-screen__canvas")
     canvas.width = 475
@@ -69,23 +73,56 @@ window.addEventListener("load", function () {
     // Initialize UI elements //
     const ui = new UI("[data-ui]", player)
     console.dir(ui)
-    const pauseMenu = new PauseMenu()
+    const pauseMenu = new PauseMenu(() => {
+        window.addEventListener("keydown", (e) => {
+            switch (e.key) {
+                case "Escape":
+                    isPaused = !isPaused
+                    // console.log("pause toggled")
+                    pauseGame()
+                    break
+            }
+        })
+    })
     pauseMenu.init(ui.elements.pauseMenuContainer)
+
+    // Initialize Input handler
+
+    // Input Handler
+    // console.log(this.document)
+    const input = new InputHandler(ui)
+
+    console.log(ui)
+
+    // Event listeners
+    ui.elements.startButton.addEventListener("click", (e) => {
+        runIntro()
+    })
+
+    // Initialize Game World
+
+    const game = new GameWorld(player, ui, input)
+    game.init(player, input, ui)
 
 
 
 
     // Initialize background layers //
 
-    // const backgroundLayer01Img = new Image()
-    // backgroundLayer01Img.src = "./images/bg-clouds-01.png"
-    // const backgroundLayer01 = new Layer(player, false, backgroundLayer01Img, 0, 0, 0, 0, 950, 270, 0, -75, 950, 270)
-    // backgroundLayer01.velocityX = -20
+    const backgroundLayer01Img = new Image()
+    backgroundLayer01Img.src = "./images/background-01-main.png"
+    const backgroundLayer01 = new Layer(player, 2, backgroundLayer01Img, 0, 0, 0, 0, 6650, 270, 0, 0, 6650, 270)
+    backgroundLayer01.velocityX = 0
 
     const backgroundLayer02Img = new Image()
     backgroundLayer02Img.src = "./images/bg01-houses-ocean.png"
     const backgroundLayer02 = new Layer(player, false, backgroundLayer02Img, 0, 0, 0, 0, 944, 512, 0, 0, 480, 270)
     backgroundLayer02.velocityX = 0
+
+    const backgroundLayer03Img = new Image()
+    backgroundLayer03Img.src = "./images/garden-06.png"
+    const backgroundLayer03 = new Layer(player, false, backgroundLayer03Img, 0, 0, 0, 0, 1024, 585, 0, 0, 480, 270)
+    backgroundLayer03.velocityX = 0
 
     // Sprite configuration
 
@@ -197,6 +234,10 @@ window.addEventListener("load", function () {
         spriteTag: spriteTags.POO
     }
 
+    // let gullPooGameObject = GameWorld.createGameObject({ this: "value" })
+
+    console.log("🚀 ~ gullPooGameObject:", new GameObject(GULLPOO_CONFIG))
+
 
     const GULLPOO_POOL_SIZE = 10
     const GULLPOO_SPAWNER_RATE = 1
@@ -238,113 +279,21 @@ window.addEventListener("load", function () {
 
 
     // Scene Objects
-    const scene01 = new GameScene(1, "Bonavista", player, [backgroundLayer02], [], scene01Spawners, "./audio/music/song-01/song_01-i_equals_da_by.mp3", [])
+    const scene01 = new GameScene(1, "Bonavista", player, [backgroundLayer03], [], scene01Spawners, "./audio/music/song-01/song_01-i_equals_da_by.mp3", [])
     let currentScene = scene01
     ui.music = currentScene.music
 
     let gameWorld = new GameWorld(canvas, 475, 270, player, currentScene)
 
-    // Input Handler
-    // console.log(this.document)
-    const input = new InputHandler(ui)
 
-    console.log(ui)
 
-    // Event listeners
-    ui.elements.startButton.addEventListener("click", (e) => {
-        runIntro()
-    })
 
-    window.addEventListener("keydown", (e) => {
-        switch (e.key) {
-            case "Escape":
-                isPaused = !isPaused
-                // console.log("pause toggled")
-                pauseGame()
-                break
-        }
-    })
 
     ui.showUI("cutscene")
 
 
 
 
-    function loop(timeStamp) {
-        // console.log("in loop function")
-        if (!isPaused) {
-            // console.log(deltaTime)
-            deltaTime = (timeStamp - lastTime) / 1000
-            lastTime = timeStamp
-            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
-            // ui.timerHUD.innerText = Math.floor(currentScene.music.duration - currentScene.music.currentTime)
-
-
-            currentScene.update(deltaTime)
-            player.update(input, deltaTime, CANVAS_WIDTH, CANVAS_HEIGHT)
-
-            if (currentScene.music.currentTime >= 0) {
-                if (player.isAlive === true) {
-                    currentScene.spawners.forEach((spawner) => {
-
-                        let collider = CollisionDetector.detectBoxCollision(player, spawner.objectPool.poolArray)
-                        // console.log(spawner.objectPool.poolArray)
-                        if (collider) {
-                            console.log("collision")
-                            if (collider.spriteTag === spriteTags.WIENER) {
-
-                                player.stats.health += collider.healthValue
-
-                                player.stats.score += collider.pointValue
-                                if (player.stats.score >= 5000) {
-                                    // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
-                                    // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
-                                    player.stats.progress = 1
-                                }
-                                // calculateCombo()
-                            } else if (collider.spriteTag === spriteTags.POO) {
-                                console.log("💩")
-                                player.stats.health += collider.healthValue
-
-                            } else if (collider.spriteTag === spriteTags.GULL) {
-                                console.log("🐦")
-                            }
-
-
-
-                        }
-                    })
-                } else {
-                    player.stats.lives--
-                    player.isAlive = false
-
-                    if (player.stats.lives > 1) {
-                        // ui.livesCounterHUD.innerText = "x" + playerLives
-
-                    } else if (player.stats.lives = 1) {
-                        // ui.livesCounterHUD.innerText = ""
-                    } else if (player.stats.lives <= 0) {
-                        endGame()
-                    }
-
-
-                }
-
-            } else {
-                ui.show(ui.endsceneScreen)
-            }
-
-            currentScene.draw(ctx)
-            player.draw(ctx)
-
-
-            requestAnimationFrame(loop)
-        } else {
-            pauseGame()
-            console.log("game is paused")
-        }
-
-    }
 
 
 
@@ -370,39 +319,7 @@ window.addEventListener("load", function () {
 
     }
 
-    function typeWriter(elementId, text, typingDelay) {
-        let index = 0
-        const element = document.getElementById(elementId)
 
-        // Clear existing text
-        element.innerHTML = ''
-
-        // Function to add characters one by one
-        function addCharacter() {
-            // Handle HTML tags (like <strong>)
-            if (text[index] === '<') {
-                let tag = ''
-                do {
-                    tag += text[index]
-                    index++
-                } while (text[index] !== '>' && index < text.length)
-                tag += '>'
-                index++
-                element.innerHTML += tag
-            } else {
-                // Add text character
-                element.innerHTML += text[index++]
-            }
-
-            // Continue the effect if there are more characters
-            if (index < text.length) {
-                setTimeout(addCharacter, typingDelay)
-            }
-        }
-
-        // Start the typewriter effect
-        addCharacter()
-    }
 
     // Extract the text content from the div without child elements like <strong>
     const dialogText = document.querySelector('#intro-dialog div').textContent
@@ -412,16 +329,22 @@ window.addEventListener("load", function () {
 
     // blurBackground()
     function initPlayer() {
+        player.stats.subscribe(game)
+        player.stats.subscribe(player)
         player.stats.subscribe(ui.lives)
         player.stats.subscribe(ui.score)
         player.stats.subscribe(ui.healthBarWidth)
         player.stats.subscribe(ui.healthBarColor)
+        player.stats.subscribe(ui.scoreRemaining)
+
 
         player.stats.lives = 3
         player.stats.score = 0
         player.stats.progress = 0
         player.stats.healthMax = 100
-        Pplayer.stats.health = 100
+        player.stats.health = 100
+
+        player.isAlive = true
 
     }
     // Game state functions
@@ -449,11 +372,15 @@ window.addEventListener("load", function () {
 
 
     }
+
+
+    game.currentScene = scene01
+
     function startGame() {
 
-        console.log(player.stats)
+        // console.log(player.stats)
         ui.showUI("play")
-        currentScene.layers[0].filter = "none"
+        scene01.layers[0].filter = "none"
 
         initPlayer()
 
@@ -462,13 +389,14 @@ window.addEventListener("load", function () {
         superNantendo.classList.add("teal-bg")
         // canvas.classList.remove("hidden")
 
-        if (currentScene.isMusicLoaded) {
-            console.log("music is loaded")
-            // runIntro()
-            currentScene.music.play()
-            loop(0)
+        game.loop(0, scene01)
+        // if (currentScene.isMusicLoaded) {
+        //     console.log("music is loaded")
+        //     // runIntro()
+        //     currentScene.music.play()
+        //     loop(0)
 
-        }
+        // }
 
     }
 
@@ -488,102 +416,40 @@ window.addEventListener("load", function () {
         location.reload() // TODO: Find better way of resetting game
     }
 
-    function pauseGame() {
-        if (isPaused) {
-            // titleScreen.classList.add("hidden")
 
-            ui.showUI("paused")
-            musicPausedTime = currentScene.music.currentTime
-            currentScene.music.pause()
-        }
-        else {
-
-            ui.showUI("play")
-            currentScene.music.currentTime = musicPausedTime
-            currentScene.music.play()
-            loop(lastTime)
-            isPaused = false
-        }
-    }
 
     function resetPlayer() {
         console.log("Reset Player")
     }
 
-    function calculateCombo() {
-        comboCounter++
-        if (comboCounter > 0 && comboCounter <= 5) {
-            for (let i = 1; i <= comboCounter; i++) {
-                let nthChildSelector = `:nth-child(${i})`
-                let nthChildSelectorString = nthChildSelector.toString()
-                // console.log(nthChildSelectorString)
-                let letter = ui.comboCounterHUD.querySelector(nthChildSelectorString)
-                // console.dir(letter)
-                letter.style.color = "var(--clr-purple)"
-                letter.style.opacity = "100%"
-            }
-        } else if (comboCounter > 5 && comboCounter <= 10) {
-            for (let i = 6; i <= comboCounter; i++) {
-                let nthChildSelectorIndex = i - 5
-                let nthChildSelector = `:nth-child(${nthChildSelectorIndex})`
-                let nthChildSelectorString = nthChildSelector.toString()
-                // console.log(nthChildSelectorString)
-                let letter = ui.comboCounterHUD.querySelector(nthChildSelectorString)
-                // console.dir(letter)
-                letter.style.color = "var(--clr-gold)"
-                letter.style.opacity = "100%"
-            }
-        }
-        if (comboCounter < 5) {
-            player.speedBonus = 0
-        } else if (comboCounter >= 5 && comboCounter < 10) {
-            player.speedBonus = 25
-        } else if (comboCounter >= 10) {
-            player.speedBonus = 50
-        }
 
 
-        if (comboCounter === 10) {
-            console.log("COMBO!!!")
-        }
-    }
 
-    function resetCombo() {
-        comboCounter = 0
-        player.speedBonus = 0
-        let letters = ui.comboCounterHUD.querySelectorAll("span")
-        letters.forEach((letter) => {
-            letter.style.color = ""
-            letter.style.opacity = "50%"
-        })
-    }
+    // function toggleDebugMode() {
+    //     isDebugMode = !isDebugMode
 
+    //     function toggleDebugMenu() {
+    //         debugMenu.toggleVisibility()
+    //     }
 
-    function toggleDebugMode() {
-        isDebugMode = !isDebugMode
+    //     setInterval(() => {
+    //         if (debugMenu.isVisible) {
+    //             debugMenu.update()
+    //         }
+    //     }, 100)
 
-        function toggleDebugMenu() {
-            debugMenu.toggleVisibility()
-        }
+    //     document.addEventListener('keydown', (event) => {
+    //         if (event.key === '`') {
+    //             toggleDebugMenu()
+    //         }
+    //     })
 
-        setInterval(() => {
-            if (debugMenu.isVisible) {
-                debugMenu.update()
-            }
-        }, 100)
+    // }
 
-        document.addEventListener('keydown', (event) => {
-            if (event.key === '`') {
-                toggleDebugMenu()
-            }
-        })
+    // const debugMenu = new DebugMenu()
+    // debugMenu.watch("player.isAlive", () => player.isAlive)
 
-    }
-
-    const debugMenu = new DebugMenu()
-    debugMenu.watch("player.isAlive", () => player.isAlive)
-
-    toggleDebugMode()
+    // toggleDebugMode()
 
 
 

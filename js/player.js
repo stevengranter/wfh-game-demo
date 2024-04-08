@@ -2,13 +2,14 @@
 import Sprite from "./sprite.js"
 import Stats from "./stats.js"
 import {
+    Dead,
     StandingLeft,
     StandingRight,
     WalkingLeft,
     WalkingRight,
     JumpingLeft,
     JumpingRight,
-    Dead
+    playerStates
 } from "./player-states.js"
 
 
@@ -23,14 +24,14 @@ export default class Player extends Sprite {
         // // console.log(this.playerAnimations)
         // this.playerStats = playerStats
 
-        this.states = [new StandingLeft(this), new StandingRight(this), new WalkingLeft(this), new WalkingRight(this), new JumpingLeft(this), new JumpingRight(this), new Dead(this)]
+        this.states = [new Dead(this), new StandingLeft(this), new StandingRight(this), new WalkingLeft(this), new WalkingRight(this), new JumpingLeft(this), new JumpingRight(this)]
         this.stateHistory = []
 
-        // currentState is at index 0 of states array
+        // currentState is at index 1 of states array
         // this.setState(this.states[0])
-        this.currentState = this.states[0]
+        this.currentState = this.states[1]
 
-        this.floorHeight = 8 // TODO: This should not be here 🤮
+        this.floorHeight = 60 // TODO: This should not be here 🤮
 
         this.velocityX = 1
         this.velocityY = 100
@@ -43,10 +44,10 @@ export default class Player extends Sprite {
 
         const initialmaxSpeedX = 25
         this.maxSpeedX = initialmaxSpeedX
-        this.speedBonus = 0
+        this.speedMultiplier = 1
 
         this.stats = new Stats()
-
+        console.log(this.stats)
 
         // this.scoreManager = new ScoreManager()
 
@@ -67,9 +68,10 @@ export default class Player extends Sprite {
         this.fps = 15
         this.frameTimer = 0
         this.frameInterval = 1000 / this.fps
-        document.addEventListener('playerZeroHealth', function (e) {
-            console.log(e.detail.message) // "Player has reached zero health!"
+        document.addEventListener('playerDeath', () => {
+            console.log(`Player is dead!`) // ealth!"
             this.isAlive = false
+            this.callSaintPeter()
             // Handle the zero health situation (e.g., end game, respawn player)
         })
 
@@ -84,7 +86,42 @@ export default class Player extends Sprite {
         // this.notify("player.currentState = " + this.currentState)
     }
 
+
+
+    startNewLife() {
+        this.isAlive = true
+        console.log(this)
+        // console.log(this.stats.healthMax)
+        // this.stats.health = this.stats.healthMax
+        // this.setState(playerStates.STANDING_LEFT)
+    }
+
+    message(data) {
+        console.log(this.constructor.name + " received ", data)
+        console.log("timestamp:", Date.now())
+
+        // Check if data exists and has the health property before accessing it
+        // if (data && data.health && data.health <= 0) {
+        //     this.isAlive = false
+        //     // Uncomment the following line if callSaintPeter function is defined and needs to be called
+        //     // this.callSaintPeter();
+        // }
+    }
+
+    // callSaintPeter() {
+    //     console.log("You is dead 💀")
+
+    //     this.setState(playerStates.DEAD)
+
+    // }
+
+
+
     update(input, deltaTime, gameWidth, gameHeight) {
+        // if (this.isOutOfBounds()) {
+        //     console.log("Player out of bounds")
+        //     this.startNewLife()
+        // }
         if (!this.isPaused) {
 
             if (this.frameTimer > this.frameInterval) {
@@ -104,10 +141,17 @@ export default class Player extends Sprite {
             }
 
             // Prevent player from moving off-screen
-            if (this.dx <= 0) {
-                this.dx = 0
-            } else if (this.dx >= gameWidth - this.dWidth) {
-                this.dx = gameWidth - this.dWidth
+            // if (this.dx <= 0) {
+            //     this.dx = 0
+            // } else if (this.dx >= gameWidth - this.dWidth) {
+            //     this.dx = gameWidth - this.dWidth
+            // }
+
+            // Create a buffer of 50px on each side
+            if (this.dx <= 75) {
+                this.dx = 75
+            } else if (this.dx >= 350) {
+                this.dx = 350
             }
 
             this.currentState.handleInput(input)
@@ -115,10 +159,13 @@ export default class Player extends Sprite {
             // horizontal Movement
             // this.dx += this.velocityX * deltaTime
             // this.prevX = this.dx
-            this.dx += this.velocityX * deltaTime
+            // console.log(deltaTime)
+            this.dx += this.velocityX * this.speedMultiplier * deltaTime
             // console.log(this.velocityX * deltaTime)
             this.dy += this.velocityY * deltaTime
             // console.log(this.velocityX)
+
+
 
 
 
@@ -133,6 +180,7 @@ export default class Player extends Sprite {
             // this.dy -= 2
 
         }
+
     }
 
 

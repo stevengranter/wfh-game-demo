@@ -20,7 +20,7 @@ export default class Observable {
         // console.dir("#observers:" + this.#observers)
         this.#observers.forEach(observer => {
             // console.dir(observer)
-            observer.update(data)
+            observer.message(data)
         })
     }
 }

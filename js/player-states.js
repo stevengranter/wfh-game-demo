@@ -1,11 +1,14 @@
+import { wait } from "./utils.js"
+
 export const playerStates = {
-    STANDING_LEFT: 0,
-    STANDING_RIGHT: 1,
-    WALKING_LEFT: 2,
-    WALKING_RIGHT: 3,
-    JUMPING_LEFT: 4,
-    JUMPING_RIGHT: 5,
-    DEAD: 6
+    DEAD: 0,
+    STANDING_LEFT: 1,
+    STANDING_RIGHT: 2,
+    WALKING_LEFT: 3,
+    WALKING_RIGHT: 4,
+    JUMPING_LEFT: 5,
+    JUMPING_RIGHT: 6,
+
 }
 
 class PlayerState {
@@ -17,12 +20,16 @@ class PlayerState {
 
 export class StandingLeft extends PlayerState {
     constructor(player) {
-        super("STANDING LEFT")
+        super("STANDING_LEFT")
         this.player = player
         this.animation = this.player.animations.StandingLeft
     }
     enter() {
         // console.log("StandingLeft")
+        if (this.player.isAlive === false) {
+            this.player.setState(playerStates.DEAD)
+            return
+        }
         this.player.endFrame = this.animation.endFrame
         this.player.sWidth = this.player.animationFrame.width
         this.player.sHeight = this.player.animationFrame.height
@@ -43,12 +50,16 @@ export class StandingLeft extends PlayerState {
 
 export class StandingRight extends PlayerState {
     constructor(player) {
-        super("STANDING RIGHT")
+        super("STANDING_RIGHT")
         this.player = player
         this.animation = this.player.animations.StandingRight
     }
     enter() {
         // console.log("StandingRight")
+        if (this.player.isAlive === false) {
+            this.player.setState(playerStates.DEAD)
+            return
+        }
         this.player.endFrame = this.animation.endFrame
         this.player.sWidth = this.player.animationFrame.width
         this.player.sHeight = this.player.animationFrame.height
@@ -67,7 +78,7 @@ export class StandingRight extends PlayerState {
 
 export class WalkingLeft extends PlayerState {
     constructor(player) {
-        super("WALKING LEFT")
+        super("WALKING_LEFT")
         this.player = player
         this.animation = this.player.animations.WalkingLeft
 
@@ -75,17 +86,24 @@ export class WalkingLeft extends PlayerState {
     }
     enter() {
         // console.log("WalkingLeft")
+        if (this.player.isAlive === false) {
+            this.player.setState(playerStates.DEAD)
+            return
+        }
         this.player.endFrame = this.animation.endFrame
         this.player.sWidth = this.player.animationFrame.width
         this.player.sHeight = this.player.animationFrame.height
         this.player.frameY = this.animation.frameY
         this.player.speedX = this.player.maxSpeedX + this.player.speedBonus
+        console.log("🚀 ~ WalkingLeft ~ enter ~ this.player.speedX:", this.player.speedX)
         this.player.velocityX = -100
+        console.log("🚀 ~ WalkingLeft ~ enter ~ this.player.velocityX:", this.player.velocityX)
+
     }
 
     handleInput(input) {
-        if (input.right) this.player.setState(playerStates.WALKING_RIGHT)
-        else if (!input.left) this.player.setState(playerStates.STANDING_LEFT)
+        // if (input.right) this.player.setState(playerStates.WALKING_RIGHT)
+        if (!input.left) this.player.setState(playerStates.STANDING_LEFT)
         else if (input.up) this.player.setState(playerStates.JUMPING_LEFT)
         // if (input === "PRESS Escape") this.player.setState(playerStates.PAUSE)
 
@@ -94,7 +112,7 @@ export class WalkingLeft extends PlayerState {
 
 export class WalkingRight extends PlayerState {
     constructor(player) {
-        super("WALKING RIGHT")
+        super("WALKING_RIGHT")
         this.player = player
         this.animation = this.player.animations.WalkingRight
 
@@ -102,6 +120,10 @@ export class WalkingRight extends PlayerState {
     }
     enter() {
         // console.log("WalkingRight")
+        if (this.player.isAlive === false) {
+            this.player.setState(playerStates.DEAD)
+            return
+        }
         this.player.endFrame = this.animation.endFrame
         this.player.sWidth = this.player.animationFrame.width
         this.player.sHeight = this.player.animationFrame.height
@@ -111,8 +133,7 @@ export class WalkingRight extends PlayerState {
     }
 
     handleInput(input) {
-        if (input.left) this.player.setState(playerStates.WALKING_LEFT)
-        else if (!input.right) this.player.setState(playerStates.STANDING_RIGHT)
+        if (!input.right) this.player.setState(playerStates.STANDING_RIGHT)
         else if (input.up) this.player.setState(playerStates.JUMPING_RIGHT)
         // if (input === "PRESS Escape") this.player.setState(playerStates.PAUSE)
     }
@@ -120,10 +141,14 @@ export class WalkingRight extends PlayerState {
 
 export class JumpingLeft extends PlayerState {
     constructor(player) {
-        super("JUMPING LEFT")
+        super("JUMPING_LEFT")
         this.player = player
     }
     enter() {
+        if (this.player.isAlive === false) {
+            this.player.setState(playerStates.DEAD)
+            return
+        }
         if (this.player.onGround()) this.player.velocityY -= 300
         // this.player.speedX = this.player.maxSpeedX * -2
     }
@@ -138,10 +163,15 @@ export class JumpingLeft extends PlayerState {
 
 export class JumpingRight extends PlayerState {
     constructor(player) {
-        super("JUMPING RIGHT")
+        super("JUMPING_RIGHT")
         this.player = player
     }
     enter() {
+        if (this.player.isAlive === false) {
+            this.player.setState(playerStates.DEAD)
+            return
+        }
+
         if (this.player.onGround()) this.player.velocityY -= 300
         // this.player.speedX = this.player.maxSpeedX * 2
     }
@@ -159,17 +189,31 @@ export class Dead extends PlayerState {
     constructor(player) {
         super("DEAD")
         this.player = player
+        this.animation = this.player.animations.StandingRight
+
     }
     enter() {
-        this.player.isAlive = false
-        this.player.spriteSheetObj.endFrame = 0
-        this.player.spriteSheetObj.frameY = 0
-        this.player.velocityY = 500
-        this.player.speedX = 0
+
+        this.player.endFrame = this.animation.endFrame
+        this.player.sWidth = this.player.animationFrame.width
+        this.player.sHeight = this.player.animationFrame.height
+        this.player.frameY = this.animation.frameY
+        this.player.weight = 0
+        this.player.velocityX = 0
+        this.player.velocityY = -100
 
     }
-
-    handleInput(input) {
-        // console.log(input)
+    exit() {
+        console.log("resurrection")
+    }
+    handleInput() {
+        // if (this.player.isOutOfBounds() === true) {
+        //     console.log("player is out of bounds")
+        // }
+        // 
+        // console.log('handleInput')
+        // if (this.player.isAlive) {
+        //     this.player.setState(playerStates.STANDING_LEFT)
+        // }
     }
 }

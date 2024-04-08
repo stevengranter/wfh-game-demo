@@ -64,8 +64,11 @@ export default class Layer {
             this.dx += this.velocityX * deltaTime
             this.dy += this.velocityY * deltaTime
         } else {
-            this.dx += ((-this.player.speedX * this.playerScrollFactor + this.velocityX) * deltaTime)
-            this.dy += ((-this.player.speedY * this.playerScrollFactor + this.velocityY) * deltaTime)
+            // console.log(this.player.speedX)
+            this.dx += ((-(this.player.velocityX * this.player.speedX * this.playerScrollFactor / 100) + this.velocityX) * deltaTime)
+            // this.dy += ((( /*this.player.velocityY */ -2 * deltaTime) * this.playerScrollFactor + this.velocityY) * deltaTime)
+            this.dy += ((-(this.player.velocityY * this.player.speedY * this.playerScrollFactor / 100) + this.velocityY) * deltaTime)
+
         }
     }
 }

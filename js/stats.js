@@ -8,6 +8,7 @@ export default class Stats extends Observable {
     #score
 
 
+
     constructor() {
 
         super()
@@ -21,9 +22,10 @@ export default class Stats extends Observable {
 
         this.#score
 
-        this.playerZeroHealthEvent = new CustomEvent('playerZeroHealth', {
+
+        this.deathEvent = new CustomEvent('playerDeath', {
             detail: {
-                message: 'Player has reached zero health!',
+                message: 'Player has died! 💀',
             }
         })
 
@@ -68,11 +70,6 @@ export default class Stats extends Observable {
     set health(value) {
         // Clamp the value to ensure it's not less than 0 and not greater than #healthMax
         this.#health = Math.max(0, Math.min(value, this.#healthMax))
-        if (this.#health <= 0) {
-            document.dispatchEvent(this.playerZeroHealthEvent)
-            this.lives--
-        }
-
         // Notify about the health change
         this.notify({ health: this.#health })
     }

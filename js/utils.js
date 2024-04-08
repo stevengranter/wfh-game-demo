@@ -3,6 +3,40 @@ export function drawStatusText(context, input, x, y) {
     context.fillText(input, x, y)
 }
 
+export function typeWriter(elementId, text, typingDelay) {
+    let index = 0
+    const element = document.getElementById(elementId)
+
+    // Clear existing text
+    element.innerHTML = ''
+
+    // Function to add characters one by one
+    function addCharacter() {
+        // Handle HTML tags (like <strong>)
+        if (text[index] === '<') {
+            let tag = ''
+            do {
+                tag += text[index]
+                index++
+            } while (text[index] !== '>' && index < text.length)
+            tag += '>'
+            index++
+            element.innerHTML += tag
+        } else {
+            // Add text character
+            element.innerHTML += text[index++]
+        }
+
+        // Continue the effect if there are more characters
+        if (index < text.length) {
+            setTimeout(addCharacter, typingDelay)
+        }
+    }
+
+    // Start the typewriter effect
+    addCharacter()
+}
+
 export function wait(delay) {
     return new Promise((resolve) => {
         setTimeout(resolve, delay)

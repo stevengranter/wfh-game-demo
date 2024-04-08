@@ -7,7 +7,7 @@
   --clr-green: #a0cc50;
   --clr-sky-blue: #0ad1ea;
   --clr-purple: #d379ff;
-  --clr-violet: #s;
+  --clr-violet: #7b28a4;
 }
 
 /* Google font embed code */
@@ -709,28 +709,33 @@ button {
   transition: background-color 0.6s, width 0.3s linear;
 }
 #hud-score-stats {
+  font-family: Coiny, sans-serif;
   display: flex;
   flex-direction: row;
   align-items: center;
-  vertical-align: middle;
+  /* vertical-align: middle; */
 }
 #score {
   font-family: Coiny, sans-serif;
   font-size: 3svw;
-  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
-    1px 1px 0 #fff;
-  color: var(--clr-violet);
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000,
+    2px 2px 0 #000;
+  color: var(--clr-gold);
   display: block;
-  /* margin: 3%; */
-  padding-top: 0;
-  /* line-height: 2vh; */
-  /* border: 1px solid magenta; */
+  /* padding-top: 3%; */
+  /* line-height: 1vh; */
+  /* outline: 3px solid white; */
+  /* aborder: 1px solid magenta; */
 }
 
-#hud-score-status {
+#score-remaining {
   font-family: Coiny, sans-serif;
-  font-size: 1.5svw;
+  font-size: 2svw;
   margin-left: 10px;
+  align-self: center;
+  color: black;
+  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
+    1px 1px 0 #fff;
 }
 
 #hud-combo {
@@ -742,7 +747,7 @@ button {
   line-height: 1rem;
   text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
     1px 1px 0 #000;
-  margin: 3%;
+  margin: 2% 0;
   padding: 0;
   /* border: 1px solid magenta; */
 }

@@ -1,13 +1,12 @@
 import { wait, toKebabCase } from "./utils.js"
+import Observable from "./observable.js"
 
-export class PauseMenu {
+export class PauseMenu extends Observable {
   constructor(onComplete) {
-    this.onComplete = onComplete
+    super()
+    onComplete()
   }
 
-  onComplete() {
-    console.log("PauseMenu.onComplete")
-  }
 
   init(container) {
     this.createElement()
@@ -87,8 +86,8 @@ export class PauseMenu {
               </div>
             </div>`
     wait(200).then(() => {
-      this.element.addEventListener("keydown", (e) => {
-        if (e = "Escape") console.log("Escape Pressed")
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") console.log("Escape Pressed")
       })
     })
 
