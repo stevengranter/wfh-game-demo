@@ -5,11 +5,15 @@ import Sprite from "./sprite.js"
 import { spriteTags } from "./sprite.js"
 import GameObject from "./game-object.js"
 
-const gameStates = {
+export const gameStateKeys = {
+    START: "start",
+    INTRO: "intro",
     RUNNING: "running",
-    PAUSED: "paused",
-    GAMEOVER: "gameover",
-    END: "end"
+    PAUSED_BY_PLAYER: "paused",
+    LEVELEND: "level-end",
+    GAMEOVER: "game-over",
+    END: "game-end",
+    CREDITS: "credits",
 }
 
 export class GameWorld extends Observable {
@@ -32,6 +36,8 @@ export class GameWorld extends Observable {
 
 
         this.isPaused = false
+        this.#gameState = gameStateKeys.START
+
         this.lastTime = 0
         this.deltaTime = 1
 
@@ -86,22 +92,15 @@ export class GameWorld extends Observable {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
-        // console.log(this.isPaused)
         if (this.isPaused === false) {
-            // console.log(deltaTime)
-
             this.deltaTime = (timeStamp - this.lastTime) / 1000
             this.lastTime = timeStamp
 
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-            // ui.timerHUD.innerText = Math.floor(currentScene.music.duration - currentScene.music.currentTime)
-
 
             this.currentScene.update(this.deltaTime)
             this.player.update(this.input, this.deltaTime)
-            // console.log(this.player.velocityY)
-            // console.log(this.player.isAlive)
-            // console.log(this.player)
+
             if (this.currentScene.music.currentTime >= 0) {
                 // Only detect collisions when player is alive
                 if (this.player.isAlive === true) {
@@ -118,14 +117,16 @@ export class GameWorld extends Observable {
                                     this.calculateCombo()
                                     this.player.stats.health += collider.healthValue
 
-                                    // this.player.stats.score += collider.pointValue
+                                    this.player.stats.score += collider.pointValue
                                     // this.ui.elements.scoreRemaining.innerText = "\ " + (2500 - this.player.stats.score) + " to progress"
                                     this.ui.elements.scoreRemaining.innerText = `( ${2500 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
 
-                                    if (this.player.stats.score >= 5000) {
+                                    if (this.player.stats.score >= 2500) {
                                         // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
                                         // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
                                         this.player.stats.progress = 1
+
+                                        this.level0Complete()
                                     }
                                     // calculateCombo()
                                 } else if (collider.spriteTag === spriteTags.POO) {
@@ -149,24 +150,6 @@ export class GameWorld extends Observable {
                     console.log("gameloop: player is dead")
                     this.player.isAlive = false
                     this.player.setState[playerStates.DEAD]
-                    // console.log("player.dx", this.player.dx)
-                    // console.log("player.dy", this.player.dy)
-                    // console.log(this.player.isOutOfBounds())
-                    // if (this.player.isOutOfBounds() === true) {
-                    //     this.player.isAlive = true
-                    // }
-                    // this.player.stats.lives--
-                    // this.player.isAlive = false
-
-                    // if (this.player.stats.lives > 1) {
-                    //     // ui.livesCounterHUD.innerText = "x" + this.playerLives
-
-                    // } else if (this.player.stats.lives = 1) {
-                    //     // ui.livesCounterHUD.innerText = ""
-                    // } else if (this.player.stats.lives <= 0) {
-                    //     endGame()
-                    // }
-
 
                 }
 
@@ -181,7 +164,7 @@ export class GameWorld extends Observable {
 
             requestAnimationFrame(this.loop.bind(this))
         } else {
-            this.pauseGame()
+            // this.pauseGame()
             console.log("game is paused")
         }
 
@@ -191,6 +174,14 @@ export class GameWorld extends Observable {
         console.log("game has stopped")
     }
 
+    level0Complete() {
+        this.isPaused = true
+        window.music.pause()
+        console.log("winner winner chicken dinner")
+        this.#gameState = gameStateKeys.LEVELEND
+        this.pauseGame()
+
+    }
     message(data) {
         // console.log(this.constructor.name + " received :", data)
     }
@@ -198,7 +189,17 @@ export class GameWorld extends Observable {
     pauseGame() {
         if (this.isPaused) {
             // this.notify({ gameState: "paused" })
-            this.ui.showUI("paused")
+            console.log(this.gameState)
+            switch (this.#gameState) {
+                case gameStateKeys.PAUSED_BY_PLAYER:
+                    this.ui.showUI("paused")
+                    break
+                case gameStateKeys.LEVELEND:
+                    this.ui.showUI("level-end")
+                    break
+                default:
+                    console.log("default: No UI for gamestate")
+            }
 
             this.musicPausedTime = window.music.currentTime
             window.music.pause()

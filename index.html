@@ -90,11 +90,21 @@
           id="game-screen__menu-overlay"
           class="overlay"
           data-ui="true"
-          data-gamestate="paused">
+          >
           <!-- START: #menu-screen -->
-          <div id="pause-menu--container" class="ui-panel" data-ui="true">
+          <div id="pause-menu--container" class="ui-panel" data-ui="true" data-gamestate="paused">
            
           </div>
+
+         <div id="level-end--container" class="ui-panel" data-ui="true" data-gamestate="level-end">
+          <h3>Level End</h3>
+          <ui>
+            <li>Wieners caught</li>
+            <li>Score collected</li>
+            <li>Lucky Seagull Blessings</li>
+            <li>Rating: ⭐️ ⭐️ ⭐️</li>
+          </ui>
+        </div>
           <!-- <div id="congrats-screen" class="ui-panel">
             <header><h2>Next level unlocked!</h2></header>
             <p>

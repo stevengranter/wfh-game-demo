@@ -123,29 +123,29 @@ export default class InputHandler {
             case "d":
             case "D":
                 this.right = isKeyPressed
-                console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.right:", this.right)
+                // console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.right:", this.right)
                 break
             case "ArrowLeft":
             case "a":
             case "A":
                 this.left = isKeyPressed
-                console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.left:", this.left)
-                // console.log("🚀 ~ InputHandler ~ listenForKeys ~ left:", this.left)
+                // console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.left:", this.left)
+                // // console.log("🚀 ~ InputHandler ~ listenForKeys ~ left:", this.left)
                 break
             case "ArrowUp":
             case "w":
             case "W":
             case " ":
                 this.up = isKeyPressed
-                console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.up:", this.up)
                 // console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.up:", this.up)
+                // // console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.up:", this.up)
                 break
             case "ArrowDown":
             case "s":
             case "S":
                 this.down = isKeyPressed
-                console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.down:", this.down)
                 // console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.down:", this.down)
+                // // console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.down:", this.down)
                 break
             case "Escape":
                 this.escape = isKeyPressed
@@ -166,15 +166,15 @@ export default class InputHandler {
             switch (e.button) {
                 case 0:
                     this.left = isButtonPressed
-                    // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
+                    // // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
                     break
                 case 1:
                     this.up = isButtonPressed
-                    // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.up:", this.up)
+                    // // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.up:", this.up)
                     break
                 case 2:
                     this.right = isButtonPressed
-                    // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
+                    // // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
                     break
                 default:
                     break

@@ -98,8 +98,8 @@ export default class Player extends Sprite {
     }
 
     message(data) {
-        console.log(this.constructor.name + " received ", data)
-        console.log("timestamp:", Date.now())
+        // console.log(this.constructor.name + " received ", data)
+        // console.log("timestamp:", Date.now())
 
         // Check if data exists and has the health property before accessing it
         // if (data && data.health && data.health <= 0) {

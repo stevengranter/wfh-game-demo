@@ -1,5 +1,6 @@
 import { wait, toKebabCase } from "./utils.js"
 import Observable from "./observable.js"
+import { gameStateKeys } from "./game-world.js"
 
 export class PauseMenu extends Observable {
   constructor(ui) {
@@ -94,6 +95,7 @@ export class PauseMenu extends Observable {
         if (e.key === "Escape") {
           const gameWorld = window.gameWorld
           gameWorld.isPaused = !gameWorld.isPaused
+          gameWorld.gameState = gameStateKeys.PAUSED_BY_PLAYER
           gameWorld.pauseGame()
         }
       })
