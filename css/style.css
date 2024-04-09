@@ -592,6 +592,15 @@ button {
   aspect-ratio: 1;
 }
 
+img#excited-chicken {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  max-width: 50%;
+  transform: rotate(-20deg);
+  transform: translate(40px, 70px) rotate(-15deg);
+}
+
 /* #title-screen img {
   max-height: 100%;
 } */
