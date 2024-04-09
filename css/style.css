@@ -96,7 +96,6 @@
   }
 
   .overlay {
-    display: none;
     position: absolute;
     width: 83%;
     height: auto;

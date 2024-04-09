@@ -326,7 +326,7 @@ window.addEventListener("load", function () {
     // blurBackground()
     function initPlayer() {
         player.stats.lives = 3
-        player.stats.score = 0
+        player.stats.score = 2300
         player.stats.progress = 0
         player.stats.healthMax = 100
         player.stats.health = 100
