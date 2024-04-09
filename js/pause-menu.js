@@ -89,6 +89,13 @@ export class PauseMenu extends Observable {
       window.addEventListener("keydown", (e) => {
         if (e.key === "Escape") console.log("Escape Pressed")
       })
+      const musicVolumeSlider = this.element.querySelector("#music-range")
+      const musicElement = window.music
+
+      musicVolumeSlider.addEventListener("input", (e) => {
+        const volumeValue = e.target.value
+        musicElement.volume = volumeValue / 100 // Assuming the slider range is from 0 to 100
+      })
     })
 
   }

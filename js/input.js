@@ -20,6 +20,8 @@ export default class InputHandler {
 
         const gameScreen = this.ui.elements.gameScreen
 
+        // console.log(this)
+
     }
 
     processGamepadInput(gamepad) {
@@ -121,11 +123,13 @@ export default class InputHandler {
             case "d":
             case "D":
                 this.right = isKeyPressed
+                console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.right:", this.right)
                 break
             case "ArrowLeft":
             case "a":
             case "A":
                 this.left = isKeyPressed
+                console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.left:", this.left)
                 // console.log("🚀 ~ InputHandler ~ listenForKeys ~ left:", this.left)
                 break
             case "ArrowUp":
@@ -133,12 +137,14 @@ export default class InputHandler {
             case "W":
             case " ":
                 this.up = isKeyPressed
+                console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.up:", this.up)
                 // console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.up:", this.up)
                 break
             case "ArrowDown":
             case "s":
             case "S":
                 this.down = isKeyPressed
+                console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.down:", this.down)
                 // console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.down:", this.down)
                 break
             case "Escape":

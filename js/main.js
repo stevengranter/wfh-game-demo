@@ -73,18 +73,7 @@ window.addEventListener("load", function () {
     // Initialize UI elements //
     const ui = new UI("[data-ui]", player)
     console.dir(ui)
-    const pauseMenu = new PauseMenu(() => {
-        window.addEventListener("keydown", (e) => {
-            switch (e.key) {
-                case "Escape":
-                    isPaused = !isPaused
-                    // console.log("pause toggled")
-                    pauseGame()
-                    break
-            }
-        })
-    })
-    pauseMenu.init(ui.elements.pauseMenuContainer)
+
 
     // Initialize Input handler
 
@@ -94,15 +83,30 @@ window.addEventListener("load", function () {
 
     console.log(ui)
 
+    // Initialize Game World
+
+    const game = new GameWorld(player, ui, input)
+    game.init(player, input, ui)
+
     // Event listeners
     ui.elements.startButton.addEventListener("click", (e) => {
         runIntro()
     })
 
-    // Initialize Game World
+    const pauseMenu = new PauseMenu(() => {
+        window.addEventListener("keydown", (e) => {
+            switch (e.key) {
+                case "Escape":
+                    game.isPaused = !game.isPaused
+                    console.log("pause toggled")
+                    game.pauseGame()
+                    break
+            }
+        })
+    })
+    pauseMenu.init(ui.elements.pauseMenuContainer)
 
-    const game = new GameWorld(player, ui, input)
-    game.init(player, input, ui)
+
 
 
 
@@ -389,15 +393,17 @@ window.addEventListener("load", function () {
         superNantendo.classList.add("teal-bg")
         // canvas.classList.remove("hidden")
 
-        game.loop(0, scene01)
-        // if (currentScene.isMusicLoaded) {
-        //     console.log("music is loaded")
-        //     // runIntro()
-        //     currentScene.music.play()
-        //     loop(0)
 
-        // }
+        if (currentScene.isMusicLoaded) {
+            console.log("music is loaded")
+            // runIntro()
+            currentScene.music.play()
+            game.loop(0, scene01)
 
+
+            //}
+
+        }
     }
 
     function endGame() {

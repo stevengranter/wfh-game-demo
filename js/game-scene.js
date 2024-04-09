@@ -22,7 +22,11 @@ export class GameScene {
         this.isMusicLoaded = false
 
 
+
         this.sceneTime = 0
+
+        // TODO: fix - doing for now so PauseMenu can access music object
+        window.music = this.music
 
     }
 

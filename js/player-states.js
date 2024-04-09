@@ -95,9 +95,9 @@ export class WalkingLeft extends PlayerState {
         this.player.sHeight = this.player.animationFrame.height
         this.player.frameY = this.animation.frameY
         this.player.speedX = this.player.maxSpeedX + this.player.speedBonus
-        console.log("🚀 ~ WalkingLeft ~ enter ~ this.player.speedX:", this.player.speedX)
+        // console.log("🚀 ~ WalkingLeft ~ enter ~ this.player.speedX:", this.player.speedX)
         this.player.velocityX = -100
-        console.log("🚀 ~ WalkingLeft ~ enter ~ this.player.velocityX:", this.player.velocityX)
+        // console.log("🚀 ~ WalkingLeft ~ enter ~ this.player.velocityX:", this.player.velocityX)
 
     }
 

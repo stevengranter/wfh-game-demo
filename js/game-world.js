@@ -69,7 +69,8 @@ export class GameWorld extends Observable {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
-        if (!this.isPaused) {
+        console.log(this.isPaused)
+        if (this.isPaused === false) {
             // console.log(deltaTime)
 
             this.deltaTime = (timeStamp - this.lastTime) / 1000
@@ -163,7 +164,7 @@ export class GameWorld extends Observable {
 
             requestAnimationFrame(this.loop.bind(this))
         } else {
-            pauseGame()
+            this.pauseGame()
             console.log("game is paused")
         }
 
@@ -181,14 +182,14 @@ export class GameWorld extends Observable {
         if (this.isPaused) {
             // this.notify({ gameState: "paused" })
             this.ui.showUI("paused")
-            musicPausedTime = this.currentScene.music.currentTime
+            this.musicPausedTime = this.currentScene.music.currentTime
             this.currentScene.music.pause()
         }
         else {
             this.ui.showUI("play")
-            this.currentScene.music.currentTime = musicPausedTime
+            this.currentScene.music.currentTime = this.musicPausedTime
             this.currentScene.music.play()
-            game.loop(lastTime)
+            this.loop(this.lastTime)
             this.isPaused = false
         }
     }
