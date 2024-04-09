@@ -17,15 +17,32 @@ export class GameWorld extends Observable {
     #gameState
     constructor(player, ui, input) {
         super()
+        this.isReady = false
+        this.player = player
+        this.ui = ui
+        this.input = input
+
+        if (this.player && this.ui && this.input) {
+            this.isReady = true
+        }
+
+
         this.canvas = document.getElementById("game-screen__canvas")
         this.ctx = this.canvas.getContext("2d")
 
-        this.isReady = false
+
         this.isPaused = false
         this.lastTime = 0
         this.deltaTime = 1
 
         this.comboCounter = 0
+
+        window.gameWorld = this
+        console.log(window)
+        console.log(this)
+
+
+
         // console.log(this)
     }
 
@@ -51,14 +68,14 @@ export class GameWorld extends Observable {
         this.notify({ currentScene: this.#currentScene })
     }
 
-    init(player, input, ui) {
-        this.player = player
-        this.ui = ui
-        this.input = input
-        if (this.player && this.ui && this.input) {
-            this.isReady = true
-        }
-    }
+    // init(player, input, ui) {
+    //     this.player = player
+    //     this.ui = ui
+    //     this.input = input
+    //     if (this.player && this.ui && this.input) {
+    //         this.isReady = true
+    //     }
+    // }
 
     loop(timeStamp) {
         // console.log("in loop function")
@@ -69,7 +86,7 @@ export class GameWorld extends Observable {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
-        console.log(this.isPaused)
+        // console.log(this.isPaused)
         if (this.isPaused === false) {
             // console.log(deltaTime)
 
@@ -81,8 +98,8 @@ export class GameWorld extends Observable {
 
 
             this.currentScene.update(this.deltaTime)
-            this.player.update(this.input, this.deltaTime, 475, 270)
-            console.log(this.player.velocityY)
+            this.player.update(this.input, this.deltaTime)
+            // console.log(this.player.velocityY)
             // console.log(this.player.isAlive)
             // console.log(this.player)
             if (this.currentScene.music.currentTime >= 0) {
@@ -182,13 +199,14 @@ export class GameWorld extends Observable {
         if (this.isPaused) {
             // this.notify({ gameState: "paused" })
             this.ui.showUI("paused")
-            this.musicPausedTime = this.currentScene.music.currentTime
-            this.currentScene.music.pause()
+
+            this.musicPausedTime = window.music.currentTime
+            window.music.pause()
         }
         else {
             this.ui.showUI("play")
-            this.currentScene.music.currentTime = this.musicPausedTime
-            this.currentScene.music.play()
+            window.music.currentTime = this.musicPausedTime
+            window.music.play()
             this.loop(this.lastTime)
             this.isPaused = false
         }

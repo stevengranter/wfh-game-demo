@@ -1,6 +1,7 @@
 
 import Sprite from "./sprite.js"
 import Stats from "./stats.js"
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
 import {
     Dead,
     StandingLeft,
@@ -117,7 +118,7 @@ export default class Player extends Sprite {
 
 
 
-    update(input, deltaTime, gameWidth, gameHeight) {
+    update(input, deltaTime) {
         // if (this.isOutOfBounds()) {
         //     console.log("Player out of bounds")
         //     this.startNewLife()
@@ -175,7 +176,7 @@ export default class Player extends Sprite {
                 this.velocityY = 0
             }
             // Prevent player from falling through floor
-            if (this.dy > gameHeight - this.dHeight) this.dy = Math.floor(gameHeight - this.dHeight - this.floorHeight)
+            if (this.dy > CANVAS_HEIGHT - this.dHeight) this.dy = Math.floor(CANVAS_HEIGHT - this.dHeight - this.floorHeight)
         } else {
             // this.dy -= 2
 

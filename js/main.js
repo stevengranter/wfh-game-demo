@@ -69,10 +69,11 @@ window.addEventListener("load", function () {
         }
     }
     const player = new Player(playerConfig)
+    console.log(player)
 
     // Initialize UI elements //
     const ui = new UI("[data-ui]", player)
-    console.dir(ui)
+
 
 
     // Initialize Input handler
@@ -80,31 +81,22 @@ window.addEventListener("load", function () {
     // Input Handler
     // console.log(this.document)
     const input = new InputHandler(ui)
+    console.dir(input)
 
-    console.log(ui)
 
     // Initialize Game World
 
     const game = new GameWorld(player, ui, input)
-    game.init(player, input, ui)
+    console.log(game)
 
     // Event listeners
     ui.elements.startButton.addEventListener("click", (e) => {
         runIntro()
     })
 
-    const pauseMenu = new PauseMenu(() => {
-        window.addEventListener("keydown", (e) => {
-            switch (e.key) {
-                case "Escape":
-                    game.isPaused = !game.isPaused
-                    console.log("pause toggled")
-                    game.pauseGame()
-                    break
-            }
-        })
-    })
-    pauseMenu.init(ui.elements.pauseMenuContainer)
+    const pauseMenu = new PauseMenu(ui)
+
+    console.log(ui)
 
 
 
@@ -287,7 +279,7 @@ window.addEventListener("load", function () {
     let currentScene = scene01
     ui.music = currentScene.music
 
-    let gameWorld = new GameWorld(canvas, 475, 270, player, currentScene)
+
 
 
 

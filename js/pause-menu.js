@@ -2,13 +2,17 @@ import { wait, toKebabCase } from "./utils.js"
 import Observable from "./observable.js"
 
 export class PauseMenu extends Observable {
-  constructor(onComplete) {
+  constructor(ui) {
     super()
-    onComplete()
+    this.ui = ui
+    this.init()
   }
 
 
-  init(container) {
+  init() {
+    const containerName = toKebabCase(this.constructor.name) + "--container"
+    const container = document.getElementById(containerName)
+    console.log(container)
     this.createElement()
     container.appendChild(this.element)
   }
@@ -87,18 +91,25 @@ export class PauseMenu extends Observable {
             </div>`
     wait(200).then(() => {
       window.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") console.log("Escape Pressed")
+        if (e.key === "Escape") {
+          const gameWorld = window.gameWorld
+          gameWorld.isPaused = !gameWorld.isPaused
+          gameWorld.pauseGame()
+        }
       })
+
       const musicVolumeSlider = this.element.querySelector("#music-range")
       const musicElement = window.music
 
       musicVolumeSlider.addEventListener("input", (e) => {
         const volumeValue = e.target.value
-        musicElement.volume = volumeValue / 100 // Assuming the slider range is from 0 to 100
+        musicElement.volume = volumeValue / 100
       })
     })
 
   }
+
+  open() { }
 
   close() {
 
