@@ -325,13 +325,7 @@ window.addEventListener("load", function () {
 
     // blurBackground()
     function initPlayer() {
-        player.stats.subscribe(game)
-        player.stats.subscribe(player)
-        player.stats.subscribe(ui.lives)
-        player.stats.subscribe(ui.score)
-        player.stats.subscribe(ui.healthBarWidth)
-        player.stats.subscribe(ui.healthBarColor)
-        player.stats.subscribe(ui.scoreRemaining)
+
 
 
         player.stats.lives = 3
@@ -341,6 +335,14 @@ window.addEventListener("load", function () {
         player.stats.health = 100
 
         player.isAlive = true
+
+        // player.stats.subscribe(game) // TODO: will double notifications for player
+        player.stats.subscribe(player)
+        player.stats.subscribe(ui.lives)
+        player.stats.subscribe(ui.score)
+        player.stats.subscribe(ui.healthBarWidth)
+        player.stats.subscribe(ui.healthBarColor)
+        player.stats.subscribe(ui.scoreRemaining)
 
     }
     // Game state functions

@@ -118,7 +118,7 @@ export class GameWorld extends Observable {
                                     this.calculateCombo()
                                     this.player.stats.health += collider.healthValue
 
-                                    this.player.stats.score += collider.pointValue
+                                    // this.player.stats.score += collider.pointValue
                                     // this.ui.elements.scoreRemaining.innerText = "\ " + (2500 - this.player.stats.score) + " to progress"
                                     this.ui.elements.scoreRemaining.innerText = `( ${2500 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
 

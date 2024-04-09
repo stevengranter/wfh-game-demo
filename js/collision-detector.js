@@ -1,4 +1,5 @@
 
+import { wait } from "./utils.js"
 export default class CollisionDetector {
 
   constructor() { }
@@ -17,6 +18,7 @@ export default class CollisionDetector {
         if (!object.isScored) {
           object.isScored = true
           object.isVisible = false
+          wait(500) // wait for 0.5 seconds to avoid returning multiple collisions
           return object
         } else {
           return false
