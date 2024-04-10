@@ -1,7 +1,6 @@
 import CollisionDetector from "./collision-detector.js"
 import Observable from "./observable.js"
 import { playerStates } from "./player-states.js"
-import Sprite from "./sprite.js"
 import { spriteTags } from "./sprite.js"
 import GameObject from "./game-object.js"
 
@@ -9,7 +8,7 @@ export const gameStateKeys = {
     START: "start",
     INTRO: "intro",
     RUNNING: "running",
-    PAUSED_BY_PLAYER: "paused",
+    PAUSED_BY_PLAYER: "paused-by-player",
     LEVELEND: "level-end",
     GAMEOVER: "game-over",
     END: "game-end",
@@ -19,6 +18,7 @@ export const gameStateKeys = {
 export class GameWorld extends Observable {
     #currentScene
     #gameState
+    #timeRemaining
     constructor(player, ui, input) {
         super()
         this.isReady = false
@@ -37,6 +37,8 @@ export class GameWorld extends Observable {
 
         this.isPaused = false
         this.#gameState = gameStateKeys.START
+        this.musicStarted = false
+        this.musicPaused = false
 
         this.lastTime = 0
         this.deltaTime = 1
@@ -74,14 +76,40 @@ export class GameWorld extends Observable {
         this.notify({ currentScene: this.#currentScene })
     }
 
-    // init(player, input, ui) {
-    //     this.player = player
-    //     this.ui = ui
-    //     this.input = input
-    //     if (this.player && this.ui && this.input) {
-    //         this.isReady = true
-    //     }
-    // }
+    notifyTimeRemaining() {
+        this.#timeRemaining = window.music.duration - window.music.currentTime
+        this.notify({ timeRemaining: Math.floor(this.#timeRemaining) })
+        console.log(Math.floor(this.#timeRemaining))
+    }
+
+    countDown(timeToCount) {
+        let i = timeToCount
+        let timerId
+        let paused = false
+
+        function runTimer() {
+            if (i > 0 && !paused) {
+                console.log(this.musicPaused)
+                this.notifyTimeRemaining()
+                i--
+                timerId = setTimeout(runTimer.bind(this), 1000) // Binding 'this' to maintain context
+            }
+        }
+
+        this.pauseTimer = function () {
+            paused = true
+            clearTimeout(timerId)
+        }
+
+        this.resumeTimer = function () {
+            paused = false
+            runTimer.call(this)
+        }
+
+        runTimer.call(this) //
+
+    }
+
 
     loop(timeStamp) {
         // console.log("in loop function")
@@ -149,7 +177,7 @@ export class GameWorld extends Observable {
                 } else {
                     console.log("gameloop: player is dead")
                     this.player.isAlive = false
-                    this.player.setState[playerStates.DEAD]
+                    this.player.setState(playerStates.DEAD)
 
                 }
 
@@ -188,8 +216,8 @@ export class GameWorld extends Observable {
 
     pauseGame() {
         if (this.isPaused) {
-            // this.notify({ gameState: "paused" })
             console.log(this.gameState)
+            this.toggleMusic()
             switch (this.#gameState) {
                 case gameStateKeys.PAUSED_BY_PLAYER:
                     this.ui.showUI("paused")
@@ -201,15 +229,32 @@ export class GameWorld extends Observable {
                     console.log("default: No UI for gamestate")
             }
 
-            this.musicPausedTime = window.music.currentTime
-            window.music.pause()
+
+
         }
         else {
             this.ui.showUI("play")
-            window.music.currentTime = this.musicPausedTime
-            window.music.play()
+            // window.music.currentTime = this.musicPausedTime
+
+            this.toggleMusic()
             this.loop(this.lastTime)
             this.isPaused = false
+        }
+    }
+
+    toggleMusic() {
+        if (this.musicStarted === false) {
+            window.music.play()
+            this.musicPaused = false
+            this.musicStarted = true
+            this.countDown(window.music.duration)
+        }
+        else if (this.musicPaused === false) {
+            window.music.pause()
+            this.musicPaused = true
+        } else {
+            window.music.play()
+            this.musicPaused = false
         }
     }
 

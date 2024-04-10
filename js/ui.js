@@ -10,6 +10,8 @@ export default class UI {
             data = 5000 - this.score
             return data
         })
+        this.timeRemaining = new DataBinder("time-remaining", "textContent")
+
         this.healthBarWidth = new DataBinder("health", "style.width", (data) => {
             data = data + "%"
             return data
@@ -150,6 +152,7 @@ export class DataBinder {
             if (this.attribute.startsWith('style.')) {
                 const styleAttribute = this.attribute.slice(6)
                 element.style[styleAttribute] = value
+
             } else {
                 element[this.attribute] = value
             }

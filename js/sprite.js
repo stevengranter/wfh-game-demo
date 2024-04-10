@@ -23,15 +23,13 @@ export default class Sprite {
 
         if (typeof spriteConfigObject === "object" && ("spriteSrc" in spriteConfigObject)) {
             // console.log("all good")
+            this.makeSpriteFromConfigObj(spriteConfigObject)
         } else {
+            // TODO: create makeSpriteFromNothing when argument is not a spriteConfigObject
             console.error("spriteConfigObject is not an object or in the wrong format")
         }
 
-        Object.entries(spriteConfigObject).forEach(([key, value]) => {
-            // console.log(key + ":" + value)
-            this[key] = value
 
-        })
 
         const imageObject = new Image()
         imageObject.src = this.spriteSrc
@@ -92,6 +90,17 @@ export default class Sprite {
 
 
     }
+
+    makeSpriteFromConfigObj(spriteConfigObject) {
+        Object.entries(spriteConfigObject).forEach(([key, value]) => {
+            // console.log(key + ":" + value)
+            this[key] = value
+
+        })
+    }
+
+    // TODO: create method
+    // makeSpriteFromNothing() {}
 
     fetchSpriteJSON(filePath) {
         fetchJsonFile(filePath)

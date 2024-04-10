@@ -18,7 +18,6 @@ export default class InputHandler {
         })
         addEventListener("keyup", (e) => this.listenForKeys(e))
 
-        const gameScreen = this.ui.elements.gameScreen
 
         // console.log(this)
 
@@ -53,8 +52,7 @@ export default class InputHandler {
     }
 
     initTouches() {
-        // console.log("initTouches")
-        // console.dir(this.ui.elements)
+
 
         let uiElements = Object.values(this.ui.elements)
 
@@ -104,13 +102,7 @@ export default class InputHandler {
 
             }
         })
-        // for (let i = 0; i < this.ui.elements.length; i++) {
-        //     let currentElement = this.ui.elements[i]
-        //     console.dir("helloTHERE!!")
-        //     if (currentElement.dataset.events === "touches") {
-        //         console.log("touches")
-        //     }
-        // }
+
     }
 
     listenForKeys(e) {

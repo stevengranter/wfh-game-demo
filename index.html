@@ -49,9 +49,7 @@
             <div id="debug-player-speedX">player.speedX = <span></span></div>
             <div id="debug-player-speedY">player.speedY = <span></span></div>
           </div>
-          <div id="level-stats">
-            <div id="level-timer"></div>
-          </div>
+         
           <div id="game-screen__ingame-overlay__hud" data-ui="true">
             <div id="hud-player-stats">
               <div id="hud-lives" class="pixelated">
@@ -84,6 +82,10 @@
               <span>C</span><span>O</span><span>M</span><span>B</span
               ><span>O</span>
             </div>
+
+             <div id="level-stats">
+            <div id="time-remaining"></div>
+          </div>
           </div>
         </div>
         <div
@@ -136,11 +138,11 @@
           <div id="intro-screen" data-ui="true" class="hidden">
             <div>
               <img
-                id="character-portrait"
+                id="popup-nan"
                 src="./images/nan-portrait-3d.webp"
                 alt=""
                 data-ui="true"
-                class="hidden"
+                class="hidden character-portrait"
               />
               <div class="dialog-panel itim-regular" id="intro-dialog" data-ui="true">
                 <div>

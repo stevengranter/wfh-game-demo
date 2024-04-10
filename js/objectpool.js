@@ -30,6 +30,7 @@ export default class ObjectPool {
     }
 
     getElement() {
+        let element
         for (let i = 0; i < this.poolArray.length; i++) {
             let element = this.poolArray[i]
             if (element.free) {

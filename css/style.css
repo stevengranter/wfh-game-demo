@@ -239,6 +239,18 @@ embed {
 #intro-screen {
   overflow: hidden;
 }
+.character-portrait {
+}
+
+img#excited-chicken {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  max-width: 50%;
+  transform: rotate(-20deg);
+  transform: translate(40px, 70px) rotate(-15deg);
+}
+
 #intro-screen img {
   max-width: 35%;
   position: absolute;
@@ -589,15 +601,6 @@ button {
   appearance: none;
   cursor: pointer;
   aspect-ratio: 1;
-}
-
-img#excited-chicken {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  max-width: 50%;
-  transform: rotate(-20deg);
-  transform: translate(40px, 70px) rotate(-15deg);
 }
 
 /* #title-screen img {

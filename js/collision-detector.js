@@ -2,13 +2,13 @@
 import { wait } from "./utils.js"
 export default class CollisionDetector {
 
-  constructor() { }
+
 
   static detectBoxCollision(subject, objectsArray) {
     // console.log(subject)
 
-    for (let i = 0; i < objectsArray.length; i++) {
-      let object = objectsArray[i].data
+    for (const element of objectsArray) {
+      let object = element.data
       if (
         subject.dx + subject.dWidth >= object.dx &&
         subject.dx <= object.dx + object.dWidth &&

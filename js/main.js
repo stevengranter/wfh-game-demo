@@ -1,4 +1,6 @@
+"use strict"
 // Import modules
+
 import { GameScene } from "./game-scene.js"
 import { GameWorld } from "./game-world.js"
 import GameObject from "./game-object.js"
@@ -81,13 +83,12 @@ window.addEventListener("load", function () {
     // Input Handler
     // console.log(this.document)
     const input = new InputHandler(ui)
-    console.dir(input)
+
 
 
     // Initialize Game World
 
     const game = new GameWorld(player, ui, input)
-    console.log(game)
 
     // Event listeners
     ui.elements.startButton.addEventListener("click", (e) => {
@@ -96,7 +97,6 @@ window.addEventListener("load", function () {
 
     const pauseMenu = new PauseMenu(ui)
 
-    console.log(ui)
 
 
 
@@ -121,6 +121,7 @@ window.addEventListener("load", function () {
     backgroundLayer03.velocityX = 0
 
     // Sprite configuration
+
 
     // Wiener 🌭
 
@@ -275,7 +276,8 @@ window.addEventListener("load", function () {
 
 
     // Scene Objects
-    const scene01 = new GameScene(1, "Bonavista", player, [backgroundLayer03], [], scene01Spawners, "./audio/music/song-01/song_01-i_equals_da_by.mp3", [])
+    const scene01 = new GameScene(1, "Bonavista", player, [backgroundLayer03], [], scene01Spawners, "./audio/music/alouette_55s.mp3", [])
+
     let currentScene = scene01
     ui.music = currentScene.music
 
@@ -326,7 +328,7 @@ window.addEventListener("load", function () {
     // blurBackground()
     function initPlayer() {
         player.stats.lives = 3
-        player.stats.score = 2300
+        player.stats.score = 0
         player.stats.progress = 0
         player.stats.healthMax = 100
         player.stats.health = 100
@@ -340,6 +342,7 @@ window.addEventListener("load", function () {
         player.stats.subscribe(ui.healthBarWidth)
         player.stats.subscribe(ui.healthBarColor)
         player.stats.subscribe(ui.scoreRemaining)
+        game.subscribe(ui.timeRemaining)
 
     }
     // Game state functions
@@ -351,16 +354,16 @@ window.addEventListener("load", function () {
         ui.hide(ui.elements.titleScreen)
         ui.show(ui.elements.introScreen)
 
-        ui.show(ui.elements.characterPortrait)
+        ui.show(ui.elements.popupNan)
         setTimeout(() => { ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
-        setTimeout(() => { ui.elements.characterPortrait.style.transform = "translateY(0px)" }, 700)
+        setTimeout(() => { ui.elements.popupNan.style.transform = "translateY(0px)" }, 700)
 
         currentScene.draw(ctx)
         setTimeout(() => { animateBlur() }, 1000)
         typeWriter('intro-dialog', dialogText, 25)
         document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
             setTimeout(() => { ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
-            setTimeout(() => { ui.elements.characterPortrait.style.transform = "translateY(475px)" }, 700)
+            setTimeout(() => { ui.elements.popupNan.style.transform = "translateY(475px)" }, 700)
             setTimeout(() => { startGame() }, 1300)
 
         })
@@ -388,7 +391,7 @@ window.addEventListener("load", function () {
         if (currentScene.isMusicLoaded) {
             console.log("music is loaded")
             // runIntro()
-            currentScene.music.play()
+            game.toggleMusic()
             game.loop(0, scene01)
 
 
@@ -425,9 +428,7 @@ window.addEventListener("load", function () {
     // function toggleDebugMode() {
     //     isDebugMode = !isDebugMode
 
-    //     function toggleDebugMenu() {
-    //         debugMenu.toggleVisibility()
-    //     }
+
 
     //     setInterval(() => {
     //         if (debugMenu.isVisible) {

@@ -1,5 +1,3 @@
-import Layer from "./layer.js"
-import Player from "./player.js"
 
 
 export class GameScene {
