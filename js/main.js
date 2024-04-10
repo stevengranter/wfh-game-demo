@@ -1,22 +1,22 @@
 "use strict"
 // Import modules
 
-import { GameScene } from "./game-scene.js"
-import { GameWorld } from "./game-world.js"
-import GameObject from "./game-object.js"
-import Layer from "./layer.js"
-import Player from "./player.js"
-import InputHandler from "./input.js"
-import { PauseMenu } from "./pause-menu.js"
+import { GameScene } from "./GameScene.js"
+import { GameWorld } from "./GameWorld.js"
+import GameObject from "./GameObject.js"
+import Layer from "./Layer.js"
+import Player from "./Player.js"
+import InputHandler from "./InputHandler.js"
+import { PauseMenu } from "./PauseMenu.js"
 import { DebugMenu } from "./debug-menu.js"
-import Sprite from "./sprite.js"
-import { spriteTags } from "./sprite.js"
-import ObjectPool from "./objectpool.js"
-import Spawner from './spawner.js'
+import Sprite from "./Sprite.js"
+import { spriteTags } from "./Sprite.js"
+import ObjectPool from "./ObjectPool.js"
+import Spawner from './Spawner.js'
 // import Projectile from "./projectile.js"
-import CollisionDetector from "./collision-detector.js"
+import CollisionDetector from "./CollisionDetector.js"
 import { drawStatusText, getRandomInt, wait, typeWriter } from "./utils.js"
-import UI from "./ui.js"
+import UI from "./UI.js"
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants.js"
 
 

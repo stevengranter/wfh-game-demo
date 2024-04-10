@@ -1,6 +1,6 @@
 import { wait, toKebabCase } from "./utils.js"
-import Observable from "./observable.js"
-import { gameStateKeys } from "./game-world.js"
+import Observable from "./Observable.js"
+import { gameStateKeys } from "./GameWorld.js"
 
 export class PauseMenu extends Observable {
   constructor(ui) {

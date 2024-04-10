@@ -1,8 +1,8 @@
-import CollisionDetector from "./collision-detector.js"
-import Observable from "./observable.js"
-import { playerStates } from "./player-states.js"
-import { spriteTags } from "./sprite.js"
-import GameObject from "./game-object.js"
+import CollisionDetector from "./CollisionDetector.js"
+import Observable from "./Observable.js"
+import { playerStates } from "./PlayerState.js"
+import { spriteTags } from "./Sprite.js"
+import GameObject from "./GameObject.js"
 
 export const gameStateKeys = {
     START: "start",
