@@ -5,18 +5,18 @@ export default class UI {
         console.log(dataAttribute)
         this.bindings = {}
         // this.readoutElements = this.initReadouts
-        this.score = new DataBinder("score", "textContent")
-        this.scoreRemaining = new DataBinder("score-remaining", "textContent", (data) => {
-            data = 5000 - this.score
-            return data
+        this.bindings.score = new DataBinder("score", "textContent")
+        this.bindings.scoreRemaining = new DataBinder("score-remaining", "textContent", (data) => {
+            let scoreRemaining = 5000 - this.bindings.score
+            return scoreRemaining
         })
-        this.timeRemaining = new DataBinder("time-remaining", "textContent")
+        this.bindings.timeRemaining = new DataBinder("time-remaining", "textContent")
 
-        this.healthBarWidth = new DataBinder("health", "style.width", (data) => {
+        this.bindings.healthBarWidth = new DataBinder("health", "style.width", (data) => {
             data = data + "%"
             return data
         })
-        this.healthBarColor = new DataBinder("health", "style.backgroundColor", (data) => {
+        this.bindings.healthBarColor = new DataBinder("health", "style.backgroundColor", (data) => {
             if (data <= 30) {
                 data = "var(--clr-red)"
             }
@@ -29,9 +29,14 @@ export default class UI {
             return data
         })
 
-        this.lives = new DataBinder("lives", "textContent")
+        this.bindings.lives = new DataBinder("lives", "textContent")
+
+        this.bindings.wienersCollected = new DataBinder("wieners-collected", "textContent")
         // console.log(this)
         // this.hudScore.update("1000")
+
+
+        console.log(this)
 
 
     }

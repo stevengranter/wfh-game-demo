@@ -79,7 +79,7 @@ export class GameWorld extends Observable {
     notifyTimeRemaining() {
         this.#timeRemaining = window.music.duration - window.music.currentTime
         this.notify({ timeRemaining: Math.floor(this.#timeRemaining) })
-        console.log(Math.floor(this.#timeRemaining))
+        console.log(`time remaining: ${Math.floor(this.#timeRemaining)}`)
     }
 
     countDown(timeToCount) {
@@ -89,7 +89,7 @@ export class GameWorld extends Observable {
 
         function runTimer() {
             if (i > 0 && !paused) {
-                console.log(this.musicPaused)
+                // console.log(this.musicPaused)
                 this.notifyTimeRemaining()
                 i--
                 timerId = setTimeout(runTimer.bind(this), 1000) // Binding 'this' to maintain context
@@ -144,8 +144,9 @@ export class GameWorld extends Observable {
                                     // console.log(this.player.stats.health)
                                     this.calculateCombo()
                                     this.player.stats.health += collider.healthValue
-
                                     this.player.stats.score += collider.pointValue
+                                    this.player.stats.wienersCollected++
+
                                     // this.ui.elements.scoreRemaining.innerText = "\ " + (2500 - this.player.stats.score) + " to progress"
                                     this.ui.elements.scoreRemaining.innerText = `( ${2500 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
 
@@ -161,6 +162,7 @@ export class GameWorld extends Observable {
                                     console.log("💩")
                                     this.resetCombo()
                                     this.player.stats.health += collider.healthValue
+                                    this.player.stats.seagullBlessingsReceived++
                                     if (this.player.stats.health <= 0) {
                                         this.player.isAlive = false
                                     }
@@ -207,7 +209,15 @@ export class GameWorld extends Observable {
         window.music.pause()
         console.log("winner winner chicken dinner")
         this.#gameState = gameStateKeys.LEVELEND
+        setTimeout(() => { document.querySelector("#level-end--container div").style.transform = "translateY(0px)" }, 50)
+        setTimeout(() => { document.querySelector("#excited-chicken").style.transform = "rotate(-15deg) translate(0px,50px) scale(100%)" }, 50)
+        document.querySelector("#level-wieners").textContent = this.player.stats.wienersCollected
+        document.querySelector("#level-score").textContent = this.player.stats.score
+        document.querySelector("#level-blessings").textContent = this.player.stats.seagullBlessingsReceived
+
+        console.log(this.player.stats.wienersCollected)
         this.pauseGame()
+
 
     }
     message(data) {

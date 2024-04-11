@@ -1,4 +1,5 @@
 "use strict"
+
 // Import modules
 
 import { GameScene } from "./GameScene.js"
@@ -327,22 +328,26 @@ window.addEventListener("load", function () {
 
     // blurBackground()
     function initPlayer() {
+        player.stats.subscribe(player)
+        player.stats.subscribe(ui.bindings.lives)
+        player.stats.subscribe(ui.bindings.score)
+        player.stats.subscribe(ui.bindings.healthBarWidth)
+        player.stats.subscribe(ui.bindings.healthBarColor)
+        player.stats.subscribe(ui.bindings.scoreRemaining)
+        player.stats.subscribe(ui.bindings.wienersCollected)
+        game.subscribe(ui.bindings.timeRemaining)
+
         player.stats.lives = 3
-        player.stats.score = 0
+        player.stats.score = 2000
         player.stats.progress = 0
         player.stats.healthMax = 100
         player.stats.health = 100
+        player.stats.wienersCollected = 0
 
         player.isAlive = true
 
         // player.stats.subscribe(game) // TODO: will double notifications for player
-        player.stats.subscribe(player)
-        player.stats.subscribe(ui.lives)
-        player.stats.subscribe(ui.score)
-        player.stats.subscribe(ui.healthBarWidth)
-        player.stats.subscribe(ui.healthBarColor)
-        player.stats.subscribe(ui.scoreRemaining)
-        game.subscribe(ui.timeRemaining)
+
 
     }
     // Game state functions

@@ -239,17 +239,6 @@ embed {
 #intro-screen {
   overflow: hidden;
 }
-.character-portrait {
-}
-
-img#excited-chicken {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  max-width: 50%;
-  transform: rotate(-20deg);
-  transform: translate(40px, 70px) rotate(-15deg);
-}
 
 #intro-screen img {
   max-width: 35%;
@@ -400,20 +389,24 @@ a {
   font-size: 2svw;
   padding-left: 2%;
 }
+
+.ui-panel .header,
+h2,
+h3 {
+  font-family: "Coiny", sans-serif;
+}
+
 .ui-panel {
-  /* display: block; */
-  /* vertical-align: middle; */
-  /* transform: translateY(-50%); */
   height: 90%;
   width: 80%;
   margin-left: auto;
   margin-right: auto;
-  background-color: var(--clr-sky-blue);
   background: linear-gradient(
     315deg,
     rgba(153, 128, 217, 1) 12%,
     rgba(10, 209, 234, 1) 57%
   );
+  background-color: var(--clr-sky-blue);
   border: 1svw solid black;
   outline: 0.5svw solid white;
   border-radius: 3svw;
@@ -619,6 +612,25 @@ button {
   overflow: hidden;
   border: 1px solid aqua;
 } */
+
+/* Level End Container styles */
+#level-end--container {
+  height: 100%;
+}
+#level-end--container div {
+  transform: translateY(120%);
+  transition: all 0.5s 0.5s;
+  height: 100%;
+}
+
+img#excited-chicken {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  max-width: 50%;
+  transform: translateY(500px) rotate(-15deg) scale(30%);
+  transition: all 0.5s 0s ease-in-out;
+}
 
 /* In-Game HUD styles */
 #game-screen__ingame-overlay__hud {

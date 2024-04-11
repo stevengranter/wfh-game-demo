@@ -83,6 +83,9 @@
               ><span>O</span>
             </div>
 
+              <div id="wieners-collected" data-ui="true"></div>
+              
+
              <div id="level-stats">
             <div id="time-remaining"></div>
           </div>
@@ -98,15 +101,20 @@
            
           </div>
 
-         <div id="level-end--container" class="ui-panel" data-ui="true" data-gamestate="level-end">
-          <h3>Level End</h3>
-          <ui>
-            <li>Wieners caught</li>
-            <li>Score collected</li>
-            <li>Lucky Seagull Blessings</li>
-            <li>Rating: ⭐️ ⭐️ ⭐️</li>
-          </ui>
-          <img src="./images/wiener-chicken-01.png" id="excited-chicken">
+         <div id="level-end--container" data-ui="true" data-gamestate="level-end">
+          <div class="ui-panel">
+            <h2>Wiener, Wiener,<br>Chicken Diener!</h2>
+            <ul>
+              <li>Wieners caught: <span id="level-wieners"></span></li>
+              <li>Score: <span id="level-score"></span></li>
+              <li>Lucky Seagull Blessings: <span id="level-blessings"></span></li>
+              <!-- <li>Rating: ⭐️ ⭐️ ⭐️</li> -->
+              <button>Next level</button>
+              
+            </ul>
+            </div>
+           <img src="./images/wiener-chicken-01.png" id="excited-chicken" alt="an excited chicken">
+           
         </div>
           <!-- <div id="congrats-screen" class="ui-panel">
             <header><h2>Next level unlocked!</h2></header>

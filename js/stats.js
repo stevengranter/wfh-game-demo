@@ -1,11 +1,13 @@
 import Observable from "./Observable.js"
 
 export default class Stats extends Observable {
-    #lives
-    #progress
-    #health
-    #healthMax
-    #score
+    #lives = 3
+    #progress = 0
+    #health = 100
+    #healthMax = 100
+    #score = 0
+    #wienersCollected = 0
+    #seagullBlessingsReceived = 0
 
 
 
@@ -14,13 +16,9 @@ export default class Stats extends Observable {
         super()
 
 
-        this.#progress
 
-        this.#health
-        this.#healthMax = 100
-        this.#lives
 
-        this.#score
+
 
 
         this.deathEvent = new CustomEvent('playerDeath', {
@@ -61,6 +59,28 @@ export default class Stats extends Observable {
     set score(value) {
         this.#score = value
         this.notify({ score: this.#score })
+    }
+
+    get wienersCollected() {
+        return this.#wienersCollected
+    }
+
+    set wienersCollected(value) {
+        this.#wienersCollected = value
+        console.log("wieners-collected:" + this.#wienersCollected)
+        this.notify({ 'wieners-collected': this.#wienersCollected })
+
+    }
+
+    get seagullBlessingsReceived() {
+        return this.#seagullBlessingsReceived
+    }
+
+    set seagullBlessingsReceived(value) {
+        this.#seagullBlessingsReceived = value
+        console.log("seagull-blessings-received:" + this.#seagullBlessingsReceived)
+        this.notify({ "seagull-blessings-received": this.#seagullBlessingsReceived })
+
     }
 
     get health() {
