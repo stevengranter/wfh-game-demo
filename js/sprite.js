@@ -192,7 +192,7 @@ export default class Sprite {
         if (this.persist == "bottom" && this.dy + this.dHeight + 20 > 270) {
             this.dy = 270 - this.dHeight - 20 // Adjust position to canvas bottom
             this.velocityY = 0 // Stop the vertical motion
-            this.velocityX = 0 // stop horizontal motion
+            this.velocityX = playerSpeedX // stop horizontal motion
             this.isAnimating = false
         }
         this.dx += (this.velocityX) * deltaTime

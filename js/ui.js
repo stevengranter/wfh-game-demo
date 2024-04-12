@@ -6,14 +6,17 @@ export default class UI {
         this.bindings = {}
         // this.readoutElements = this.initReadouts
         this.bindings.score = new DataBinder("score", "textContent")
+
         this.bindings.scoreRemaining = new DataBinder("score-remaining", "textContent", (data) => {
             let scoreRemaining = 5000 - this.bindings.score
             return scoreRemaining
         })
+
         this.bindings.timeRemaining = new DataBinder("time-remaining", "textContent")
 
         this.bindings.healthBarWidth = new DataBinder("health", "style.width", (data) => {
             data = data + "%"
+            console.log(data)
             return data
         })
         this.bindings.healthBarColor = new DataBinder("health", "style.backgroundColor", (data) => {

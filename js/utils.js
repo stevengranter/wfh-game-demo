@@ -3,6 +3,7 @@ export function drawStatusText(context, input, x, y) {
     context.fillText(input, x, y)
 }
 
+
 export function typeWriter(elementId, text, typingDelay) {
     let index = 0
     const element = document.getElementById(elementId)
@@ -135,4 +136,36 @@ export function preloadGameAssets(assets) {
     // Wait for all assets to finish preloading
     return Promise.all(promises)
 }
+
+
+
+
+
+// let blurValue = 0
+// const maxBlur = 4
+// const step = 0.2
+
+export function animateBlur(currentScene, context, blurValue, maxBlur, step) {
+    blurValue += step
+
+    if (currentScene.layers !== undefined && currentScene.layers.length > 0) {
+        currentScene.layers[0].filter = `blur(${blurValue}px)`
+        console.log(currentScene.layers[0].filter)
+        currentScene.draw(context)
+
+        if (blurValue < maxBlur) {
+            requestAnimationFrame(() => animateBlur(currentScene, context, blurValue, maxBlur, step))
+        }
+    }
+}
+
+
+
+
+// Extract the text content from the div without child elements like <strong>
+
+// Start the typewriter effect
+
+
+// blurBackground()
 

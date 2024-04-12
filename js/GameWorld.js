@@ -4,6 +4,7 @@ import { playerStates } from "./PlayerState.js"
 import { spriteTags } from "./Sprite.js"
 import GameObject from "./GameObject.js"
 import { GameScene } from "./GameScene.js"
+import { typeWriter, animateBlur } from "./utils.js"
 
 export const gameStateKeys = {
     TITLE: "title",
@@ -82,8 +83,8 @@ export class GameWorld extends Observable {
 
     notifyTimeRemaining() {
         this.#timeRemaining = window.music.duration - window.music.currentTime
-        this.notify({ timeRemaining: Math.floor(this.#timeRemaining) })
-        console.log(`time remaining: ${Math.floor(this.#timeRemaining)}`)
+        // this.notify({ timeRemaining: Math.floor(this.#timeRemaining) })
+        // console.log(`time remaining: ${Math.floor(this.#timeRemaining)}`)
     }
 
     countDown(timeToCount) {
@@ -141,6 +142,7 @@ export class GameWorld extends Observable {
 
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
+            // console.log(this.player.velocityX)
             this.currentScene.update(this.deltaTime)
             this.player.update(this.input, this.deltaTime)
 
@@ -154,7 +156,7 @@ export class GameWorld extends Observable {
                             let collider = CollisionDetector.detectBoxCollision(this.player, spawner.objectPool.poolArray)
                             // console.log(spawner.objectPool.poolArray)
                             if (collider) {
-                                console.log("collision")
+                                // console.log("collision")
                                 if (collider.spriteTag === spriteTags.WIENER) {
                                     // console.log(this.player.stats.health)
                                     this.calculateCombo()
@@ -174,7 +176,7 @@ export class GameWorld extends Observable {
                                     }
                                     // calculateCombo()
                                 } else if (collider.spriteTag === spriteTags.POO) {
-                                    console.log("💩")
+                                    // console.log("💩")
                                     this.resetCombo()
                                     this.player.stats.health += collider.healthValue
                                     this.player.stats.seagullBlessingsReceived++
@@ -183,7 +185,7 @@ export class GameWorld extends Observable {
                                     }
 
                                 } else if (collider.spriteTag === spriteTags.GULL) {
-                                    console.log("🐦")
+                                    // console.log("🐦")
                                 }
 
 
@@ -215,94 +217,7 @@ export class GameWorld extends Observable {
 
     }
 
-    gameLoop02(timeStamp) {
-        console.log("in gameloop 02")
 
-        if (!this.isReady) {
-            console.error("Player, input and/or ui not defined for GameWorld")
-        }
-        if (!this.currentScene) {
-            console.error("No currentScene defined for Gameworld loop")
-            return
-        }
-        if (this.isPaused === false) {
-            this.deltaTime = (timeStamp - this.lastTime) / 1000
-            this.lastTime = timeStamp
-
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-
-            this.currentScene.update(this.deltaTime)
-            this.player.update(this.input, this.deltaTime)
-
-            if (this.currentScene.music.currentTime >= 0) {
-                // Only detect collisions when player is alive
-                if (this.player.isAlive === true) {
-                    // console.log(currentScene.spawners)
-                    if (this.currentScene.spawners) {
-                        this.currentScene.spawners.forEach((spawner) => {
-
-                            let collider = CollisionDetector.detectBoxCollision(this.player, spawner.objectPool.poolArray)
-                            // console.log(spawner.objectPool.poolArray)
-                            if (collider) {
-                                console.log("collision")
-                                if (collider.spriteTag === spriteTags.WIENER) {
-                                    // console.log(this.player.stats.health)
-                                    this.calculateCombo()
-                                    this.player.stats.health += collider.healthValue
-                                    this.player.stats.score += collider.pointValue
-                                    this.player.stats.wienersCollected++
-
-                                    // this.ui.elements.scoreRemaining.innerText = "\ " + (2500 - this.player.stats.score) + " to progress"
-                                    this.ui.elements.scoreRemaining.innerText = `( ${2500 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
-
-                                    if (this.player.stats.score >= 2500) {
-                                        // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
-                                        // ui.scoreStatusHUD.innerText = "Next Level Unlocked!
-
-                                        this.endScene()
-                                    }
-                                    // calculateCombo()
-                                } else if (collider.spriteTag === spriteTags.POO) {
-                                    console.log("💩")
-                                    this.resetCombo()
-                                    this.player.stats.health += collider.healthValue
-                                    this.player.stats.seagullBlessingsReceived++
-                                    if (this.player.stats.health <= 0) {
-                                        this.player.isAlive = false
-                                    }
-
-                                } else if (collider.spriteTag === spriteTags.GULL) {
-                                    console.log("🐦")
-                                }
-
-
-
-                            }
-                        })
-                    }
-                } else {
-                    console.log("gameloop: player is dead")
-                    this.player.isAlive = false
-                    this.player.setState(playerStates.DEAD)
-
-                }
-
-            } else {
-                console.log("showing endScreen")
-                this.ui.show(this.ui.endsceneScreen)
-            }
-
-            this.currentScene.draw(this.ctx)
-            this.player.draw(this.ctx)
-
-
-            requestAnimationFrame(this.loop.bind(this))
-        } else {
-            // this.pauseGame()
-            console.log("game is paused")
-        }
-
-    }
 
     startGame = () => {
 
@@ -311,7 +226,7 @@ export class GameWorld extends Observable {
 
         // scene01.layers[0].filter = "none"
 
-        this.initPlayer()
+
         this.initScene()
 
         this.gameState = gameStateKeys.PLAY
@@ -327,36 +242,14 @@ export class GameWorld extends Observable {
 
     }
 
-    initPlayer() {
-        console.log(this.player.stats)
-        this.player.stats.subscribe(this.player)
-        this.player.stats.subscribe(this.ui.bindings.lives)
-        this.player.stats.subscribe(this.ui.bindings.score)
-        this.player.stats.subscribe(this.ui.bindings.healthBarWidth)
-        this.player.stats.subscribe(this.ui.bindings.healthBarColor)
-        this.player.stats.subscribe(this.ui.bindings.scoreRemaining)
-        this.player.stats.subscribe(this.ui.bindings.wienersCollected)
-        this.subscribe(this.ui.bindings.timeRemaining)
-        this.subscribe(this.player)
-        this.subscribe(this.ui)
-
-        this.player.stats.lives = 3
-        this.player.stats.score = 2400
-        this.player.stats.progress = 0
-        this.player.stats.healthMax = 100
-        this.player.stats.health = 100
-        this.player.stats.wienersCollected = 0
-
-        this.player.isAlive = true
-
-        // this.player.stats.subscribe(game) // TODO: will double notifications for player
 
 
-    }
 
     initScene() {
 
     }
+
+
 
 
     stopGame() {
@@ -375,7 +268,7 @@ export class GameWorld extends Observable {
 
 
         this.gameState = gameStateKeys.LEVEL_END
-        this.ui.toggleUI(gameStateKeys.LEVEL_END)
+        this.ui.toggleUI(this.gameState)
 
         // window and chicken animations
         const levelEndContainerDIV = this.ui.elements.levelEndContainer.querySelector("div")
@@ -409,17 +302,23 @@ export class GameWorld extends Observable {
         console.log("🚀 ~ GameWorld ~ this.scenes:", this.scenes)
         console.log("current Scene is set:" + this.currentScene)
 
+        console.log(this.currentScene)
         const playMusic = () => {
-            if (this.currentScene.isMusicLoaded) {
-                console.log("music is loaded")
-                this.toggleMusic()
+            if (this.currentScene.hasOwnProperty("music")) {
+                if (this.currentScene.isMusicLoaded) {
+                    console.log("music is loaded")
+                    this.toggleMusic()
+                }
             }
         }
 
         const placesPlayer = () => {
-            this.player.stats.score = 0
+            this.player.stats.lives = 3
+            this.player.stats.score = 2000
+            this.player.stats.progress = 0
             this.player.stats.healthMax = 100
-            this.player.stats.health = 10
+            this.player.stats.health = 100
+            this.player.stats.wienersCollected = 0
             this.player.isAlive = true
         }
 
@@ -459,14 +358,17 @@ export class GameWorld extends Observable {
         this.ui.show(this.ui.elements.popupNan)
         setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
         setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(0px)" }, 700)
+        // function animateBlur(blurValue, maxBlur, step) 
 
         this.currentScene.draw(this.ctx)
-        // // setTimeout(() => { animateBlur() }, 1000)
-        // // typeWriter('intro-dialog', dialogText, 25)
+        setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
+        const dialogText = document.querySelector('#intro-dialog div').textContent
+        typeWriter('intro-dialog', dialogText, 25)
 
         document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
             setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
             setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(475px)" }, 700)
+            setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0, 0, 0.1) }, 1000)
             setTimeout(() => this.startScene(), 1300)
         })
     }

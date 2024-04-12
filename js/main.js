@@ -126,7 +126,10 @@ window.addEventListener("load", function () {
 
     const scene00_layers = [scene00_backgroundLayer]
 
-
+    const scene01_backgroundLayerImg = new Image()
+    scene01_backgroundLayerImg.src = "./images/background-01-main.webp"
+    const scene01_backgroundLayer = new Layer(player, false, scene01_backgroundLayerImg, 0, 0, 0, 0, 6650, 270, 0, 0, 6650, 270)
+    const scene01_layers = [scene01_backgroundLayer]
 
     // Sprite configuratio
 
@@ -241,7 +244,7 @@ window.addEventListener("load", function () {
 
     // let gullPooGameObject = GameWorld.createGameObject({ this: "value" })
 
-    console.log("🚀 ~ gullPooGameObject:", new GameObject(GULLPOO_CONFIG))
+    // console.log("🚀 ~ gullPooGameObject:", new GameObject(GULLPOO_CONFIG))
 
 
     const GULLPOO_POOL_SIZE = 10
@@ -269,6 +272,7 @@ window.addEventListener("load", function () {
     }
 
     const gullPooPool = new ObjectPool(makeGullPoo, gullPooResetFunc, GULLPOO_POOL_SIZE)
+    // console.log("🚀 ~ gullPooPool:", gullPooPool)
 
     // Link gullpoo to gull
     for (let i = 0; i < gullPooPool.poolArray.length; i++) {
@@ -278,6 +282,56 @@ window.addEventListener("load", function () {
     }
 
     const gullPooSpawner = new Spawner(GULLPOO_SPAWNER_RATE, gullPooPool)
+    // console.log("🚀 ~ gullPooSpawner:", gullPooSpawner)
+
+
+    const JUMBO_CONFIG = {
+        spriteSrc: "./images/wiener-64px-spinCW-01.png",
+        animationFrame: { x: 0, y: 0, width: 64, height: 64 },
+        animations: {
+            Spinning: {
+                frameX: 0,
+                frameY: 0,
+                endFrame: 28
+            }
+        },
+        pointValue: 100,
+        healthValue: 5,
+        persist: "bottom"
+    }
+
+    const INITIAL_JUMBO_DY = -50
+    const JUMBO_POOL_SIZE = 10
+    const JUMBO_SPAWNER_RATE = 10
+
+    function initializeJumboProperties(jumbo) {
+        jumbo.fps = getRandomInt(30, 90)
+        jumbo.dx = getRandomInt(20, 460)
+        jumbo.dy = INITIAL_JUMBO_DY
+        jumbo.velocityX = getRandomInt(-50, 50)
+        jumbo.velocityY = getRandomInt(100, 1000)
+    }
+
+    const makeJumbo = () => {
+        let jumbo = new Sprite(JUMBO_CONFIG)
+        initializeJumboProperties(jumbo)
+        return jumbo
+    }
+
+    const jumboResetFunc = (jumbo) => {
+        jumbo.isScored = false
+        jumbo.isVisible = true
+        initializeJumboProperties(jumbo)
+    }
+
+    const jumboPool = new ObjectPool(makeJumbo, jumboResetFunc, JUMBO_POOL_SIZE)
+    // console.log("🚀 ~ jumboPool:", jumboPool)
+
+    const jumboSpawner = new Spawner(JUMBO_SPAWNER_RATE, jumboPool)
+    // console.log("🚀 ~ jumboSpawner:", jumboSpawner)
+
+
+
     const scene00_spawners = [wienerSpawner, gullSpawner, gullPooSpawner]
 
 
@@ -302,6 +356,40 @@ window.addEventListener("load", function () {
 
     const scene00 = new GameScene(scene00_config)
     game.scenes.push(scene00)
+
+
+    const scene01_spawners = [jumboSpawner]
+
+
+    const scene01_music = "./audio/music/i_equals_da_by.mp3"
+
+    const scene01_config = {
+        index: 0,
+        name: "RoundTheCircle",
+        playerBounds: {
+            topLeft: [0, 0],
+            topRight: [CANVAS_WIDTH, 0],
+            bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
+            bottomLeft: [0, CANVAS_HEIGHT]
+        },
+        layers: scene01_layers,
+        sprites: [],
+        spawners: scene01_spawners,
+        music: scene01_music,
+        sfx: [],
+
+    }
+
+    const scene01 = new GameScene(scene01_config)
+    game.scenes.push(scene01)
+
+    console.dir(game.scenes)
+
+    // Init player
+
+
+
+
 
     //Scene Objects
     // const scene01 = new GameScene(0, "Garden", player, [backgroundLayer03], [], scene01Spawners, "./audio/music/alouette_55s.mp3", [])
@@ -421,7 +509,35 @@ window.addEventListener("load", function () {
     // game.ui.toggleUI("title")
 
 
+    function initObservers() {
+        console.log(game.player.stats)
+        game.player.stats.subscribe(game.player)
+        game.player.stats.subscribe(game.ui.bindings.lives)
+        game.player.stats.subscribe(game.ui.bindings.score)
+        game.player.stats.subscribe(game.ui.bindings.healthBarWidth)
+        game.player.stats.subscribe(game.ui.bindings.healthBarColor)
+        game.player.stats.subscribe(game.ui.bindings.scoreRemaining)
+        game.player.stats.subscribe(game.ui.bindings.wienersCollected)
 
+
+        game.scenes.forEach((scene) => {
+            console.log(scene)
+            scene.subscribe(game.player)
+        })
+
+        console.log(game.ui.bindings)
+        game.subscribe(game.ui.bindings.timeRemaining)
+        game.subscribe(game.player)
+        game.subscribe(game.ui)
+
+
+
+        // game.player.stats.subscribe(game) // TODO: will double notifications for player
+
+
+    }
+
+    initObservers()
 
 
 

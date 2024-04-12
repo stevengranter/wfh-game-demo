@@ -8,13 +8,13 @@ export default class Spawner {
         this.timeSinceSpawn = 0
     }
 
-    update(deltaTime, playerVelocityX = 0, playerVelocityY = 0) {
+    update(deltaTime) {
         this.timeSinceSpawn += deltaTime * 1000
         //console.log(this.timeSinceSpawn)
         if (this.timeSinceSpawn >= this.spawnInterval) {
             let element = this.objectPool.getElement()
             // console.log(element.data)
-            if ("parentSprite" in element.data) {
+            if (element.data.hasOwnProperty("parentSprite")) {
                 // console.log("has parent sprite")
                 // console.log(element.data.parentSprite)
                 element.data.getParentPosition(element.data.parentSprite)
@@ -27,11 +27,12 @@ export default class Spawner {
             this.timeSinceSpawn = 0
         }
 
+        // console.log(this.objectPool.poolArray)
         for (let i = 0; i < this.objectPool.poolArray.length; i++) {
             if (!this.objectPool.poolArray[i].free) {
                 // if (this.objectPool.poolArray[i].free == false) {
 
-                this.objectPool.poolArray[i].data.update(deltaTime, playerVelocityX, playerVelocityY)
+                this.objectPool.poolArray[i].data.update(deltaTime)
             }
             // }
         }

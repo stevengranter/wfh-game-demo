@@ -40,11 +40,11 @@ export default class Layer {
     }
 
     draw(context) {
-
-        if ((this.filter !== "none") || (this.filter !== undefined)) {
+        if ((this.filter !== "none") && (this.filter !== undefined)) {
             // console.log(this.filter)
             context.filter = this.filter
         }
+
         context.drawImage(
             this.backgroundImageObject,
             this.sx,
@@ -54,20 +54,24 @@ export default class Layer {
             Math.floor(this.dx),
             Math.floor(this.dy),
             this.dWidth,
-            this.dHeight,)
-        context.filter = "none"
+            this.dHeight
+        )
+
+
+        // context.filter = "none"
     }
 
-    update(deltaTime) {
+
+    update(deltaTime, playerVelocityX = 0, playerVelocityY = 0) {
+        // console.log(playerVelocityX)
 
         if (!this.playerScrollFactor) {
-            this.dx += this.velocityX * deltaTime
-            this.dy += this.velocityY * deltaTime
+
+            this.dx += playerVelocityX * deltaTime
+            this.dy += playerVelocityY * deltaTime
         } else {
-            // console.log(this.player.speedX)
-            this.dx += ((-(this.player.velocityX * this.player.speedX * this.playerScrollFactor / 100) + this.velocityX) * deltaTime)
-            // this.dy += ((( /*this.player.velocityY */ -2 * deltaTime) * this.playerScrollFactor + this.velocityY) * deltaTime)
-            this.dy += ((-(this.player.velocityY * this.player.speedY * this.playerScrollFactor / 100) + this.velocityY) * deltaTime)
+            // negative so the background scrolls in the opposite direction of player
+            this.dx += -(this.velocityX + (this.playerScrollFactor * this.player.velocityX)) * deltaTime
 
         }
     }

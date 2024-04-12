@@ -1,66 +1,74 @@
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
+import Observable from "./Observable.js"
 
 
-let gameSceneTestObj = {
-    index: 0,
-    name: "",
-    playerBounds: {
-        topLeft: [0, 0],
-        topRight: [CANVAS_WIDTH, 0],
-        bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
-        bottomLeft: [0, CANVAS_HEIGHT]
-    },
-    layers: [],
-    sprites: [],
-    spawners: [],
-    music: [],
-    sfx: [],
-}
+// let gameSceneTestObj = {
+//     index: 0,
+//     name: "",
+//     playerBounds: {
+//         topLeft: [0, 0],
+//         topRight: [CANVAS_WIDTH, 0],
+//         bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
+//         bottomLeft: [0, CANVAS_HEIGHT]
+//     },
+//     layers: [],
+//     sprites: [],
+//     spawners: [],
+//     music: [],
+//     sfx: [],
+// }
 
 
 
 
-export class GameScene {
+export class GameScene extends Observable {
+    #playerBounds
+
     constructor({ index, name, playerBounds, layers, sprites, spawners, music, sfx }) {
-
-
+        super()
         this.index = index || 0
         this.name = name || "NoName"
-        this.playerBounds = playerBounds ||
-        {
+        this.playerBounds = playerBounds || {
             topLeft: [0, 0],
             topRight: [CANVAS_WIDTH, 0],
             bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
             bottomLeft: [0, CANVAS_HEIGHT]
-        },
-            this.layers = layers
+        }
+        this.layers = layers
         this.sprites = sprites
         this.spawners = spawners
-
-        // this.soundTrack = music
 
         try {
             this.music = this.loadMusic(music)
         } catch (error) {
             console.warn("Music could not be loaded")
         }
-        // console.log(this.music)
+
         this.sfx = sfx
-
         this.isMusicLoaded = false
-
-
-
         this.sceneTime = 0
 
-        // TODO: fix - doing for now so PauseMenu can access music object
-        window.music = this.music
+        window.music = this.music // Temporary solution for PauseMenu access
 
     }
 
-    update(deltaTime) {
+    get playerBounds() {
+        console.dir(this.#playerBounds) // Corrected property name
+        return this.#playerBounds
+    }
+
+    set playerBounds(boundingCoordinatesObj) {
+        this.#playerBounds = boundingCoordinatesObj
+        console.log("sent playerBounds")
+        // this.notify("some data")
+
+    }
+
+
+
+    update(deltaTime, playerVelocityX = 0, playerVelocityY = 0) {
         this.layers.forEach((layer) => {
-            layer.update(deltaTime)
+            layer.update(deltaTime, playerVelocityX, playerVelocityY)
         })
         this.spawners.forEach((spawner) => {
             spawner.update(deltaTime)

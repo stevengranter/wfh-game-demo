@@ -48,7 +48,7 @@ export default class Player extends Sprite {
         this.speedMultiplier = 1
 
         this.stats = new Stats()
-        console.log(this.stats)
+        // console.log(this.stats)
 
         // this.scoreManager = new ScoreManager()
 
@@ -103,6 +103,7 @@ export default class Player extends Sprite {
     }
 
     receiveUpdate(data) {
+        // console.log("player received:", data)
 
         if (typeof data === 'object' && data.hasOwnProperty("gameState")) {
             console.log("data has gamestate:", data.gameState)
