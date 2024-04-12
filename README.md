@@ -2,7 +2,7 @@
 
 ### Overview 🌤️
 
-Get ready to dive into the delightfully wacky world of "Wieners from Heaven," where classic 16-bit gaming collides with absurd platforming. In this side-scrolling saga, players embark on an epic quest as 'Nan', a spunky grandmother on a mission to provide supper for her grandchildren. She has to venture far from home, walking across Canada while jumping and dodging her way through a barrage of wieners raining from the sky.
+Get ready to dive into the delightfully wacky world of "Wieners from Heaven," where classic 16-bit gaming collides with absurd platforming. In this side-scrolling saga, players embark on an epic quest as 'Nan', a spunky grandmother on a mission to provide supper for her grandchildren. She has to venture far from home, dodging her way through a barrage of wieners raining from the sky.
 
 ### Requirements 👈
 
@@ -17,7 +17,7 @@ Get ready to dive into the delightfully wacky world of "Wieners from Heaven," wh
 
 ### Work-in-Progress 🚧
 
-> ⛔️ **WARNING**: This game is incomplete, in active development (Feb-Mar 2024), and contains many, MANY bugs and broken or missing functionality/features. _It will probably be the opposite of fun and it may even crash your web browser._ 😳
+> ⛔️ **WARNING**: This game is incomplete, in active development (Feb-Apr 2024), and contains many, MANY bugs and broken or missing functionality/features. _It will probably be the opposite of fun and it may even crash your web browser._ 😳
 
 ⚠️ [Play Wieners From Heaven: Maple Syrup Edition](https://stevengranter.github.io/wieners-maple-syrup)
 
