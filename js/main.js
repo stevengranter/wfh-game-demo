@@ -127,9 +127,16 @@ window.addEventListener("load", function () {
     const scene00_layers = [scene00_backgroundLayer]
 
     const scene01_backgroundLayerImg = new Image()
-    scene01_backgroundLayerImg.src = "./images/background-01-main.webp"
-    const scene01_backgroundLayer = new Layer(player, false, scene01_backgroundLayerImg, 0, 0, 0, 0, 6650, 270, 0, 0, 6650, 270)
+    scene01_backgroundLayerImg.src = "./images/bg-beach-huts-01.webp"
+    const scene01_backgroundLayer = new Layer(player, false, scene01_backgroundLayerImg, 0, 0, 0, 0, 768, 512, 0, -30, 475, 300)
     const scene01_layers = [scene01_backgroundLayer]
+
+    const shopScene_backgroundLayerImg = new Image()
+    shopScene_backgroundLayerImg.src = "./images/bg-shop-01.webp"
+    const shopScene_backgroundLayer = new Layer(player, false, shopScene_backgroundLayerImg, 0, 0, 0, 0, 1024, 585, 0, 0, 480, 270)
+    shopScene_backgroundLayer.velocityX = 0
+    const shopScene_layers = [shopScene_backgroundLayer]
+
 
     // Sprite configuratio
 
@@ -175,8 +182,31 @@ window.addEventListener("load", function () {
         initializeWienerProperties(wiener)
     }
 
-    const wienerPool = new ObjectPool(makeWiener, wienerResetFunc, WIENER_POOL_SIZE)
-    const wienerSpawner = new Spawner(SPAWNER_RATE, wienerPool, 0)
+    const wienerPool00 = new ObjectPool(makeWiener, wienerResetFunc, WIENER_POOL_SIZE)
+    const wienerSpawner00 = new Spawner(SPAWNER_RATE, wienerPool00)
+
+    function initializeWienerProperties01(wiener) {
+        wiener.fps = getRandomInt(15, 120)
+        wiener.dx = 460
+        wiener.dy = getRandomInt(-100, 270)
+        wiener.velocityX = getRandomInt(-300, -400)
+        wiener.velocityY = getRandomInt(50, 100)
+    }
+
+    const makeWiener01 = () => {
+        let wiener = new Sprite(WIENER_CONFIG)
+        initializeWienerProperties01(wiener)
+        return wiener
+    }
+
+    const wienerResetFunc01 = (wiener) => {
+        wiener.isScored = false
+        wiener.isVisible = true
+        initializeWienerProperties01(wiener)
+    }
+
+    const wienerPool01 = new ObjectPool(makeWiener01, wienerResetFunc01, 100)
+    const wienerSpawner01 = new Spawner(0.05, wienerPool01, 0)
 
 
     // Seagull 🐦
@@ -222,6 +252,34 @@ window.addEventListener("load", function () {
 
     const gullPool = new ObjectPool(makeGull, gullResetFunc, GULL_POOL_SIZE)
     const gullSpawner = new Spawner(GULL_SPAWNER_RATE, gullPool, 0)
+
+
+
+    const GULL_POOL_SIZE_01 = 50
+    const GULL_SPAWNER_RATE_01 = 0.50
+
+    function initializeGullProperties01(gull) {
+        gull.fps = getRandomInt(15, 30)
+        gull.dx = getRandomInt(465, 500)
+        gull.dy = getRandomInt(10, 50)
+        gull.velocityX = getRandomInt(-300, -75)
+        gull.velocityY = Math.random() < 0.5 ? -10 : 10
+    }
+
+    const makeGull01 = () => {
+        let gull = new Sprite(GULL_CONFIG)
+        initializeGullProperties01(gull)
+        return gull
+    }
+
+    const gullResetFunc01 = (gull) => {
+        gull.isScored = false
+        gull.isVisible = true
+        initializeGullProperties01(gull)
+    }
+
+    const gullPool01 = new ObjectPool(makeGull01, gullResetFunc01, GULL_POOL_SIZE_01)
+    const gullSpawner01 = new Spawner(GULL_SPAWNER_RATE_01, gullPool, 0)
 
 
 
@@ -285,6 +343,54 @@ window.addEventListener("load", function () {
     // console.log("🚀 ~ gullPooSpawner:", gullPooSpawner)
 
 
+
+
+
+    // let gullPooGameObject = GameWorld.createGameObject({ this: "value" })
+
+    // console.log("🚀 ~ gullPooGameObject:", new GameObject(GULLPOO_CONFIG))
+
+
+    const GULLPOO_POOL_SIZE_01 = 30
+    const GULLPOO_SPAWNER_RATE_01 = 0.25
+
+    function initializeGullPooProperties01(poo) {
+        poo.dx = getRandomInt(-10, 465)
+        poo.dy = -50
+        poo.velocityX = getRandomInt(0, 100)
+        poo.velocityY = getRandomInt(100, 200)
+    }
+
+    const makeGullPoo01 = () => {
+        let gullPoo = new Sprite(GULLPOO_CONFIG)
+        initializeGullPooProperties01(gullPoo)
+        return gullPoo
+    }
+
+    const gullPooResetFunc01 = (gullPoo) => {
+        gullPoo.isScored = false
+        gullPoo.isVisible = true
+        gullPoo.velocityX = getRandomInt(0, 10)
+        gullPoo.velocityY = getRandomInt(100, 200)
+        initializeGullPooProperties01(gullPoo)
+    }
+
+    const gullPooPool01 = new ObjectPool(makeGullPoo01, gullPooResetFunc01, GULLPOO_POOL_SIZE_01)
+    // console.log("🚀 ~ gullPooPool:", gullPooPool)
+
+    // Link gullpoo to gull
+    // for (let i = 0; i < gullPooPool01.poolArray.length; i++) {
+    //     let gullPoo = gullPooPool01.poolArray[i]
+    //     let gullParent = gullPool01.poolArray[i]
+    //     gullPoo.data.parentSprite = gullParent
+    // }
+    console.log("gullPooPool01:")
+    console.dir(gullPooPool01)
+
+    const gullPooSpawner01 = new Spawner(GULLPOO_SPAWNER_RATE_01, gullPooPool01)
+    // console.log("🚀 ~ gullPooSpawner:", gullPooSpawner)
+
+
     const JUMBO_CONFIG = {
         spriteSrc: "./images/wiener-64px-spinCW-01.png",
         animationFrame: { x: 0, y: 0, width: 64, height: 64 },
@@ -332,7 +438,7 @@ window.addEventListener("load", function () {
 
 
 
-    const scene00_spawners = [wienerSpawner, gullSpawner, gullPooSpawner]
+    const scene00_spawners = [wienerSpawner00, gullSpawner, gullPooSpawner]
 
 
     const scene00_music = "./audio/music/alouette_55s.mp3"
@@ -354,11 +460,10 @@ window.addEventListener("load", function () {
 
     }
 
-    const scene00 = new GameScene(scene00_config)
-    game.scenes.push(scene00)
 
 
-    const scene01_spawners = [jumboSpawner]
+
+    const scene01_spawners = [wienerSpawner01, gullSpawner01, gullPooSpawner01, jumboSpawner]
 
 
     const scene01_music = "./audio/music/i_equals_da_by.mp3"
@@ -380,10 +485,43 @@ window.addEventListener("load", function () {
 
     }
 
+
+
+    //const scene01_music = "./audio/music/i_equals_da_by.mp3"
+
+    const shopScene_config = {
+        index: 0,
+        name: "RoundTheCircle",
+        playerBounds: {
+            topLeft: [0, 0],
+            topRight: [CANVAS_WIDTH, 0],
+            bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
+            bottomLeft: [0, CANVAS_HEIGHT]
+        },
+        layers: shopScene_layers,
+        sprites: [],
+        spawners: scene01_spawners,
+        music: scene01_music,
+        sfx: [],
+
+    }
+
+
+    const scene00 = new GameScene(scene00_config)
     const scene01 = new GameScene(scene01_config)
+    const shopScene = new GameScene(shopScene_config)
+
+
+
+
+    game.scenes.push(scene00)
+    // game.scenes.push(shopScene)
+    console.log(scene01.spawners)
     game.scenes.push(scene01)
 
     console.dir(game.scenes)
+
+
 
     // Init player
 

@@ -86,11 +86,11 @@ export default class UI {
                     // console.log(element + "has gameState of " + element.dataset.gamestate)
                     if (element.dataset.gamestate === gameState && isActive === true) {
                         this.show(element)
-                        element.style.display = "block"
+                        // element.style.display = "block"
 
                     } else {
                         this.hide(element)
-                        element.style.display = "none"
+                        // element.style.display = "none"
                     }
                 }
             }

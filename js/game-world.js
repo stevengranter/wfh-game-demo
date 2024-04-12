@@ -165,14 +165,27 @@ export class GameWorld extends Observable {
                                     this.player.stats.wienersCollected++
 
                                     // this.ui.elements.scoreRemaining.innerText = "\ " + (2500 - this.player.stats.score) + " to progress"
-                                    this.ui.elements.scoreRemaining.innerText = `( ${2500 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
+                                    console.log(this.player.stats.progress)
+                                    if (this.player.stats.progress === 0) {
+                                        this.ui.elements.scoreRemaining.innerText = `( ${1000 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
 
-                                    if (this.player.stats.score >= 2500) {
-                                        // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
-                                        // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
+                                        if (this.player.stats.score >= 1000) {
+                                            // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
+                                            // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
 
 
-                                        this.endScene()
+                                            this.endScene()
+                                        }
+                                    } else {
+                                        this.ui.elements.scoreRemaining.innerText = `( ${10000 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
+
+                                        if (this.player.stats.score >= 10000) {
+                                            // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
+                                            // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
+
+
+                                            this.endScene()
+                                        }
                                     }
                                     // calculateCombo()
                                 } else if (collider.spriteTag === spriteTags.POO) {
@@ -262,9 +275,10 @@ export class GameWorld extends Observable {
         // Pause the game and the music
         this.isPaused = true
         window.music.pause()
-        this.player.stats.progress++
+        console.log("player progress before set: " + this.player.stats.progress)
+        this.player.stats.progress += 1
         console.log("winner winner chicken dinner")
-        console.log("this.player.stats.progress " + this.player.stats.progress)
+        console.log("player progress after set: " + this.player.stats.progress)
 
 
         this.gameState = gameStateKeys.LEVEL_END
@@ -285,7 +299,7 @@ export class GameWorld extends Observable {
 
 
 
-            this.startScene()
+            this.runShop()
 
             console.log("next level button clicked")
         })
@@ -314,8 +328,7 @@ export class GameWorld extends Observable {
 
         const placesPlayer = () => {
             this.player.stats.lives = 3
-            this.player.stats.score = 2000
-            this.player.stats.progress = 0
+            this.player.stats.score = 0
             this.player.stats.healthMax = 100
             this.player.stats.health = 100
             this.player.stats.wienersCollected = 0
@@ -352,7 +365,9 @@ export class GameWorld extends Observable {
         this.ui.toggleUI("cutscene")
 
 
+
         this.ui.hide(this.ui.elements.titleScreen)
+        this.ui.hide(this.ui.elements.shopScreen)
         this.ui.show(this.ui.elements.introScreen)
 
         this.ui.show(this.ui.elements.popupNan)
@@ -371,6 +386,17 @@ export class GameWorld extends Observable {
             setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0, 0, 0.1) }, 1000)
             setTimeout(() => this.startScene(), 1300)
         })
+    }
+
+    runShop() {
+
+        this.ui.toggleUI("cutscene")
+        this.ui.show(this.ui.elements.shopScreen)
+
+        this.ui.elements.shopScreen.addEventListener("click", (e) => {
+            this.startScene()
+        })
+
     }
 
 
