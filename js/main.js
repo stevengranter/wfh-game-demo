@@ -3,7 +3,7 @@
 // Import modules
 
 import { GameScene } from "./GameScene.js"
-import { GameWorld } from "./GameWorld.js"
+import { GameWorld, gameStateKeys } from "./GameWorld.js"
 import GameObject from "./GameObject.js"
 import Layer from "./Layer.js"
 import Player from "./Player.js"
@@ -92,36 +92,43 @@ window.addEventListener("load", function () {
     const game = new GameWorld(player, ui, input)
 
     // Event listeners
-    ui.elements.startButton.addEventListener("click", (e) => {
-        runIntro()
-    })
+    const startButton = ui.elements.startButton
+    startButton.addEventListener("click", function (e) {
+        game.runIntro()
+    }.bind(game))
 
     const pauseMenu = new PauseMenu(ui)
 
 
 
 
+    // const backgroundLayer01Img = new Image()
+    // backgroundLayer01Img.src = "./images/background-01-main.png"
+    // const backgroundLayer01 = new Layer(player, false, backgroundLayer01Img, 0, 0, 0, 0, 6650, 270, 0, 0, 6650, 270)
+    // backgroundLayer01.velocityX = 0
+
+    // const backgroundLayer02Img = new Image()
+    // backgroundLayer02Img.src = "./images/bg01-houses-ocean.png"
+    // const backgroundLayer02 = new Layer(player, false, backgroundLayer02Img, 0, 0, 0, 0, 944, 512, 0, 0, 480, 270)
+    // backgroundLayer02.velocityX = 0
 
 
 
+    // SCENE 00
     // Initialize background layers //
 
-    const backgroundLayer01Img = new Image()
-    backgroundLayer01Img.src = "./images/background-01-main.png"
-    const backgroundLayer01 = new Layer(player, 2, backgroundLayer01Img, 0, 0, 0, 0, 6650, 270, 0, 0, 6650, 270)
-    backgroundLayer01.velocityX = 0
 
-    const backgroundLayer02Img = new Image()
-    backgroundLayer02Img.src = "./images/bg01-houses-ocean.png"
-    const backgroundLayer02 = new Layer(player, false, backgroundLayer02Img, 0, 0, 0, 0, 944, 512, 0, 0, 480, 270)
-    backgroundLayer02.velocityX = 0
 
-    const backgroundLayer03Img = new Image()
-    backgroundLayer03Img.src = "./images/garden-06.png"
-    const backgroundLayer03 = new Layer(player, false, backgroundLayer03Img, 0, 0, 0, 0, 1024, 585, 0, 0, 480, 270)
-    backgroundLayer03.velocityX = 0
+    const scene00_backgroundLayerImg = new Image()
+    scene00_backgroundLayerImg.src = "./images/garden-06.png"
+    const scene00_backgroundLayer = new Layer(player, false, scene00_backgroundLayerImg, 0, 0, 0, 0, 1024, 585, 0, 0, 480, 270)
+    scene00_backgroundLayer.velocityX = 0
 
-    // Sprite configuration
+    const scene00_layers = [scene00_backgroundLayer]
+
+
+
+    // Sprite configuratio
 
 
     // Wiener 🌭
@@ -271,24 +278,72 @@ window.addEventListener("load", function () {
     }
 
     const gullPooSpawner = new Spawner(GULLPOO_SPAWNER_RATE, gullPooPool)
-    const scene01Spawners = [wienerSpawner, gullSpawner, gullPooSpawner]
+    const scene00_spawners = [wienerSpawner, gullSpawner, gullPooSpawner]
+
+
+    const scene00_music = "./audio/music/alouette_55s.mp3"
+
+    const scene00_config = {
+        index: 0,
+        name: "Garden",
+        playerBounds: {
+            topLeft: [0, 0],
+            topRight: [CANVAS_WIDTH, 0],
+            bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
+            bottomLeft: [0, CANVAS_HEIGHT]
+        },
+        layers: scene00_layers,
+        sprites: [],
+        spawners: scene00_spawners,
+        music: scene00_music,
+        sfx: [],
+
+    }
+
+    const scene00 = new GameScene(scene00_config)
+    game.scenes.push(scene00)
+
+    //Scene Objects
+    // const scene01 = new GameScene(0, "Garden", player, [backgroundLayer03], [], scene01Spawners, "./audio/music/alouette_55s.mp3", [])
+    // const scene02 = new GameScene(1, "AllAroundTheCircle", player, [backgroundLayer02], [], scene01Spawners, "./audio/music/i_equals_da_by.mp3", [])
+
+    // game.addScene(scene01)
+    // game.addScene(scene02)
+    // console.log(game.scenes)
+
+    // let currentScene = game.scenes[0]
+
+    // ui.music = scene01.music
+
+    // const gameSceneTestObj = {
+    //     index: 0,
+    //     name: "",
+    //     playerBounds: {
+    //         topLeft: [0, 0],
+    //         topRight: [CANVAS_WIDTH, 0],
+    //         bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
+    //         bottomLeft: [0, CANVAS_HEIGHT]
+    //     },
+    //     layers: [],
+    //     sprites: [],
+    //     spawners: [],
+    //     music: [],
+    //     sfx: [],
+    // }
+
+    // let scene01 = new GameScene(gameSceneTestObj)
+
+    // game.addScene(scene01)
 
 
 
 
-    // Scene Objects
-    const scene01 = new GameScene(1, "Bonavista", player, [backgroundLayer03], [], scene01Spawners, "./audio/music/alouette_55s.mp3", [])
-
-    let currentScene = scene01
-    ui.music = currentScene.music
 
 
 
 
 
-
-
-    ui.showUI("cutscene")
+    // ui.toggleUI("cutscene")
 
 
 
@@ -306,13 +361,13 @@ window.addEventListener("load", function () {
 
         blurValue += step
 
-
-        currentScene.layers[0].filter = `blur(${blurValue}px)`
-        currentScene.draw(ctx)
-        if (blurValue < maxBlur) {
-            requestAnimationFrame(animateBlur)
+        if (currentScene.layers !== undefined && currentScene.layers.length > 0) {
+            currentScene.layers[0].filter = `blur(${blurValue}px)`
+            currentScene.draw(ctx)
+            if (blurValue < maxBlur) {
+                requestAnimationFrame(animateBlur)
+            }
         }
-
 
 
 
@@ -327,141 +382,45 @@ window.addEventListener("load", function () {
 
 
     // blurBackground()
-    function initPlayer() {
-        player.stats.subscribe(player)
-        player.stats.subscribe(ui.bindings.lives)
-        player.stats.subscribe(ui.bindings.score)
-        player.stats.subscribe(ui.bindings.healthBarWidth)
-        player.stats.subscribe(ui.bindings.healthBarColor)
-        player.stats.subscribe(ui.bindings.scoreRemaining)
-        player.stats.subscribe(ui.bindings.wienersCollected)
-        game.subscribe(ui.bindings.timeRemaining)
 
-        player.stats.lives = 3
-        player.stats.score = 2000
-        player.stats.progress = 0
-        player.stats.healthMax = 100
-        player.stats.health = 100
-        player.stats.wienersCollected = 0
-
-        player.isAlive = true
-
-        // player.stats.subscribe(game) // TODO: will double notifications for player
-
-
-    }
     // Game state functions
 
-    function runIntro() {
-        ui.showUI("cutscene")
-        console.log(ui)
+    // function startGame() {
 
-        ui.hide(ui.elements.titleScreen)
-        ui.show(ui.elements.introScreen)
+    //     // console.log(player.stats)
+    //     ui.toggleUI("play")
+    //     // scene001.layers[0].filter = "none"
 
-        ui.show(ui.elements.popupNan)
-        setTimeout(() => { ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
-        setTimeout(() => { ui.elements.popupNan.style.transform = "translateY(0px)" }, 700)
+    //     initPlayer()
+    //     const currentScene = game.scenes[0]
 
-        currentScene.draw(ctx)
-        setTimeout(() => { animateBlur() }, 1000)
-        typeWriter('intro-dialog', dialogText, 25)
-        document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
-            setTimeout(() => { ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
-            setTimeout(() => { ui.elements.popupNan.style.transform = "translateY(475px)" }, 700)
-            setTimeout(() => { startGame() }, 1300)
-
-        })
+    //     const superNantendo = document.getElementById("ui--super-nantendo")
+    //     superNantendo.classList.add("teal-bg")
+    //     // canvas.classList.remove("hidden")
 
 
-    }
+    //     if (currentScene.isMusicLoaded) {
+    //         console.log("music is loaded")
+    //         // runIntro()
+    //         game.toggleMusic()
+    //         game.loop(0, scene001)
 
 
-    game.currentScene = scene01
+    //         //}
 
-    function startGame() {
-
-        // console.log(player.stats)
-        ui.showUI("play")
-        scene01.layers[0].filter = "none"
-
-        initPlayer()
-
-
-        const superNantendo = document.getElementById("ui--super-nantendo")
-        superNantendo.classList.add("teal-bg")
-        // canvas.classList.remove("hidden")
-
-
-        if (currentScene.isMusicLoaded) {
-            console.log("music is loaded")
-            // runIntro()
-            game.toggleMusic()
-            game.loop(0, scene01)
-
-
-            //}
-
-        }
-    }
-
-    function endGame() {
-        ui.hide(ui.ingameOverlay)
-        ui.show(ui.menuOverlay)
-        ui.show(ui.gameOverScreen)
-    }
-
-    function endScene() {
-
-    }
-
-    function resetGame() {
-        isPaused = false
-        lastTime = 0
-        location.reload() // TODO: Find better way of resetting game
-    }
-
-
-
-    function resetPlayer() {
-        console.log("Reset Player")
-    }
-
-
-
-
-    // function toggleDebugMode() {
-    //     isDebugMode = !isDebugMode
-
-
-
-    //     setInterval(() => {
-    //         if (debugMenu.isVisible) {
-    //             debugMenu.update()
-    //         }
-    //     }, 100)
-
-    //     document.addEventListener('keydown', (event) => {
-    //         if (event.key === '`') {
-    //             toggleDebugMenu()
-    //         }
-    //     })
-
+    //     }
     // }
 
-    // const debugMenu = new DebugMenu()
-    // debugMenu.watch("player.isAlive", () => player.isAlive)
-
-    // toggleDebugMode()
 
 
 
 
+    console.log(game.ui)
+    console.log(game.gameState)
+    game.gameState = gameStateKeys.TITLE
+    // game.ui.toggleUI("title")
 
 
-
-    // Uncomment to bypass title screen
-    // setTimeout(startGame, 5000)
 
 
 

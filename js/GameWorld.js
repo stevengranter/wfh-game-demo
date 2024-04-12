@@ -3,13 +3,15 @@ import Observable from "./Observable.js"
 import { playerStates } from "./PlayerState.js"
 import { spriteTags } from "./Sprite.js"
 import GameObject from "./GameObject.js"
+import { GameScene } from "./GameScene.js"
 
 export const gameStateKeys = {
+    TITLE: "title",
     START: "start",
     INTRO: "intro",
-    RUNNING: "running",
+    PLAY: "play",
     PAUSED_BY_PLAYER: "paused-by-player",
-    LEVELEND: "level-end",
+    LEVEL_END: "level-end",
     GAMEOVER: "game-over",
     END: "game-end",
     CREDITS: "credits",
@@ -21,6 +23,8 @@ export class GameWorld extends Observable {
     #timeRemaining
     constructor(player, ui, input) {
         super()
+
+        this.scenes = []
         this.isReady = false
         this.player = player
         this.ui = ui
@@ -36,7 +40,7 @@ export class GameWorld extends Observable {
 
 
         this.isPaused = false
-        this.#gameState = gameStateKeys.START
+        this.#gameState = gameStateKeys.TITLE
         this.musicStarted = false
         this.musicPaused = false
 
@@ -110,9 +114,20 @@ export class GameWorld extends Observable {
 
     }
 
+    addScene(gameScene) {
+        console.log("in addScene method")
+        if (gameScene instanceof GameScene) {
+            this.scenes.push(gameScene)
+            console.log("Game scene added")
+        } else {
+            console.log("Invalid scene type. Expected GameScene.")
+        }
+    }
+
+
 
     loop(timeStamp) {
-        // console.log("in loop function")
+        // console.log("in loop 01")
         if (!this.isReady) {
             console.error("Player, input and/or ui not defined for GameWorld")
         }
@@ -153,9 +168,98 @@ export class GameWorld extends Observable {
                                     if (this.player.stats.score >= 2500) {
                                         // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
                                         // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
-                                        this.player.stats.progress = 1
 
-                                        this.level0Complete()
+
+                                        this.endScene()
+                                    }
+                                    // calculateCombo()
+                                } else if (collider.spriteTag === spriteTags.POO) {
+                                    console.log("💩")
+                                    this.resetCombo()
+                                    this.player.stats.health += collider.healthValue
+                                    this.player.stats.seagullBlessingsReceived++
+                                    if (this.player.stats.health <= 0) {
+                                        this.player.isAlive = false
+                                    }
+
+                                } else if (collider.spriteTag === spriteTags.GULL) {
+                                    console.log("🐦")
+                                }
+
+
+
+                            }
+                        })
+                    }
+                } else {
+                    // console.log("gameloop: player is dead")
+                    this.player.isAlive = false
+                    this.player.setState(playerStates.DEAD)
+
+                }
+
+            } else {
+                console.log("showing endScreen")
+                this.ui.show(this.ui.endsceneScreen)
+            }
+
+            this.currentScene.draw(this.ctx)
+            this.player.draw(this.ctx)
+
+
+            requestAnimationFrame(this.loop.bind(this))
+        } else {
+            // this.pauseGame()
+            console.log("game is paused")
+        }
+
+    }
+
+    gameLoop02(timeStamp) {
+        console.log("in gameloop 02")
+
+        if (!this.isReady) {
+            console.error("Player, input and/or ui not defined for GameWorld")
+        }
+        if (!this.currentScene) {
+            console.error("No currentScene defined for Gameworld loop")
+            return
+        }
+        if (this.isPaused === false) {
+            this.deltaTime = (timeStamp - this.lastTime) / 1000
+            this.lastTime = timeStamp
+
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+
+            this.currentScene.update(this.deltaTime)
+            this.player.update(this.input, this.deltaTime)
+
+            if (this.currentScene.music.currentTime >= 0) {
+                // Only detect collisions when player is alive
+                if (this.player.isAlive === true) {
+                    // console.log(currentScene.spawners)
+                    if (this.currentScene.spawners) {
+                        this.currentScene.spawners.forEach((spawner) => {
+
+                            let collider = CollisionDetector.detectBoxCollision(this.player, spawner.objectPool.poolArray)
+                            // console.log(spawner.objectPool.poolArray)
+                            if (collider) {
+                                console.log("collision")
+                                if (collider.spriteTag === spriteTags.WIENER) {
+                                    // console.log(this.player.stats.health)
+                                    this.calculateCombo()
+                                    this.player.stats.health += collider.healthValue
+                                    this.player.stats.score += collider.pointValue
+                                    this.player.stats.wienersCollected++
+
+                                    // this.ui.elements.scoreRemaining.innerText = "\ " + (2500 - this.player.stats.score) + " to progress"
+                                    this.ui.elements.scoreRemaining.innerText = `( ${2500 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
+
+                                    if (this.player.stats.score >= 2500) {
+                                        // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
+                                        // ui.scoreStatusHUD.innerText = "Next Level Unlocked!
+
+                                        this.endScene()
                                     }
                                     // calculateCombo()
                                 } else if (collider.spriteTag === spriteTags.POO) {
@@ -200,27 +304,175 @@ export class GameWorld extends Observable {
 
     }
 
+    startGame = () => {
+
+        // console.log(player.stats)
+        console.log(this.ui)
+
+        // scene01.layers[0].filter = "none"
+
+        this.initPlayer()
+        this.initScene()
+
+        this.gameState = gameStateKeys.PLAY
+        this.ui.toggleUI(this.gameState)
+
+        const superNantendo = document.getElementById("ui--super-nantendo")
+        superNantendo.classList.add("teal-bg")
+        // canvas.classList.remove("hidden")
+
+        this.currentScene = game.scenes[0]
+
+        console.log(this.currentScene)
+
+    }
+
+    initPlayer() {
+        console.log(this.player.stats)
+        this.player.stats.subscribe(this.player)
+        this.player.stats.subscribe(this.ui.bindings.lives)
+        this.player.stats.subscribe(this.ui.bindings.score)
+        this.player.stats.subscribe(this.ui.bindings.healthBarWidth)
+        this.player.stats.subscribe(this.ui.bindings.healthBarColor)
+        this.player.stats.subscribe(this.ui.bindings.scoreRemaining)
+        this.player.stats.subscribe(this.ui.bindings.wienersCollected)
+        this.subscribe(this.ui.bindings.timeRemaining)
+        this.subscribe(this.player)
+        this.subscribe(this.ui)
+
+        this.player.stats.lives = 3
+        this.player.stats.score = 2400
+        this.player.stats.progress = 0
+        this.player.stats.healthMax = 100
+        this.player.stats.health = 100
+        this.player.stats.wienersCollected = 0
+
+        this.player.isAlive = true
+
+        // this.player.stats.subscribe(game) // TODO: will double notifications for player
+
+
+    }
+
+    initScene() {
+
+    }
+
+
     stopGame() {
         console.log("game has stopped")
     }
 
-    level0Complete() {
+
+
+    endScene() {
+        // Pause the game and the music
         this.isPaused = true
         window.music.pause()
+        this.player.stats.progress++
         console.log("winner winner chicken dinner")
-        this.#gameState = gameStateKeys.LEVELEND
-        setTimeout(() => { document.querySelector("#level-end--container div").style.transform = "translateY(0px)" }, 50)
-        setTimeout(() => { document.querySelector("#excited-chicken").style.transform = "rotate(-15deg) translate(0px,50px) scale(100%)" }, 50)
-        document.querySelector("#level-wieners").textContent = this.player.stats.wienersCollected
-        document.querySelector("#level-score").textContent = this.player.stats.score
-        document.querySelector("#level-blessings").textContent = this.player.stats.seagullBlessingsReceived
+        console.log("this.player.stats.progress " + this.player.stats.progress)
 
-        console.log(this.player.stats.wienersCollected)
-        this.pauseGame()
+
+        this.gameState = gameStateKeys.LEVEL_END
+        this.ui.toggleUI(gameStateKeys.LEVEL_END)
+
+        // window and chicken animations
+        const levelEndContainerDIV = this.ui.elements.levelEndContainer.querySelector("div")
+        setTimeout(() => { levelEndContainerDIV.style.transform = "translateY(0px)" }, 50)
+        setTimeout(() => { this.ui.elements.excitedChicken.style.transform = "rotate(-15deg) translate(0px,50px) scale(100%)" }, 50)
+
+        // Display level stats
+        document.getElementById("level-wieners").textContent = this.player.stats.wienersCollected
+        document.getElementById("level-score").textContent = this.player.stats.score
+        document.getElementById("level-blessings").textContent = this.player.stats.seagullBlessingsReceived
+
+
+        document.getElementById("next-level-button").addEventListener("click", (e) => {
+
+
+
+            this.startScene()
+
+            console.log("next level button clicked")
+        })
 
 
     }
-    message(data) {
+
+    startScene = () => {
+
+
+        const sceneIndex = this.player.stats.progress
+        console.log("🚀 ~ GameWorld ~ this.player.stats.progress:", this.player.stats.progress)
+        this.currentScene = this.scenes[sceneIndex]
+        console.log("🚀 ~ GameWorld ~ this.scenes:", this.scenes)
+        console.log("current Scene is set:" + this.currentScene)
+
+        const playMusic = () => {
+            if (this.currentScene.isMusicLoaded) {
+                console.log("music is loaded")
+                this.toggleMusic()
+            }
+        }
+
+        const placesPlayer = () => {
+            this.player.stats.score = 0
+            this.player.stats.healthMax = 100
+            this.player.stats.health = 10
+            this.player.isAlive = true
+        }
+
+        const curtainUp = () => {
+            this.gameState = gameStateKeys.PLAY
+            this.ui.toggleUI(this.gameState)
+            this.isPaused = false
+            this.pauseGame()
+            this.loop(0, this.#currentScene)
+        }
+
+        console.log("player.progress" + this.player.stats.progress)
+
+        // Call the functions in the desired order
+        playMusic()
+        placesPlayer()
+        curtainUp()
+    }
+
+
+    runIntro() {
+
+        console.log(this.ui)
+
+        console.log(this.player.stats)
+
+        const currentSceneIndex = this.player.stats.progress
+        this.currentScene = this.scenes[currentSceneIndex]
+        console.dir(this.currentScene)
+
+        this.ui.toggleUI("cutscene")
+
+
+        this.ui.hide(this.ui.elements.titleScreen)
+        this.ui.show(this.ui.elements.introScreen)
+
+        this.ui.show(this.ui.elements.popupNan)
+        setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
+        setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(0px)" }, 700)
+
+        this.currentScene.draw(this.ctx)
+        // // setTimeout(() => { animateBlur() }, 1000)
+        // // typeWriter('intro-dialog', dialogText, 25)
+
+        document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
+            setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
+            setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(475px)" }, 700)
+            setTimeout(() => this.startScene(), 1300)
+        })
+    }
+
+
+    receiveUpdate(data) {
         // console.log(this.constructor.name + " received :", data)
     }
 
@@ -230,10 +482,10 @@ export class GameWorld extends Observable {
             this.toggleMusic()
             switch (this.#gameState) {
                 case gameStateKeys.PAUSED_BY_PLAYER:
-                    this.ui.showUI("paused")
+                    this.ui.toggleUI("paused")
                     break
-                case gameStateKeys.LEVELEND:
-                    this.ui.showUI("level-end")
+                case gameStateKeys.LEVEL_END:
+                    this.ui.toggleUI("level-end")
                     break
                 default:
                     console.log("default: No UI for gamestate")
@@ -243,7 +495,7 @@ export class GameWorld extends Observable {
 
         }
         else {
-            this.ui.showUI("play")
+            this.ui.toggleUI("play")
             // window.music.currentTime = this.musicPausedTime
 
             this.toggleMusic()

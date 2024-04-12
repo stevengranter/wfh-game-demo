@@ -40,7 +40,7 @@
         />
         <div
           id="game-screen__hud-overlay"
-          class="overlay"
+          class="overlay hidden"
           data-ui="true"
           data-gamestate="play"
         >
@@ -93,7 +93,7 @@
         </div>
         <div
           id="game-screen__menu-overlay"
-          class="overlay"
+          class="overlay hidden"
           data-ui="true"
           >
           <!-- START: #menu-screen -->
@@ -109,12 +109,13 @@
               <li>Score: <span id="level-score"></span></li>
               <li>Lucky Seagull Blessings: <span id="level-blessings"></span></li>
               <!-- <li>Rating: ⭐️ ⭐️ ⭐️</li> -->
-              <button>Next level</button>
+              <button id="next-level-button">Next level</button>
               
             </ul>
             </div>
-           <img src="./images/wiener-chicken-01.png" id="excited-chicken" alt="an excited chicken">
-           
+            <div id="excited-chicken" data-ui="true">
+              <img src="./images/wiener-chicken-01.png" alt="an excited chicken">
+            </div>
         </div>
           <!-- <div id="congrats-screen" class="ui-panel">
             <header><h2>Next level unlocked!</h2></header>
@@ -136,7 +137,7 @@
           data-gamestate="cutscene"
           display="block"
         >
-          <div id="title-screen" data-ui="true" class="block">
+          <div id="title-screen" data-ui="true" data-gamestate="title" class="block">
             <div>
               <img src="./images/wfh-logo.webp" alt="" />
               <div id="start-button" data-ui="true"><h2>Start</h2></div>

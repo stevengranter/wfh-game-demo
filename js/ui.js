@@ -38,9 +38,12 @@ export default class UI {
 
         console.log(this)
 
-
     }
 
+
+    receiveUpdate(data) {
+        console.dir("UI received: ", data)
+    }
 
     init(dataAttribute) {
         let uiDOMElements = document.querySelectorAll(`${dataAttribute}`)
@@ -68,7 +71,7 @@ export default class UI {
         element.classList.remove("block")
     }
 
-    showUI(gameState) {
+    toggleUI(gameState, isActive = true) {
         for (let key in this.elements) {
             // console.log("in elements loop")
             // console.log(typeof this.elements[key])
@@ -78,7 +81,7 @@ export default class UI {
                 // console.log(element.dataset)
                 if (element.dataset.gamestate !== undefined) {
                     // console.log(element + "has gameState of " + element.dataset.gamestate)
-                    if (element.dataset.gamestate === gameState) {
+                    if (element.dataset.gamestate === gameState && isActive === true) {
                         this.show(element)
                         element.style.display = "block"
 
@@ -90,6 +93,8 @@ export default class UI {
             }
         }
     }
+
+
     appendTemplate(template, container) {
         container.appendChild(template)
     }
@@ -149,7 +154,7 @@ export class DataBinder {
         this.formatFunction = formatFunction
     }
 
-    message(data) {
+    receiveUpdate(data) {
 
         if (data.hasOwnProperty(this.elementId)) {
             const element = document.getElementById(this.elementId)

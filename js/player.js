@@ -97,16 +97,16 @@ export default class Player extends Sprite {
         // this.setState(playerStates.STANDING_LEFT)
     }
 
-    message(data) {
-        // console.log(this.constructor.name + " received ", data)
-        // console.log("timestamp:", Date.now())
+    startNewLevel() {
+        this.isAlive = true
 
-        // Check if data exists and has the health property before accessing it
-        // if (data && data.health && data.health <= 0) {
-        //     this.isAlive = false
-        //     // Uncomment the following line if callSaintPeter function is defined and needs to be called
-        //     // this.callSaintPeter();
-        // }
+    }
+
+    receiveUpdate(data) {
+
+        if (typeof data === 'object' && data.hasOwnProperty("gameState")) {
+            console.log("data has gamestate:", data.gameState)
+        }
     }
 
     // callSaintPeter() {

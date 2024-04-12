@@ -617,13 +617,13 @@ button {
 #level-end--container {
   height: 100%;
 }
-#level-end--container div {
+#level-end--container .ui-panel {
   transform: translateY(120%);
   transition: all 0.5s 0.5s;
   height: 100%;
 }
 
-img#excited-chicken {
+div#excited-chicken {
   position: absolute;
   bottom: 0;
   right: 0;
