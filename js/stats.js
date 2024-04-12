@@ -1,4 +1,4 @@
-import Observable from "./Observable.js"
+import Observable from "./observable.js"
 
 export default class Stats extends Observable {
     #lives = 3

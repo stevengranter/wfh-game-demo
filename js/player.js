@@ -1,6 +1,6 @@
 
-import Sprite from "./Sprite.js"
-import Stats from "./Stats.js"
+import Sprite from "./sprite.js"
+import Stats from "./stats.js"
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
 import {
     Dead,
@@ -11,7 +11,7 @@ import {
     JumpingLeft,
     JumpingRight,
     playerStates
-} from "./PlayerState.js"
+} from "./player-state.js"
 
 
 export default class Player extends Sprite {

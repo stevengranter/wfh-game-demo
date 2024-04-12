@@ -1,5 +1,5 @@
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
-import Observable from "./Observable.js"
+import Observable from "./observable.js"
 
 
 // let gameSceneTestObj = {

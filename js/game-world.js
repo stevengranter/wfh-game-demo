@@ -1,9 +1,9 @@
-import CollisionDetector from "./CollisionDetector.js"
-import Observable from "./Observable.js"
-import { playerStates } from "./PlayerState.js"
-import { spriteTags } from "./Sprite.js"
-import GameObject from "./GameObject.js"
-import { GameScene } from "./GameScene.js"
+import CollisionDetector from "./collision-detector.js"
+import Observable from "./observable.js"
+import { playerStates } from "./player-state.js"
+import { spriteTags } from "./sprite.js"
+import GameObject from "./game-object.js"
+import { GameScene } from "./game-scene.js"
 import { typeWriter, animateBlur } from "./utils.js"
 
 export const gameStateKeys = {
