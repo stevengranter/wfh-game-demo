@@ -19,13 +19,9 @@ Get ready to dive into the delightfully wacky world of "Wieners from Heaven," wh
 
 > ⛔️ **WARNING**: This game is incomplete, in active development (Feb-Mar 2024), and contains many, MANY bugs and broken or missing functionality/features. _It will probably be the opposite of fun and it may even crash your web browser._ 😳
 
-⚠️ [Play Wieners From Heaven: Maple Syrup Edition](https://stevengranter.github.io/wieners-maple-syrup/src/)
+⚠️ [Play Wieners From Heaven: Maple Syrup Edition](https://stevengranter.github.io/wieners-maple-syrup)
 
 ### Bonus Items
-
-#### Documents 📓
-
-[Game Design Document](https://stevengranter.github.io/wieners-maple-syrup/docs/gdd/index.html)
 
 #### Official Game Soundtrack 💿
 
@@ -33,6 +29,4 @@ Get ready to dive into the delightfully wacky world of "Wieners from Heaven," wh
 
 Track List
 
-1. [i = "da b'y"](https://soundcloud.com/sansunicorn/i-da-by) (released February 18, 2024)
-
-2. ...more soon!
+[i = "da b'y"](https://soundcloud.com/sansunicorn/i-da-by) (released February 18, 2024)
