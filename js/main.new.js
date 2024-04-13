@@ -17,7 +17,7 @@ import InputHandler from "./input-handler.js"
 import { PauseMenu } from "./pause-menu.js"
 import { DebugMenu } from "./debug-menu.js"
 
-import { spriteTags } from "./sprite.old.js"
+import { spriteTags } from "./sprite.js"
 import ObjectPool from "./object-pool.js"
 
 // import Projectile from "./projectile.js"
@@ -91,66 +91,142 @@ window.addEventListener("load", function () {
     // Initialize Game World
 
     const game = new GameWorld(player, ui, input)
+    console.log(game)
 
     // Event listeners
     const startButton = ui.elements.startButton
     startButton.addEventListener("click", function (e) {
-        game.runIntro()
+        game.loop(0)
     }.bind(game))
+
 
     const pauseMenu = new PauseMenu(ui)
 
     // Wiener 🌭
 
-    const WIENER_CONFIG = {
-        spriteSrc: "./images/wiener-32px-spin-01.png",
-        animationFrame: { x: 0, y: 0, width: 32, height: 32 },
-        animations: {
-            Spinning: {
-                frameX: 0,
-                frameY: 0,
-                endFrame: 28
-            },
-        },
-        location: {
-            dx: {
-                random:
-                {
-                    lowerBound: 0,
-                    upperBound: CANVAS_WIDTH
-                }
-            },
-            dy: {
-                random:
-                {
-                    lowerBound: 0,
-                    upperBound: CANVAS_HEIGHT
+    const getWienerConfig = () => {
+        return {
+            spriteSrc: "./images/wiener-32px-spin-01.png",
+            animationFrame: { x: 0, y: 0, width: 32, height: 32 },
+            animations: {
+                Spinning: {
+                    frameX: 0,
+                    frameY: 0,
+                    endFrame: 28
                 },
             },
-        },
-        direction: {
-            velocityX: {
-                random:
-                {
-                    lowerBound: 0,
-                    upperBound: CANVAS_HEIGHT
+            location: {
+                dx: {
+                    random:
+                    {
+                        lowerBound: 0,
+                        upperBound: CANVAS_WIDTH
+                    }
+                },
+                dy: {
+                    random:
+                    {
+                        lowerBound: 0,
+                        upperBound: -40
+                    },
                 },
             },
-            velocityY: {
-                random:
-                {
-                    lowerBound: 0,
-                    upperBound: CANVAS_HEIGHT
+            direction: {
+                velocityX: {
+                    random:
+                    {
+                        lowerBound: -100,
+                        upperBound: 300
+                    },
+                },
+                velocityY: {
+                    random:
+                    {
+                        lowerBound: 50,
+                        upperBound: 300
+                    },
                 },
             },
-        },
-        healthValue: 5,
-        spriteTag: spriteTags.WIENER
+            healthValue: 5,
+            spriteTag: spriteTags.WIENER
+        }
     }
 
+    const newWiener = (() => new Sprite(getWienerConfig()))()
 
-    const newWiener = new Sprite(WIENER_CONFIG)
     console.log("🚀 ~ newWiener:", newWiener)
+
+
+    const mySpawner = new Spawner()
+    console.log(mySpawner)
+
+    mySpawner.registerObjectPool("wiener", getWienerConfig)
+
+    // mySpawner.startSpawningObjects("wiener", 1, 500, 10, 10000, 1000)
+
+    setTimeout(() => {
+        mySpawner.spawnObject("wiener", "objectID-", 4, 10, 10)
+    }, 1000)
+
+    setTimeout(() => {
+        mySpawner.spawnObject("wiener", "objectID-", 4, 25, 5)
+    }, 5000)
+
+    setTimeout(() => {
+        mySpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
+    }, 10000)
+
+    setTimeout(() => {
+        mySpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
+    }, 15000)
+
+
+
+
+    const scene00_config = {
+        index: 0,
+        name: "Garden",
+        playerBounds: {
+            topLeft: [0, 0],
+            topRight: [CANVAS_WIDTH, 0],
+            bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
+            bottomLeft: [0, CANVAS_HEIGHT]
+        },
+        layers: [],
+        sprites: [],
+        spawners: [mySpawner],
+        music: [],
+        sfx: [],
+
+    }
+
+    const scene00 = new GameScene(scene00_config)
+
+    game.scenes = []
+    game.scenes.push(scene00)
+
+    ui.toggleUI("play")
+    game.startScene()
+
+    console.dir(mySpawner)
+
+    // game.loop2(0, mySpawner)
+
+
+
+
+    // setTimeout(() => {
+    //     console.log("spawned Objects: ")
+    //     console.dir(spawner.getAllSpawnedObjects())
+    //     spawner.draw(ctx)
+    // }, 2000)
+
+    // setTimeout(() => {
+    //     console.log("spawned Objects: ")
+    //     console.dir(spawner.getAllSpawnedObjects())
+    //     spawner.draw(ctx)
+    // }, 12000)
+
 
 
 

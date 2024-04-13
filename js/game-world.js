@@ -1,7 +1,7 @@
 import CollisionDetector from "./collision-detector.js"
 import Observable from "./observable.js"
 import { playerStates } from "./player-state.js"
-import { spriteTags } from "./sprite.old.js"
+import { spriteTags } from "./sprite.js"
 import GameObject from "./game-object.js"
 import { GameScene } from "./game-scene.js"
 import { typeWriter, animateBlur } from "./utils.js"
@@ -126,13 +126,13 @@ export class GameWorld extends Observable {
     }
 
 
-
     loop(timeStamp) {
         // console.log("in loop 01")
+        // console.log(this.currentScene)
         if (!this.isReady) {
             console.error("Player, input and/or ui not defined for GameWorld")
         }
-        if (!this.currentScene) {
+        if (this.currentScene === undefined) {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
@@ -149,7 +149,8 @@ export class GameWorld extends Observable {
             if (this.currentScene.music.currentTime >= 0) {
                 // Only detect collisions when player is alive
                 if (this.player.isAlive === true) {
-                    // console.log(currentScene.spawners)
+                    console.log(this.currentScene.spawners)
+
                     if (this.currentScene.spawners) {
                         this.currentScene.spawners.forEach((spawner) => {
 
@@ -309,10 +310,11 @@ export class GameWorld extends Observable {
 
     startScene = () => {
 
-
-        const sceneIndex = this.player.stats.progress
+        // TODO: fix
+        const sceneIndex = 0 //this.player.stats.progress
         // console.log("🚀 ~ GameWorld ~ this.player.stats.progress:", this.player.stats.progress)
         this.currentScene = this.scenes[sceneIndex]
+        console.log(this.currentScene)
         // console.log("🚀 ~ GameWorld ~ this.scenes:", this.scenes)
         // console.log("current Scene is set:" + this.currentScene)
 

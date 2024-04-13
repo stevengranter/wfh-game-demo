@@ -70,21 +70,11 @@ export default class Sprite {
             switch (key) {
                 case "location":
                     // Set random dx and dy values if specified in the configuration
-                    if (value.dx && value.dx.random) {
-                        this.dx = getRandomInt(value.dx.random.lowerBound, value.dx.random.upperBound)
-                    }
-                    if (value.dy && value.dy.random) {
-                        this.dy = getRandomInt(value.dy.random.lowerBound, value.dy.random.upperBound)
-                    }
+                    this.setRandomLocation(value)
                     break
                 case "direction":
                     // Set random velocityX and velocityY values if specified in the configuration
-                    if (value.velocityX && value.velocityX.random) {
-                        this.velocityX = getRandomInt(value.velocityX.random.lowerBound, value.velocityX.random.upperBound)
-                    }
-                    if (value.velocityY && value.velocityY.random) {
-                        this.velocityY = getRandomInt(value.velocityY.random.lowerBound, value.velocityY.random.upperBound)
-                    }
+                    this.setRandomDirection(value)
                     break
                 default:
                     // Assign any other key-value pairs directly to the sprite object
@@ -94,6 +84,24 @@ export default class Sprite {
     }
 
 
+
+    setRandomDirection(value) {
+        if (value.velocityX && value.velocityX.random) {
+            this.velocityX = getRandomInt(value.velocityX.random.lowerBound, value.velocityX.random.upperBound)
+        }
+        if (value.velocityY && value.velocityY.random) {
+            this.velocityY = getRandomInt(value.velocityY.random.lowerBound, value.velocityY.random.upperBound)
+        }
+    }
+
+    setRandomLocation(value) {
+        if (value.dx && value.dx.random) {
+            this.dx = getRandomInt(value.dx.random.lowerBound, value.dx.random.upperBound)
+        }
+        if (value.dy && value.dy.random) {
+            this.dy = getRandomInt(value.dy.random.lowerBound, value.dy.random.upperBound)
+        }
+    }
 
     // TODO: create method
     // makeSpriteFromNothing() {}
