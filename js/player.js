@@ -1,5 +1,5 @@
 
-import Sprite from "./sprite.js"
+import Sprite from "./sprite.old.js"
 import Stats from "./stats.js"
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
 import {

@@ -2,7 +2,7 @@ import { toCamelCase } from "./utils.js"
 export default class UI {
     constructor(dataAttribute, player) {
         this.elements = this.init(dataAttribute)
-        console.log(dataAttribute)
+        // console.log(dataAttribute)
         this.bindings = {}
         // this.readoutElements = this.initReadouts
         this.bindings.score = new DataBinder("score", "textContent")
@@ -39,7 +39,7 @@ export default class UI {
         // this.hudScore.update("1000")
 
 
-        console.log(this)
+        // console.log(this)
 
     }
 

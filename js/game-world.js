@@ -1,7 +1,7 @@
 import CollisionDetector from "./collision-detector.js"
 import Observable from "./observable.js"
 import { playerStates } from "./player-state.js"
-import { spriteTags } from "./sprite.js"
+import { spriteTags } from "./sprite.old.js"
 import GameObject from "./game-object.js"
 import { GameScene } from "./game-scene.js"
 import { typeWriter, animateBlur } from "./utils.js"
@@ -51,8 +51,8 @@ export class GameWorld extends Observable {
         this.comboCounter = 0
 
         window.gameWorld = this
-        console.log(window)
-        console.log(this)
+        // console.log(window)
+        // console.log(this)
 
 
 
@@ -116,12 +116,12 @@ export class GameWorld extends Observable {
     }
 
     addScene(gameScene) {
-        console.log("in addScene method")
+        // console.log("in addScene method")
         if (gameScene instanceof GameScene) {
             this.scenes.push(gameScene)
             console.log("Game scene added")
         } else {
-            console.log("Invalid scene type. Expected GameScene.")
+            console.warn("Invalid scene type. Expected GameScene.")
         }
     }
 
@@ -165,7 +165,7 @@ export class GameWorld extends Observable {
                                     this.player.stats.wienersCollected++
 
                                     // this.ui.elements.scoreRemaining.innerText = "\ " + (2500 - this.player.stats.score) + " to progress"
-                                    console.log(this.player.stats.progress)
+                                    // console.log(this.player.stats.progress)
                                     if (this.player.stats.progress === 0) {
                                         this.ui.elements.scoreRemaining.innerText = `( ${1000 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
 
@@ -214,7 +214,7 @@ export class GameWorld extends Observable {
                 }
 
             } else {
-                console.log("showing endScreen")
+                // console.log("showing endScreen")
                 this.ui.show(this.ui.endsceneScreen)
             }
 
@@ -235,7 +235,7 @@ export class GameWorld extends Observable {
     startGame = () => {
 
         // console.log(player.stats)
-        console.log(this.ui)
+        // console.log(this.ui)
 
         // scene01.layers[0].filter = "none"
 
@@ -251,7 +251,7 @@ export class GameWorld extends Observable {
 
         this.currentScene = game.scenes[0]
 
-        console.log(this.currentScene)
+        // console.log(this.currentScene)
 
     }
 
@@ -311,12 +311,12 @@ export class GameWorld extends Observable {
 
 
         const sceneIndex = this.player.stats.progress
-        console.log("🚀 ~ GameWorld ~ this.player.stats.progress:", this.player.stats.progress)
+        // console.log("🚀 ~ GameWorld ~ this.player.stats.progress:", this.player.stats.progress)
         this.currentScene = this.scenes[sceneIndex]
-        console.log("🚀 ~ GameWorld ~ this.scenes:", this.scenes)
-        console.log("current Scene is set:" + this.currentScene)
+        // console.log("🚀 ~ GameWorld ~ this.scenes:", this.scenes)
+        // console.log("current Scene is set:" + this.currentScene)
 
-        console.log(this.currentScene)
+        // console.log(this.currentScene)
         const playMusic = () => {
             if (this.currentScene.hasOwnProperty("music")) {
                 if (this.currentScene.isMusicLoaded) {
@@ -354,13 +354,13 @@ export class GameWorld extends Observable {
 
     runIntro() {
 
-        console.log(this.ui)
+        // console.log(this.ui)
 
-        console.log(this.player.stats)
+        // console.log(this.player.stats)
 
         const currentSceneIndex = this.player.stats.progress
         this.currentScene = this.scenes[currentSceneIndex]
-        console.dir(this.currentScene)
+        // console.dir(this.currentScene)
 
         this.ui.toggleUI("cutscene")
 
@@ -406,7 +406,7 @@ export class GameWorld extends Observable {
 
     pauseGame() {
         if (this.isPaused) {
-            console.log(this.gameState)
+            // console.log(this.gameState)
             this.toggleMusic()
             switch (this.#gameState) {
                 case gameStateKeys.PAUSED_BY_PLAYER:
@@ -416,7 +416,7 @@ export class GameWorld extends Observable {
                     this.ui.toggleUI("level-end")
                     break
                 default:
-                    console.log("default: No UI for gamestate")
+                    console.warn("No UI defined for gamestate: " + this.#gameState)
             }
 
 
@@ -482,7 +482,7 @@ export class GameWorld extends Observable {
 
 
         if (this.comboCounter === 10) {
-            console.log("COMBO!!!")
+            // console.log("COMBO!!!")
         }
     }
 

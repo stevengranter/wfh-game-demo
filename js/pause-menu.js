@@ -13,7 +13,7 @@ export class PauseMenu extends Observable {
   init() {
     const containerName = toKebabCase(this.constructor.name) + "--container"
     const container = document.getElementById(containerName)
-    console.log(container)
+    // console.log(container)
     this.createElement()
     container.appendChild(this.element)
   }
