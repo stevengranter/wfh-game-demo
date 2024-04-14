@@ -21,7 +21,7 @@ import { spriteTags } from "./sprite.js"
 import ObjectPool from "./object-pool.js"
 
 // import Projectile from "./projectile.js"
-import CollisionDetector from "./collision-detector.js"
+import CollisionDetector from "./collision-detector.new.js"
 import { drawStatusText, getRandomInt, wait, typeWriter } from "./utils.js"
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants.js"
 
@@ -169,9 +169,9 @@ window.addEventListener("load", function () {
                     },
                 },
             },
-            healthValue: 5,
-            spriteTag: spriteTags.Gull,
-            timeLimit: 4
+            healthValue: 0,
+            spriteTag: spriteTags.GULL,
+            timeLimit: 10
         }
     }
 
@@ -244,7 +244,8 @@ window.addEventListener("load", function () {
                 },
             },
             healthValue: 5,
-            spriteTag: spriteTags.Gull,
+            pointValue: 100,
+            spriteTag: spriteTags.WIENER,
             timeLimit: 4
         }
     }
@@ -305,6 +306,36 @@ window.addEventListener("load", function () {
 
     game.scenes = []
     game.scenes.push(scene00)
+
+    function initObservers() {
+        console.log(game.player.stats)
+        game.player.stats.subscribe(game.player)
+        game.player.stats.subscribe(game.ui.bindings.lives)
+        game.player.stats.subscribe(game.ui.bindings.score)
+        game.player.stats.subscribe(game.ui.bindings.healthBarWidth)
+        game.player.stats.subscribe(game.ui.bindings.healthBarColor)
+        game.player.stats.subscribe(game.ui.bindings.scoreRemaining)
+        game.player.stats.subscribe(game.ui.bindings.wienersCollected)
+
+
+        game.scenes.forEach((scene) => {
+            console.log(scene)
+            scene.subscribe(game.player)
+        })
+
+        console.log(game.ui.bindings)
+        game.subscribe(game.ui.bindings.timeRemaining)
+        game.subscribe(game.player)
+        game.subscribe(game.ui)
+
+
+
+        // game.player.stats.subscribe(game) // TODO: will double notifications for player
+
+
+    }
+
+    initObservers()
 
     ui.toggleUI("play")
     game.startScene()
