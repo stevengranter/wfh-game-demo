@@ -11,7 +11,7 @@ import { GameScene } from "./game-scene.js"
 import { GameWorld, gameStateKeys } from "./game-world.new.js"
 import GameObject from "./game-object.js"
 import UI from "./ui.js"
-import Layer from "./layer.js"
+import Layer from "./layer.new.js"
 import Player from "./player.js"
 import InputHandler from "./input-handler.js"
 import { PauseMenu } from "./pause-menu.js"
@@ -104,6 +104,102 @@ window.addEventListener("load", function () {
 
     // Wiener 🌭
 
+    const layerConfig = () => {
+        return {
+            spriteSrc: "./images/garden-06.png",
+            animationFrame: {},
+            animations: {},
+            location: { dx: 0, dy: 0 },
+            direction: {
+                velocityX: 0,
+                velocityY: 0,
+            },
+            spawners: [],
+            timeline: {},
+            player: player,
+            playerScrollFactor: 0,
+        }
+    }
+
+    const myLayer = new Layer({ ...layerConfig() })
+
+
+    // console.dir(myLayer)
+
+    const getGullConfig = () => {
+        return {
+            spriteSrc: "./images/seagull-flying-sprite-01-sheet.png",
+            animationFrame: { x: 0, y: 0, width: 44, height: 51 },
+            animations: {
+                Spinning: {
+                    frameX: 0,
+                    frameY: 0,
+                    endFrame: 7
+                },
+            },
+            location: {
+                dx: {
+                    random:
+                    {
+                        lowerBound: CANVAS_WIDTH,
+                        upperBound: CANVAS_WIDTH + 100
+                    }
+                },
+                dy: {
+                    random:
+                    {
+                        lowerBound: 0,
+                        upperBound: -40
+                    },
+                },
+            },
+            direction: {
+                velocityX: {
+                    random:
+                    {
+                        lowerBound: -300,
+                        upperBound: -100
+                    },
+                },
+                velocityY: {
+                    random:
+                    {
+                        lowerBound: 10,
+                        upperBound: 20
+                    },
+                },
+            },
+            healthValue: 5,
+            spriteTag: spriteTags.Gull,
+            timeLimit: 4
+        }
+    }
+
+
+
+    const newGull = (() => new Sprite(getGullConfig()))()
+
+    console.log("🚀 ~ newGull:", newGull)
+
+
+
+
+    const gullSpawner = new Spawner()
+
+    gullSpawner.registerObjectPool("gull", getGullConfig)
+
+    console.log(gullSpawner)
+
+    // setTimeout(() => {
+    //     gullSpawner.spawnObject("gull", "objectID-", 5, 10, 10)
+    // }, 1000)
+
+    // setTimeout(() => {
+    //     gullSpawner.spawnObject("gull", "objectID-", 5, 50, 5)
+    // }, 15000)
+
+
+
     const getWienerConfig = () => {
         return {
             spriteSrc: "./images/wiener-32px-spin-01.png",
@@ -119,15 +215,15 @@ window.addEventListener("load", function () {
                 dx: {
                     random:
                     {
-                        lowerBound: 0,
-                        upperBound: CANVAS_WIDTH
+                        lowerBound: -20,
+                        upperBound: CANVAS_WIDTH + 20
                     }
                 },
                 dy: {
                     random:
                     {
-                        lowerBound: 0,
-                        upperBound: -40
+                        lowerBound: -50,
+                        upperBound: 0
                     },
                 },
             },
@@ -135,8 +231,8 @@ window.addEventListener("load", function () {
                 velocityX: {
                     random:
                     {
-                        lowerBound: -100,
-                        upperBound: 300
+                        lowerBound: -10,
+                        upperBound: +10
                     },
                 },
                 velocityY: {
@@ -148,43 +244,39 @@ window.addEventListener("load", function () {
                 },
             },
             healthValue: 5,
-            spriteTag: spriteTags.WIENER,
+            spriteTag: spriteTags.Gull,
             timeLimit: 4
         }
     }
 
-    const newWiener = (() => new Sprite(getWienerConfig()))()
 
-    console.log("🚀 ~ newWiener:", newWiener)
+    const wienerSpawner = new Spawner()
 
 
-    const mySpawner = new Spawner()
-    console.log(mySpawner)
+    wienerSpawner.registerObjectPool("wiener", getWienerConfig)
+    console.log(wienerSpawner)
 
-    mySpawner.registerObjectPool("wiener", getWienerConfig)
-    console.log(mySpawner)
+    wienerSpawner.startSpawningObjects("wiener", 1, 500, 10, 100, 1000)
 
-    // mySpawner.startSpawningObjects("wiener", 1, 500, 10, 10000, 1000)
+    // setTimeout(() => {
+    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 10, 10)
+    // }, 1000)
 
-    setTimeout(() => {
-        mySpawner.spawnObject("wiener", "objectID-", 4, 10, 10)
-    }, 1000)
+    // setTimeout(() => {
+    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 25, 5)
+    // }, 5000)
 
-    setTimeout(() => {
-        mySpawner.spawnObject("wiener", "objectID-", 4, 25, 5)
-    }, 5000)
+    // setTimeout(() => {
+    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
+    // }, 10000)
 
-    setTimeout(() => {
-        mySpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
-    }, 10000)
+    // setTimeout(() => {
+    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
+    // }, 12000)
 
-    setTimeout(() => {
-        mySpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
-    }, 12000)
-
-    setTimeout(() => {
-        mySpawner.spawnObject("wiener", "objectID-", 4, 400, 10)
-    }, 15000)
+    // setTimeout(() => {
+    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 400, 10)
+    // }, 15000)
 
 
 
@@ -200,13 +292,16 @@ window.addEventListener("load", function () {
         },
         layers: [],
         sprites: [],
-        spawners: [mySpawner],
+        spawners: [wienerSpawner, gullSpawner],
         music: [],
         sfx: [],
 
     }
 
     const scene00 = new GameScene(scene00_config)
+    scene00.layers.push(myLayer)
+
+    console.log(scene00)
 
     game.scenes = []
     game.scenes.push(scene00)

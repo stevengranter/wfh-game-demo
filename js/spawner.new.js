@@ -27,7 +27,7 @@ class ObjectPool {
 
     returnObject(obj) {
         if (obj && obj.hasOwnProperty("configObject")) {
-            console.log("returnObject: object has configObject")
+            // console.log("returnObject: object has configObject")
         }
         this.pool.push(obj)
     }
@@ -116,9 +116,7 @@ export default class Spawner {
                 if (object.timeLimit <= 0) {
                     object.spawned = false
                     object.location = null
-                    this.objectPools[objectType].returnObject(object)
-                    console.dir(object)
-                    console.log("object returned to pool") // TODO: not being returned, fix
+                    this.objectPools[objectType].returnObject(object)// TODO: not being returned, fix
                     this.spawnedObjects = this.spawnedObjects.filter(obj => obj !== object)
                 }
             }
