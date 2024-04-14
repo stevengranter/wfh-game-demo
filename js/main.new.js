@@ -190,13 +190,13 @@ window.addEventListener("load", function () {
 
     console.log(gullSpawner)
 
-    // setTimeout(() => {
-    //     gullSpawner.spawnObject("gull", "objectID-", 5, 10, 10)
-    // }, 1000)
+    setTimeout(() => {
+        gullSpawner.spawnObject("gull", "objectID-", 5, 10, 10)
+    }, 1000)
 
-    // setTimeout(() => {
-    //     gullSpawner.spawnObject("gull", "objectID-", 5, 50, 5)
-    // }, 15000)
+    setTimeout(() => {
+        gullSpawner.spawnObject("gull", "objectID-", 5, 50, 5)
+    }, 15000)
 
 
 
@@ -256,27 +256,27 @@ window.addEventListener("load", function () {
     wienerSpawner.registerObjectPool("wiener", getWienerConfig)
     console.log(wienerSpawner)
 
-    wienerSpawner.startSpawningObjects("wiener", 1, 500, 10, 100, 1000)
+    // wienerSpawner.startSpawningObjects("wiener", 1, 500, 10, 100, 1000)
 
-    // setTimeout(() => {
-    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 10, 10)
-    // }, 1000)
+    setTimeout(() => {
+        wienerSpawner.spawnObject("wiener", "objectID-", 4, 10, 10)
+    }, 1000)
 
-    // setTimeout(() => {
-    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 25, 5)
-    // }, 5000)
+    setTimeout(() => {
+        wienerSpawner.spawnObject("wiener", "objectID-", 4, 25, 5)
+    }, 5000)
 
-    // setTimeout(() => {
-    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
-    // }, 10000)
+    setTimeout(() => {
+        wienerSpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
+    }, 10000)
 
-    // setTimeout(() => {
-    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
-    // }, 12000)
+    setTimeout(() => {
+        wienerSpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
+    }, 12000)
 
-    // setTimeout(() => {
-    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 400, 10)
-    // }, 15000)
+    setTimeout(() => {
+        wienerSpawner.spawnObject("wiener", "objectID-", 4, 400, 10)
+    }, 15000)
 
 
 
