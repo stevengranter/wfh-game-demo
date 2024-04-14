@@ -8,7 +8,7 @@ import Sprite from "./sprite.js"
 
 // OG modules
 import { GameScene } from "./game-scene.js"
-import { GameWorld, gameStateKeys } from "./game-world.js"
+import { GameWorld, gameStateKeys } from "./game-world.new.js"
 import GameObject from "./game-object.js"
 import UI from "./ui.js"
 import Layer from "./layer.js"
@@ -148,7 +148,8 @@ window.addEventListener("load", function () {
                 },
             },
             healthValue: 5,
-            spriteTag: spriteTags.WIENER
+            spriteTag: spriteTags.WIENER,
+            timeLimit: 4
         }
     }
 
@@ -161,6 +162,7 @@ window.addEventListener("load", function () {
     console.log(mySpawner)
 
     mySpawner.registerObjectPool("wiener", getWienerConfig)
+    console.log(mySpawner)
 
     // mySpawner.startSpawningObjects("wiener", 1, 500, 10, 10000, 1000)
 
@@ -178,6 +180,10 @@ window.addEventListener("load", function () {
 
     setTimeout(() => {
         mySpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
+    }, 12000)
+
+    setTimeout(() => {
+        mySpawner.spawnObject("wiener", "objectID-", 4, 400, 10)
     }, 15000)
 
 
@@ -208,7 +214,7 @@ window.addEventListener("load", function () {
     ui.toggleUI("play")
     game.startScene()
 
-    console.dir(mySpawner)
+    // console.dir(mySpawner)
 
     // game.loop2(0, mySpawner)
 

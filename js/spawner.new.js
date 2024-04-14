@@ -59,6 +59,7 @@ export default class Spawner {
 
                     object.id = objectId + spawnCount
                     object.spawned = true
+                    object.objectType = objectType
 
                     setTimeout(() => {
                         object.spawned = false
@@ -102,17 +103,21 @@ export default class Spawner {
 
     update(deltaTime) {
         this.spawnedObjects.forEach(object => {
+            const objectType = object.objectType
             if (object instanceof Sprite && object.spawned) {
                 object.update(deltaTime)
 
                 // Decrease the remaining time for the spawned object
                 object.timeLimit -= deltaTime
+                // console.log("🚀 ~ Spawner ~ update ~ object.timeLimit:", object.timeLimit)
+
 
                 // Return the object to the pool if the time limit is reached
                 if (object.timeLimit <= 0) {
                     object.spawned = false
                     object.location = null
-                    this.objectPools[object.type].returnObject(object)
+                    this.objectPools[objectType].returnObject(object)
+                    console.dir(object)
                     console.log("object returned to pool") // TODO: not being returned, fix
                     this.spawnedObjects = this.spawnedObjects.filter(obj => obj !== object)
                 }
@@ -121,7 +126,8 @@ export default class Spawner {
 
         this.timeSinceSpawn += deltaTime * 1000
         if (this.timeSinceSpawn >= this.spawnDrawTime) {
-            const objectPool = this.objectPools.wiener
+            // const objectType = this.objectPools.objec
+            const objectPool = this.objectPools[objectType]
             const element = objectPool.borrowObject()
             element.timeLimit = spawnDrawTime
             // Call the update method on the borrowed object's data
