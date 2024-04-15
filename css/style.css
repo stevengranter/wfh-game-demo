@@ -273,6 +273,8 @@ embed {
   right: 2%;
   top: 6%;
   padding: 0.8em;
+  transition: transform 0.6s 3s linear;
+  /* transform: translatey(-200px); */
 }
 
 #intro-dialog {
@@ -280,7 +282,7 @@ embed {
   transition: transform 0.6s 0.5s linear;
   padding: 1em 1em 1em 4em;
   width: 70%;
-  height: 30%;
+  height: 40%;
   bottom: 5%;
   left: 25%;
 }

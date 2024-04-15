@@ -399,6 +399,22 @@ export class GameWorld extends Observable {
         this.ui.hide(this.ui.elements.titleScreen)
         this.ui.show(this.ui.elements.shopScreen)
         this.ui.hide(this.ui.elements.introScreen)
+        console.log(this.ui)
+        let dialogText = document.querySelector('#shop-dialog div').textContent
+        typeWriter('shop-dialog', dialogText, 25)
+
+        document.getElementById("item-rainbonnet").querySelector(".buy-button").addEventListener("pointerdown", () => {
+            let dialogText = "You don't have enough points for that. I can't just be giving stuff away now can I?"
+            typeWriter('shop-dialog', dialogText, 25)
+            setTimeout(() => {
+                typeWriter('shop-dialog', "Sorry, come back once you get some more points.", 25)
+            }, 5000) // Delay the second message by 10 seconds
+        })
+
+
+
+        // setTimeout(() => { this.ui.elements.shopDialog.style.transform = "translateY(-600px)" }, 100)
+
 
 
 

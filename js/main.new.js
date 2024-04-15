@@ -338,7 +338,7 @@ window.addEventListener("load", function () {
     initObservers()
 
     ui.toggleUI("cutscene")
-    // game.runIntro()
+    game.runIntro()
 
     // console.dir(mySpawner)
 
