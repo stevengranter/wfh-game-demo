@@ -347,28 +347,31 @@ window.addEventListener("load", function () {
     game.scenes.push(scene00)
 
     function initObservers() {
+        /* 
+        Subscribe player's Stats instance (game.player.stats) to GameWorld instance (game) because
+        GameWorld instance detects collisions which effect a player's stats (like health and points)
+        */
         game.subscribe(game.player.stats)
+
+        /*
+        Subscribe player Sprite instance to game.player.stats so sprite affects can 
+        apply when certain stats are reached
+        */
         game.player.stats.subscribe(game.player)
 
-
+        /* 
+        Subscribe all the UI bindings to the game.player.stats so they UI elements update as a player's
+        stats change
+        */
         Object.values(game.ui.bindings).forEach((binding) => {
             game.player.stats.subscribe(binding)
         })
 
-        // game.scenes.forEach((scene) => {
-        //     console.log(scene)
-        //     scene.subscribe(game.player)
-        // })
-
         // console.log(game.ui.bindings)
         // game.subscribe(game.ui.bindings.timeRemaining)
-        // // game.subscribe(game.player)
+        // game.subscribe(game.player)
         // game.subscribe(game.ui)
         // game.subscribe(game.player.stats)
-
-
-
-        // game.player.stats.subscribe(game) // TODO: will double notifications for player
 
 
     }
@@ -377,27 +380,6 @@ window.addEventListener("load", function () {
 
     ui.toggleUI("cutscene")
     game.runIntro()
-
-    // console.dir(mySpawner)
-
-    // game.loop2(0, mySpawner)
-
-
-
-
-    // setTimeout(() => {
-    //     console.log("spawned Objects: ")
-    //     console.dir(spawner.getAllSpawnedObjects())
-    //     spawner.draw(ctx)
-    // }, 2000)
-
-    // setTimeout(() => {
-    //     console.log("spawned Objects: ")
-    //     console.dir(spawner.getAllSpawnedObjects())
-    //     spawner.draw(ctx)
-    // }, 12000)
-
-
 
 
 
