@@ -104,24 +104,7 @@ window.addEventListener("load", function () {
 
     // Wiener 🌭
 
-    const layerConfig = () => {
-        return {
-            spriteSrc: "./images/garden-06.png",
-            animationFrame: {},
-            animations: {},
-            location: { dx: 0, dy: 0 },
-            direction: {
-                velocityX: 0,
-                velocityY: 0,
-            },
-            spawners: [],
-            timeline: {},
-            player: player,
-            playerScrollFactor: 0,
-        }
-    }
 
-    const myLayer = new Layer({ ...layerConfig() })
 
 
     // console.dir(myLayer)
@@ -194,9 +177,11 @@ window.addEventListener("load", function () {
         gullSpawner.spawnObject("gull", "objectID-", 5, 10, 10)
     }, 1000)
 
-    setTimeout(() => {
-        gullSpawner.spawnObject("gull", "objectID-", 5, 50, 5)
-    }, 15000)
+    // setTimeout(() => {
+    //     gullSpawner.spawnObject("gull", "objectID-", 5, 50, 5)
+    // }, 15000)
+
+
 
 
 
@@ -267,20 +252,75 @@ window.addEventListener("load", function () {
         wienerSpawner.spawnObject("wiener", "objectID-", 4, 25, 5)
     }, 5000)
 
-    setTimeout(() => {
-        wienerSpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
-    }, 10000)
+    // setTimeout(() => {
+    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
+    // }, 10000)
 
-    setTimeout(() => {
-        wienerSpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
-    }, 12000)
+    // setTimeout(() => {
+    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
+    // }, 12000)
 
-    setTimeout(() => {
-        wienerSpawner.spawnObject("wiener", "objectID-", 4, 400, 10)
-    }, 15000)
+    // setTimeout(() => {
+    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 400, 10)
+    // }, 15000)
 
 
+    const backgroundLayerConfig = () => {
+        return {
+            spriteSrc: "./images/garden-06.png",
+            animationFrame: {},
+            animations: {},
+            location: { dx: 0, dy: 0 },
+            direction: {
+                velocityX: 0,
+                velocityY: 0,
+            },
+            timeline: {},
+            player: player,
+            playerScrollFactor: 0,
+            isPlayerLayer: false
+        }
+    }
 
+    const spriteLayerConfig = () => {
+        return {
+            // spriteSrc: "./images/garden-06.png",
+            animationFrame: {},
+            animations: {},
+            location: { dx: 0, dy: 0 },
+            direction: {
+                velocityX: 0,
+                velocityY: 0,
+            },
+            spawners: [wienerSpawner, gullSpawner],
+            timeline: {},
+            player: player,
+            playerScrollFactor: 0,
+            isPlayerLayer: true
+        }
+    }
+
+    const foregroundLayerConfig = () => {
+        return {
+            spriteSrc: "./images/garden-06-foreground.webp",
+            animationFrame: {},
+            animations: {},
+            location: { dx: 0, dy: 0 },
+            direction: {
+                velocityX: 0,
+                velocityY: 0,
+            },
+            // spawners: [wienerSpawner, gullSpawner],
+            timeline: {},
+            player: player,
+            playerScrollFactor: 0,
+            isPlayerLayer: false
+        }
+    }
+
+    const backgroundLayer = new Layer({ ...backgroundLayerConfig() })
+    const spriteLayer = new Layer({ ...spriteLayerConfig() })
+    const foregroundLayer = new Layer({ ...foregroundLayerConfig() })
 
     const scene00_config = {
         index: 0,
@@ -291,16 +331,15 @@ window.addEventListener("load", function () {
             bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
             bottomLeft: [0, CANVAS_HEIGHT]
         },
-        layers: [],
-        sprites: [],
-        spawners: [wienerSpawner, gullSpawner],
+        layers: [backgroundLayer, spriteLayer, foregroundLayer],
+        spriteLayerIndex: 1,
         music: [],
         sfx: [],
 
     }
 
     const scene00 = new GameScene(scene00_config)
-    scene00.layers.push(myLayer)
+
 
     console.log(scene00)
 
@@ -308,25 +347,24 @@ window.addEventListener("load", function () {
     game.scenes.push(scene00)
 
     function initObservers() {
-        console.log(game.player.stats)
+        game.subscribe(game.player.stats)
         game.player.stats.subscribe(game.player)
-        game.player.stats.subscribe(game.ui.bindings.lives)
-        game.player.stats.subscribe(game.ui.bindings.score)
-        game.player.stats.subscribe(game.ui.bindings.healthBarWidth)
-        game.player.stats.subscribe(game.ui.bindings.healthBarColor)
-        game.player.stats.subscribe(game.ui.bindings.scoreRemaining)
-        game.player.stats.subscribe(game.ui.bindings.wienersCollected)
 
 
-        game.scenes.forEach((scene) => {
-            console.log(scene)
-            scene.subscribe(game.player)
+        Object.values(game.ui.bindings).forEach((binding) => {
+            game.player.stats.subscribe(binding)
         })
 
-        console.log(game.ui.bindings)
-        game.subscribe(game.ui.bindings.timeRemaining)
-        game.subscribe(game.player)
-        game.subscribe(game.ui)
+        // game.scenes.forEach((scene) => {
+        //     console.log(scene)
+        //     scene.subscribe(game.player)
+        // })
+
+        // console.log(game.ui.bindings)
+        // game.subscribe(game.ui.bindings.timeRemaining)
+        // // game.subscribe(game.player)
+        // game.subscribe(game.ui)
+        // game.subscribe(game.player.stats)
 
 
 

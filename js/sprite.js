@@ -1,5 +1,5 @@
 import { fetchJsonFile, getRandomInt } from "./utils.js"
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS, CTX } from "./constants.js"
 
 // Define a constant named spriteTypes and freeze the object to make it immutable
 export const spriteTypes = Object.freeze({
@@ -56,6 +56,7 @@ export default class Sprite {
         this.isVisible = true
         this.isAnimating = true
         this.isScored = false
+
 
 
     }

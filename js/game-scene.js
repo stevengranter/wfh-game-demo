@@ -24,7 +24,7 @@ import Observable from "./observable.js"
 export class GameScene extends Observable {
     #playerBounds
 
-    constructor({ index, name, playerBounds, layers, sprites, spawners, music, sfx }) {
+    constructor({ index, name, playerBounds, layers, spriteLayerIndex, spawners, music, sfx }) {
         super()
         this.index = index || 0
         this.name = name || "NoName"
@@ -34,9 +34,10 @@ export class GameScene extends Observable {
             bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
             bottomLeft: [0, CANVAS_HEIGHT]
         }
-        this.layers = layers
-        this.sprites = sprites
-        this.spawners = spawners
+        this.layers = layers || []
+        this.spriteLayerIndex = spriteLayerIndex
+        this.spriteLayer = this.layers[spriteLayerIndex]
+        this.spawners = spawners || []
 
         try {
             this.music = this.loadMusic(music)
@@ -49,6 +50,7 @@ export class GameScene extends Observable {
         this.sceneTime = 0
 
         window.music = this.music // Temporary solution for PauseMenu access
+        console.log(this)
 
     }
 
@@ -66,22 +68,19 @@ export class GameScene extends Observable {
 
 
 
-    update(deltaTime, playerVelocityX = 0, playerVelocityY = 0) {
+    update(deltaTime, input = null, playerVelocityX = 0, playerVelocityY = 0) {
         this.layers.forEach((layer) => {
-            layer.update(deltaTime, playerVelocityX, playerVelocityY)
+            layer.update(deltaTime, input, playerVelocityX, playerVelocityY)
         })
-        this.spawners.forEach((spawner) => {
-            spawner.update(deltaTime)
-        })
+
     }
 
-    draw(context) {
+    draw(context, background, spawners, player) {
+        // console.log(player)
         this.layers.forEach((layer) => {
-            layer.draw(context)
+            layer.draw(context, background, spawners, player)
         })
-        this.spawners.forEach((spawner) => {
-            spawner.draw(context)
-        })
+
     }
 
     loadMusic(musicFile) {

@@ -1,4 +1,5 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS, CTX } from "./constants.js"
+import Spawner from "./spawner.new.js"
 
 export default class Layer {
     constructor(args) {
@@ -17,8 +18,10 @@ export default class Layer {
         // Initialize imageObject as null or undefined
         this.imageObject = null
         console.log(this)
-        // Now we need to call init() after construction to load the image
-        this.init()
+
+        // Call init to load the background image 
+        if (this.spriteSrc) this.init()
+
     }
 
     async init() {
@@ -52,10 +55,55 @@ export default class Layer {
 
     }
 
+    draw(context, background = true, spawners = false, player = false) {
+        // console.log(player)
+        if (background) this.drawBackground(context)
+        if (spawners) this.drawSpawners(context)
+        if (player) this.drawPlayer(context)
+
+    }
+
+    update(deltaTime, input, playerVelocityX, playerVelocityY) {
+        this.updateBackground(deltaTime, playerVelocityX, playerVelocityY)
+        this.updateSpawners(deltaTime)
+        this.updatePlayer(input, deltaTime)
+    }
+
+    updatePlayer(input, deltaTime) {
+        if (this.isPlayerLayer === true) {
+            // console.log("update: is player layer")
+            this.player.update(input, deltaTime)
+        }
+    }
+
+    drawPlayer(context) {
+        if (this.isPlayerLayer === true) {
+            // console.log("draw: is player layer")
+            this.player.draw(context)
+        }
+    }
 
 
-    draw(context) {
-        // Check if the imageObject is loaded before drawing
+    updateSpawners(deltaTime) {
+        if (!this.spawners) return
+        this.spawners.forEach((spawner) => {
+            spawner.update(deltaTime)
+        })
+    }
+
+    drawSpawners(context) {
+        if (!this.spawners) return
+        this.spawners.forEach((spawner) => {
+            spawner.draw(CTX)
+        })
+    }
+
+
+    drawBackground(context) {
+
+        // Guard clause: If there is no background image, just return
+        if (!this.imageObject) return
+
         if (this.imageObject) {
             if (this.filter !== "none") {
                 context.filter = this.filter
@@ -82,9 +130,11 @@ export default class Layer {
 
 
 
-    update(deltaTime, playerVelocityX = 0, playerVelocityY = 0) {
-        // console.log(playerVelocityX)
 
+
+    updateBackground(deltaTime, playerVelocityX = 0, playerVelocityY = 0) {
+        // console.log(playerVelocityX)
+        if (!this.imageObject) return
         if (this.playerScrollFactor === 0) {
 
             this.dx += this.velocityX * deltaTime

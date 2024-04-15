@@ -30,7 +30,17 @@ export default class Stats extends Observable {
 
     }
 
-
+    receiveUpdate(data) {
+        console.log("playerstats has received", data)
+        if (data.health != undefined) {
+            // console.log("health: " + data.health)
+            this.health += data.health
+        }
+        if (data.points != undefined) {
+            // console.log("points:" + data.points)
+            this.score += data.points
+        }
+    }
 
 
     get lives() {
@@ -57,6 +67,7 @@ export default class Stats extends Observable {
     }
 
     set score(value) {
+        console.log("#score is", value)
         this.#score = value
         this.notify({ score: this.#score })
     }

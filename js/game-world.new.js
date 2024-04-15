@@ -143,73 +143,98 @@ export class GameWorld extends Observable {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
             // console.log(this.player.velocityX)
-            this.currentScene.update(this.deltaTime)
-            this.player.update(this.input, this.deltaTime)
+            this.currentScene.update(this.deltaTime, this.input)
+            // this.player.update(this.input, this.deltaTime)
+
+
 
             if (this.currentScene.music.currentTime >= 0) {
                 // Only detect collisions when player is alive
                 if (this.player.isAlive === true) {
-                    // console.log(this.currentScene.spawners)
 
-                    if (this.currentScene.spawners) {
-                        this.currentScene.spawners.forEach((spawner) => {
+                    // console.log(this.currentScene.spriteLayer.spawners)
 
-                            spawner.spawnedObjects.forEach((object) => {
-                                let collider = CollisionDetector.detectBoxCollision(this.player, object)
+                    this.currentScene.spriteLayer.spawners.forEach((spawner) => {
+                        // console.log(spawner)
+                        let colliders = spawner.getAllSpawnedObjects()
 
-
-
-                                if (collider) {
-                                    // console.log("collision")
-                                    if (collider.spriteTag === spriteTags.WIENER) {
-                                        // console.log(this.player.stats.health)
-                                        this.calculateCombo()
-                                        this.player.stats.health += collider.healthValue
-                                        this.player.stats.score += collider.pointValue
-                                        this.player.stats.wienersCollected++
-
-                                        // this.ui.elements.scoreRemaining.innerText = "\ " + (2500 - this.player.stats.score) + " to progress"
-                                        // console.log(this.player.stats.progress)
-                                        if (this.player.stats.progress === 0) {
-                                            this.ui.elements.scoreRemaining.innerText = `( ${1000 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
-
-                                            if (this.player.stats.score >= 1000) {
-                                                // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
-                                                // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
-
-
-                                                this.endScene()
-                                            }
-                                        } else {
-                                            this.ui.elements.scoreRemaining.innerText = `( ${10000 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
-
-                                            if (this.player.stats.score >= 10000) {
-                                                // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
-                                                // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
-
-
-                                                this.endScene()
-                                            }
-                                        }
-                                        // calculateCombo()
-                                    } else if (collider.spriteTag === spriteTags.POO) {
-                                        // console.log("💩")
-                                        this.resetCombo()
-                                        this.player.stats.health += collider.healthValue
-                                        this.player.stats.seagullBlessingsReceived++
-                                        if (this.player.stats.health <= 0) {
-                                            this.player.isAlive = false
-                                        }
-
-                                    } else if (collider.spriteTag === spriteTags.GULL) {
-                                        // console.log("🐦")
-                                    }
+                        // console.log("colliders: ", colliders.length)
+                        if (colliders.length !== 0 || colliders !== undefined) {
+                            colliders.forEach((collider) => {
+                                let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
+                                if (collisionObject != undefined) {
+                                    console.log(collisionObject)
+                                    this.notify(collisionObject)
 
                                 }
 
+
                             })
-                        })
-                    }
+                        }
+                    })
+
+
+
+
+                    // if (this.currentScene.spawners) {
+                    //     this.currentScene.spawners.forEach((spawner) => {
+
+                    //         spawner.spawnedObjects.forEach((object) => {
+                    //             let collider = CollisionDetector.detectBoxCollision(this.player, object)
+
+
+
+                    //             if (collider) {
+                    //                 // console.log("collision")
+                    //                 if (collider.spriteTag === spriteTags.WIENER) {
+                    //                     // console.log(this.player.stats.health)
+                    //                     this.calculateCombo()
+                    //                     this.player.stats.health += collider.healthValue
+                    //                     this.player.stats.score += collider.pointValue
+                    //                     this.player.stats.wienersCollected++
+
+                    //                     // this.ui.elements.scoreRemaining.innerText = "\ " + (2500 - this.player.stats.score) + " to progress"
+                    //                     // console.log(this.player.stats.progress)
+                    //                     if (this.player.stats.progress === 0) {
+                    //                         this.ui.elements.scoreRemaining.innerText = `( ${1000 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
+
+                    //                         if (this.player.stats.score >= 1000) {
+                    //                             // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
+                    //                             // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
+
+
+                    //                             this.endScene()
+                    //                         }
+                    //                     } else {
+                    //                         this.ui.elements.scoreRemaining.innerText = `( ${10000 - this.player.stats.score} remaining)` //"\ " + (2500 - this.player.stats.score) + " to progress"
+
+                    //                         if (this.player.stats.score >= 10000) {
+                    //                             // ui.scoreCounterHUD.style.color = "var(--clr-purple)"
+                    //                             // ui.scoreStatusHUD.innerText = "Next Level Unlocked!"
+
+
+                    //                             this.endScene()
+                    //                         }
+                    //                     }
+                    //                     // calculateCombo()
+                    //                 } else if (collider.spriteTag === spriteTags.POO) {
+                    //                     // console.log("💩")
+                    //                     this.resetCombo()
+                    //                     this.player.stats.health += collider.healthValue
+                    //                     this.player.stats.seagullBlessingsReceived++
+                    //                     if (this.player.stats.health <= 0) {
+                    //                         this.player.isAlive = false
+                    //                     }
+
+                    //                 } else if (collider.spriteTag === spriteTags.GULL) {
+                    //                     // console.log("🐦")
+                    //                 }
+
+                    //             }
+
+                    //         })
+                    //     })
+                    // }
                 } else {
                     // console.log("gameloop: player is dead")
                     this.player.isAlive = false
@@ -221,9 +246,9 @@ export class GameWorld extends Observable {
                 // console.log("showing endScreen")
                 this.ui.show(this.ui.endsceneScreen)
             }
+            this.currentScene.draw(this.ctx, true, true, true)
 
-            this.currentScene.draw(this.ctx)
-            this.player.draw(this.ctx)
+            // this.player.draw(this.ctx)
 
 
             requestAnimationFrame(this.loop.bind(this))
@@ -380,7 +405,7 @@ export class GameWorld extends Observable {
         setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(0px)" }, 700)
         // function animateBlur(blurValue, maxBlur, step) 
 
-        this.currentScene.draw(this.ctx)
+        this.currentScene.draw(this.ctx, false, true, true)
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
         const dialogText = document.querySelector('#intro-dialog div').textContent
         typeWriter('intro-dialog', dialogText, 25)
@@ -454,19 +479,19 @@ export class GameWorld extends Observable {
     }
 
     toggleMusic() {
-        if (this.musicStarted === false) {
-            window.music.play()
-            this.musicPaused = false
-            this.musicStarted = true
-            this.countDown(window.music.duration)
-        }
-        else if (this.musicPaused === false) {
-            window.music.pause()
-            this.musicPaused = true
-        } else {
-            window.music.play()
-            this.musicPaused = false
-        }
+        // if (this.musicStarted === false) {
+        //     window.music.play()
+        //     this.musicPaused = false
+        //     this.musicStarted = true
+        //     this.countDown(window.music.duration)
+        // }
+        // else if (this.musicPaused === false) {
+        //     window.music.pause()
+        //     this.musicPaused = true
+        // } else {
+        //     window.music.play()
+        //     this.musicPaused = false
+        // }
     }
 
     calculateCombo() {

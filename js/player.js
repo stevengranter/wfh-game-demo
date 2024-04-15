@@ -41,7 +41,7 @@ export default class Player extends Sprite {
         this.speedX = 0
         this.speedY = 0
         this.dx = 200
-        this.dy = 100
+        this.dy = 150
 
         const initialmaxSpeedX = 25
         this.maxSpeedX = initialmaxSpeedX
@@ -103,7 +103,7 @@ export default class Player extends Sprite {
     }
 
     receiveUpdate(data) {
-        // console.log("player received:", data)
+        console.log("player received:", data)
 
         if (typeof data === 'object' && data.hasOwnProperty("gameState")) {
             console.log("data has gamestate:", data.gameState)
@@ -150,10 +150,10 @@ export default class Player extends Sprite {
             // }
 
             // Create a buffer of 50px on each side
-            if (this.dx <= 75) {
-                this.dx = 75
-            } else if (this.dx >= 350) {
-                this.dx = 350
+            if (this.dx <= 0) {
+                this.dx = 0
+            } else if (this.dx >= 425) {
+                this.dx = 425
             }
 
             this.currentState.handleInput(input)

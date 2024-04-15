@@ -1,4 +1,5 @@
 import Sprite from "./sprite.js"
+import { CANVAS, CTX } from "./constants.js"
 
 class ObjectPool {
     constructor(objectType) {
@@ -106,7 +107,7 @@ export default class Spawner {
             const objectType = object.objectType
             if (object instanceof Sprite && object.spawned) {
                 object.update(deltaTime)
-
+                // console.log(object)
                 // Decrease the remaining time for the spawned object
                 object.timeLimit -= deltaTime
                 // console.log("🚀 ~ Spawner ~ update ~ object.timeLimit:", object.timeLimit)
