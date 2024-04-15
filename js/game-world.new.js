@@ -396,11 +396,11 @@ export class GameWorld extends Observable {
     runShop() {
 
         this.ui.toggleUI("cutscene")
+        this.ui.hide(this.ui.elements.titleScreen)
         this.ui.show(this.ui.elements.shopScreen)
+        this.ui.hide(this.ui.elements.introScreen)
 
-        this.ui.elements.shopScreen.addEventListener("click", (e) => {
-            this.startScene()
-        })
+
 
     }
 

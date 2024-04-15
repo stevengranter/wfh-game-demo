@@ -250,22 +250,14 @@ embed {
   transition: all 1s 0s cubic-bezier(1, 0, 0, 1);
 }
 
-#intro-dialog {
-  transform: translatey(400px);
-  transition: transform 0.6s 0.5s linear;
-
+.dialog-panel {
   display: flex;
   align-content: center;
-  padding: 1em 1em 1em 4em;
   margin: 1em;
   font-size: 2.5vw;
   font: "Itim", sans-serif;
-  width: 70%;
-  height: 30%;
-  /* padding: 0em 1em 2em 3em; */
+  padding: 1em;
   position: absolute;
-  bottom: 5%;
-  left: 25%;
   z-index: 4;
   border-radius: 10px;
   border: 3px solid black;
@@ -274,6 +266,23 @@ embed {
   background-color: white;
   color: black;
   outline: 3px solid white;
+}
+
+#shop-dialog {
+  width: 40%;
+  right: 2%;
+  top: 6%;
+  padding: 0.8em;
+}
+
+#intro-dialog {
+  transform: translatey(400px);
+  transition: transform 0.6s 0.5s linear;
+  padding: 1em 1em 1em 4em;
+  width: 70%;
+  height: 30%;
+  bottom: 5%;
+  left: 25%;
 }
 
 #intro-screen #intro-dialog div {
@@ -627,6 +636,43 @@ button {
   background-image: url("../images/bg-shop-01.webp");
   background-size: cover;
   height: 100%;
+}
+
+.shop-panel {
+  font-size: 1.7svw;
+  background-color: #07cfd3;
+  width: 75%;
+  padding: 0.5em 0.5em 0.5em 8em;
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  border-radius: 1em;
+  border: 0.3em solid black;
+  outline: 0.3em solid white;
+}
+
+.shop-panel h2 {
+  color: white;
+  text-shadow: 0.1em 0.1em 0px black;
+}
+
+.shop-panel .item-photo {
+  position: absolute;
+  width: 18svw;
+  height: auto;
+  left: 0;
+  top: 0;
+  transform: translate(-25%, -25%) rotate(-10deg);
+}
+.shop-panel .price {
+  color: white;
+  font-weight: bold;
+  padding-top: 10px;
+}
+.shop-panel button {
+  position: absolute;
+  right: 0;
 }
 
 div#excited-chicken {
