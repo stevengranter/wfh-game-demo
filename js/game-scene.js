@@ -24,7 +24,7 @@ import Observable from "./observable.js"
 export class GameScene extends Observable {
     #playerBounds
 
-    constructor({ index, name, playerBounds, layers, spriteLayerIndex, spawners, music, sfx }) {
+    constructor({ index, name, playerBounds, layers, spriteLayerIndex, spawners, music, sfx, goals }) {
         super()
         this.index = index || 0
         this.name = name || "NoName"
@@ -39,18 +39,24 @@ export class GameScene extends Observable {
         this.spriteLayer = this.layers[spriteLayerIndex]
         this.spawners = spawners || []
 
+
+
+        this.sfx = sfx
+        this.goals = goals
+        this.isMusicLoaded = false
+        this.sceneTime = 0
+
         try {
             this.music = this.loadMusic(music)
+            console.log("Music is loaded")
+            this.isMusicLoaded = true
         } catch (error) {
             console.warn("Music could not be loaded")
         }
 
-        this.sfx = sfx
-        this.isMusicLoaded = false
-        this.sceneTime = 0
-
         window.music = this.music // Temporary solution for PauseMenu access
-        console.log(this)
+        // console.log(this)
+        // console.log(this.goal)
 
     }
 
@@ -65,6 +71,7 @@ export class GameScene extends Observable {
         // this.notify("some data")
 
     }
+
 
 
 

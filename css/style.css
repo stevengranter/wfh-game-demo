@@ -624,11 +624,11 @@ button {
   border: 1px solid aqua;
 } */
 
-/* Level End Container styles */
-#level-end--container {
+/* scene End Container styles */
+#scene-end--container {
   height: 100%;
 }
-#level-end--container .ui-panel {
+#scene-end--container .ui-panel {
   transform: translateY(120%);
   transition: all 0.5s 0.5s;
   height: 100%;
@@ -689,19 +689,17 @@ div#excited-chicken {
 /* In-Game HUD styles */
 #game-screen__ingame-overlay__hud {
   position: absolute;
-  width: 30%;
+  width: 100%;
   left: 0;
   top: 0;
-  width: 30%;
+  /* width: 30%; */
   height: 30%;
-  margin-left: 5%;
-  margin-top: 5%;
   position: absolute;
   /* border: 2px solid cyan; */
   text-align: left;
 }
 
-#level-stats {
+#hud-scene-stats {
   right: 0;
   top: 0;
   width: 30%;
@@ -720,7 +718,17 @@ div#excited-chicken {
     1px 1px 0 #fff;
 }
 
-/* #level-timer::before {
+.hud-left {
+  left: 0;
+  width: 30%;
+  margin-left: 5%;
+  margin-top: 5%;
+}
+
+.hud-right {
+  right: 0;
+}
+/* #scene-timer::before {
   content: "⏱️";
 } */
 
@@ -740,7 +748,8 @@ div#excited-chicken {
   top: 5%;
   /* left: 3%; */
   z-index: 6;
-  position: absolute;
+  position: relative;
+  transform: translateY(-30px);
 }
 
 #hud-lives img {
@@ -764,7 +773,6 @@ div#excited-chicken {
   /* border: 1px solid magenta; */
   vertical-align: middle;
   z-index: 3;
-  position: absolute;
   left: 6vw;
   /* top: 10%; */
   right: 0%;

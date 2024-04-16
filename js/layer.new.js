@@ -17,7 +17,7 @@ export default class Layer {
 
         // Initialize imageObject as null or undefined
         this.imageObject = null
-        console.log(this)
+        // console.log(this)
 
         // Call init to load the background image 
         if (this.spriteSrc) this.init()

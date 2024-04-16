@@ -150,7 +150,7 @@ export function animateBlur(currentScene, context, blurValue, maxBlur, step) {
 
     if (currentScene.layers !== undefined && currentScene.layers.length > 0) {
         currentScene.layers[0].filter = `blur(${blurValue}px)`
-        console.log(currentScene.layers[0].filter)
+        // console.log(currentScene.layers[0].filter)
         currentScene.draw(context)
 
         if (blurValue < maxBlur) {

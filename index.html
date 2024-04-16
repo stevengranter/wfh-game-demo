@@ -51,6 +51,7 @@
           </div>
          
           <div id="game-screen__ingame-overlay__hud" data-ui="true">
+            <div class="hud-left">
             <div id="hud-player-stats">
               <div id="hud-lives" class="pixelated">
                 <img src="./images/nan-portrait-pixel-01.png" alt="" />
@@ -84,11 +85,12 @@
             </div>
 
               <div id="wieners-collected" data-ui="true"></div>
-              
+              </div>
 
-             <div id="level-stats">
-            <div id="time-remaining"></div>
-          </div>
+            <div id="hud-scene-stats" class="hud-right">
+               <div id="time-remaining" data-ui="true"></div>
+            </div>
+             
           </div>
         </div>
         <div
@@ -101,15 +103,15 @@
            
           </div>
 
-         <div id="level-end--container" data-ui="true" data-gamestate="level-end">
+         <div id="scene-end--container" data-ui="true" data-gamestate="scene-end">
           <div class="ui-panel">
             <h2>Wiener, Wiener,<br>Chicken Diener!</h2>
             <ul>
-              <li>Wieners caught: <span id="level-wieners"></span></li>
-              <li>Score: <span id="level-score"></span></li>
-              <li>Lucky Seagull Blessings: <span id="level-blessings"></span></li>
+              <li>Wieners caught: <span id="scene-wieners"></span></li>
+              <li>Score: <span id="scene-score"></span></li>
+              <li>Lucky Seagull Blessings: <span id="scene-blessings"></span></li>
               <!-- <li>Rating: ⭐️ ⭐️ ⭐️</li> -->
-              <button id="next-level-button">Next level</button>
+              <button id="next-scene-button">Next scene</button>
               
             </ul>
             </div>
@@ -118,14 +120,14 @@
             </div>
         </div>
           <!-- <div id="congrats-screen" class="ui-panel">
-            <header><h2>Next level unlocked!</h2></header>
+            <header><h2>Next scene unlocked!</h2></header>
             <p>
-              You have enough points to progress to the next level! Keep
+              You have enough points to progress to the next scene! Keep
               collecting for bonus items
             </p>
           </div>
 
-          <div id="levelselect-screen" class="ui-panel">
+          <div id="sceneselect-screen" class="ui-panel">
            
           </div> -->
         </div>
@@ -162,7 +164,7 @@
 
           
           <!-- <div id="endscene-screen" class="ui-panel">
-            <header><h2>Level end</h2></header>
+            <header><h2>scene end</h2></header>
             <p></p>
           </div>
           <div id="gameover-screen" class="ui-panel">

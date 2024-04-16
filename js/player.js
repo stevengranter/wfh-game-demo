@@ -103,11 +103,11 @@ export default class Player extends Sprite {
     }
 
     receiveUpdate(data) {
-        console.log("player received:", data)
+        // console.log("player received:", data)
 
-        if (typeof data === 'object' && data.hasOwnProperty("gameState")) {
-            console.log("data has gamestate:", data.gameState)
-        }
+        // if (typeof data === 'object' && data.hasOwnProperty("gameState")) {
+        //     // console.log("data has gamestate:", data.gameState)
+        // }
     }
 
     // callSaintPeter() {

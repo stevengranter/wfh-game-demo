@@ -12,20 +12,28 @@ export const gameStateKeys = {
     INTRO: "intro",
     PLAY: "play",
     PAUSED_BY_PLAYER: "paused-by-player",
-    LEVEL_END: "level-end",
+    SCENE_END: "scene-end",
     GAMEOVER: "game-over",
     END: "game-end",
     CREDITS: "credits",
+}
+
+export const musicStateKeys = {
+    PAUSED: "paused",
+    PLAYING: "playing",
+    STOPPED: "stopped",
+    READY: "ready"
 }
 
 export class GameWorld extends Observable {
     #currentScene
     #gameState
     #timeRemaining
+    #scenes
     constructor(player, ui, input) {
         super()
 
-        this.scenes = []
+        this.#scenes = []
         this.isReady = false
         this.player = player
         this.ui = ui
@@ -40,10 +48,9 @@ export class GameWorld extends Observable {
         this.ctx = this.canvas.getContext("2d")
 
 
-        this.isPaused = false
+
         this.#gameState = gameStateKeys.TITLE
-        this.musicStarted = false
-        this.musicPaused = false
+
 
         this.lastTime = 0
         this.deltaTime = 1
@@ -54,6 +61,9 @@ export class GameWorld extends Observable {
         // console.log(window)
         // console.log(this)
 
+        this.#currentScene = {
+            intervalId: null
+        }
 
 
         // console.log(this)
@@ -82,43 +92,19 @@ export class GameWorld extends Observable {
     }
 
     notifyTimeRemaining() {
-        this.#timeRemaining = window.music.duration - window.music.currentTime
-        // this.notify({ timeRemaining: Math.floor(this.#timeRemaining) })
+        if (this.music !== undefined) {
+            this.#timeRemaining = this.music.duration - this.music.currentTime
+            this.notify({ "time-remaining": Math.floor(this.#timeRemaining) })
+        }
         // console.log(`time remaining: ${Math.floor(this.#timeRemaining)}`)
     }
 
-    countDown(timeToCount) {
-        let i = timeToCount
-        let timerId
-        let paused = false
 
-        function runTimer() {
-            if (i > 0 && !paused) {
-                // console.log(this.musicPaused)
-                this.notifyTimeRemaining()
-                i--
-                timerId = setTimeout(runTimer.bind(this), 1000) // Binding 'this' to maintain context
-            }
-        }
 
-        this.pauseTimer = function () {
-            paused = true
-            clearTimeout(timerId)
-        }
-
-        this.resumeTimer = function () {
-            paused = false
-            runTimer.call(this)
-        }
-
-        runTimer.call(this) //
-
-    }
 
     addScene(gameScene) {
-        // console.log("in addScene method")
         if (gameScene instanceof GameScene) {
-            this.scenes.push(gameScene)
+            this.#scenes.push(gameScene)
             console.log("Game scene added")
         } else {
             console.warn("Invalid scene type. Expected GameScene.")
@@ -163,7 +149,7 @@ export class GameWorld extends Observable {
                             colliders.forEach((collider) => {
                                 let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
                                 if (collisionObject != undefined) {
-                                    console.log(collisionObject)
+                                    // console.log(collisionObject)
                                     this.notify(collisionObject)
 
                                 }
@@ -303,55 +289,63 @@ export class GameWorld extends Observable {
     endScene() {
         // Pause the game and the music
         this.isPaused = true
-        window.music.pause()
-        console.log("player progress before set: " + this.player.stats.progress)
+        clearInterval(this.#currentScene.intervalId)
+        this.pauseMusic()
+        // console.log("player progress before set: " + this.player.stats.progress)
         this.player.stats.progress += 1
         console.log("winner winner chicken dinner")
-        console.log("player progress after set: " + this.player.stats.progress)
+        // console.log("player progress after set: " + this.player.stats.progress)
 
 
-        this.gameState = gameStateKeys.LEVEL_END
+        this.gameState = gameStateKeys.SCENE_END
         this.ui.toggleUI(this.gameState)
 
         // window and chicken animations
-        const levelEndContainerDIV = this.ui.elements.levelEndContainer.querySelector("div")
-        setTimeout(() => { levelEndContainerDIV.style.transform = "translateY(0px)" }, 50)
+        const sceneEndContainerDIV = this.ui.elements.sceneEndContainer.querySelector("div")
+        setTimeout(() => { sceneEndContainerDIV.style.transform = "translateY(0px)" }, 50)
         setTimeout(() => { this.ui.elements.excitedChicken.style.transform = "rotate(-15deg) translate(0px,50px) scale(100%)" }, 50)
 
         // Display level stats
-        document.getElementById("level-wieners").textContent = this.player.stats.wienersCollected
-        document.getElementById("level-score").textContent = this.player.stats.score
-        document.getElementById("level-blessings").textContent = this.player.stats.seagullBlessingsReceived
+        document.getElementById("scene-wieners").textContent = this.player.stats.wienersCollected
+        document.getElementById("scene-score").textContent = this.player.stats.score
+        document.getElementById("scene-blessings").textContent = this.player.stats.seagullBlessingsReceived
 
 
-        document.getElementById("next-level-button").addEventListener("click", (e) => {
+        document.getElementById("next-scene-button").addEventListener("click", (e) => {
 
 
 
             this.runShop()
 
-            console.log("next level button clicked")
+            // console.log("next scene button clicked")
         })
 
 
     }
 
+    initSceneGoals() {
+        if (this.currentScene.goals.bronze.type === "score") {
+            this.scoreGoal = this.currentScene.goals.bronze.value
+            console.log(this.scoreGoal)
+        }
+    }
+
+
+
     startScene = () => {
 
         // TODO: fix
-        const sceneIndex = 0 //this.player.stats.progress
-        // console.log("🚀 ~ GameWorld ~ this.player.stats.progress:", this.player.stats.progress)
-        this.currentScene = this.scenes[sceneIndex]
-        console.log(this.currentScene)
-        // console.log("🚀 ~ GameWorld ~ this.scenes:", this.scenes)
-        // console.log("current Scene is set:" + this.currentScene)
+        const sceneIndex = this.player.stats.progress
+        this.currentScene = this.#scenes[sceneIndex]
+        this.initSceneGoals()
 
-        // console.log(this.currentScene)
         const playMusic = () => {
             if (this.currentScene.hasOwnProperty("music")) {
                 if (this.currentScene.isMusicLoaded) {
-                    console.log("music is loaded")
-                    this.toggleMusic()
+                    // console.log("music is loaded")
+                    this.music = this.currentScene.music
+
+                    this.playMusic()
                 }
             }
         }
@@ -373,6 +367,21 @@ export class GameWorld extends Observable {
             this.loop(0, this.#currentScene)
         }
 
+        const checkGoal = () => {
+            // console.log(this.player)
+            if (this.player.stats.score >= this.scoreGoal) {
+                console.log("You won! 🥳")
+                clearInterval(intervalId)
+                this.endScene()
+
+            }
+        }
+
+
+        // Check for goal every 0.5 seconds
+        const intervalId = setInterval(checkGoal, 500)
+
+
         console.log("player.progress" + this.player.stats.progress)
 
         // Call the functions in the desired order
@@ -389,7 +398,7 @@ export class GameWorld extends Observable {
         // console.log(this.player.stats)
 
         const currentSceneIndex = this.player.stats.progress
-        this.currentScene = this.scenes[currentSceneIndex]
+        this.currentScene = this.#scenes[currentSceneIndex]
         // console.dir(this.currentScene)
 
         this.ui.toggleUI("cutscene")
@@ -447,13 +456,13 @@ export class GameWorld extends Observable {
 
 
     receiveUpdate(data) {
-        // console.log(this.constructor.name + " received :", data)
+        console.log("gameworld received :", data)
     }
 
     pauseGame() {
         if (this.isPaused) {
             // console.log(this.gameState)
-            this.toggleMusic()
+            this.pauseMusic()
             switch (this.#gameState) {
                 case gameStateKeys.PAUSED_BY_PLAYER:
                     this.ui.toggleUI("paused")
@@ -470,29 +479,44 @@ export class GameWorld extends Observable {
         }
         else {
             this.ui.toggleUI("play")
-            // window.music.currentTime = this.musicPausedTime
+            // this.music.currentTime = this.musicPausedTime
 
-            this.toggleMusic()
+            this.playMusic()
             this.loop(this.lastTime)
             this.isPaused = false
         }
     }
 
-    toggleMusic() {
-        // if (this.musicStarted === false) {
-        //     window.music.play()
-        //     this.musicPaused = false
-        //     this.musicStarted = true
-        //     this.countDown(window.music.duration)
-        // }
-        // else if (this.musicPaused === false) {
-        //     window.music.pause()
-        //     this.musicPaused = true
-        // } else {
-        //     window.music.play()
-        //     this.musicPaused = false
-        // }
+    playMusic() {
+        this.music.play()
+        this.musicState = musicStateKeys.PLAYING
     }
+
+    pauseMusic() {
+        this.music.pause()
+        this.musicState = musicStateKeys.PAUSED
+    }
+
+    stopMusic() {
+        this.music.stop()
+        this.musicState = musicStateKeys.PAUSED
+    }
+
+    // toggleMusic() {
+    //     if (this.musicStarted === false) {
+    //         this.playMusic()
+    //         this.musicPaused = false
+    //         this.musicStarted = true
+    //         this.countDown(this.music.duration)
+    //     }
+    //     else if (this.musicPaused === false) {
+    //         this.pauseMusic()
+    //         this.musicPaused = true
+    //     } else {
+    //         this.playMusic()
+    //         this.musicPaused = false
+    //     }
+    // }
 
     calculateCombo() {
         this.comboCounter++

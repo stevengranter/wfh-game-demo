@@ -57,6 +57,9 @@ export default class Spawner {
                 if (this.objectPools[objectType] && typeof this.objectPools[objectType].configGenerator === 'function') {
                     const objectConfig = this.objectPools[objectType].configGenerator()
                     const object = new Sprite(objectConfig)
+                    if (object.parentSpriteTag) {
+                        console.log("parent is:" + object.parentSpriteTag)
+                    }
 
                     object.id = objectId + spawnCount
                     object.spawned = true

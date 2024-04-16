@@ -18,7 +18,7 @@ export default class CollisionDetector {
           object.isScored = true
           object.isVisible = false
           wait(500) // wait for 0.5 seconds to avoid returning multiple collisions
-          console.log("collision")
+          // console.log("collision")
           const scoreObject = {}
           scoreObject.health = object.healthValue
           scoreObject.points = object.pointValue

@@ -4,27 +4,36 @@ export default class UI {
         this.elements = this.init(dataAttribute)
         // console.log(dataAttribute)
         this.bindings = {}
+        this.bindings.player = {}
+        this.bindings.scene = {}
         // this.readoutElements = this.initReadouts
-        this.bindings.score = new DataBinder("score", "textContent")
+        this.bindings.player.score = new DataBinder("score", "textContent")
 
         this.bindings.scoreRemaining = new DataBinder("score-remaining", "textContent", (data) => {
             let scoreRemaining = 5000 - this.bindings.score
             return scoreRemaining
         })
 
-        this.bindings.timeRemaining = new DataBinder("time-remaining", "textContent")
-
-        this.bindings.healthBarWidth = new DataBinder("health", "style.width", (data) => {
-            data = data + "%"
-            console.log(data)
+        this.bindings.scene.timeRemaining = new DataBinder("time-remaining", "textContent")
+        this.bindings.scene.timeRemainingStyle = new DataBinder("time-remaining", "style.color", (data) => {
+            // console.log(data)
+            if (data < 15) {
+                data = "var(--clr-red)"
+            }
             return data
         })
-        this.bindings.healthBarColor = new DataBinder("health", "style.backgroundColor", (data) => {
+
+        this.bindings.player.healthBarWidth = new DataBinder("health", "style.width", (data) => {
+            data = data + "%"
+            // console.log(data)
+            return data
+        })
+        this.bindings.player.healthBarColor = new DataBinder("health", "style.backgroundColor", (data) => {
             if (data <= 30) {
                 data = "var(--clr-red)"
             }
             else if ((data > 30) && (data < 70)) {
-                console.log("color change")
+                // console.log("color change")
                 data = "var(--clr-orange)"
             } else {
                 data = "var(--clr-green)"
@@ -32,9 +41,9 @@ export default class UI {
             return data
         })
 
-        this.bindings.lives = new DataBinder("lives", "textContent")
+        this.bindings.player.lives = new DataBinder("lives", "textContent")
 
-        this.bindings.wienersCollected = new DataBinder("wieners-collected", "textContent")
+        this.bindings.player.wienersCollected = new DataBinder("wieners-collected", "textContent")
         // console.log(this)
         // this.hudScore.update("1000")
 
@@ -158,7 +167,8 @@ export class DataBinder {
     }
 
     receiveUpdate(data) {
-
+        // console.log(this.constructor.name)
+        // console.dir(data)
         if (data.hasOwnProperty(this.elementId)) {
             const element = document.getElementById(this.elementId)
             let value = this.formatFunction ? this.formatFunction(data[this.elementId]) : data[this.elementId]

@@ -91,7 +91,7 @@ window.addEventListener("load", function () {
     // Initialize Game World
 
     const game = new GameWorld(player, ui, input)
-    console.log(game)
+    // console.log(game)
 
     // Event listeners
     const startButton = ui.elements.startButton
@@ -162,7 +162,7 @@ window.addEventListener("load", function () {
 
     const newGull = (() => new Sprite(getGullConfig()))()
 
-    console.log("🚀 ~ newGull:", newGull)
+    // console.log("🚀 ~ newGull:", newGull)
 
 
 
@@ -171,7 +171,7 @@ window.addEventListener("load", function () {
 
     gullSpawner.registerObjectPool("gull", getGullConfig)
 
-    console.log(gullSpawner)
+    // console.log(gullSpawner)
 
     setTimeout(() => {
         gullSpawner.spawnObject("gull", "objectID-", 5, 10, 10)
@@ -182,6 +182,67 @@ window.addEventListener("load", function () {
     // }, 15000)
 
 
+    const getGullBlessingConfig = () => {
+        return {
+            spriteSrc: "./images/seagull-poo-sprite-02.png",
+            animationFrame: { x: 0, y: 0, width: 16, height: 16 },
+            animations: {
+                Spinning: {
+                    frameX: 0,
+                    frameY: 0,
+                    endFrame: 0
+                },
+            },
+            location: {
+                dx: {
+                    random:
+                    {
+                        lowerBound: -20,
+                        upperBound: CANVAS_WIDTH + 20
+                    }
+                },
+                dy: {
+                    random:
+                    {
+                        lowerBound: -50,
+                        upperBound: 0
+                    },
+                },
+            },
+            direction: {
+                velocityX: {
+                    random:
+                    {
+                        lowerBound: -10,
+                        upperBound: +10
+                    },
+                },
+                velocityY: {
+                    random:
+                    {
+                        lowerBound: 50,
+                        upperBound: 300
+                    },
+                },
+            },
+            healthValue: -25,
+            pointValue: 0,
+            spriteTag: spriteTags.POO,
+            timeLimit: 4,
+            parentSpriteTag: spriteTags.GULL
+        }
+    }
+
+
+    const gullBlessingSpawner = new Spawner()
+
+
+    gullBlessingSpawner.registerObjectPool("blessing", getGullBlessingConfig)
+    // console.log(gullBlessingSpawner)
+
+    setTimeout(() => {
+        gullBlessingSpawner.spawnObject("blessing", "objectID-", 4, 10, 10)
+    }, 3000)
 
 
 
@@ -240,7 +301,7 @@ window.addEventListener("load", function () {
 
 
     wienerSpawner.registerObjectPool("wiener", getWienerConfig)
-    console.log(wienerSpawner)
+    // console.log(wienerSpawner)
 
     // wienerSpawner.startSpawningObjects("wiener", 1, 500, 10, 100, 1000)
 
@@ -252,13 +313,13 @@ window.addEventListener("load", function () {
         wienerSpawner.spawnObject("wiener", "objectID-", 4, 25, 5)
     }, 5000)
 
-    // setTimeout(() => {
-    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
-    // }, 10000)
+    setTimeout(() => {
+        wienerSpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
+    }, 10000)
 
-    // setTimeout(() => {
-    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
-    // }, 12000)
+    setTimeout(() => {
+        wienerSpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
+    }, 12000)
 
     // setTimeout(() => {
     //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 400, 10)
@@ -292,7 +353,7 @@ window.addEventListener("load", function () {
                 velocityX: 0,
                 velocityY: 0,
             },
-            spawners: [wienerSpawner, gullSpawner],
+            spawners: [wienerSpawner, gullBlessingSpawner, gullSpawner],
             timeline: {},
             player: player,
             playerScrollFactor: 0,
@@ -333,8 +394,22 @@ window.addEventListener("load", function () {
         },
         layers: [backgroundLayer, spriteLayer, foregroundLayer],
         spriteLayerIndex: 1,
-        music: [],
+        music: ["../audio/music/alouette_55s.mp3"],
         sfx: [],
+        goals: {
+            gold: {
+                type: "score",
+                value: 5000
+            },
+            silver: {
+                type: "score",
+                value: 4000
+            },
+            bronze: {
+                type: "score",
+                value: 2500
+            }
+        }
 
     }
 
@@ -343,8 +418,7 @@ window.addEventListener("load", function () {
 
     console.log(scene00)
 
-    game.scenes = []
-    game.scenes.push(scene00)
+    game.addScene(scene00)
 
     function initObservers() {
         /* 
@@ -358,12 +432,17 @@ window.addEventListener("load", function () {
         apply when certain stats are reached
         */
         game.player.stats.subscribe(game.player)
+        game.player.stats.subscribe(game)
+
+        game.subscribe(game.ui.bindings.scene.timeRemaining)
+        game.subscribe(game.ui.bindings.scene.timeRemainingStyle)
 
         /* 
         Subscribe all the UI bindings to the game.player.stats so they UI elements update as a player's
         stats change
         */
-        Object.values(game.ui.bindings).forEach((binding) => {
+
+        Object.values(game.ui.bindings.player).forEach((binding) => {
             game.player.stats.subscribe(binding)
         })
 
@@ -379,7 +458,16 @@ window.addEventListener("load", function () {
     initObservers()
 
     ui.toggleUI("cutscene")
+    console.dir(ui)
     game.runIntro()
+
+    // Assuming game.notifyTimeRemaining is already defined and is a method of game
+
+    // Call the function every 1000 milliseconds (1 second)
+    const intervalId = setInterval(game.notifyTimeRemaining.bind(game), 1000)
+
+    // If you need to stop repeating the call, you can clear the interval with:
+    // clearInterval(intervalId);
 
 
 
