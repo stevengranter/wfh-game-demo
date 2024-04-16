@@ -25,7 +25,8 @@ export default class Sprite {
 
         // Check if spriteConfigObject is an object and has 'spriteSrc' property
         if (typeof spriteConfigObject === "object" && "spriteSrc" in spriteConfigObject) {
-            this.makeSpriteFromConfigObj(spriteConfigObject)
+            this.configObject = spriteConfigObject
+            this.setProperties(this.configObject)
         } else {
             console.error("spriteConfigObject is not in the correct format or missing 'spriteSrc'")
         }
@@ -59,11 +60,20 @@ export default class Sprite {
 
     }
 
+    // storeConfigObject(configObject) {
+    //     this.configObject = spriteConfigObject // Store the sprite configuration object
+    // }
+
+    resetSprite() {
+        if (this.configObject) {
+            console.log("has configObject")
+            this.setProperties(this.configObject)
+        }
+    }
+
 
     // Function to create a sprite from the given configuration object
-    makeSpriteFromConfigObj(spriteConfigObject) {
-        this.configObject = spriteConfigObject // Store the sprite configuration object
-
+    setProperties(spriteConfigObject) {
         // Iterate over each key-value pair in the spriteConfigObject
         for (const [key, value] of Object.entries(spriteConfigObject)) {
             switch (key) {

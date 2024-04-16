@@ -155,26 +155,8 @@ window.addEventListener("load", function () {
 
 
 
-    const newGull = (() => new Sprite(getGullConfig()))()
-
-    // console.log("🚀 ~ newGull:", newGull)
 
 
-
-
-    const gullSpawner = new Spawner()
-
-    gullSpawner.registerObjectPool("gull", getGullConfig)
-
-    // console.log(gullSpawner)
-
-    setTimeout(() => {
-        gullSpawner.spawnObject("gull", "objectID-", 5, 10, 10)
-    }, 1000)
-
-    // setTimeout(() => {
-    //     gullSpawner.spawnObject("gull", "objectID-", 5, 50, 5)
-    // }, 15000)
 
 
     const getGullBlessingConfig = () => {
@@ -229,16 +211,6 @@ window.addEventListener("load", function () {
     }
 
 
-    const gullBlessingSpawner = new Spawner()
-
-
-    gullBlessingSpawner.registerObjectPool("blessing", getGullBlessingConfig)
-    // console.log(gullBlessingSpawner)
-
-    setTimeout(() => {
-        gullBlessingSpawner.spawnObject("blessing", "objectID-", 4, 10, 10)
-    }, 3000)
-
 
 
     const getWienerConfig = () => {
@@ -291,35 +263,18 @@ window.addEventListener("load", function () {
         }
     }
 
+    // Create spawner and register object pools for each object with spawner
 
-    const wienerSpawner = new Spawner()
+    const spawner = new Spawner()
 
+    spawner.registerObjectPool("gull", getGullConfig)
+    spawner.registerObjectPool("blessing", getGullBlessingConfig)
+    spawner.registerObjectPool("wiener", getWienerConfig)
 
-    wienerSpawner.registerObjectPool("wiener", getWienerConfig)
-    // console.log(wienerSpawner)
+    // spawner.startSpawningObjects("wiener", "wiener-", 15, 10, 15)
+    // spawner.startSpawningObjects("gull", "gull-", 15, 10, 55)
 
-    // wienerSpawner.startSpawningObjects("wiener", 1, 500, 10, 100, 1000)
-
-    setTimeout(() => {
-        wienerSpawner.spawnObject("wiener", "objectID-", 4, 10, 10)
-    }, 1000)
-
-    setTimeout(() => {
-        wienerSpawner.spawnObject("wiener", "objectID-", 4, 25, 5)
-    }, 5000)
-
-    setTimeout(() => {
-        wienerSpawner.spawnObject("wiener", "objectID-", 4, 100, 10)
-    }, 10000)
-
-    setTimeout(() => {
-        wienerSpawner.spawnObject("wiener", "objectID-", 4, 200, 10)
-    }, 12000)
-
-    // setTimeout(() => {
-    //     wienerSpawner.spawnObject("wiener", "objectID-", 4, 400, 10)
-    // }, 15000)
-
+    console.log(spawner)
 
     const backgroundLayerConfig = () => {
         return {
@@ -348,8 +303,13 @@ window.addEventListener("load", function () {
                 velocityX: 0,
                 velocityY: 0,
             },
-            spawners: [wienerSpawner, gullBlessingSpawner, gullSpawner],
-            timeline: {},
+            spawners: [spawner],
+            eventTimeline: [
+                {
+                    type: "spawner",
+                    objectType: "gull",
+                }
+            ],
             player: player,
             playerScrollFactor: 0,
             isPlayerLayer: true
@@ -425,7 +385,6 @@ window.addEventListener("load", function () {
                 velocityX: 0,
                 velocityY: 0,
             },
-            timeline: {},
             player: player,
             playerScrollFactor: 0,
             isPlayerLayer: false
@@ -447,6 +406,7 @@ window.addEventListener("load", function () {
         spriteLayerIndex: 1,
         music: ["../audio/music/i_equals_da_by.mp3"],
         sfx: [],
+        events: [],
         goals: {
             gold: {
                 type: "score",
