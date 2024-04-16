@@ -293,7 +293,8 @@ export class GameWorld extends Observable {
                             event.objectId,
                             event.spawnDrawTime,
                             event.totalSpawnCount,
-                            event.spawningDuration
+                            event.spawningDuration,
+                            event.resetConfig
                         )
                     }, event.startTime)
 

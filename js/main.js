@@ -315,12 +315,35 @@ window.addEventListener("load", function () {
                     spawnDrawTime: 5,
                     totalSpawnCount: 500,
                     spawningDuration: 55,
-                    // resetConfig: {
-                    //     // velocityX: -100,
-                    //     customReset: true,
-
-                    // }
+                    resetConfig: {
+                        velocityX: -50,
+                        customReset: true,
+                    }
                 },
+                {
+                    startTime: 2000,
+                    type: "spawner",
+                    objectType: "wiener",
+                    objectId: "wiener-",
+                    spawnDrawTime: 5,
+                    totalSpawnCount: 500,
+                    spawningDuration: 55,
+                    resetConfig: {
+                        dy: 280,
+                        velocityX: 50,
+                        customReset: true,
+
+                    },
+                },
+                {
+                    startTime: 10000,
+                    type: "spawner",
+                    objectType: "wiener",
+                    objectId: "wiener-",
+                    spawnDrawTime: 5,
+                    totalSpawnCount: 500,
+                    spawningDuration: 55,
+                }
 
 
             ],
@@ -351,11 +374,8 @@ window.addEventListener("load", function () {
                     spawnDrawTime: 10,
                     totalSpawnCount: 25,
                     spawningDuration: 5,
-                    // resetConfig: {
-                    //     // velocityX: -100,
-                    //     customReset: true,
 
-                    // }
+
                 },
                 {
                     startTime: 5000,
@@ -373,7 +393,8 @@ window.addEventListener("load", function () {
                     objectId: "wiener-",
                     spawnDrawTime: 10,
                     totalSpawnCount: 10000,
-                    spawningDuration: 10
+                    spawningDuration: 10,
+
                 }
 
             ],
