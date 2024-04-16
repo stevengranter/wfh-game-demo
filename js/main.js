@@ -294,7 +294,43 @@ window.addEventListener("load", function () {
         }
     }
 
-    const spriteLayerConfig = () => {
+    const scene00spriteLayerConfig = () => {
+        return {
+            // spriteSrc: "./images/garden-06.png",
+            animationFrame: {},
+            animations: {},
+            location: { dx: 0, dy: 0 },
+            direction: {
+                velocityX: 0,
+                velocityY: 0,
+            },
+            spawners: [spawner],
+            eventTimeline: [
+
+                {
+                    startTime: 1000,
+                    type: "spawner",
+                    objectType: "wiener",
+                    objectId: "wiener-",
+                    spawnDrawTime: 5,
+                    totalSpawnCount: 500,
+                    spawningDuration: 55,
+                    // resetConfig: {
+                    //     // velocityX: -100,
+                    //     customReset: true,
+
+                    // }
+                },
+
+
+            ],
+            player: player,
+            playerScrollFactor: 0,
+            isPlayerLayer: true
+        }
+    }
+
+    const scene01spriteLayerConfig = () => {
         return {
             // spriteSrc: "./images/garden-06.png",
             animationFrame: {},
@@ -366,7 +402,7 @@ window.addEventListener("load", function () {
     }
 
     const backgroundLayer = new Layer({ ...backgroundLayerConfig() })
-    const spriteLayer = new Layer({ ...spriteLayerConfig() })
+    const scene00spriteLayer = new Layer({ ...scene00spriteLayerConfig() })
     const foregroundLayer = new Layer({ ...foregroundLayerConfig() })
 
     const scene00_config = {
@@ -378,22 +414,22 @@ window.addEventListener("load", function () {
             bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
             bottomLeft: [0, CANVAS_HEIGHT]
         },
-        layers: [backgroundLayer, spriteLayer, foregroundLayer],
+        layers: [backgroundLayer, scene00spriteLayer, foregroundLayer],
         spriteLayerIndex: 1,
         music: ["../audio/music/alouette_55s.mp3"],
         sfx: [],
         goals: {
             gold: {
                 type: "score",
-                value: 300000
+                value: 10000
             },
             silver: {
                 type: "score",
-                value: 200000
+                value: 5000
             },
             bronze: {
                 type: "score",
-                value: 100000
+                value: 2500
             }
         }
 
@@ -423,6 +459,7 @@ window.addEventListener("load", function () {
     }
 
     const scene01BackgroundLayer = new Layer({ ...scene01BackgroundLayerConfig() })
+    const scene01spriteLayer = new Layer({ ...scene01spriteLayerConfig() })
 
     const scene01_config = {
         index: 0,
@@ -433,7 +470,7 @@ window.addEventListener("load", function () {
             bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
             bottomLeft: [0, CANVAS_HEIGHT]
         },
-        layers: [scene01BackgroundLayer, spriteLayer],
+        layers: [scene01BackgroundLayer, scene01spriteLayer],
         spriteLayerIndex: 1,
         music: ["../audio/music/i_equals_da_by.mp3"],
         sfx: [],
