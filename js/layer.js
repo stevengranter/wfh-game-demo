@@ -1,74 +1,144 @@
+import { CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS, CTX } from "./constants.js"
+import Spawner from "./spawner.js"
+
 export default class Layer {
-    constructor(
-        player,
-        playerScrollFactor = false,
-        backgroundImageObject,
-        velocityX = 0,
-        velocityY = 0,
-        sx = 0,
-        sy = 0,
-        sWidth = 0,
-        sHeight = 0,
-        dx = 0,
-        dy = 0,
-        dWidth = 0,
-        dHeight = 0,
-        filter = "none"
+    constructor(args) {
+        Object.assign(this, args)
 
-    ) {
+        // Set defaults if not provided
+        this.sx = this.sx ?? 0
+        this.sy = this.sy ?? 0
 
-        this.player = player
-        this.playerScrollFactor = playerScrollFactor
-        this.backgroundImageObject = backgroundImageObject
-        this.velocityX = velocityX
-        this.velocityY = velocityY
-        this.sx = sx
-        this.sy = sy
-        this.sWidth = sWidth
-        this.sHeight = sHeight
-        this.dx = dx
-        this.dy = dy
-        this.dHeight = dHeight
-        this.dWidth = dWidth
+        this.dx = this.location.dx ?? 0
+        this.dy = this.location.dy ?? 0
 
-        this.filter = filter
+        this.velocityX = this.direction.velocityX ?? 0
+        this.velocityY = this.direction.velocityY ?? 0
 
+        // Initialize imageObject as null or undefined
+        this.imageObject = null
         // console.log(this)
 
-
+        // Call init to load the background image 
+        if (this.spriteSrc) this.init()
 
     }
 
-    draw(context) {
-        if ((this.filter !== "none") && (this.filter !== undefined)) {
-            // console.log(this.filter)
-            context.filter = this.filter
+    async init() {
+        try {
+            this.imageObject = await this.loadImage(this.spriteSrc)
+            console.log("Layer image loaded")
+        } catch (error) {
+            console.error('Error loading image:', error)
         }
+    }
 
-        context.drawImage(
-            this.backgroundImageObject,
-            this.sx,
-            this.sy,
-            this.sWidth,
-            this.sHeight,
-            Math.floor(this.dx),
-            Math.floor(this.dy),
-            this.dWidth,
-            this.dHeight
-        )
+    loadImage(sourceImage) {
+        return new Promise((resolve, reject) => {
+            const imageObject = new Image()
 
+            imageObject.onload = () => {
+                this.sWidth = imageObject.naturalWidth
+                this.sHeight = imageObject.naturalHeight
+                this.dHeight = this.dHeight ?? CANVAS_HEIGHT
+                this.dWidth = this.dWidth ?? CANVAS_WIDTH
+                resolve(imageObject)
+            }
 
-        // context.filter = "none"
+            imageObject.onerror = (error) => {
+                reject(error)
+            }
+
+            imageObject.src = sourceImage
+            this.imageObject = imageObject
+        })
+
+    }
+
+    draw(context, background = true, spawners = false, player = false) {
+        // console.log(player)
+        if (background) this.drawBackground(context)
+        if (spawners) this.drawSpawners(context)
+        if (player) this.drawPlayer(context)
+
+    }
+
+    update(deltaTime, input, playerVelocityX, playerVelocityY) {
+        this.updateBackground(deltaTime, playerVelocityX, playerVelocityY)
+        this.updateSpawners(deltaTime)
+        this.updatePlayer(input, deltaTime)
+    }
+
+    updatePlayer(input, deltaTime) {
+        if (this.isPlayerLayer === true) {
+            // console.log("update: is player layer")
+            this.player.update(input, deltaTime)
+        }
+    }
+
+    drawPlayer(context) {
+        if (this.isPlayerLayer === true) {
+            // console.log("draw: is player layer")
+            this.player.draw(context)
+        }
     }
 
 
-    update(deltaTime, playerVelocityX = 0, playerVelocityY = 0) {
+    updateSpawners(deltaTime) {
+        if (!this.spawners) return
+        this.spawners.forEach((spawner) => {
+            spawner.update(deltaTime)
+        })
+    }
+
+    drawSpawners(context) {
+        if (!this.spawners) return
+        this.spawners.forEach((spawner) => {
+            spawner.draw(CTX)
+        })
+    }
+
+
+    drawBackground(context) {
+
+        // Guard clause: If there is no background image, just return
+        if (!this.imageObject) return
+
+        if (this.imageObject) {
+            if (this.filter !== "none") {
+                context.filter = this.filter
+            }
+            // console.log(this.imageObject)
+            context.drawImage(
+                this.imageObject,
+                this.sx,
+                this.sy,
+                this.sWidth,
+                this.sHeight,
+                Math.floor(this.dx),
+                Math.floor(this.dy),
+                this.dWidth,
+                this.dHeight
+            )
+
+            // Reset the filter to "none" after drawing
+            context.filter = "none"
+        } else {
+            console.warn('Image not loaded, cannot draw layer')
+        }
+    }
+
+
+
+
+
+    updateBackground(deltaTime, playerVelocityX = 0, playerVelocityY = 0) {
         // console.log(playerVelocityX)
+        if (!this.imageObject) return
+        if (this.playerScrollFactor === 0) {
 
-        if (!this.playerScrollFactor) {
-
-            this.dx += playerVelocityX * deltaTime
-            this.dy += playerVelocityY * deltaTime
+            this.dx += this.velocityX * deltaTime
+            this.dy += this.velocityY * deltaTime
         } else {
             // negative so the background scrolls in the opposite direction of player
             this.dx += -(this.velocityX + (this.playerScrollFactor * this.player.velocityX)) * deltaTime

@@ -2,13 +2,14 @@
 import { wait } from "./utils.js"
 export default class CollisionDetector {
 
+  // Basic AABB box collision detection
+  static detectBoxCollision(subject, object) {
 
+    /* if either the subject or object is out of the gameplay bounds,
+      we don't have to check for a collision
+    */
+    if (!subject.isOutOfBounds() || !object.isOutOfBounds()) {
 
-  static detectBoxCollision(subject, objectsArray) {
-    // console.log(subject)
-
-    for (const element of objectsArray) {
-      let object = element.data
       if (
         subject.dx + subject.dWidth >= object.dx &&
         subject.dx <= object.dx + object.dWidth &&
@@ -19,17 +20,22 @@ export default class CollisionDetector {
           object.isScored = true
           object.isVisible = false
           wait(500) // wait for 0.5 seconds to avoid returning multiple collisions
-          return object
+          const scoreObject = {}
+          scoreObject.health = object.healthValue
+          scoreObject.points = object.pointValue
+          return scoreObject// return object
         } else {
-          return false
+          return null // if object has already been scored
         }
-
+      } else {
+        return null // if no collision has occured
       }
-
-
-
+    } else {
+      return null // if subject or object is out of bounds
     }
 
-
   }
+
+
 }
+

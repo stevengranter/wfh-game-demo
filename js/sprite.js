@@ -21,8 +21,6 @@ export const spriteTags = Object.freeze({
 
 export default class Sprite {
 
-
-    // Constructor function for creating a sprite object
     constructor(spriteConfigObject) {
 
         // Check if spriteConfigObject is an object and has 'spriteSrc' property
@@ -198,8 +196,8 @@ export default class Sprite {
 
         if (this.persist == "bottom" && this.dy + this.dHeight + 20 > 270) {
             this.dy = 270 - this.dHeight - 20 // Adjust position to canvas bottom
-            this.velocityY = 0 // Stop the vertical motion
-            this.velocityX = 0 // stop horizontal motion
+            this.velocityY = 0 // Stop vertical motion
+            this.velocityX = 0 // Stop horizontal motion
             this.isAnimating = false
         }
         this.dx += (this.velocityX) * deltaTime
@@ -235,13 +233,13 @@ export default class Sprite {
 
 }
 
-// Define a class named AnimationFrame
+
 export class AnimationFrame {
-    // Constructor for creating an instance of AnimationFrame with specified parameters
+
     constructor(sx, sy, sWidth, sHeight) {
-        // Initialize the starting x-coordinate of the frame
+        // Initialize the upper-left x-coordinate of the frame
         this.sx = sx
-        // Initialize the starting y-coordinate of the frame
+        // Initialize the upper-left y-coordinate of the frame
         this.sy = sy
         // Initialize the width of the frame
         this.sWidth = sWidth
@@ -251,15 +249,15 @@ export class AnimationFrame {
 }
 
 
-// Define a class named SpriteAnimation
+
 export class SpriteAnimation {
-    // Constructor for creating an instance of SpriteAnimation with specified parameters
+
     constructor(animationFrame, frameX, frameY, endFrame) {
         // Initialize the animation frame object for the sprite animation
         this.animationFrame = animationFrame
-        // Initialize the x-coordinate of the current frame
+        // Initialize the frame row of the current frame
         this.frameX = frameX
-        // Initialize the y-coordinate of the current frame
+        // Initialize the frame column of the current frame
         this.frameY = frameY
         // Initialize the ending frame number for the animation
         this.endFrame = endFrame

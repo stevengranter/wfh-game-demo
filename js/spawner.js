@@ -1,83 +1,145 @@
+import Sprite from "./sprite.js"
+import { CANVAS, CTX } from "./constants.js"
+
+class ObjectPool {
+    constructor(objectType) {
+        this.objectType = objectType
+        this.pool = []
+        this.configGenerator = null
+    }
+
+    borrowObject() {
+        if (this.pool.length === 0) {
+            console.log(`Creating a new ${this.objectType}`)
+            const newObj = { type: this.objectType }
+            if (typeof this.configGenerator === 'function') {
+                Object.assign(newObj, this.configGenerator())
+            }
+            return newObj
+        } else {
+            console.log(`Reusing a ${this.objectType} from the pool`)
+            const obj = this.pool.pop()
+            if (obj && obj.hasOwnProperty("configObject")) {
+                console.log("borrowObject: object has configObject")
+            }
+            return obj
+        }
+    }
+
+    returnObject(obj) {
+        if (obj && obj.hasOwnProperty("configObject")) {
+            // console.log("returnObject: object has configObject")
+        }
+        this.pool.push(obj)
+    }
+}
 
 
 export default class Spawner {
-
-    constructor(spawnInterval = 5, objectPool) {
-        this.spawnInterval = spawnInterval * 1000 // multiply to get milliseconds
-        this.objectPool = objectPool
-        this.timeSinceSpawn = 0
+    constructor() {
+        this.spawnedObjects = []
+        this.objectPools = {}
     }
 
-    update(deltaTime) {
-        this.timeSinceSpawn += deltaTime * 1000
-        //console.log(this.timeSinceSpawn)
-        if (this.timeSinceSpawn >= this.spawnInterval) {
-            let element = this.objectPool.getElement()
-            // console.log(element.data)
-            if (element.data.hasOwnProperty("parentSprite")) {
-                // console.log("has parent sprite")
-                // console.log(element.data.parentSprite)
-                element.data.getParentPosition(element.data.parentSprite)
+    registerObjectPool(objectType, configGenerator) {
+        const objectPool = new ObjectPool(objectType)
+        objectPool.configGenerator = configGenerator
+        this.objectPools[objectType] = objectPool
+    }
+
+
+    spawnObject(objectType, objectId, spawnDrawTime, totalSpawnCount, spawningDuration) {
+        let spawnCount = 0
+        const timeBetweenSpawns = spawningDuration / totalSpawnCount // Calculate time between spawns
+
+        const intervalId = setInterval(() => {
+            if (spawnCount < totalSpawnCount) {
+                if (this.objectPools[objectType] && typeof this.objectPools[objectType].configGenerator === 'function') {
+                    const objectConfig = this.objectPools[objectType].configGenerator()
+                    const object = new Sprite(objectConfig)
+                    if (object.parentSpriteTag) {
+                        console.log("parent is:" + object.parentSpriteTag)
+                    }
+
+                    object.id = objectId + spawnCount
+                    object.spawned = true
+                    object.objectType = objectType
+
+                    setTimeout(() => {
+                        object.spawned = false
+                        object.location = null
+                        this.objectPools[objectType].returnObject(object)
+
+                        const index = this.spawnedObjects.indexOf(object)
+                        if (index !== -1) {
+                            this.spawnedObjects.splice(index, 1)
+                        }
+                    }, spawnDrawTime * 1000) // Convert seconds to milliseconds for setTimeout
+
+                    this.spawnedObjects.push(object)
+                    spawnCount++
+                }
+            } else {
+                clearInterval(intervalId)
             }
-            // if (element.data.getParentVelocity) {
-            //     element.data.getParentVelocity()
-            // }
+        }, timeBetweenSpawns * 1000) // Convert seconds to milliseconds for setInterval
+    }
 
-            // element.data.update()
-            this.timeSinceSpawn = 0
+    startSpawningObjects(objectType, objectId, spawnDrawTime, totalSpawnCount, spawningDuration) {
+        if (!this.objectPools[objectType]) {
+            console.error(`Object pool for ${objectType} not registered.`)
+            return
         }
+        this.spawnObject(objectType, objectId, spawnDrawTime, totalSpawnCount, spawningDuration)
+    }
 
-        // console.log(this.objectPool.poolArray)
-        for (let i = 0; i < this.objectPool.poolArray.length; i++) {
-            if (!this.objectPool.poolArray[i].free) {
-                // if (this.objectPool.poolArray[i].free == false) {
-
-                this.objectPool.poolArray[i].data.update(deltaTime)
-            }
-            // }
-        }
+    getAllSpawnedObjects() {
+        return this.spawnedObjects
     }
 
     draw(context) {
-
-        for (let i = 0; i < this.objectPool.poolArray.length; i++) {
-            if (this.objectPool.poolArray[i].free === false) {
-                const element = this.objectPool.poolArray[i]
-                if (element.data.dx < 500 && element.data.dx > -50 && element.data.dy > -50 && element.data.dy < 275) {
-                    element.data.draw(context)
-                    // console.log(element)
-                }
-                else {
-                    this.objectPool.releaseElement(element)
-                    // console.log('Just released:')
-                    // console.log(element)
-                }
+        this.spawnedObjects.forEach(object => {
+            if (object instanceof Sprite && object.spawned) {
+                object.draw(context)
             }
-        }
+        })
     }
 
-    getActiveObjects() {
-        let numActiveObjects = 0
-        for (let e = 0; e < this.objectPool.poolArray.length; e++) {
-            if (this.objectPool.poolArray[e].free == false) {
-                numActiveObjects = numActiveObjects + 1
+    update(deltaTime) {
+        this.spawnedObjects.forEach(object => {
+            const objectType = object.objectType
+            if (object instanceof Sprite && object.spawned) {
+                object.update(deltaTime)
+                // console.log(object)
+                // Decrease the remaining time for the spawned object
+                object.timeLimit -= deltaTime
+                // console.log("🚀 ~ Spawner ~ update ~ object.timeLimit:", object.timeLimit)
+
+
+                // Return the object to the pool if the time limit is reached
+                if (object.timeLimit <= 0) {
+                    object.spawned = false
+                    object.location = null
+                    this.objectPools[objectType].returnObject(object)// TODO: not being returned, fix
+                    this.spawnedObjects = this.spawnedObjects.filter(obj => obj !== object)
+                }
             }
+        })
 
+        this.timeSinceSpawn += deltaTime * 1000
+        if (this.timeSinceSpawn >= this.spawnDrawTime) {
+            // const objectType = this.objectPools.objec
+            const objectPool = this.objectPools[objectType]
+            const element = objectPool.borrowObject()
+            element.timeLimit = spawnDrawTime
+            // Call the update method on the borrowed object's data
+            element.update()
+
+            objectPool.returnObject(element)
+
+            this.timeSinceSpawn = 0
         }
-        return numActiveObjects
-    }
-
-    getFreeObjects() {
-        let numFreeObjects = 0
-        for (let e = 0; e < this.objectPool.poolArray.length; e++) {
-            if (this.objectPool.poolArray[e].free == true) {
-                numFreeObjects = numFreeObjects + 1
-            }
-
-        }
-        return numFreeObjects
     }
 
 
 }
-
