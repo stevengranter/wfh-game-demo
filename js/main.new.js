@@ -432,7 +432,7 @@ window.addEventListener("load", function () {
         apply when certain stats are reached
         */
         game.player.stats.subscribe(game.player)
-        game.player.stats.subscribe(game)
+        // game.player.stats.subscribe(game)
 
         game.subscribe(game.ui.bindings.scene.timeRemaining)
         game.subscribe(game.ui.bindings.scene.timeRemainingStyle)

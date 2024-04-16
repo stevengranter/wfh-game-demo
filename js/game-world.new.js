@@ -122,7 +122,7 @@ export class GameWorld extends Observable {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
-        if (this.isPaused === false) {
+        if (this.isPaused === false && this.isSceneOver != false) {
             this.deltaTime = (timeStamp - this.lastTime) / 1000
             this.lastTime = timeStamp
 
@@ -288,6 +288,7 @@ export class GameWorld extends Observable {
 
     endScene() {
         // Pause the game and the music
+        this.isSceneOver = true
         this.isPaused = true
         clearInterval(this.#currentScene.intervalId)
         this.pauseMusic()
@@ -369,17 +370,19 @@ export class GameWorld extends Observable {
 
         const checkGoal = () => {
             // console.log(this.player)
-            if (this.player.stats.score >= this.scoreGoal) {
-                console.log("You won! 🥳")
-                clearInterval(intervalId)
-                this.endScene()
+            if (!this.isSceneOver) {
+                if (this.player.stats.score >= this.scoreGoal) {
+                    console.log("You won! 🥳")
+                    clearInterval(intervalId)
+                    this.endScene()
 
+                }
             }
         }
 
 
         // Check for goal every 0.5 seconds
-        const intervalId = setInterval(checkGoal, 500)
+        const intervalId = setInterval(checkGoal, this.deltaTime)
 
 
         console.log("player.progress" + this.player.stats.progress)
@@ -456,7 +459,7 @@ export class GameWorld extends Observable {
 
 
     receiveUpdate(data) {
-        console.log("gameworld received :", data)
+        // console.log("gameworld received :", data)
     }
 
     pauseGame() {
