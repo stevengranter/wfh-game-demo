@@ -64,10 +64,10 @@ export default class Sprite {
     //     this.configObject = spriteConfigObject // Store the sprite configuration object
     // }
 
-    resetSprite() {
-        if (this.configObject) {
+    resetSprite(configObject = this.configObject) {
+        if (configObject) {
             // console.log("has configObject")
-            this.setProperties(this.configObject)
+            this.setProperties(configObject)
         }
     }
 

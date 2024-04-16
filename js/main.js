@@ -314,24 +314,29 @@ window.addEventListener("load", function () {
                     objectId: "wiener-",
                     spawnDrawTime: 10,
                     totalSpawnCount: 25,
-                    spawningDuration: 5
+                    spawningDuration: 5,
+                    // resetConfig: {
+                    //     // velocityX: -100,
+                    //     customReset: true,
+
+                    // }
                 },
                 {
-                    startTime: 4000,
-                    type: "spawner",
-                    objectType: "wiener",
-                    objectId: "wiener-",
-                    spawnDrawTime: 10,
-                    totalSpawnCount: 50,
-                    spawningDuration: 8
-                },
-                {
-                    startTime: 8000,
+                    startTime: 5000,
                     type: "spawner",
                     objectType: "wiener",
                     objectId: "wiener-",
                     spawnDrawTime: 10,
                     totalSpawnCount: 100,
+                    spawningDuration: 5
+                },
+                {
+                    startTime: 10000,
+                    type: "spawner",
+                    objectType: "wiener",
+                    objectId: "wiener-",
+                    spawnDrawTime: 10,
+                    totalSpawnCount: 10000,
                     spawningDuration: 10
                 }
 
@@ -380,15 +385,15 @@ window.addEventListener("load", function () {
         goals: {
             gold: {
                 type: "score",
-                value: 8000
+                value: 300000
             },
             silver: {
                 type: "score",
-                value: 4000
+                value: 200000
             },
             bronze: {
                 type: "score",
-                value: 2000
+                value: 100000
             }
         }
 

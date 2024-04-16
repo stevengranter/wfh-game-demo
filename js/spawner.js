@@ -8,16 +8,20 @@ class ObjectPool {
         this.configGenerator = null
     }
 
-    borrowObject() {
+    borrowObject(resetConfig) {
         let obj
         if (this.pool.length > 0) {
             // console.log(`Reusing a ${this.objectType} from the pool`)
             obj = this.pool.pop()
-            obj.resetSprite()
+
         } else {
             // console.log(`Creating a new ${this.objectType}`)
             if (typeof this.configGenerator === 'function') {
                 obj = new Sprite(this.configGenerator())
+                // if (resetConfig) {
+                //     console.log("custom reset")
+                //     obj.resetSprite(resetConfig)
+                // }
                 // console.log(obj)
             }
         }
@@ -25,6 +29,7 @@ class ObjectPool {
     }
 
     returnObject(obj) {
+        obj.resetSprite()
         this.pool.push(obj)
     }
 }
@@ -41,7 +46,7 @@ export default class Spawner {
         this.objectPools[objectType] = objectPool
     }
 
-    spawnObject(objectType, objectId, spawnDrawTime, totalSpawnCount, spawningDuration) {
+    spawnObject(objectType, objectId, spawnDrawTime, totalSpawnCount, spawningDuration, resetConfig) {
         let spawnCount = 0
         const timeBetweenSpawns = spawningDuration / totalSpawnCount
 
@@ -56,7 +61,7 @@ export default class Spawner {
                 return
             }
 
-            const object = objectPool.borrowObject()
+            const object = objectPool.borrowObject(resetConfig)
             object.id = `${objectId}-${spawnCount}`
             object.spawned = true
             object.objectType = objectType
@@ -64,6 +69,11 @@ export default class Spawner {
             setTimeout(() => {
                 object.spawned = false
                 object.location = null
+
+                // if (resetConfig) {
+                //     console.log("custom reset")
+                //     object.resetSprite(resetConfig)
+                // }
                 objectPool.returnObject(object)
                 this.spawnedObjects = this.spawnedObjects.filter(o => o !== object)
             }, spawnDrawTime * 1000)
@@ -73,7 +83,7 @@ export default class Spawner {
         }, timeBetweenSpawns * 1000)
     }
 
-    startSpawningObjects(objectType, objectId = objectType, spawnDrawTime = 5, totalSpawnCount = 10, spawningDuration = 10) {
+    startSpawningObjects(objectType, objectId = objectType, spawnDrawTime = 5, totalSpawnCount = 10, spawningDuration = 10, resetObject) {
         if (!this.objectPools[objectType]) {
             console.error(`Object pool for ${objectType} not registered.`)
             return
