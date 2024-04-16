@@ -75,7 +75,7 @@ export class GameScene extends Observable {
             const music = new Audio()
             this.isMusicLoaded = false
             music.src = musicFile
-            music.loop = true // Set the music to loop indefinitely
+            music.loop = false // Set the music to play through once
 
             // Event listener to update scene time and loading status when music can play
             music.addEventListener("canplay", () => {

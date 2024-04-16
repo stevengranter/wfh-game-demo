@@ -394,7 +394,7 @@ window.addEventListener("load", function () {
         goals: {
             gold: {
                 type: "score",
-                value: 5000
+                value: 8000
             },
             silver: {
                 type: "score",
@@ -402,7 +402,7 @@ window.addEventListener("load", function () {
             },
             bronze: {
                 type: "score",
-                value: 2500
+                value: 2000
             }
         }
 
@@ -411,9 +411,66 @@ window.addEventListener("load", function () {
     const scene00 = new GameScene(scene00_config)
 
 
-    console.log(scene00)
-
     game.addScene(scene00)
+
+
+
+    const scene01BackgroundLayerConfig = () => {
+        return {
+            spriteSrc: "./images/bg-beach-huts-01.webp",
+            animationFrame: {},
+            animations: {},
+            location: { dx: 0, dy: 0 },
+            direction: {
+                velocityX: 0,
+                velocityY: 0,
+            },
+            timeline: {},
+            player: player,
+            playerScrollFactor: 0,
+            isPlayerLayer: false
+        }
+    }
+
+    const scene01BackgroundLayer = new Layer({ ...scene01BackgroundLayerConfig() })
+
+    const scene01_config = {
+        index: 0,
+        name: "Cavendish",
+        playerBounds: {
+            topLeft: [0, 0],
+            topRight: [CANVAS_WIDTH, 0],
+            bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
+            bottomLeft: [0, CANVAS_HEIGHT]
+        },
+        layers: [scene01BackgroundLayer, spriteLayer],
+        spriteLayerIndex: 1,
+        music: ["../audio/music/i_equals_da_by.mp3"],
+        sfx: [],
+        goals: {
+            gold: {
+                type: "score",
+                value: 8000
+            },
+            silver: {
+                type: "score",
+                value: 4000
+            },
+            bronze: {
+                type: "score",
+                value: 2000
+            }
+        }
+
+    }
+
+    const scene01 = new GameScene(scene01_config)
+
+    console.log(scene01)
+
+    game.addScene(scene01)
+
+    console.log(game)
 
     function initObservers() {
         /* 
@@ -427,13 +484,12 @@ window.addEventListener("load", function () {
         apply when certain stats are reached
         */
         game.player.stats.subscribe(game.player)
-        // game.player.stats.subscribe(game)
 
         game.subscribe(game.ui.bindings.scene.timeRemaining)
         game.subscribe(game.ui.bindings.scene.timeRemainingStyle)
 
         /* 
-        Subscribe all the UI bindings to the game.player.stats so they UI elements update as a player's
+        Subscribe all the UI bindings to the game.player.stats so the UI elements update as a player's
         stats change
         */
 
@@ -441,28 +497,16 @@ window.addEventListener("load", function () {
             game.player.stats.subscribe(binding)
         })
 
-        // console.log(game.ui.bindings)
-        // game.subscribe(game.ui.bindings.timeRemaining)
-        // game.subscribe(game.player)
-        // game.subscribe(game.ui)
-        // game.subscribe(game.player.stats)
-
 
     }
 
     initObservers()
 
     ui.toggleUI("cutscene")
+    ui.hide(ui.elements.banner)
     console.dir(ui)
     game.runIntro()
 
-    // Assuming game.notifyTimeRemaining is already defined and is a method of game
-
-    // Call the function every 1000 milliseconds (1 second)
-    const intervalId = setInterval(game.notifyTimeRemaining.bind(game), 1000)
-
-    // If you need to stop repeating the call, you can clear the interval with:
-    // clearInterval(intervalId);
 
 
 

@@ -55,7 +55,7 @@ export class GameWorld extends Observable {
 
         this.comboCounter = 0
 
-        window.gameWorld = this
+        // window.gameWorld = this
 
         this.#currentScene = {
             intervalId: null
@@ -84,13 +84,7 @@ export class GameWorld extends Observable {
         this.notify({ currentScene: this.#currentScene })
     }
 
-    notifyTimeRemaining() {
-        if (this.music !== undefined) {
-            this.#timeRemaining = this.music.duration - this.music.currentTime
-            this.notify({ "time-remaining": Math.floor(this.#timeRemaining) })
-        }
-        // console.log(`time remaining: ${Math.floor(this.#timeRemaining)}`)
-    }
+
 
 
 
@@ -106,7 +100,7 @@ export class GameWorld extends Observable {
 
 
     loop(timeStamp) {
-        // console.log("in loop 01")
+        console.log(this.#gameState)
         // console.log(this.currentScene)
         if (!this.isReady) {
             console.error("Player, input and/or ui not defined for GameWorld")
@@ -140,13 +134,14 @@ export class GameWorld extends Observable {
                         // console.log("colliders: ", colliders.length)
                         if (colliders.length !== 0 || colliders !== undefined) {
                             colliders.forEach((collider) => {
-                                let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
-                                if (collisionObject != undefined) {
-                                    // console.log(collisionObject)
-                                    this.notify(collisionObject)
+                                if (this.gameState === gameStateKeys.PLAY) {
+                                    let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
+                                    if (collisionObject != undefined) {
+                                        // console.log(collisionObject)
+                                        this.notify(collisionObject)
 
+                                    }
                                 }
-
 
                             })
                         }
@@ -220,6 +215,7 @@ export class GameWorld extends Observable {
 
     endScene() {
         // Pause the game and the music
+        this.gameState = gameStateKeys.SCENE_END
         this.isSceneOver = true
         this.isPaused = true
         clearInterval(this.#currentScene.intervalId)
@@ -230,7 +226,7 @@ export class GameWorld extends Observable {
         // console.log("player progress after set: " + this.player.stats.progress)
 
 
-        this.gameState = gameStateKeys.SCENE_END
+
         this.ui.toggleUI(this.gameState)
 
         // window and chicken animations
@@ -257,19 +253,42 @@ export class GameWorld extends Observable {
     }
 
     initSceneGoals() {
-        if (this.currentScene.goals.bronze.type === "score") {
-            this.scoreGoal = this.currentScene.goals.bronze.value
-            console.log(this.scoreGoal)
+
+        // console.log(this.currentScene.goals.gold)
+        this.sceneGoals = {}
+
+        // Check if the goals property exists and is not undefined
+        if (this.currentScene.goals && Object.keys(this.currentScene.goals).length > 0) {
+            // Iterate over the entries of the goals object
+            Object.entries(this.currentScene.goals).forEach(([key, value]) => {
+                // console.log(key, value)
+                this.sceneGoals[key] = value
+
+                console.log("scene has goals")
+
+            })
+        } else {
+            // If goals is undefined or has no keys, it's considered empty
+            console.log("scene has no goals or goals property is undefined")
         }
+        console.log(this.sceneGoals)
     }
+
+    // if (this.currentScene.goals.bronze.type === "score") {
+    //     this.scoreGoal = this.currentScene.goals.bronze.value
+    //     console.log(this.scoreGoal)
+    // }
+
 
 
 
     startScene = () => {
 
         // TODO: fix
+
         const sceneIndex = this.player.stats.progress
         this.currentScene = this.#scenes[sceneIndex]
+        console.log("currentScene is now", sceneIndex, this.currentScene)
         this.initSceneGoals()
 
         const playMusic = () => {
@@ -303,18 +322,35 @@ export class GameWorld extends Observable {
         const checkGoal = () => {
             // console.log(this.player)
             if (!this.isSceneOver) {
-                if (this.player.stats.score >= this.scoreGoal) {
-                    console.log("You won! 🥳")
-                    clearInterval(intervalId)
+                if (this.player.stats.score >= this.sceneGoals.bronze.value) {
+                    console.log("You won! ⭐️")
                     this.endScene()
-
                 }
             }
         }
 
+        const notifyTimeRemaining = () => {
+            if (this.music !== undefined) {
+                this.#timeRemaining = this.music.duration - this.music.currentTime
+                this.notify({ "time-remaining": Math.floor(this.#timeRemaining) })
+                if (this.#timeRemaining <= 0) {
+                    console.log("Out of Time ⌛️")
+                    clearInterval(sceneTimeIntervalId)
+                    clearInterval(goalCheckIntervalId)
+                    this.gameState = gameStateKeys.SCENE_END
+                    this.endScene()
+                }
+
+            }
+            // console.log(`time remaining: ${Math.floor(this.#timeRemaining)}`)
+        }
+
 
         // Check for goal every 0.5 seconds
-        const intervalId = setInterval(checkGoal, this.deltaTime)
+        const goalCheckIntervalId = setInterval(checkGoal, 500)
+
+        // Send observers the time remaining every 1s
+        const sceneTimeIntervalId = setInterval(notifyTimeRemaining, 1000)
 
 
         console.log("player.progress" + this.player.stats.progress)
@@ -377,7 +413,10 @@ export class GameWorld extends Observable {
             typeWriter('shop-dialog', dialogText, 25)
             setTimeout(() => {
                 typeWriter('shop-dialog', "Sorry, come back once you get some more points.", 25)
-            }, 5000) // Delay the second message by 10 seconds
+            }, 5000) // Delay the second message by 5 seconds
+            setTimeout(() => {
+                this.startScene()
+            }, 2000)
         })
 
 
