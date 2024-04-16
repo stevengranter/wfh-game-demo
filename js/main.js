@@ -266,6 +266,7 @@ window.addEventListener("load", function () {
     // Create spawner and register object pools for each object with spawner
 
     const spawner = new Spawner()
+    game.spawner = spawner
 
     spawner.registerObjectPool("gull", getGullConfig)
     spawner.registerObjectPool("blessing", getGullBlessingConfig)
@@ -305,10 +306,35 @@ window.addEventListener("load", function () {
             },
             spawners: [spawner],
             eventTimeline: [
+
                 {
+                    startTime: 1000,
                     type: "spawner",
-                    objectType: "gull",
+                    objectType: "wiener",
+                    objectId: "wiener-",
+                    spawnDrawTime: 10,
+                    totalSpawnCount: 25,
+                    spawningDuration: 5
+                },
+                {
+                    startTime: 4000,
+                    type: "spawner",
+                    objectType: "wiener",
+                    objectId: "wiener-",
+                    spawnDrawTime: 10,
+                    totalSpawnCount: 50,
+                    spawningDuration: 8
+                },
+                {
+                    startTime: 8000,
+                    type: "spawner",
+                    objectType: "wiener",
+                    objectId: "wiener-",
+                    spawnDrawTime: 10,
+                    totalSpawnCount: 100,
+                    spawningDuration: 10
                 }
+
             ],
             player: player,
             playerScrollFactor: 0,

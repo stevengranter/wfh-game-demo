@@ -66,7 +66,7 @@ export default class Sprite {
 
     resetSprite() {
         if (this.configObject) {
-            console.log("has configObject")
+            // console.log("has configObject")
             this.setProperties(this.configObject)
         }
     }

@@ -100,7 +100,7 @@ export class GameWorld extends Observable {
 
 
     loop(timeStamp) {
-        console.log(this.#gameState)
+        // console.log(this.#gameState)
         // console.log(this.currentScene)
         if (!this.isReady) {
             console.error("Player, input and/or ui not defined for GameWorld")
@@ -200,9 +200,6 @@ export class GameWorld extends Observable {
 
 
 
-    initScene() {
-
-    }
 
 
 
@@ -263,7 +260,6 @@ export class GameWorld extends Observable {
             Object.entries(this.currentScene.goals).forEach(([key, value]) => {
                 // console.log(key, value)
                 this.sceneGoals[key] = value
-
                 console.log("scene has goals")
 
             })
@@ -280,6 +276,36 @@ export class GameWorld extends Observable {
     // }
 
 
+    initSceneEvents() {
+        const spriteLayer = this.currentScene && this.currentScene.spriteLayer
+        if (!spriteLayer) {
+            console.error('Sprite layer is not defined.')
+            return
+        }
+
+        const { eventTimeline } = spriteLayer
+        if (eventTimeline) {
+            eventTimeline.forEach((event) => {
+                try {
+                    setTimeout(() => {
+                        this.spawner.startSpawningObjects(
+                            event.objectType,
+                            event.objectId,
+                            event.spawnDrawTime,
+                            event.totalSpawnCount,
+                            event.spawningDuration
+                        )
+                    }, event.startTime)
+
+                } catch (error) {
+                    console.error(`Error during event processing: ${error.message}`)
+                }
+            })
+        }
+    }
+
+
+
 
 
     startScene = () => {
@@ -290,6 +316,7 @@ export class GameWorld extends Observable {
         this.currentScene = this.#scenes[sceneIndex]
         console.log("currentScene is now", sceneIndex, this.currentScene)
         this.initSceneGoals()
+        this.initSceneEvents()
 
         const playMusic = () => {
             if (this.currentScene.hasOwnProperty("music")) {
