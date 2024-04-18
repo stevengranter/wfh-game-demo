@@ -7,14 +7,17 @@ import Observable from "./observable.js"
 export class GameScene extends Observable {
     // playerBounds // Private field to store player bounds
 
-    constructor({ index, name, playerBounds, layers, spriteLayerIndex, music, sfx, goals }) {
+    constructor({ index, name, playerBounds, layers, spriteLayerIndex, music, sfx, goals }, player) {
         super() // Calls the constructor of Observable
         this.index = index || 0 // Scene index defaulting to 0 if not provided
         this.name = name || "NoName" // Scene name defaulting to "NoName" if not provided
-
-
-
+        this.player = player
         this.layers = layers || null // Layers of the scene, default null
+
+        // A reference to the player object is added to each layer 
+        // (to determine scrolling speed for backgrounds and collisions on the sprite layer)
+        this.addPlayerToScene()
+
         this.spriteLayerIndex = spriteLayerIndex // Index of the sprite layer within the layers array
         this.spriteLayer = this.layers[spriteLayerIndex] // Reference to the sprite layer
         // this.spawners = spawners || null // Spawner objects for the scene, default is null
@@ -33,10 +36,16 @@ export class GameScene extends Observable {
             console.warn("Music could not be loaded") // Warn if music cannot be loaded
         }
 
-        // this.playerBounds = this.spriteLayer.playerBounds
-        // console.log(this.playerBounds)
 
+    }
 
+    addPlayerToScene() {
+        if (this.layers) {
+            this.layers.forEach((layer) => {
+                layer.player = this.player
+                console.log("addplayertoscene:" + layer)
+            })
+        }
     }
 
     // Getter for playerBounds 

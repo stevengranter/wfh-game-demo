@@ -11,7 +11,7 @@ class ObjectPool {
     borrowObject(resetConfig) {
         let obj
         if (this.pool.length > 0) {
-            console.log(`Reusing a ${this.objectType} from the pool`)
+            // console.log(`Reusing a ${this.objectType} from the pool`)
             obj = this.pool.pop()
             // console.log("object borrowed from pool")
 
@@ -24,7 +24,7 @@ class ObjectPool {
                 if (resetConfig) {
                     // console.log("custom reset")
                     obj.resetSprite(resetConfig)
-                    console.log("custom reset applied")
+                    // console.log("custom reset applied")
                 }
                 // console.log(obj)
             }
@@ -41,7 +41,7 @@ class ObjectPool {
             obj.resetSprite(resetConfig)
         }
         this.pool.push(obj)
-        console.log(`${obj.objectType} returned to pool.`)
+        // console.log(`${obj.objectType} returned to pool.`)
     }
 }
 
@@ -97,6 +97,7 @@ export default class Spawner {
             }
 
             const object = objectPool.borrowObject(resetConfig)
+            console.log(objectId)
             object.id = `${objectId}-${spawnCount}`
             object.spawned = true
             object.objectType = objectType

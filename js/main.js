@@ -1,501 +1,80 @@
 "use strict"
 
-// Import modules
+// Import configuration objects/functions
+import { playerConfig } from "./cfg/player.cfg.js"
+import { getGullConfig, getWienerConfig, getGullBlessingConfig } from "./cfg/spawners.cfg.js"
 
-// new modules
+import { scene00Config } from "./cfg/scene00.cfg.js"
+import { scene01Config } from "./cfg/scene01.cfg.js"
+
+
+// Import classes
 import Spawner from "./spawner.js"
-import Sprite from "./sprite.js"
-
-// OG modules
 import { GameScene } from "./game-scene.js"
-import { GameWorld, gameStateKeys } from "./game-world.js"
+import { GameWorld } from "./game-world.js"
 import UI from "./ui.js"
-import Layer from "./layer.js"
 import Player from "./player.js"
 import InputHandler from "./input-handler.js"
 import { PauseMenu } from "./pause-menu.js"
 
-import { spriteTags } from "./sprite.js"
-// import CollisionDetector from "./collision-detector.js"
-// import { drawStatusText, getRandomInt, wait, typeWriter } from "./utils.js"
-import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants.js"
-
+// Event listener to wait for document to load before running scripts
 window.addEventListener("load", function () {
 
-    let lastTime = 0
-    let deltaTime = 1
-    let comboCounter = 0
-    let isPaused = false
-    let musicPausedTime = 0
 
+    // --- MAIN GAMEWORLD  --- //
 
-
-    const canvas = document.getElementById("game-screen__canvas")
-    canvas.width = 475
-    canvas.height = 270
-    const ctx = canvas.getContext("2d")
-
-    // Initialize player
-    let playerConfig = {
-        spriteSrc: "./images/nan-sprite-walk.png",
-        animationFrame: {
-            x: 0,
-            y: 0,
-            width: 48,
-            height: 48
-        },
-        animations: {
-            StandingLeft: {
-                frameX: 0,
-                frameY: 1,
-                endFrame: 0
-            },
-            StandingRight: {
-                frameX: 0,
-                frameY: 0,
-                endFrame: 0
-            },
-            WalkingLeft: {
-                frameX: 0,
-                frameY: 1,
-                endFrame: 4
-            },
-            WalkingRight: {
-                frameX: 0,
-                frameY: 0,
-                endFrame: 4
-            },
-        }
-    }
+    // 👵🏼 Initialize player (config imported from cfg/player.cfg.js)
     const player = new Player(playerConfig)
-    // console.log(player)
 
-    // Initialize UI elements //
+    // 👁️ Initialize UI elements
     const ui = new UI("[data-ui]", player)
 
-
-
-    // Initialize Input handler
-
-    // Input Handler
-    // console.log(this.document)
-    const input = new InputHandler(ui)
-
-
-
-    // Initialize Game World
-
-    const game = new GameWorld(player, ui, input)
-    // console.log(game)
-
-    // Event listeners
-    const startButton = ui.elements.startButton
-    startButton.addEventListener("click", function (e) {
-        game.loop(0)
-    }.bind(game))
-
-
+    // ⏸️ Initialize pause menu
     const pauseMenu = new PauseMenu(ui)
 
-    // Wiener 🌭
+    // 🕹️ Initialize Input handler
+    const input = new InputHandler(ui)
+
+    // 🌎 Initialize Game World, add references to player, ui and input
+    const game = new GameWorld(player, ui, input)
 
 
+    // --- SPAWNER and OBJECT POOL --- //
 
-
-    // console.dir(myLayer)
-
-    const getGullConfig = () => {
-        return {
-            spriteSrc: "./images/seagull-flying-sprite-01-sheet.png",
-            animationFrame: { x: 0, y: 0, width: 44, height: 51 },
-            animations: {
-                Spinning: {
-                    frameX: 0,
-                    frameY: 0,
-                    endFrame: 7
-                },
-            },
-            location: {
-                dx: {
-                    random:
-                    {
-                        lowerBound: CANVAS_WIDTH,
-                        upperBound: CANVAS_WIDTH + 100
-                    }
-                },
-                dy: {
-                    random:
-                    {
-                        lowerBound: 0,
-                        upperBound: -40
-                    },
-                },
-            },
-            direction: {
-                velocityX: {
-                    random:
-                    {
-                        lowerBound: -300,
-                        upperBound: -100
-                    },
-                },
-                velocityY: {
-                    random:
-                    {
-                        lowerBound: 10,
-                        upperBound: 20
-                    },
-                },
-            },
-            healthValue: 0,
-            spriteTag: spriteTags.GULL,
-            timeLimit: 10
-        }
-    }
-
-
-
-
-
-
-
-    const getGullBlessingConfig = () => {
-        return {
-            spriteSrc: "./images/seagull-poo-sprite-02.png",
-            animationFrame: { x: 0, y: 0, width: 16, height: 16 },
-            animations: {
-                Spinning: {
-                    frameX: 0,
-                    frameY: 0,
-                    endFrame: 0
-                },
-            },
-            location: {
-                dx: {
-                    random:
-                    {
-                        lowerBound: -20,
-                        upperBound: CANVAS_WIDTH + 20
-                    }
-                },
-                dy: {
-                    random:
-                    {
-                        lowerBound: -50,
-                        upperBound: 0
-                    },
-                },
-            },
-            direction: {
-                velocityX: {
-                    random:
-                    {
-                        lowerBound: -10,
-                        upperBound: +10
-                    },
-                },
-                velocityY: {
-                    random:
-                    {
-                        lowerBound: 50,
-                        upperBound: 300
-                    },
-                },
-            },
-            healthValue: -25,
-            pointValue: 0,
-            spriteTag: spriteTags.POO,
-            timeLimit: 4,
-            parentSpriteTag: spriteTags.GULL
-        }
-    }
-
-
-
-
-    const getWienerConfig = () => {
-        return {
-            spriteSrc: "./images/wiener-32px-spin-01.png",
-            animationFrame: { x: 0, y: 0, width: 32, height: 32 },
-            animations: {
-                Spinning: {
-                    frameX: 0,
-                    frameY: 0,
-                    endFrame: 28
-                },
-            },
-            location: {
-                dx: {
-                    random:
-                    {
-                        lowerBound: -20,
-                        upperBound: CANVAS_WIDTH + 20
-                    }
-                },
-                dy: {
-                    random:
-                    {
-                        lowerBound: -50,
-                        upperBound: 0
-                    },
-                },
-            },
-            direction: {
-                velocityX: {
-                    random:
-                    {
-                        lowerBound: -10,
-                        upperBound: +10
-                    },
-                },
-                velocityY: {
-                    random:
-                    {
-                        lowerBound: 50,
-                        upperBound: 300
-                    },
-                },
-            },
-            healthValue: 5,
-            pointValue: 100,
-            spriteTag: spriteTags.WIENER,
-            timeLimit: 4
-        }
-    }
-
-    // Create spawner and register object pools for each object with spawner
-
+    // 🏊🏼‍♂️ Create spawner and register object pools for each object with spawner
     const spawner = new Spawner()
     game.spawner = spawner
 
-    spawner.registerObjectPool("gull", getGullConfig)
-    spawner.registerObjectPool("blessing", getGullBlessingConfig)
+    // 🌭 Create wieners object pool (config imported from cfg/spawners.cfg.js)
     spawner.registerObjectPool("wiener", getWienerConfig)
 
-    // spawner.startSpawningObjects("wiener", "wiener-", 15, 10, 15)
-    // spawner.startSpawningObjects("gull", "gull-", 15, 10, 55)
+    // 🐦 Create gull object pool (config imported from cfg/spawners.cfg.js)
+    spawner.registerObjectPool("gull", getGullConfig)
 
-    console.log(spawner)
+    // 💩 Create gull blessing object pool (config imported from cfg/spawners.cfg.js)
+    spawner.registerObjectPool("blessing", getGullBlessingConfig)
 
-    const backgroundLayerConfig = () => {
-        return {
-            spriteSrc: "./images/garden-06.png",
-            animationFrame: {},
-            animations: {},
-            location: { dx: 0, dy: 0 },
-            direction: {
-                velocityX: 0,
-                velocityY: 0,
-            },
-            timeline: {},
-            player: player,
-            playerScrollFactor: 0,
-            isPlayerLayer: false
-        }
+
+    // --- SCENE  --- // 
+
+    // 🏡 Create scene00 and add to GameWorld instance
+    function readyScene00() {
+        // scene00Config imported from cfg/scene00.cfg.js
+        const scene00 = new GameScene(scene00Config, player)
+        game.addScene(scene00)
     }
 
-    const scene00spriteLayerConfig = () => {
-        return {
-            // spriteSrc: "./images/garden-06.png",
-            eventTimeline: [
-                {
-                    startTime: 500,
-                    type: "spawner",
-                    objectType: "wiener",
-                    objectId: "wiener-",
-                    totalSpawnCount: 60,
-                    spawningDuration: 30,
-
-                },
-                {
-                    startTime: 25000,
-                    type: "spawner",
-                    objectType: "wiener",
-                    objectId: "wiener-",
-                    totalSpawnCount: 500,
-                    spawningDuration: 55,
-
-                },
-                {
-                    startTime: 10000,
-                    type: "spawner",
-                    objectType: "wiener",
-                    objectId: "wiener-",
-                    totalSpawnCount: 500,
-                    spawningDuration: 55,
-                }
-
-
-            ],
-            // floorHeight: 60,
-            playerBounds: {
-                topLeft: { x: 0, y: 0 },
-                topRight: { x: CANVAS_WIDTH, y: 0 },
-                bottomRight: { x: CANVAS_WIDTH, y: CANVAS_HEIGHT - 60 },
-                bottomLeft: { x: 0, y: CANVAS_HEIGHT - 60 }
-            },
-            player: player,
-            playerScrollFactor: 0,
-            isPlayerLayer: true,
-
-        }
+    // 🌊 Create scene01 and add to GameWorld instance
+    function readyScene01() {
+        // scene01Config imported from cfg/scene01.cfg.js
+        const scene01 = new GameScene(scene01Config, player)
+        game.addScene(scene01)
     }
 
-    const scene01spriteLayerConfig = () => {
-        return {
-            eventTimeline: [
 
-                {
-                    startTime: 5000,
-                    type: "spawner",
-                    objectType: "wiener",
-                    objectId: "wiener-",
-                    totalSpawnCount: 25,
-                    spawningDuration: 5,
+    // --- UI and DATA BINDING --- //
 
-                },
-                {
-                    startTime: 10000,
-                    type: "spawner",
-                    objectType: "wiener",
-                    objectId: "wiener-",
-                    totalSpawnCount: 100,
-                    spawningDuration: 5
-                },
-                {
-                    startTime: 10000,
-                    type: "spawner",
-                    objectType: "wiener",
-                    objectId: "wiener-",
-                    totalSpawnCount: 500,
-                    spawningDuration: 10,
-
-                }
-
-            ],
-            player: player,
-            playerScrollFactor: 0,
-            isPlayerLayer: true,
-            playerBounds: {
-                topLeft: { x: 0, y: 0 },
-                topRight: { x: CANVAS_WIDTH, y: 0 },
-                bottomRight: { x: CANVAS_WIDTH, y: CANVAS_HEIGHT - 15 },
-                bottomLeft: { x: 0, y: CANVAS_HEIGHT - 15 }
-            },
-        }
-    }
-
-    const foregroundLayerConfig = () => {
-        return {
-            spriteSrc: "./images/garden-06-foreground.webp",
-            animationFrame: {},
-            animations: {},
-            location: { dx: 0, dy: 0 },
-            direction: {
-                velocityX: 0,
-                velocityY: 0,
-            },
-            // spawners: [wienerSpawner, gullSpawner],
-            timeline: {},
-            player: player,
-            playerScrollFactor: 0,
-            isPlayerLayer: false
-        }
-    }
-
-    const backgroundLayer = new Layer({ ...backgroundLayerConfig() })
-    const scene00spriteLayer = new Layer({ ...scene00spriteLayerConfig() })
-    const foregroundLayer = new Layer({ ...foregroundLayerConfig() })
-
-    const scene00_config = {
-        index: 0,
-        name: "Garden",
-        layers: [backgroundLayer, scene00spriteLayer, foregroundLayer],
-        spriteLayerIndex: 1,
-        music: ["../audio/music/alouette_55s.mp3"],
-        sfx: [],
-        goals: {
-            gold: {
-                type: "score",
-                value: 10000
-            },
-            silver: {
-                type: "score",
-                value: 5000
-            },
-            bronze: {
-                type: "score",
-                value: 2500
-            }
-        }
-
-    }
-
-    const scene00 = new GameScene(scene00_config)
-
-
-    game.addScene(scene00)
-
-
-
-    const scene01BackgroundLayerConfig = () => {
-        return {
-            spriteSrc: "./images/bg-beach-huts-01.webp",
-            animationFrame: {},
-            animations: {},
-            location: { dx: 0, dy: 0 },
-            direction: {
-                velocityX: 0,
-                velocityY: 0,
-            },
-            player: player,
-            playerScrollFactor: 0,
-            isPlayerLayer: false
-        }
-    }
-
-    const scene01BackgroundLayer = new Layer({ ...scene01BackgroundLayerConfig() })
-    const scene01spriteLayer = new Layer({ ...scene01spriteLayerConfig() })
-
-    const scene01_config = {
-        index: 0,
-        name: "Cavendish",
-        // playerBounds: {
-        //     topLeft: { x: 0, y: 0 },
-        //     topRight: { x: CANVAS_WIDTH, y: 0 },
-        //     bottomRight: { x: CANVAS_WIDTH, y: CANVAS_HEIGHT - 20 },
-        //     bottomLeft: { x: 0, y: CANVAS_HEIGHT - 20 }
-        // },
-        layers: [scene01BackgroundLayer, scene01spriteLayer],
-        spriteLayerIndex: 1,
-        music: ["../audio/music/i_equals_da_by.mp3"],
-        sfx: [],
-        events: [],
-        goals: {
-            gold: {
-                type: "score",
-                value: 8000
-            },
-            silver: {
-                type: "score",
-                value: 4000
-            },
-            bronze: {
-                type: "score",
-                value: 2000
-            }
-        }
-
-    }
-
-    const scene01 = new GameScene(scene01_config)
-
-    console.log(scene01)
-
-    game.addScene(scene01)
-
-    console.log(game)
-
+    // 👀 Initialize Observable and Observers
     function initObservers() {
         /* 
         Subscribe player's Stats instance (game.player.stats) to GameWorld instance (game) because
@@ -508,7 +87,6 @@ window.addEventListener("load", function () {
         apply when certain stats are reached
         */
         game.player.stats.subscribe(game.player)
-
         game.subscribe(game.ui.bindings.scene.timeRemaining)
         game.subscribe(game.ui.bindings.scene.timeRemainingStyle)
 
@@ -516,7 +94,6 @@ window.addEventListener("load", function () {
         Subscribe all the UI bindings to the game.player.stats so the UI elements update as a player's
         stats change
         */
-
         Object.values(game.ui.bindings.player).forEach((binding) => {
             game.player.stats.subscribe(binding)
         })
@@ -524,24 +101,19 @@ window.addEventListener("load", function () {
 
     }
 
+    // Add event listener to start button
+    const startButton = ui.elements.startButton
+    startButton.addEventListener("click", function (e) {
+        game.loop(0)
+    }.bind(game))
+
     initObservers()
+    readyScene00()
 
     ui.toggleUI("cutscene")
     ui.hide(ui.elements.banner)
-    console.dir(ui)
+
     game.runIntro()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

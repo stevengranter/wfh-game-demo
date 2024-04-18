@@ -158,7 +158,7 @@ export default class Player extends Sprite {
             // Create a buffer of 50px on each side
 
             if (this.isAlive) {
-                console.log("listening for input")
+                // console.log("listening for input")
                 this.currentState.handleInput(input)
             }
 

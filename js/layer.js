@@ -9,7 +9,6 @@ export default class Layer {
         playerScrollFactor = 0,
         isPlayerLayer = false,
         playerBounds = null,
-        spawners = null
     }) {
         this.spriteSrc = spriteSrc
         this.eventTimeline = eventTimeline
@@ -17,7 +16,6 @@ export default class Layer {
         this.playerScrollFactor = playerScrollFactor
         this.isPlayerLayer = isPlayerLayer
         this.playerBounds = playerBounds
-        // this.spawners = spawners
 
         // Set defaults if not provided
         this.sx = this.sx ?? 0
@@ -93,15 +91,17 @@ export default class Layer {
 
     updatePlayer(input, deltaTime) {
         if (this.isPlayerLayer === true) {
-            // console.log("update: is player layer")
-            this.player.update(input, deltaTime)
+            try { this.player.update(input, deltaTime) }
+            catch { console.error(`drawPlayer: this.player is ${this.player}`) }
+
         }
     }
 
     drawPlayer(context) {
         if (this.isPlayerLayer === true) {
-            // console.log("draw: is player layer")
-            this.player.draw(context)
+            try { this.player.draw(context) }
+            catch { console.error(`drawPlayer: this.player is ${this.player}`) }
+
         }
     }
 
