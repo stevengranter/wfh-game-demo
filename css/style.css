@@ -714,14 +714,17 @@ div#excited-chicken {
   margin-top: 5%;
   position: absolute;
   /* border: 2px solid cyan; */
+}
+
+#time-remaining {
   text-align: right;
   font-family: "Coiny", sans-serif;
   font-size: 6svw;
   line-height: 6svw;
   opacity: 100%;
   color: var(--clr-violet);
-  text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff,
-    1px 1px 0 #fff;
+  -webkit-text-stroke: 2px #fff;
+  /* text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff; */
 }
 
 .hud-left {

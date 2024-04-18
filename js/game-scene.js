@@ -5,20 +5,14 @@ import Observable from "./observable.js"
 
 // GameScene class extends Observable to inherit event handling capabilities
 export class GameScene extends Observable {
-    #playerBounds // Private field to store player bounds
+    // playerBounds // Private field to store player bounds
 
     constructor({ index, name, playerBounds, layers, spriteLayerIndex, music, sfx, goals }) {
         super() // Calls the constructor of Observable
         this.index = index || 0 // Scene index defaulting to 0 if not provided
         this.name = name || "NoName" // Scene name defaulting to "NoName" if not provided
 
-        // Player bounds defaults to the corners of the canvas if not provided
-        this.playerBounds = playerBounds || {
-            topLeft: [0, 0],
-            topRight: [CANVAS_WIDTH, 0],
-            bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
-            bottomLeft: [0, CANVAS_HEIGHT]
-        }
+
 
         this.layers = layers || null // Layers of the scene, default null
         this.spriteLayerIndex = spriteLayerIndex // Index of the sprite layer within the layers array
@@ -39,6 +33,8 @@ export class GameScene extends Observable {
             console.warn("Music could not be loaded") // Warn if music cannot be loaded
         }
 
+        // this.playerBounds = this.spriteLayer.playerBounds
+        // console.log(this.playerBounds)
 
 
     }
@@ -46,12 +42,13 @@ export class GameScene extends Observable {
     // Getter for playerBounds 
     get playerBounds() {
         // console.dir(this.#playerBounds)
-        return this.#playerBounds
+        console.dir(this.spriteLayer.playerBounds)
+        return this.spriteLayer.playerBounds
     }
 
     // Setter for playerBounds that updates the private field and logs the update
     set playerBounds(boundingCoordinatesObj) {
-        this.#playerBounds = boundingCoordinatesObj
+        this.spriteLayer = boundingCoordinatesObj
         console.log("sent playerBounds")
     }
 

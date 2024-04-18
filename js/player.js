@@ -13,6 +13,8 @@ import {
     playerStates
 } from "./player-state.js"
 
+import { GameWorld } from "./game-world.js"
+
 
 export default class Player extends Sprite {
 
@@ -32,18 +34,19 @@ export default class Player extends Sprite {
         // this.setState(this.states[0])
         this.currentState = this.states[1]
 
-        this.floorHeight = 60 // TODO: This should not be here 🤮
+        // this.floorHeight = 60 // TODO: This should not be here 🤮
 
-        this.velocityX = 1
-        this.velocityY = 100
-        this.weight = 20
+        this.velocityX = 0
+        this.velocityY = 0
+        this.weight = 10
 
         this.speedX = 0
         this.speedY = 0
-        this.dx = 200
-        this.dy = 150
+        this.dx = (CANVAS_WIDTH - this.dWidth) / 2
+        // this.dy = (CANVAS_HEIGHT / 2) - this.dHeight
+        this.dy = 0 - this.dHeight
 
-        const initialmaxSpeedX = 25
+        const initialmaxSpeedX = 0
         this.maxSpeedX = initialmaxSpeedX
         this.speedMultiplier = 1
 
@@ -56,7 +59,7 @@ export default class Player extends Sprite {
 
 
 
-        this.isAlive = true
+        this.isAlive = false
 
 
         this.sWidth = 48
@@ -80,6 +83,9 @@ export default class Player extends Sprite {
     }
 
 
+    setBounds(boundingObject) {
+        this.bounds = boundingObject
+    }
 
     setState(state) {
         this.currentState = this.states[state]
@@ -150,13 +156,11 @@ export default class Player extends Sprite {
             // }
 
             // Create a buffer of 50px on each side
-            if (this.dx <= 0) {
-                this.dx = 0
-            } else if (this.dx >= 425) {
-                this.dx = 425
-            }
 
-            this.currentState.handleInput(input)
+            if (this.isAlive) {
+                console.log("listening for input")
+                this.currentState.handleInput(input)
+            }
 
             // horizontal Movement
             // this.dx += this.velocityX * deltaTime
@@ -176,10 +180,17 @@ export default class Player extends Sprite {
             } else {
                 this.velocityY = 0
             }
-            // Prevent player from falling through floor
-            if (this.dy > CANVAS_HEIGHT - this.dHeight) this.dy = Math.floor(CANVAS_HEIGHT - this.dHeight - this.floorHeight)
-        } else {
-            // this.dy -= 2
+            // console.log(this.bounds)
+
+            // Set player boundaries
+            if (this.dx <= this.bounds.topLeft.x) {
+                this.dx = this.bounds.topLeft.x
+            }
+            if (this.dx >= this.bounds.topRight.x - this.dWidth) {
+                this.dx = this.bounds.topRight.x - this.dWidth
+            }
+            if (this.dy >= this.bounds.bottomRight.y - this.dHeight) this.dy = Math.floor(this.bounds.bottomRight.y - this.dHeight)
+
 
         }
 
@@ -188,7 +199,11 @@ export default class Player extends Sprite {
 
 
     onGround() {
-        return this.dy >= 270 - this.sHeight - this.floorHeight
+        // console.log(this.dy + this.dHeight)
+        // console.log(this.bounds.bottomLeft.y)
+        // console.log(this.dy >= this.bounds.bottomLeft.y)
+        return (this.dy + this.dHeight >= this.bounds.bottomLeft.y)
+
     }
 
 

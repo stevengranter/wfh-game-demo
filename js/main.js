@@ -297,92 +297,68 @@ window.addEventListener("load", function () {
     const scene00spriteLayerConfig = () => {
         return {
             // spriteSrc: "./images/garden-06.png",
-            animationFrame: {},
-            animations: {},
-            location: { dx: 0, dy: 0 },
-            direction: {
-                velocityX: 0,
-                velocityY: 0,
-            },
-            spawners: [spawner],
             eventTimeline: [
-
                 {
-                    startTime: 1000,
+                    startTime: 500,
                     type: "spawner",
                     objectType: "wiener",
                     objectId: "wiener-",
-                    spawnDrawTime: 5,
-                    totalSpawnCount: 500,
-                    spawningDuration: 55,
-                    resetConfig: {
-                        velocityX: -50,
-                        customReset: true,
-                    }
+                    totalSpawnCount: 60,
+                    spawningDuration: 30,
+
                 },
                 {
-                    startTime: 2000,
+                    startTime: 25000,
                     type: "spawner",
                     objectType: "wiener",
                     objectId: "wiener-",
-                    spawnDrawTime: 5,
                     totalSpawnCount: 500,
                     spawningDuration: 55,
-                    resetConfig: {
-                        dy: 280,
-                        velocityX: 50,
-                        customReset: true,
 
-                    },
                 },
                 {
                     startTime: 10000,
                     type: "spawner",
                     objectType: "wiener",
                     objectId: "wiener-",
-                    spawnDrawTime: 5,
                     totalSpawnCount: 500,
                     spawningDuration: 55,
                 }
 
 
             ],
+            // floorHeight: 60,
+            playerBounds: {
+                topLeft: { x: 0, y: 0 },
+                topRight: { x: CANVAS_WIDTH, y: 0 },
+                bottomRight: { x: CANVAS_WIDTH, y: CANVAS_HEIGHT - 60 },
+                bottomLeft: { x: 0, y: CANVAS_HEIGHT - 60 }
+            },
             player: player,
             playerScrollFactor: 0,
-            isPlayerLayer: true
+            isPlayerLayer: true,
+
         }
     }
 
     const scene01spriteLayerConfig = () => {
         return {
-            // spriteSrc: "./images/garden-06.png",
-            animationFrame: {},
-            animations: {},
-            location: { dx: 0, dy: 0 },
-            direction: {
-                velocityX: 0,
-                velocityY: 0,
-            },
-            spawners: [spawner],
             eventTimeline: [
 
-                {
-                    startTime: 1000,
-                    type: "spawner",
-                    objectType: "wiener",
-                    objectId: "wiener-",
-                    spawnDrawTime: 10,
-                    totalSpawnCount: 25,
-                    spawningDuration: 5,
-
-
-                },
                 {
                     startTime: 5000,
                     type: "spawner",
                     objectType: "wiener",
                     objectId: "wiener-",
-                    spawnDrawTime: 10,
+                    totalSpawnCount: 25,
+                    spawningDuration: 5,
+
+                },
+                {
+                    startTime: 10000,
+                    type: "spawner",
+                    objectType: "wiener",
+                    objectId: "wiener-",
                     totalSpawnCount: 100,
                     spawningDuration: 5
                 },
@@ -391,8 +367,7 @@ window.addEventListener("load", function () {
                     type: "spawner",
                     objectType: "wiener",
                     objectId: "wiener-",
-                    spawnDrawTime: 10,
-                    totalSpawnCount: 10000,
+                    totalSpawnCount: 500,
                     spawningDuration: 10,
 
                 }
@@ -400,7 +375,13 @@ window.addEventListener("load", function () {
             ],
             player: player,
             playerScrollFactor: 0,
-            isPlayerLayer: true
+            isPlayerLayer: true,
+            playerBounds: {
+                topLeft: { x: 0, y: 0 },
+                topRight: { x: CANVAS_WIDTH, y: 0 },
+                bottomRight: { x: CANVAS_WIDTH, y: CANVAS_HEIGHT - 15 },
+                bottomLeft: { x: 0, y: CANVAS_HEIGHT - 15 }
+            },
         }
     }
 
@@ -429,12 +410,6 @@ window.addEventListener("load", function () {
     const scene00_config = {
         index: 0,
         name: "Garden",
-        playerBounds: {
-            topLeft: [0, 0],
-            topRight: [CANVAS_WIDTH, 0],
-            bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
-            bottomLeft: [0, CANVAS_HEIGHT]
-        },
         layers: [backgroundLayer, scene00spriteLayer, foregroundLayer],
         spriteLayerIndex: 1,
         music: ["../audio/music/alouette_55s.mp3"],
@@ -485,12 +460,12 @@ window.addEventListener("load", function () {
     const scene01_config = {
         index: 0,
         name: "Cavendish",
-        playerBounds: {
-            topLeft: [0, 0],
-            topRight: [CANVAS_WIDTH, 0],
-            bottomRight: [CANVAS_WIDTH, CANVAS_HEIGHT],
-            bottomLeft: [0, CANVAS_HEIGHT]
-        },
+        // playerBounds: {
+        //     topLeft: { x: 0, y: 0 },
+        //     topRight: { x: CANVAS_WIDTH, y: 0 },
+        //     bottomRight: { x: CANVAS_WIDTH, y: CANVAS_HEIGHT - 20 },
+        //     bottomLeft: { x: 0, y: CANVAS_HEIGHT - 20 }
+        // },
         layers: [scene01BackgroundLayer, scene01spriteLayer],
         spriteLayerIndex: 1,
         music: ["../audio/music/i_equals_da_by.mp3"],

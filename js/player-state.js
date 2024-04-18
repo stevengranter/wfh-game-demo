@@ -1,4 +1,5 @@
 import { wait } from "./utils.js"
+import { GameWorld } from "./game-world.js"
 
 export const playerStates = {
     DEAD: 0,

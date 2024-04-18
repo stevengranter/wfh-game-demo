@@ -128,7 +128,7 @@ export default class Sprite {
     // Function to check if the sprite is out of bounds based on its current position and dimensions
     isOutOfBounds() {
         // Check if the sprite's position is outside the canvas boundaries
-        if (this.dx < (0 - this.dWidth) || this.dx > (CANVAS_WIDTH + this.dWidth) || this.dy < (0 - this.dHeight) || this.dy > (CANVAS_HEIGHT + this.dHeight)) {
+        if ((this.dx < 0 - CANVAS_WIDTH || this.dx > 2 * CANVAS_WIDTH) || (this.dy < 0 - CANVAS_HEIGHT || this.dy > 2 * CANVAS_HEIGHT)) {
             return true // Return true if the sprite is out of bounds
         } else {
             return false // Return false if the sprite is within the bounds

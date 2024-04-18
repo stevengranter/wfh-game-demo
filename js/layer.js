@@ -2,25 +2,47 @@ import { CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS, CTX } from "./constants.js"
 import Spawner from "./spawner.js"
 
 export default class Layer {
-    constructor(args) {
-        Object.assign(this, args)
+    constructor({
+        spriteSrc = null,
+        eventTimeline = null,
+        player = null,
+        playerScrollFactor = 0,
+        isPlayerLayer = false,
+        playerBounds = null,
+        spawners = null
+    }) {
+        this.spriteSrc = spriteSrc
+        this.eventTimeline = eventTimeline
+        this.player = player
+        this.playerScrollFactor = playerScrollFactor
+        this.isPlayerLayer = isPlayerLayer
+        this.playerBounds = playerBounds
+        // this.spawners = spawners
 
         // Set defaults if not provided
         this.sx = this.sx ?? 0
         this.sy = this.sy ?? 0
 
-        this.dx = this.location.dx ?? 0
-        this.dy = this.location.dy ?? 0
+        this.dx = 0
+        this.dy = 0
 
-        this.velocityX = this.direction.velocityX ?? 0
-        this.velocityY = this.direction.velocityY ?? 0
+
+        this.velocityX = 0
+        this.velocityY = 0
 
         // Initialize imageObject as null or undefined
         this.imageObject = null
         // console.log(this)
 
+        // Player bounds defaults to the corners of the canvas if not provided
+        // console.log(this.playerBounds)
+
+        // this.player.bounds = this.playerBounds
+
         // Call init to load the background image 
         if (this.spriteSrc) this.init()
+
+        console.log(this)
 
     }
 
@@ -58,14 +80,14 @@ export default class Layer {
     draw(context, background = true, spawners = false, player = false) {
         // console.log(player)
         if (background) this.drawBackground(context)
-        if (spawners) this.drawSpawners(context)
+        // if (spawners) this.drawSpawners(context)
         if (player) this.drawPlayer(context)
 
     }
 
     update(deltaTime, input, playerVelocityX, playerVelocityY) {
         this.updateBackground(deltaTime, playerVelocityX, playerVelocityY)
-        this.updateSpawners(deltaTime)
+        // this.updateSpawners(deltaTime)
         this.updatePlayer(input, deltaTime)
     }
 
@@ -83,20 +105,20 @@ export default class Layer {
         }
     }
 
+    // MOVED 
+    // updateSpawners(deltaTime) {
+    //     if (!this.spawners) return
+    //     this.spawners.forEach((spawner) => {
+    //         spawner.update(deltaTime)
+    //     })
+    // }
 
-    updateSpawners(deltaTime) {
-        if (!this.spawners) return
-        this.spawners.forEach((spawner) => {
-            spawner.update(deltaTime)
-        })
-    }
-
-    drawSpawners(context) {
-        if (!this.spawners) return
-        this.spawners.forEach((spawner) => {
-            spawner.draw(CTX)
-        })
-    }
+    // drawSpawners(context) {
+    //     if (!this.spawners) return
+    //     this.spawners.forEach((spawner) => {
+    //         spawner.draw(CTX)
+    //     })
+    // }
 
 
     drawBackground(context) {

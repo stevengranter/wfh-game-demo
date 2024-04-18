@@ -28,6 +28,7 @@ export class GameWorld extends Observable {
     #gameState
     #timeRemaining
     #scenes
+    static #deltaTime = 1
     constructor(player, ui, input) {
         super()
 
@@ -51,7 +52,7 @@ export class GameWorld extends Observable {
 
 
         this.lastTime = 0
-        this.deltaTime = 1
+        // GameWorld.#deltaTime = 1
 
         this.comboCounter = 0
 
@@ -85,7 +86,9 @@ export class GameWorld extends Observable {
     }
 
 
-
+    static get deltaTime() {
+        return GameWorld.#deltaTime
+    }
 
 
 
@@ -100,7 +103,7 @@ export class GameWorld extends Observable {
 
 
     loop(timeStamp) {
-        // console.log(this.#gameState)
+        console.log(this.#gameState)
         // console.log(this.currentScene)
         if (!this.isReady) {
             console.error("Player, input and/or ui not defined for GameWorld")
@@ -109,16 +112,17 @@ export class GameWorld extends Observable {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
+        if (this.#gameState !== gameStateKeys.PLAY) return
         if (this.isPaused === false && this.isSceneOver != false) {
-            this.deltaTime = (timeStamp - this.lastTime) / 1000
+            GameWorld.#deltaTime = (timeStamp - this.lastTime) / 1000
             this.lastTime = timeStamp
 
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
             // console.log(this.player.velocityX)
-            this.currentScene.update(this.deltaTime, this.input)
-            // this.player.update(this.input, this.deltaTime)
-
+            this.currentScene.update(GameWorld.#deltaTime, this.input)
+            // this.player.update(this.input, GameWorld.#deltaTime)
+            this.spawner.update(GameWorld.#deltaTime)
 
 
             if (this.currentScene.music.currentTime >= 0) {
@@ -127,25 +131,27 @@ export class GameWorld extends Observable {
 
                     // console.log(this.currentScene.spriteLayer.spawners)
 
-                    this.currentScene.spriteLayer.spawners.forEach((spawner) => {
-                        // console.log(spawner)
-                        let colliders = spawner.getAllSpawnedObjects()
+                    // this.spawner.forEach((spawner) => {
+                    // console.log(spawner)
+                    let colliders = this.spawner.getAllSpawnedObjects()
+                    // console.log(colliders)
 
-                        // console.log("colliders: ", colliders.length)
-                        if (colliders.length !== 0 || colliders !== undefined) {
-                            colliders.forEach((collider) => {
-                                if (this.gameState === gameStateKeys.PLAY) {
-                                    let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
-                                    if (collisionObject != undefined) {
-                                        // console.log(collisionObject)
-                                        this.notify(collisionObject)
+                    // console.log("colliders: ", colliders.length)
+                    if (colliders.length !== 0 || colliders !== undefined) {
+                        colliders.forEach((collider) => {
+                            if (this.gameState === gameStateKeys.PLAY) {
+                                let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
+                                if (collisionObject != undefined) {
+                                    // console.log(collisionObject)
+                                    this.notify(collisionObject)
 
-                                    }
                                 }
+                            }
 
-                            })
-                        }
-                    })
+                        })
+                    }
+                    // }
+                    // )
 
 
                 } else {
@@ -160,6 +166,7 @@ export class GameWorld extends Observable {
                 this.ui.show(this.ui.endsceneScreen)
             }
             this.currentScene.draw(this.ctx, true, true, true)
+            this.spawner.draw(this.ctx)
 
             // this.player.draw(this.ctx)
 
@@ -215,6 +222,7 @@ export class GameWorld extends Observable {
         this.gameState = gameStateKeys.SCENE_END
         this.isSceneOver = true
         this.isPaused = true
+        this.spawner.reset()
         clearInterval(this.#currentScene.intervalId)
         this.pauseMusic()
         // console.log("player progress before set: " + this.player.stats.progress)
@@ -291,7 +299,6 @@ export class GameWorld extends Observable {
                         this.spawner.startSpawningObjects(
                             event.objectType,
                             event.objectId,
-                            event.spawnDrawTime,
                             event.totalSpawnCount,
                             event.spawningDuration,
                             event.resetConfig
@@ -318,6 +325,10 @@ export class GameWorld extends Observable {
         console.log("currentScene is now", sceneIndex, this.currentScene)
         this.initSceneGoals()
         this.initSceneEvents()
+        console.log(this.currentScene)
+        this.player.setBounds(this.currentScene.spriteLayer.playerBounds)
+        // console.log(this.currentScene.playerBounds)
+        // this.player.bounds = this.currentScene.playerBounds
 
         const playMusic = () => {
             if (this.currentScene.hasOwnProperty("music")) {
@@ -337,6 +348,7 @@ export class GameWorld extends Observable {
             this.player.stats.health = 100
             this.player.stats.wienersCollected = 0
             this.player.isAlive = true
+
         }
 
         const curtainUp = () => {
@@ -344,6 +356,7 @@ export class GameWorld extends Observable {
             this.ui.toggleUI(this.gameState)
             this.isPaused = false
             this.pauseGame()
+
             this.loop(0, this.#currentScene)
         }
 
@@ -384,9 +397,10 @@ export class GameWorld extends Observable {
         console.log("player.progress" + this.player.stats.progress)
 
         // Call the functions in the desired order
-        playMusic()
-        placesPlayer()
-        curtainUp()
+
+        setTimeout(placesPlayer, 500)
+        setTimeout(playMusic, 1000)
+        setTimeout(curtainUp, 2000)
     }
 
 
@@ -417,6 +431,7 @@ export class GameWorld extends Observable {
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
         const dialogText = document.querySelector('#intro-dialog div').textContent
         typeWriter('intro-dialog', dialogText, 25)
+        console.log(this.player.isAlive)
 
         document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
             setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
