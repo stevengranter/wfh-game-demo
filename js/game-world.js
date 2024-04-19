@@ -92,7 +92,7 @@ export class GameWorld extends Observable {
     }
 
 
-
+    // Method to add scene to game instance
     addScene(gameScene) {
         if (gameScene instanceof GameScene) {
             this.#scenes.push(gameScene)
@@ -102,45 +102,54 @@ export class GameWorld extends Observable {
         }
     }
 
-
+    // the main game loop
     loop(timeStamp) {
 
-        // Guard clauses to exit the game loop if any of the conditions are met
-        if (!this.isReady) { // if there is no reference to player, input, or UI
+        // Guard clauses to exit the loop if any of the conditions are met
+
+        // if there is no reference to player, input, or UI
+        if (!this.isReady) {
             console.error("Player, input and/or UI not defined for GameWorld")
             return
         }
 
-        if (!this.currentScene) { // if currentScene hasn't been declared for some reason
+        // if currentScene hasn't been declared for some reason
+        if (!this.currentScene) {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
 
-        if (this.isPaused) { // if the game is paused, we don't want to run the gameloop
-            this.pauseGame()
+        // if the game is paused, we don't want to run the loop
+        if (this.isPaused) {
             console.log("game is paused")
             console.log("Game is paused")
             return
         }
 
-        if (this.#gameState !== gameStateKeys.PLAY) { // unless the gameState is "play", we shouldn't run the loop
+        // unless the gameState is "play", we shouldn't run the loop
+        if (this.#gameState !== gameStateKeys.PLAY) {
             console.warn("Game state isn't in play state")
             return
         }
 
-        if (this.isSceneOver) { // if the scene has ended, we should exit the loop
+        // if the scene has ended, we should exit the loop
+        if (this.isSceneOver) {
             this.ui.show(this.ui.endsceneScreen)
             console.log("Game scene has ended")
             return
         }
 
-        if (this.currentScene.music.currentTime === 0) { // if the music has ended, we should be at the end of the scene, and gameplay should stop
+        // if the music has ended, we should be at the end of the scene, and gameplay should stop
+        if (this.currentScene.music.currentTime === 0) {
             console.log("Music has ended, scene is over")
             return
         }
 
-        if (!this.player.isAlive) { // here we don't exit the game loop, but we do want to set the player state to trigger animation and stats changes
-            this.player.isAlive = false
+        // here we don't exit the loop (through return statement), 
+        // but we do want to set the player state to trigger animation 
+        // and stats changes
+        if (!this.player.stats.isAlive) {
+            this.player.stats.isAlive = false
             this.player.setState(playerStates.DEAD)
             console.log("Player is Dead")
         }
@@ -375,7 +384,7 @@ export class GameWorld extends Observable {
             this.player.stats.healthMax = 100
             this.player.stats.health = 100
             this.player.stats.wienersCollected = 0
-            this.player.isAlive = true
+            this.player.stats.isAlive = true
 
         }
 
@@ -426,9 +435,9 @@ export class GameWorld extends Observable {
 
         // Call the functions in the desired order
 
-        setTimeout(placesPlayer, 500)
-        setTimeout(playMusic, 1000)
-        setTimeout(curtainUp, 2000)
+        setTimeout(placesPlayer, 1000)
+        setTimeout(playMusic, 500)
+        setTimeout(curtainUp, 1000)
     }
 
 
@@ -459,7 +468,7 @@ export class GameWorld extends Observable {
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
         const dialogText = document.querySelector('#intro-dialog div').textContent
         typeWriter('intro-dialog', dialogText, 25)
-        console.log("player.isAlive: " + this.player.isAlive)
+        console.log("player.stats.isAlive: " + this.player.stats.isAlive)
 
         document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
             setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)

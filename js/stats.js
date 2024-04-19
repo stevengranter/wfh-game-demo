@@ -10,6 +10,7 @@ export default class Stats extends Observable {
     #score = 0
     #wienersCollected = 0
     #seagullBlessingsReceived = 0
+    #isAlive = false
 
 
 
@@ -44,6 +45,15 @@ export default class Stats extends Observable {
         }
     }
 
+
+    get isAlive() {
+        return this.#isAlive
+    }
+
+    set isAlive(booleanValue) {
+        this.#isAlive = booleanValue
+        this.notify({ 'is-alive': this.#isAlive })
+    }
 
     get lives() {
         return this.#lives

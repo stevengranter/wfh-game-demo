@@ -18,7 +18,7 @@ import { GameWorld } from "./game-world.js"
 
 
 export default class Player extends Sprite {
-
+    #isAlive
     constructor(spriteConfigObject) {
         super(spriteConfigObject)
 
@@ -60,7 +60,7 @@ export default class Player extends Sprite {
 
 
 
-        this.isAlive = false
+        this.#isAlive = false
 
 
         this.sWidth = 48
@@ -83,9 +83,12 @@ export default class Player extends Sprite {
 
     }
 
+
+
     get position() {
         return { x: this.dx, y: this.dy }
     }
+
 
     setBounds(boundingObject) {
         this.bounds = boundingObject
@@ -113,7 +116,7 @@ export default class Player extends Sprite {
     }
 
     receiveUpdate(data) {
-        // console.log("player received:", data)
+        console.log("player received:", data)
 
         // if (typeof data === 'object' && data.hasOwnProperty("gameState")) {
         //     // console.log("data has gamestate:", data.gameState)
@@ -161,7 +164,7 @@ export default class Player extends Sprite {
 
             // Create a buffer of 50px on each side
 
-            if (this.isAlive) {
+            if (this.stats.isAlive) {
                 // console.log("listening for input")
                 this.currentState.handleInput(input)
             }
