@@ -104,99 +104,96 @@ export class GameWorld extends Observable {
 
 
     loop(timeStamp) {
-        // console.log(this.#gameState)
-        // console.log("in game loop")
-        if (!this.isReady) {
-            console.error("Player, input and/or ui not defined for GameWorld")
+
+        // Guard clauses to exit the game loop if any of the conditions are met
+        if (!this.isReady) { // if there is no reference to player, input, or UI
+            console.error("Player, input and/or UI not defined for GameWorld")
             return
         }
+
         if (this.currentScene === undefined) {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
+
+        if (this.isPaused) {
+            this.pauseGame()
+            console.log("game is paused")
+            console.log("Game is paused")
+            return
+        }
+
         if (this.#gameState !== gameStateKeys.PLAY) {
             console.warn("Game state isn't in play state")
             return
         }
-        if (this.isPaused === false && this.isSceneOver != false) {
-            GameWorld.#deltaTime = (timeStamp - this.lastTime) / 1000
-            this.lastTime = timeStamp
 
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-
-            // console.log(this.player.velocityX)
-            this.currentScene.update(GameWorld.#deltaTime, this.input)
-            // this.player.update(this.input, GameWorld.#deltaTime)
-            // this.spawner.update(GameWorld.#deltaTime)
-
-
-            if (this.currentScene.music.currentTime >= 0) {
-                // Only detect collisions when player is alive
-                if (this.player.isAlive === true) {
-
-                    // console.log(this.currentScene.spriteLayer.spawners)
-
-                    // this.spawner.forEach((spawner) => {
-                    // console.log(spawner)
-                    let colliders = this.spawner.getAllSpawnedObjects()
-                    // console.log(colliders)
-
-                    // console.log("colliders: ", colliders.length)
-                    if (colliders.length !== 0 || colliders !== undefined) {
-                        colliders.forEach((collider) => {
-                            const playerInRange = collider.detectPlayer({ 'dx': this.player.dx, 'dy': this.player.dy })
-                            if (playerInRange) {
-                                if (collider instanceof Enemy) {
-                                    collider.launchProjectile({ velocityX: 0, velocityY: getRandomInt(50, 300) })
-                                    // console.dir(collider.projectile)
-                                    let collisionProjectileObject = CollisionDetector.detectBoxCollision(this.player, collider.projectile)
-                                    console.dir(collisionProjectileObject)
-                                    if (collisionProjectileObject) {
-                                        this.notify(collisionProjectileObject)
-                                    }
-                                }
-                                let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
-                                if (collisionObject) {
-                                    // console.log(collisionObject)
-                                    this.notify(collisionObject)
-                                }
-                            }
-                        })
-
-
-                        // let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
-                        // if (collisionObject != undefined) {
-                        //     // console.log(collisionObject)
-                        //     this.notify(collisionObject)
-
-
-                    }
-                } else {
-                    // console.log("gameloop: player is dead")
-                    this.player.isAlive = false
-                    this.player.setState(playerStates.DEAD)
-
-                }
-
-            } else {
-                // console.log("showing endScreen")
-                this.ui.show(this.ui.endsceneScreen)
-            }
-            this.currentScene.draw(this.ctx, true, true, true)
-            // this.spawner.draw(this.ctx)
-
-            // this.player.draw(this.ctx)
-
-
-            requestAnimationFrame(this.loop.bind(this))
-        } else {
-            this.pauseGame()
-            console.log("game is paused")
+        if (this.isSceneOver) {
+            this.ui.show(this.ui.endsceneScreen)
+            console.log("Game scene has ended")
+            return
         }
+
+        if (this.currentScene.music.currentTime === 0) {
+            console.log("Music has ended, scene is over")
+        }
+
+        if (!this.player.isAlive) {
+            this.player.isAlive = false
+            this.player.setState(playerStates.DEAD)
+            console.log("Player is Dead")
+        }
+
+        // Timekeeping, setting deltaTime with each frame
+
+        GameWorld.#deltaTime = (timeStamp - this.lastTime) / 1000
+        this.lastTime = timeStamp
+
+        // Clear the canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+
+        // Update the currentScene(includes background layers, player sprite and spawned items)
+        this.currentScene.update(GameWorld.#deltaTime, this.input)
+
+        // Detect collisions by calling CollisionDetector (using AABB algorithm)
+        this.detectCollisions()
+
+        // Draw the scene to the canvas
+        this.currentScene.draw(this.ctx, true, true, true)
+
+        requestAnimationFrame(this.loop.bind(this))
+
 
     }
 
+    detectCollisions() {
+        let colliders = this.spawner.getAllSpawnedObjects()
+        // console.log(colliders)
 
+        // console.log("colliders: ", colliders.length)
+        if (colliders.length !== 0 || colliders !== undefined) {
+            colliders.forEach((collider) => {
+                const playerInRange = collider.detectPlayer({ 'dx': this.player.dx, 'dy': this.player.dy })
+                if (playerInRange) {
+                    if (collider instanceof Enemy) {
+                        collider.launchProjectile({ velocityX: 0, velocityY: getRandomInt(50, 300) })
+                        // console.dir(collider.projectile)
+                        let collisionProjectileObject = CollisionDetector.detectBoxCollision(this.player, collider.projectile)
+                        if (collisionProjectileObject) console.dir(collisionProjectileObject)
+                        if (collisionProjectileObject) {
+                            this.notify(collisionProjectileObject)
+                        }
+                    }
+                    let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
+                    if (collisionObject) {
+                        // console.log(collisionObject)
+                        this.notify(collisionObject)
+                    }
+                }
+            })
+
+        }
+    }
 
     startGame = () => {
 
