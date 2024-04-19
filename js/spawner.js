@@ -138,6 +138,13 @@ export default class Spawner {
         return this.spawnedObjects
     }
 
+    getAllEnemies() {
+        return this.spawnedObjects.filter((object) => {
+            return object instanceof Enemy
+        })
+    }
+
+
     draw(context) {
         // console.log("in spawnedobject draw")
         this.spawnedObjects.forEach(object => {

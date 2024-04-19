@@ -73,12 +73,12 @@ export default class Sprite {
         }
     }
 
-    detectPlayer({ dx, dy }) {
+    detectPlayer({ dx, dy }, detectionDistance = 100) {
         // 📐 Calculate the distance between the enemy and the player using the Pythagorean theorem 
         const distance = Math.sqrt(Math.pow(this.dx - dx, 2) + Math.pow(this.dy - dy, 2))
 
-        // Check if the distance is less than 150 pixels.
-        if (distance < 150) {
+        // Check if the distance is less than the detectionDistance provided as argument (defaults to 100px)
+        if (distance < detectionDistance) {
             // console.log(distance) // Log the distance
             // console.log("Enemy detected player")
             return true
