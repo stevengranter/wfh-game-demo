@@ -105,7 +105,76 @@
           >
           <!-- START: #menu-screen -->
           <div id="pause-menu--container" class="ui-panel hidden" data-ui="true" data-gamestate="paused">
-           
+           <header><h2>Options</h2></header>
+            <ul>
+              <!-- <li>
+                <label for="master-volume">
+                  <img
+                    class="ui-icon"
+                    src="./images/ui--volume-icon.svg"
+                    alt="Music Volume"
+                  />
+                </label>
+                <div class="range-container">
+                  <input
+                    title="master-volume"
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="100"
+                    class="slider"
+                    id="volume-range"
+                  />
+                </div>
+              </li> -->
+              <li>
+                <label for="music-volume">
+                  <img
+                    class="ui-icon"
+                    src="./images/ui--music-icon.svg"
+                    alt="Music Volume"
+                  />
+                </label>
+                <div class="range-container">
+                  <input
+                    title="music-volume"
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="80"
+                    class="slider"
+                    id="music-range"
+                    data-ui="true"
+                  />
+                </div>
+              </li>
+              <li>
+                <label for="sfx-volume">
+                  <img
+                    class="ui-icon"
+                    src="./images/ui--sfx-icon.svg"
+                    alt="Sound Effects Volume"
+                /></label>
+                <div class="range-container">
+                  <input
+                    title="sfx-volume"
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="80"
+                    class="slider"
+                    id="sfx-range"
+                  />
+                </div>
+              </li>
+            </ul>
+            <button id="resume-button" data-ui="true">Resume</button>
+
+            <div id="stop-button">
+              <div class="border">
+                <button>Stop</button>
+              </div>
+            </div>`
           </div>
 
          <div id="scene-end--container" data-ui="true" data-gamestate="scene-end">

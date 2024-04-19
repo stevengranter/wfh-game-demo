@@ -1,5 +1,5 @@
-// Importing constants for canvas dimensions 
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
+"use strict"
+
 // Importing the Observable parent class 
 import Observable from "./observable.js"
 
@@ -11,7 +11,8 @@ export class GameScene extends Observable {
         super() // Calls the constructor of Observable
         this.index = index || 0 // Scene index defaulting to 0 if not provided
         this.name = name || "NoName" // Scene name defaulting to "NoName" if not provided
-        this.player = player
+
+        this.player = player // add reference to player to GameScene instance
         this.layers = layers || null // Layers of the scene, default null
 
         // A reference to the player object is added to each layer 

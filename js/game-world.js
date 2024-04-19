@@ -1,8 +1,13 @@
+"use strict"
+
+// Import required classes and utility functions
 import CollisionDetector from "./collision-detector.js"
 import Observable from "./observable.js"
 import { playerStates } from "./player-state.js"
 import { GameScene } from "./game-scene.js"
-import { typeWriter, animateBlur } from "./utils.js"
+import { typeWriter, animateBlur, getRandomInt } from "./utils.js"
+import { Enemy } from "./enemy.js"
+
 
 export const gameStateKeys = {
     TITLE: "title",
@@ -24,15 +29,24 @@ export const musicStateKeys = {
 }
 
 export class GameWorld extends Observable {
-    #currentScene
     #gameState
-    #timeRemaining
     #scenes
+    #currentScene
+    #timeRemaining
+
+    // set #deltaTime to 1 to avoid a NaN error when starting the game loop
     static #deltaTime = 1
+
     constructor(player, ui, input) {
         super()
 
+        this.#currentScene = {
+            intervalId: null
+        }
+        this.#gameState = gameStateKeys.TITLE
         this.#scenes = []
+
+
         this.isReady = false
         this.player = player
         this.ui = ui
@@ -46,27 +60,12 @@ export class GameWorld extends Observable {
         this.canvas = document.getElementById("game-screen__canvas")
         this.ctx = this.canvas.getContext("2d")
 
-
-
-        this.#gameState = gameStateKeys.TITLE
-
-
         this.lastTime = 0
-        // GameWorld.#deltaTime = 1
-
         this.comboCounter = 0
-
-        // window.gameWorld = this
-
-        this.#currentScene = {
-            intervalId: null
-        }
-
-
     }
 
 
-
+    // Getter/setter for private #gameState variable
     get gameState() {
         return this.#gameState
     }
@@ -76,6 +75,7 @@ export class GameWorld extends Observable {
         this.notify({ gameState: this.#gameState })
     }
 
+    // Getter/setter for private #currentScene variable
     get currentScene() {
         return this.#currentScene
     }
@@ -85,7 +85,8 @@ export class GameWorld extends Observable {
         this.notify({ currentScene: this.#currentScene })
     }
 
-
+    // Getter for private static #deltaTime variable 
+    // (No setter defined, as #deltaTime should only be set by the GameWorld class in the game loop)
     static get deltaTime() {
         return GameWorld.#deltaTime
     }
@@ -103,16 +104,20 @@ export class GameWorld extends Observable {
 
 
     loop(timeStamp) {
-        console.log(this.#gameState)
-        // console.log(this.currentScene)
+        // console.log(this.#gameState)
+        // console.log("in game loop")
         if (!this.isReady) {
             console.error("Player, input and/or ui not defined for GameWorld")
+            return
         }
         if (this.currentScene === undefined) {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
-        if (this.#gameState !== gameStateKeys.PLAY) return
+        if (this.#gameState !== gameStateKeys.PLAY) {
+            console.warn("Game state isn't in play state")
+            return
+        }
         if (this.isPaused === false && this.isSceneOver != false) {
             GameWorld.#deltaTime = (timeStamp - this.lastTime) / 1000
             this.lastTime = timeStamp
@@ -122,7 +127,7 @@ export class GameWorld extends Observable {
             // console.log(this.player.velocityX)
             this.currentScene.update(GameWorld.#deltaTime, this.input)
             // this.player.update(this.input, GameWorld.#deltaTime)
-            this.spawner.update(GameWorld.#deltaTime)
+            // this.spawner.update(GameWorld.#deltaTime)
 
 
             if (this.currentScene.music.currentTime >= 0) {
@@ -139,21 +144,33 @@ export class GameWorld extends Observable {
                     // console.log("colliders: ", colliders.length)
                     if (colliders.length !== 0 || colliders !== undefined) {
                         colliders.forEach((collider) => {
-                            if (this.gameState === gameStateKeys.PLAY) {
+                            const playerInRange = collider.detectPlayer({ 'dx': this.player.dx, 'dy': this.player.dy })
+                            if (playerInRange) {
+                                if (collider instanceof Enemy) {
+                                    collider.launchProjectile({ velocityX: 0, velocityY: getRandomInt(50, 300) })
+                                    // console.dir(collider.projectile)
+                                    let collisionProjectileObject = CollisionDetector.detectBoxCollision(this.player, collider.projectile)
+                                    console.dir(collisionProjectileObject)
+                                    if (collisionProjectileObject) {
+                                        this.notify(collisionProjectileObject)
+                                    }
+                                }
                                 let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
-                                if (collisionObject != undefined) {
+                                if (collisionObject) {
                                     // console.log(collisionObject)
                                     this.notify(collisionObject)
-
                                 }
                             }
-
                         })
+
+
+                        // let collisionObject = CollisionDetector.detectBoxCollision(this.player, collider)
+                        // if (collisionObject != undefined) {
+                        //     // console.log(collisionObject)
+                        //     this.notify(collisionObject)
+
+
                     }
-                    // }
-                    // )
-
-
                 } else {
                     // console.log("gameloop: player is dead")
                     this.player.isAlive = false
@@ -166,14 +183,14 @@ export class GameWorld extends Observable {
                 this.ui.show(this.ui.endsceneScreen)
             }
             this.currentScene.draw(this.ctx, true, true, true)
-            this.spawner.draw(this.ctx)
+            // this.spawner.draw(this.ctx)
 
             // this.player.draw(this.ctx)
 
 
             requestAnimationFrame(this.loop.bind(this))
         } else {
-            // this.pauseGame()
+            this.pauseGame()
             console.log("game is paused")
         }
 
@@ -332,11 +349,24 @@ export class GameWorld extends Observable {
 
         const playMusic = () => {
             if (this.currentScene.hasOwnProperty("music")) {
+
                 if (this.currentScene.isMusicLoaded) {
-                    // console.log("music is loaded")
                     this.music = this.currentScene.music
 
+                    // Add the ability to adjust volume to the slider
+                    const musicVolumeSlider = this.ui.elements.musicRange
+                    const musicElement = this.music
+                    console.log(this.currentScene.isMusicLoaded)
+                    musicVolumeSlider.addEventListener("input", (e) => {
+                        const volumeValue = e.target.value
+                        musicElement.volume = volumeValue / 100
+                    })
+
+                    // Start playing music
                     this.playMusic()
+
+
+
                 }
             }
         }
@@ -431,7 +461,7 @@ export class GameWorld extends Observable {
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
         const dialogText = document.querySelector('#intro-dialog div').textContent
         typeWriter('intro-dialog', dialogText, 25)
-        console.log(this.player.isAlive)
+        console.log("player.isAlive: " + this.player.isAlive)
 
         document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
             setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
@@ -495,12 +525,15 @@ export class GameWorld extends Observable {
 
         }
         else {
+            this.#gameState = gameStateKeys.PLAY
             this.ui.toggleUI("play")
             // this.music.currentTime = this.musicPausedTime
 
             this.playMusic()
-            this.loop(this.lastTime)
+            console.log(this.lastTime)
             this.isPaused = false
+            this.loop(this.lastTime)
+
         }
     }
 

@@ -1,3 +1,5 @@
+"use strict"
+
 import { wait } from "./utils.js"
 import { GameWorld } from "./game-world.js"
 

@@ -1,3 +1,4 @@
+"use strict"
 
 import Layer from "../layer.js"
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "../constants.js"
@@ -26,7 +27,6 @@ const getScene00Layer_SpriteConfig = () => {
                 startTime: 500,
                 type: "spawner",
                 objectType: "wiener",
-                objectId: "wiener-",
                 totalSpawnCount: 60,
                 spawningDuration: 30,
 
@@ -35,7 +35,6 @@ const getScene00Layer_SpriteConfig = () => {
                 startTime: 5000,
                 type: "spawner",
                 objectType: "gull",
-                objectId: "gull-",
                 totalSpawnCount: 30,
                 spawningDuration: 30,
 
@@ -44,8 +43,7 @@ const getScene00Layer_SpriteConfig = () => {
                 startTime: 10000,
                 type: "spawner",
                 objectType: "wiener",
-                objectId: "wiener-",
-                totalSpawnCount: 500,
+                totalSpawnCount: 200,
                 spawningDuration: 55,
             }
 
@@ -60,7 +58,6 @@ const getScene00Layer_SpriteConfig = () => {
         },
         playerScrollFactor: 0,
         isPlayerLayer: true,
-
     }
 }
 
@@ -84,7 +81,6 @@ const getScene00Layer_ForegroundConfig = () => {
 const scene00Layer_Background = new Layer({ ...getScene00Layer_BackgroundConfig() })
 const scene00Layer_Sprite = new Layer({ ...getScene00Layer_SpriteConfig() })
 const scene00Layer_Foreground = new Layer({ ...getScene00Layer_ForegroundConfig() })
-
 
 export const scene00Config = {
     index: 0,

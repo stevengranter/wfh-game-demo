@@ -1,3 +1,4 @@
+"use strict"
 export function drawStatusText(context, input, x, y) {
     context.font = "8px Verdana"
     context.fillText(input, x, y)

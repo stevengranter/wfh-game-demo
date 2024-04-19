@@ -1,3 +1,5 @@
+"use strict"
+
 // import constants used in configuration functions
 import { CANVAS_HEIGHT, CANVAS_WIDTH } from "../constants.js"
 import { spriteTags } from "../sprite.js"
@@ -34,15 +36,15 @@ export const getWienerConfig = () => {
             velocityX: {
                 random:
                 {
-                    lowerBound: -10,
-                    upperBound: +10
+                    lowerBound: -25,
+                    upperBound: 25
                 },
             },
             velocityY: {
                 random:
                 {
-                    lowerBound: 50,
-                    upperBound: 300
+                    lowerBound: 25,
+                    upperBound: 150
                 },
             },
         },
@@ -96,9 +98,11 @@ export const getGullConfig = () => {
                 },
             },
         },
+        objectType: "enemy",
         healthValue: 0,
         spriteTag: spriteTags.GULL,
-        timeLimit: 10
+        pointValue: 0,
+        timeLimit: 10,
     }
 }
 
@@ -106,6 +110,7 @@ export const getGullConfig = () => {
 export const getGullBlessingConfig = () => {
     return {
         spriteSrc: "./images/seagull-poo-sprite-02.png",
+        offset: { x: 30, y: 38 },
         animationFrame: { x: 0, y: 0, width: 16, height: 16 },
         animations: {
             Spinning: {

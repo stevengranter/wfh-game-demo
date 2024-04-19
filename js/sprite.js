@@ -1,3 +1,5 @@
+"use strict"
+
 import { fetchJsonFile, getRandomInt } from "./utils.js"
 import { CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS, CTX } from "./constants.js"
 
@@ -71,7 +73,17 @@ export default class Sprite {
         }
     }
 
+    detectPlayer({ dx, dy }) {
+        // 📐 Calculate the distance between the enemy and the player using the Pythagorean theorem 
+        const distance = Math.sqrt(Math.pow(this.dx - dx, 2) + Math.pow(this.dy - dy, 2))
 
+        // Check if the distance is less than 150 pixels.
+        if (distance < 150) {
+            // console.log(distance) // Log the distance
+            // console.log("Enemy detected player")
+            return true
+        }
+    }
     // Function to create a sprite from the given configuration object
     setProperties(spriteConfigObject) {
         // Iterate over each key-value pair in the spriteConfigObject
@@ -140,6 +152,7 @@ export default class Sprite {
     draw(context) {
         // Check if the sprite is not visible or out of bounds, then return without drawing
         if ((!this.isVisible) || (this.isOutOfBounds())) return
+        // if (this.projectile && this.projectile.isVisible) this.projectile.draw(context)
 
         // Draw the sprite on the canvas context
         context.drawImage(

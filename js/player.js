@@ -1,3 +1,4 @@
+"use strict"
 
 import Sprite from "./sprite.js"
 import Stats from "./stats.js"
@@ -82,6 +83,9 @@ export default class Player extends Sprite {
 
     }
 
+    get position() {
+        return { x: this.dx, y: this.dy }
+    }
 
     setBounds(boundingObject) {
         this.bounds = boundingObject

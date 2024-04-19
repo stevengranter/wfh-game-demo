@@ -1,3 +1,5 @@
+"use strict"
+
 // 👵🏼 Initialize player
 export const playerConfig = {
     spriteSrc: "./images/nan-sprite-walk.png",

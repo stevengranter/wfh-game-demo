@@ -1,5 +1,6 @@
-import { CANVAS_HEIGHT, CANVAS_WIDTH, CANVAS, CTX } from "./constants.js"
-import Spawner from "./spawner.js"
+"use strict"
+
+import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
 
 export default class Layer {
     constructor({
@@ -9,7 +10,7 @@ export default class Layer {
         playerScrollFactor = 0,
         isPlayerLayer = false,
         playerBounds = null,
-    }) {
+    }, spawner) {
         this.spriteSrc = spriteSrc
         this.eventTimeline = eventTimeline
         this.player = player
@@ -40,7 +41,8 @@ export default class Layer {
         // Call init to load the background image 
         if (this.spriteSrc) this.init()
 
-        console.log(this)
+        this.spawner = spawner
+        // console.log(this)
 
     }
 
@@ -78,14 +80,14 @@ export default class Layer {
     draw(context, background = true, spawners = false, player = false) {
         // console.log(player)
         if (background) this.drawBackground(context)
-        // if (spawners) this.drawSpawners(context)
+        if (spawners) this.drawSpawner(context)
         if (player) this.drawPlayer(context)
 
     }
 
     update(deltaTime, input, playerVelocityX, playerVelocityY) {
         this.updateBackground(deltaTime, playerVelocityX, playerVelocityY)
-        // this.updateSpawners(deltaTime)
+        this.updateSpawner(deltaTime)
         this.updatePlayer(input, deltaTime)
     }
 
@@ -105,20 +107,15 @@ export default class Layer {
         }
     }
 
-    // MOVED 
-    // updateSpawners(deltaTime) {
-    //     if (!this.spawners) return
-    //     this.spawners.forEach((spawner) => {
-    //         spawner.update(deltaTime)
-    //     })
-    // }
+    updateSpawner(deltaTime) {
+        if (!this.spawner) return
+        this.spawner.update(deltaTime)
+    }
 
-    // drawSpawners(context) {
-    //     if (!this.spawners) return
-    //     this.spawners.forEach((spawner) => {
-    //         spawner.draw(CTX)
-    //     })
-    // }
+    drawSpawner(context) {
+        if (!this.spawner) return
+        this.spawner.draw(context)
+    }
 
 
     drawBackground(context) {

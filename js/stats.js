@@ -1,3 +1,5 @@
+"use strict"
+
 import Observable from "./observable.js"
 
 export default class Stats extends Observable {

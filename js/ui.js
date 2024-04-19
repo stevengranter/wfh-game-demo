@@ -1,3 +1,5 @@
+"use strict"
+
 import { toCamelCase } from "./utils.js"
 export default class UI {
     constructor(dataAttribute, player) {

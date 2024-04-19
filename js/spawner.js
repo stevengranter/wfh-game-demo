@@ -1,10 +1,14 @@
+"use strict"
+
 import Sprite from "./sprite.js"
+import { Enemy } from "./enemy.js"
 import { CANVAS, CTX } from "./constants.js"
 
 class ObjectPool {
     constructor(objectType) {
         this.objectType = objectType
         this.pool = []
+        this.enemies = []
         this.configGenerator = null
     }
 
@@ -16,11 +20,15 @@ class ObjectPool {
             // console.log("object borrowed from pool")
 
         } else {
-            console.log(`Creating a new ${this.objectType}`)
+            // console.log(`Creating a new ${this.objectType}`)
             if (typeof this.configGenerator === 'function') {
-                obj = new Sprite(this.configGenerator())
-                // console.log("object created for pool")
-
+                if (this.objectType == "gull") {
+                    obj = new Enemy(this.configGenerator(), this.childSpriteConfigGenerator())
+                    this.enemies.push(obj)
+                } else {
+                    obj = new Sprite(this.configGenerator())
+                    // console.log("object created for pool")
+                }
                 if (resetConfig) {
                     // console.log("custom reset")
                     obj.resetSprite(resetConfig)
@@ -52,10 +60,13 @@ export default class Spawner {
         this.spawnIntervals = []
     }
 
-    registerObjectPool(objectType, configGenerator) {
+    registerObjectPool(objectType, configGenerator, childSpriteConfigGenerator = null) {
         const objectPool = new ObjectPool(objectType)
         objectPool.configGenerator = configGenerator
+        // console.log(childSpriteConfigGenerator)
+        if (childSpriteConfigGenerator) objectPool.childSpriteConfigGenerator = childSpriteConfigGenerator
         this.objectPools[objectType] = objectPool
+        // console.log(this.objectPools[objectType])
     }
 
     reset() {
@@ -97,11 +108,10 @@ export default class Spawner {
             }
 
             const object = objectPool.borrowObject(resetConfig)
-            console.log(objectId)
+            // 
             object.id = `${objectId}-${spawnCount}`
             object.spawned = true
             object.objectType = objectType
-
             if (object.isOutOfBounds()) {
                 object.spawned = false
                 object.location = null
