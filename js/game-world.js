@@ -111,41 +111,41 @@ export class GameWorld extends Observable {
             return
         }
 
-        if (this.currentScene === undefined) {
+        if (!this.currentScene) { // if currentScene hasn't been declared for some reason
             console.error("No currentScene defined for Gameworld loop")
             return
         }
 
-        if (this.isPaused) {
+        if (this.isPaused) { // if the game is paused, we don't want to run the gameloop
             this.pauseGame()
             console.log("game is paused")
             console.log("Game is paused")
             return
         }
 
-        if (this.#gameState !== gameStateKeys.PLAY) {
+        if (this.#gameState !== gameStateKeys.PLAY) { // unless the gameState is "play", we shouldn't run the loop
             console.warn("Game state isn't in play state")
             return
         }
 
-        if (this.isSceneOver) {
+        if (this.isSceneOver) { // if the scene has ended, we should exit the loop
             this.ui.show(this.ui.endsceneScreen)
             console.log("Game scene has ended")
             return
         }
 
-        if (this.currentScene.music.currentTime === 0) {
+        if (this.currentScene.music.currentTime === 0) { // if the music has ended, we should be at the end of the scene, and gameplay should stop
             console.log("Music has ended, scene is over")
+            return
         }
 
-        if (!this.player.isAlive) {
+        if (!this.player.isAlive) { // here we don't exit the game loop, but we do want to set the player state to trigger animation and stats changes
             this.player.isAlive = false
             this.player.setState(playerStates.DEAD)
             console.log("Player is Dead")
         }
 
         // Timekeeping, setting deltaTime with each frame
-
         GameWorld.#deltaTime = (timeStamp - this.lastTime) / 1000
         this.lastTime = timeStamp
 
@@ -161,6 +161,7 @@ export class GameWorld extends Observable {
         // Draw the scene to the canvas
         this.currentScene.draw(this.ctx, true, true, true)
 
+        // requestAnimationFrame to get next frame
         requestAnimationFrame(this.loop.bind(this))
 
 
