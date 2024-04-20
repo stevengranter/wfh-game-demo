@@ -121,8 +121,6 @@ export class GameWorld extends Observable {
 
         // if the game is paused, we don't want to run the loop
         if (this.isPaused) {
-            console.log("game is paused")
-            console.log("Game is paused")
             return
         }
 
@@ -416,9 +414,7 @@ export class GameWorld extends Observable {
             this.gameState = gameStateKeys.PLAY
             this.ui.toggleUI(this.gameState)
             this.isPaused = false
-            this.pauseGame()
-
-            this.loop(0, this.#currentScene)
+            this.loop(0)
         }
 
         const checkGoal = () => {
@@ -539,7 +535,7 @@ export class GameWorld extends Observable {
 
     pauseGame() {
         if (this.isPaused) {
-            // console.log(this.gameState)
+            console.log(this.gameState)
             this.pauseMusic()
             switch (this.#gameState) {
                 case gameStateKeys.PAUSED_BY_PLAYER:
@@ -551,15 +547,11 @@ export class GameWorld extends Observable {
                 default:
                     console.warn("No UI defined for gamestate: " + this.#gameState)
             }
-
-
-
         }
         else {
             this.#gameState = gameStateKeys.PLAY
             this.ui.toggleUI("play")
-            // this.music.currentTime = this.musicPausedTime
-
+            // this.music.currentTime = this.musicPausedTimes
             this.playMusic()
             console.log(this.lastTime)
             this.isPaused = false

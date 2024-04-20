@@ -39,7 +39,7 @@ export default class Player extends Sprite {
 
         this.velocityX = 0
         this.velocityY = 0
-        this.weight = 10
+        this.weight = 20
 
         this.speedX = 0
         this.speedY = 0
