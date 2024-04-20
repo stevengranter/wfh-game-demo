@@ -139,6 +139,13 @@ export default class Player extends Sprite {
         // }
         if (!this.isPaused) {
 
+            if ((this.childSprite)) {
+                console.log(this.childSprite)
+                this.setChildSpriteLocation()
+                console.log("childsprite set")
+            }
+
+
             if (this.frameTimer > this.frameInterval) {
                 if (this.frameX < this.endFrame) {
                     // console.log(this.frameX)

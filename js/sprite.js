@@ -34,9 +34,8 @@ export default class Sprite {
         }
 
         // Create a new Image object and set its source to spriteSrc
-        const imageObject = new Image()
-        imageObject.src = this.spriteSrc
-        this.imageObject = imageObject
+
+        this.loadSprite()
 
         // Set default width and height values if not provided
         this.dWidth = this.dWidth || this.animationFrame.width
@@ -71,6 +70,16 @@ export default class Sprite {
             // console.log("has configObject")
             this.setProperties(configObject)
         }
+    }
+
+    loadSprite() {
+        const imageObject = new Image()
+        if (!this.altAppearance) {
+            imageObject.src = this.spriteSrc
+        } else {
+            imageObject.src = this.altSprite.spriteSrc
+        }
+        this.imageObject = imageObject
     }
 
     detectPlayer({ dx, dy }, detectionDistance = 100) {
@@ -152,6 +161,7 @@ export default class Sprite {
     draw(context) {
         // Check if the sprite is not visible or out of bounds, then return without drawing
         if ((!this.isVisible) || (this.isOutOfBounds())) return
+
         // if (this.projectile && this.projectile.isVisible) this.projectile.draw(context)
 
         // Draw the sprite on the canvas context
@@ -166,6 +176,11 @@ export default class Sprite {
             this.dWidth,             // Width of the image to draw
             this.dHeight             // Height of the image to draw
         )
+
+        if ((this.childSprite)) {
+            // console.log(this.childSprite)
+            this.childSprite.draw(context)
+        }
     }
 
 
@@ -223,35 +238,46 @@ export default class Sprite {
             this.velocityX = 0 // Stop horizontal motion
             this.isAnimating = false
         }
+
+
+
         this.dx += (this.velocityX) * deltaTime
         this.dy += (this.velocityY) * deltaTime
 
 
+
+
     }
 
-    getParentPosition(parentSprite) {
-        // Set parentSprite to current object's parentSprite if not provided
-        if (!parentSprite) parentSprite = this.parentSprite
+    setChildSpriteLocation() {
+        this.childSprite.dx = this.dx
+        this.childSprite.dy = this.dy
 
-        // If parentSprite exists, calculate the position based on parentSprite's data
-        if (this.parentSprite) {
-            // Calculate the x position relative to the parentSprite
-            this.dx = this.parentSprite.data.dx + this.parentSprite.data.dWidth / 2// + this.velocityX
-            // Calculate the y position relative to the parentSprite
-            this.dy = this.parentSprite.data.dy + this.parentSprite.data.dHeight / 2// + this.velocityY
-        }
     }
 
+    // getParentPosition(parentSprite) {
+    //     // Set parentSprite to current object's parentSprite if not provided
+    //     if (!parentSprite) parentSprite = this.parentSprite
 
-    getParentVelocity() {
-        // Check if the current object has a parentSprite
-        if (this.parentSprite) {
-            // Set the current object's velocityX to its parentSprite's velocityX
-            this.velocityX = this.parentSprite.velocityX
-            // Set the current object's velocityY to its parentSprite's velocityY
-            this.velocityY = this.parentSprite.velocityY
-        }
-    }
+    //     // If parentSprite exists, calculate the position based on parentSprite's data
+    //     if (this.parentSprite) {
+    //         // Calculate the x position relative to the parentSprite
+    //         this.dx = this.parentSprite.data.dx + this.parentSprite.data.dWidth / 2// + this.velocityX
+    //         // Calculate the y position relative to the parentSprite
+    //         this.dy = this.parentSprite.data.dy + this.parentSprite.data.dHeight / 2// + this.velocityY
+    //     }
+    // }
+
+
+    // getParentVelocity() {
+    //     // Check if the current object has a parentSprite
+    //     if (this.parentSprite) {
+    //         // Set the current object's velocityX to its parentSprite's velocityX
+    //         this.velocityX = this.parentSprite.velocityX
+    //         // Set the current object's velocityY to its parentSprite's velocityY
+    //         this.velocityY = this.parentSprite.velocityY
+    //     }
+    // }
 
 
 }

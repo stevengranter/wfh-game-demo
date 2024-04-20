@@ -1,7 +1,7 @@
 "use strict"
 
 // Import configuration objects/functions
-import { playerConfig } from "./cfg/player.cfg.js"
+import { playerConfig, playerAltConfig } from "./cfg/player.cfg.js"
 import { getGullConfig, getWienerConfig, getGullBlessingConfig } from "./cfg/spawners.cfg.js"
 
 import { scene00Config } from "./cfg/scene00.cfg.js"
@@ -12,6 +12,7 @@ import { wait } from "./utils.js"
 
 
 // Import classes
+import Sprite from "./sprite.js"
 import Spawner from "./spawner.js"
 import { GameScene } from "./game-scene.js"
 import { GameWorld, gameStateKeys } from "./game-world.js"
@@ -28,6 +29,12 @@ window.addEventListener("load", function () {
 
     // 👵🏼 Initialize player (config imported from cfg/player.cfg.js)
     const player = new Player(playerConfig)
+
+    const playerAltAppearance = new Sprite(playerAltConfig)
+    player.altSprite = playerAltAppearance
+    player.altAppearance = false
+    player.loadSprite()
+    console.log(player)
 
     // 🖥️ Initialize UI elements
     const ui = new UI("[data-ui]", player)
