@@ -163,8 +163,8 @@ export class GameWorld extends Observable {
         this.currentScene.update(GameWorld.#deltaTime, this.input)
 
         // Detect collisions by calling CollisionDetector (using AABB algorithm)
-        // this.detectCollisions()
-        // this.detectProjectileCollisions()
+        this.detectCollisions()
+        this.detectProjectileCollisions()
         this.detectPlayerByEnemies()
 
         // Draw the scene to the canvas
@@ -200,25 +200,25 @@ export class GameWorld extends Observable {
     detectPlayerByEnemies() {
         let enemies = this.spawner.getAllEnemies()
         if (enemies.length === 0 || !enemies) {
-            console.log("No enemies detected")
+            // console.log("No enemies detected")
         }
         enemies.forEach((enemy) => {
-            if (!enemy.detectPlayer({ 'dx': this.player.dx, 'dy': this.player.dy }, 150)) return
-            enemy.launchProjectile({ velocityX: 0, velocityY: getRandomInt(50, 300) })
-
+            if (enemy.detectPlayer({ 'dx': this.player.dx, 'dy': this.player.dy }, 150)) {
+                enemy.launchProjectile({ velocityX: 10, velocityY: getRandomInt(100, 300) })
+            }
         })
     }
 
     detectProjectileCollisions() {
         let enemies = this.spawner.getAllEnemies()
-        console.log(enemies)
+        // console.log(enemies)
         if (enemies.length !== 0 || enemies !== undefined) {
             enemies.forEach((enemy) => {
                 if (enemy instanceof Enemy) {
-                    enemy.launchProjectile({ velocityX: 0, velocityY: getRandomInt(50, 300) })
+                    // enemy.launchProjectile({ velocityX: 0, velocityY: getRandomInt(50, 300) })
                     // console.dir(enemy.projectile)
                     let collisionProjectileObject = CollisionDetector.detectBoxCollision(this.player, enemy.projectile)
-                    if (collisionProjectileObject) console.dir(collisionProjectileObject)
+                    // if (collisionProjectileObject) console.dir(collisionProjectileObject)
                     if (collisionProjectileObject) {
                         this.notify(collisionProjectileObject)
                     }

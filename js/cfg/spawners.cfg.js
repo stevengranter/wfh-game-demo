@@ -146,7 +146,7 @@ export const getGullBlessingConfig = () => {
             velocityY: {
                 random:
                 {
-                    lowerBound: 50,
+                    lowerBound: 100,
                     upperBound: 300
                 },
             },

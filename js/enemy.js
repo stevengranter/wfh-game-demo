@@ -24,8 +24,6 @@ export class Enemy extends Sprite {
         this.resetProjectile()
         this.projectile.velocityX = velocityX
         this.projectile.velocityY = velocityY
-        console.log(this.projectile.dx)
-        console.log(this.projectile.dy)
         this.projectile.isVisible = true
 
     }

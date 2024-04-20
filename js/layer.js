@@ -80,15 +80,16 @@ export default class Layer {
     draw(context, background = true, spawners = false, player = false) {
         // console.log(player)
         if (background) this.drawBackground(context)
-        if (spawners) this.drawSpawner(context)
         if (player) this.drawPlayer(context)
+        if (spawners) this.drawSpawner(context)
 
     }
 
     update(deltaTime, input, playerVelocityX, playerVelocityY) {
         this.updateBackground(deltaTime, playerVelocityX, playerVelocityY)
-        this.updateSpawner(deltaTime)
         this.updatePlayer(input, deltaTime)
+        this.updateSpawner(deltaTime)
+
     }
 
     updatePlayer(input, deltaTime) {
