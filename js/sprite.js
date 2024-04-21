@@ -25,17 +25,22 @@ export default class Sprite {
 
     constructor(spriteConfigObject) {
 
-        // Check if spriteConfigObject is an object and has 'spriteSrc' property
+        // Check if spriteConfigObject is an object and has 'spriteSrc' property 
         if (typeof spriteConfigObject === "object" && "spriteSrc" in spriteConfigObject) {
+            // store the config properties in case sprite reset required
             this.configObject = spriteConfigObject
+
+            // call setProperties() method to set up sprite properties
             this.setProperties(this.configObject)
+
+            // call loadSprite() method to create new Image object and set its source to spriteSrc
+            this.loadSprite()
+
         } else {
             console.error("spriteConfigObject is not in the correct format or missing 'spriteSrc'")
         }
 
-        // Create a new Image object and set its source to spriteSrc
 
-        this.loadSprite()
 
         // Set default width and height values if not provided
         this.dWidth = this.dWidth || this.animationFrame.width
@@ -57,21 +62,49 @@ export default class Sprite {
         this.isAnimating = true
         this.isScored = false
 
-
-
     }
 
-    // storeConfigObject(configObject) {
-    //     this.configObject = spriteConfigObject // Store the sprite configuration object
-    // }
+    // Method to create a sprite from the given configuration object
+    setProperties(spriteConfigObject) {
 
+        // method to assign random or fixed value depending on config values,
+        // using arrow function to keep 'this' scoped to Sprite instance
+        const assignRandomOrFixed = (config, propName, defaultValue) => {
+            if (config && config.random) {
+                this[propName] = getRandomInt(
+                    config.random.lowerBound,
+                    config.random.upperBound
+                )
+            } else {
+                // if no default value provided, set value to 0
+                this[propName] = defaultValue !== undefined ? defaultValue : 0
+            }
+        }
+
+        for (const [key, value] of Object.entries(spriteConfigObject)) {
+            switch (key) {
+                case "location":
+                    assignRandomOrFixed(value.dx, 'dx', value.dx)
+                    assignRandomOrFixed(value.dy, 'dy', value.dy)
+                    break
+                case "direction":
+                    assignRandomOrFixed(value.velocityX, 'velocityX', value.velocityX)
+                    assignRandomOrFixed(value.velocityY, 'velocityY', value.velocityY)
+                    break
+                default:
+                    this[key] = value
+            }
+        }
+    }
+
+    // Method to reset sprite from the config stores in configObject property
     resetSprite(configObject = this.configObject) {
         if (configObject) {
-            // console.log("has configObject")
             this.setProperties(configObject)
         }
     }
 
+    // Method to load sprite image data from file (will use altAppearance if flag is set)
     loadSprite() {
         const imageObject = new Image()
         if (!this.altAppearance) {
@@ -82,6 +115,8 @@ export default class Sprite {
         this.imageObject = imageObject
     }
 
+
+    // Method to detect player within a certain distance
     detectPlayer({ dx, dy }, detectionDistance = 100) {
         // 📐 Calculate the distance between the enemy and the player using the Pythagorean theorem 
         const distance = Math.sqrt(Math.pow(this.dx - dx, 2) + Math.pow(this.dy - dy, 2))
@@ -93,48 +128,6 @@ export default class Sprite {
             return true
         }
     }
-    // Function to create a sprite from the given configuration object
-    setProperties(spriteConfigObject) {
-        // Iterate over each key-value pair in the spriteConfigObject
-        for (const [key, value] of Object.entries(spriteConfigObject)) {
-            switch (key) {
-                case "location":
-                    // Set random dx and dy values if specified in the configuration
-                    this.setRandomLocation(value)
-                    break
-                case "direction":
-                    // Set random velocityX and velocityY values if specified in the configuration
-                    this.setRandomDirection(value)
-                    break
-                default:
-                    // Assign any other key-value pairs directly to the sprite object
-                    this[key] = value
-            }
-        }
-    }
-
-
-
-    setRandomDirection(value) {
-        if (value.velocityX && value.velocityX.random) {
-            this.velocityX = getRandomInt(value.velocityX.random.lowerBound, value.velocityX.random.upperBound)
-        }
-        if (value.velocityY && value.velocityY.random) {
-            this.velocityY = getRandomInt(value.velocityY.random.lowerBound, value.velocityY.random.upperBound)
-        }
-    }
-
-    setRandomLocation(value) {
-        if (value.dx && value.dx.random) {
-            this.dx = getRandomInt(value.dx.random.lowerBound, value.dx.random.upperBound)
-        }
-        if (value.dy && value.dy.random) {
-            this.dy = getRandomInt(value.dy.random.lowerBound, value.dy.random.upperBound)
-        }
-    }
-
-    // TODO: create method
-    // makeSpriteFromNothing() {}
 
     fetchSpriteJSON(filePath) {
         fetchJsonFile(filePath)
@@ -146,7 +139,7 @@ export default class Sprite {
             })
     }
 
-    // Function to check if the sprite is out of bounds based on its current position and dimensions
+    // Method to check if the sprite is out of bounds based on its current position and dimensions
     isOutOfBounds() {
         // Check if the sprite's position is outside the canvas boundaries
         if ((this.dx < 0 - CANVAS_WIDTH || this.dx > 2 * CANVAS_WIDTH) || (this.dy < 0 - CANVAS_HEIGHT || this.dy > 2 * CANVAS_HEIGHT)) {
@@ -157,7 +150,7 @@ export default class Sprite {
     }
 
 
-    // Function to draw the sprite on the canvas context
+    // Method to draw the sprite on the canvas context
     draw(context) {
         // Check if the sprite is not visible or out of bounds, then return without drawing
         if ((!this.isVisible) || (this.isOutOfBounds())) return
@@ -183,9 +176,7 @@ export default class Sprite {
         }
     }
 
-
-
-
+    // Method to update Sprite position on canvas
     update(deltaTime, playerSpeedX = 0, playerSpeedY = 0) {
         // animate cels in spritesheet
         if (this.isAnimating) {
@@ -239,50 +230,22 @@ export default class Sprite {
             this.isAnimating = false
         }
 
-
-
         this.dx += (this.velocityX) * deltaTime
         this.dy += (this.velocityY) * deltaTime
 
-
-
-
     }
 
+    // Method to set child sprite location based on this sprite's location
     setChildSpriteLocation() {
         this.childSprite.dx = this.dx
         this.childSprite.dy = this.dy
 
     }
 
-    // getParentPosition(parentSprite) {
-    //     // Set parentSprite to current object's parentSprite if not provided
-    //     if (!parentSprite) parentSprite = this.parentSprite
-
-    //     // If parentSprite exists, calculate the position based on parentSprite's data
-    //     if (this.parentSprite) {
-    //         // Calculate the x position relative to the parentSprite
-    //         this.dx = this.parentSprite.data.dx + this.parentSprite.data.dWidth / 2// + this.velocityX
-    //         // Calculate the y position relative to the parentSprite
-    //         this.dy = this.parentSprite.data.dy + this.parentSprite.data.dHeight / 2// + this.velocityY
-    //     }
-    // }
-
-
-    // getParentVelocity() {
-    //     // Check if the current object has a parentSprite
-    //     if (this.parentSprite) {
-    //         // Set the current object's velocityX to its parentSprite's velocityX
-    //         this.velocityX = this.parentSprite.velocityX
-    //         // Set the current object's velocityY to its parentSprite's velocityY
-    //         this.velocityY = this.parentSprite.velocityY
-    //     }
-    // }
-
 
 }
 
-
+// Class to store animation frame properties
 export class AnimationFrame {
 
     constructor(sx, sy, sWidth, sHeight) {
@@ -298,7 +261,7 @@ export class AnimationFrame {
 }
 
 
-
+// Class to store animations for the sprite
 export class SpriteAnimation {
 
     constructor(animationFrame, frameX, frameY, endFrame) {

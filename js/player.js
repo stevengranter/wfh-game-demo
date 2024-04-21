@@ -56,13 +56,6 @@ export default class Player extends Sprite {
 
         // this.scoreManager = new ScoreManager()
 
-
-
-
-
-        this.#isAlive = false
-
-
         this.sWidth = 48
         this.sHeight = 48
         this.dWidth = 48
@@ -73,6 +66,7 @@ export default class Player extends Sprite {
         this.fps = 15
         this.frameTimer = 0
         this.frameInterval = 1000 / this.fps
+
         document.addEventListener('playerDeath', () => {
             console.log(`Player is dead!`) // ealth!"
             this.isAlive = false

@@ -22,7 +22,7 @@ export const getWienerConfig = () => {
                 {
                     lowerBound: -20,
                     upperBound: CANVAS_WIDTH + 20
-                }
+                },
             },
             dy: {
                 random:

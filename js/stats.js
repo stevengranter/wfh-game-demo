@@ -12,17 +12,8 @@ export default class Stats extends Observable {
     #seagullBlessingsReceived = 0
     #isAlive = false
 
-
-
     constructor() {
-
         super()
-
-
-
-
-
-
 
         this.deathEvent = new CustomEvent('playerDeath', {
             detail: {
