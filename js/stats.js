@@ -39,6 +39,9 @@ export default class Stats extends Observable {
             // console.log("points:" + data.points)
             this.score += data.points
         }
+        if (data.tag !== undefined) {
+            this.scoreKeeper.calculateCombo(data)
+        }
     }
 
 

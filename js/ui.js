@@ -50,14 +50,68 @@ export default class UI {
         // this.hudScore.update("1000")
 
 
-        // console.log(this)
+        console.log(this)
 
     }
 
 
     receiveUpdate(data) {
-        console.dir("UI received: ", data)
+        console.log("UI received: ", data)
+        // Checking for undefined here instead of falsy values, as we want to 
+        // still updateComboDisplay if data.comboCounter === 0
+        if (data.comboCounter !== undefined) {
+            console.log(data)
+            this.updateComboDisplay(data)
+
+        }
     }
+
+    processUpdate(data) {
+        if (data.hasOwnProperty(this.elementId)) {
+            const element = document.getElementById(this.elementId)
+            let value = this.formatFunction ? this.formatFunction(data[this.elementId]) : data[this.elementId]
+            if (this.attribute.startsWith('style.')) {
+                const styleAttribute = this.attribute.slice(6)
+                element.style[styleAttribute] = value
+
+            } else {
+                element[this.attribute] = value
+            }
+        }
+    }
+
+    updateComboDisplay(data) {
+        if (data.comboCounter > 0 && data.comboCounter <= 5) {
+            for (let i = 1; i <= data.comboCounter; i++) {
+                let nthChildSelector = `:nth-child(${i})`
+                let nthChildSelectorString = nthChildSelector.toString()
+                // console.log(nthChildSelectorString)
+                let letter = this.elements.hudCombo.querySelector(nthChildSelectorString)
+                // console.dir(letter)
+                letter.style.color = "var(--clr-sky-blue)"
+                letter.style.opacity = "100%"
+            }
+        } else if (data.comboCounter > 5 && data.comboCounter <= 10) {
+            for (let i = 6; i <= data.comboCounter; i++) {
+                let nthChildSelectorIndex = i - 5
+                let nthChildSelector = `:nth-child(${nthChildSelectorIndex})`
+                let nthChildSelectorString = nthChildSelector.toString()
+                // console.log(nthChildSelectorString)
+                let letter = this.elements.hudCombo.querySelector(nthChildSelectorString)
+                // console.dir(letter)
+                letter.style.color = "var(--clr-purple)"
+                letter.style.opacity = "100%"
+            }
+        } else if (data.comboCounter <= 0) {
+            console.log("combo counter UI should reset")
+            let letters = this.elements.hudCombo.querySelectorAll("span")
+            letters.forEach((letter) => {
+                letter.style.color = ""
+                letter.style.opacity = "50%"
+            })
+        }
+    }
+
 
     init(dataAttribute) {
         let uiDOMElements = document.querySelectorAll(`${dataAttribute}`)

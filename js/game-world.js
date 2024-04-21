@@ -575,54 +575,5 @@ export class GameWorld extends Observable {
         this.musicState = musicStateKeys.PAUSED
     }
 
-
-    calculateCombo() {
-        this.comboCounter++
-        if (this.comboCounter > 0 && this.comboCounter <= 5) {
-            for (let i = 1; i <= this.comboCounter; i++) {
-                let nthChildSelector = `:nth-child(${i})`
-                let nthChildSelectorString = nthChildSelector.toString()
-                // console.log(nthChildSelectorString)
-                let letter = this.ui.elements.hudCombo.querySelector(nthChildSelectorString)
-                // console.dir(letter)
-                letter.style.color = "var(--clr-sky-blue)"
-                letter.style.opacity = "100%"
-            }
-        } else if (this.comboCounter > 5 && this.comboCounter <= 10) {
-            for (let i = 6; i <= this.comboCounter; i++) {
-                let nthChildSelectorIndex = i - 5
-                let nthChildSelector = `:nth-child(${nthChildSelectorIndex})`
-                let nthChildSelectorString = nthChildSelector.toString()
-                // console.log(nthChildSelectorString)
-                let letter = this.ui.elements.hudCombo.querySelector(nthChildSelectorString)
-                // console.dir(letter)
-                letter.style.color = "var(--clr-purple)"
-                letter.style.opacity = "100%"
-            }
-        }
-        if (this.comboCounter < 5) {
-            this.player.speedMultiplier = 1
-        } else if (this.comboCounter >= 5 && this.comboCounter < 10) {
-            this.player.speedMultiplier = 1.5
-        } else if (this.comboCounter >= 10) {
-            this.player.speedMultiplier = 2
-        }
-
-
-        if (this.comboCounter === 10) {
-            // console.log("COMBO!!!")
-        }
-    }
-
-    resetCombo() {
-        this.comboCounter = 0
-        this.player.speedMultiplier = 1
-        let letters = this.ui.elements.hudCombo.querySelectorAll("span")
-        letters.forEach((letter) => {
-            letter.style.color = ""
-            letter.style.opacity = "50%"
-        })
-    }
-
 }
 

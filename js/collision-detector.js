@@ -31,6 +31,7 @@ export default class CollisionDetector {
         // console.log(object)
         scoreObject.health = object.healthValue
         scoreObject.points = object.pointValue
+        scoreObject.tag = object.spriteTag
         return scoreObject// return object
       } else {
         return null // if object has already been scored

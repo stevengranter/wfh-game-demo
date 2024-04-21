@@ -111,18 +111,31 @@ export default class Player extends Sprite {
 
     receiveUpdate(data) {
         // console.log("player received:", data)
-
+        if (data.comboCounter !== undefined) {
+            this.processUpdate(data)
+        }
         // if (typeof data === 'object' && data.hasOwnProperty("gameState")) {
         //     // console.log("data has gamestate:", data.gameState)
         // }
     }
 
-    // callSaintPeter() {
-    //     console.log("You is dead 💀")
+    processUpdate(data) {
+        if (data.comboCounter) {
+            this.processComboCounter(data)
+        }
 
-    //     this.setState(playerStates.DEAD)
+    }
 
-    // }
+    processComboCounter(data) {
+        if (data.comboCounter < 5) {
+            this.speedMultiplier = 1
+        } else if (data.comboCounter >= 5 && data.comboCounter < 10) {
+            this.speedMultiplier = 1.5
+        } else if (data.comboCounter >= 10) {
+            this.speedMultiplier = 2
+        }
+    }
+
 
 
 

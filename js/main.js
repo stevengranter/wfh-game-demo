@@ -101,12 +101,14 @@ window.addEventListener("load", function () {
         GameWorld instance detects collisions which effect a player's stats (like health and points)
         */
         game.subscribe(game.player.stats)
+        game.player.stats.scoreKeeper.subscribe(game.ui)
 
         /*
         Subscribe player Sprite instance to game.player.stats so sprite affects can 
         apply when certain stats are reached
         */
         game.player.stats.subscribe(game.player)
+        game.player.stats.scoreKeeper.subscribe(game.player)
         game.subscribe(game.ui.bindings.scene.timeRemaining)
         game.subscribe(game.ui.bindings.scene.timeRemainingStyle)
 
