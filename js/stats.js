@@ -16,7 +16,9 @@ export default class Stats extends Observable {
     constructor() {
         super()
 
-        this.#score = new ScoreKeeper()
+        this.scoreKeeper = new ScoreKeeper()
+        this.#score = this.scoreKeeper.currentScore
+        // console.log(this.#score)
 
         this.deathEvent = new CustomEvent('playerDeath', {
             detail: {
@@ -74,8 +76,10 @@ export default class Stats extends Observable {
 
     set score(value) {
         // console.log("#score is", value)
-        this.#score = value
-        this.notify({ score: this.#score })
+        this.scoreKeeper.currentScore = value
+        this.#score = this.scoreKeeper.currentScore
+        // console.log(this.#score)
+        this.notify({ score: this.scoreKeeper.currentScore })
     }
 
     get wienersCollected() {

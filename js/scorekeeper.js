@@ -1,8 +1,12 @@
-export default class ScoreKeeper {
+
+import Observable from "./observable.js"
+
+export default class ScoreKeeper extends Observable {
     #finalScore
     #currentScore
     #sceneScores
     constructor(initialScore) {
+        super()
         this.#currentScore = initialScore || 0
         this.#sceneScores = []
     }
@@ -13,6 +17,7 @@ export default class ScoreKeeper {
 
     set currentScore(value) {
         this.#currentScore = value
+        // console.log(this.#currentScore)
     }
 
     get finalScore() {
