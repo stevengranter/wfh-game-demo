@@ -1,19 +1,22 @@
 "use strict"
 
 import Observable from "./observable.js"
+import ScoreKeeper from "./scorekeeper.js"
 
 export default class Stats extends Observable {
     #lives = 3
     #progress = 0
     #health = 100
     #healthMax = 100
-    #score = 0
     #wienersCollected = 0
     #seagullBlessingsReceived = 0
     #isAlive = false
+    #score
 
     constructor() {
         super()
+
+        this.#score = new ScoreKeeper()
 
         this.deathEvent = new CustomEvent('playerDeath', {
             detail: {
