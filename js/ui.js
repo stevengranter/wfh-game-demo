@@ -35,8 +35,10 @@ export default class UI {
     }
 
 
-    receiveUpdate(data) {
-        // console.log("UI received: ", data)
+    receiveUpdate(data, sender) {
+
+        console.log(sender + " sent data: ")
+        console.log(data)
         // Checking for undefined here instead of falsey values, as we want to 
         // still update if the value is equal to 0
         if (data.comboCounter !== undefined) {
@@ -46,7 +48,8 @@ export default class UI {
             this.processUpdate(data)
     }
 
-    processUpdate(data) {
+    processUpdate(data, sender) {
+
         Object.entries(data).forEach(([key, value]) => { // Destructure the [key, value] pair
             // console.log(key, value)
             this.updateUI(key, value)

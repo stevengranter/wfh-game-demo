@@ -21,7 +21,8 @@ export default class Observable {
         // console.dir("#observers:" + this.#observers)
         this.#observers.forEach(observer => {
             // console.dir(observer)
-            observer.receiveUpdate(data)
+            let sender = this.constructor.name
+            observer.receiveUpdate(data, sender)
         })
     }
 }
