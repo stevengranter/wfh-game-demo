@@ -203,11 +203,14 @@ export class Dead extends PlayerState {
         this.player.frameY = this.animation.frameY
         this.player.weight = 0
         this.player.velocityX = 0
-        this.player.velocityY = -100
-
+        this.player.velocityY = -150
+        setTimeout(() => {
+            this.exit()
+        }, 1200)
     }
+
     exit() {
-        console.log("resurrection")
+        this.player.startNewLife()
     }
     handleInput() {
         // if (this.player.isOutOfBounds() === true) {

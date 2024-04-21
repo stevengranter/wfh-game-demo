@@ -2,7 +2,7 @@
 
 import Sprite from "./sprite.js"
 import Stats from "./stats.js"
-import { CANVAS_HEIGHT, CANVAS_WIDTH } from "./constants.js"
+import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./constants.js"
 import {
     Dead,
     StandingLeft,
@@ -14,11 +14,10 @@ import {
     playerStates
 } from "./player-state.js"
 
-import { GameWorld } from "./game-world.js"
-
 
 export default class Player extends Sprite {
     #isAlive
+    #maxWeight = 20
     constructor(spriteConfigObject) {
         super(spriteConfigObject)
 
@@ -35,11 +34,10 @@ export default class Player extends Sprite {
         // this.setState(this.states[0])
         this.currentState = this.states[1]
 
-        // this.floorHeight = 60 // TODO: This should not be here 🤮
 
         this.velocityX = 0
         this.velocityY = 0
-        this.weight = 20
+        this.weight = this.#maxWeight
 
         this.speedX = 0
         this.speedY = 0
@@ -69,7 +67,7 @@ export default class Player extends Sprite {
 
         document.addEventListener('playerDeath', () => {
             console.log(`Player is dead!`) // ealth!"
-            this.isAlive = false
+
             this.callSaintPeter()
             // Handle the zero health situation (e.g., end game, respawn player)
         })
@@ -77,6 +75,12 @@ export default class Player extends Sprite {
 
     }
 
+    callSaintPeter() {
+        this.stats.isAlive = false
+        this.stats.lives = this.stats.lives - 1
+        this.canvasFilter = "grayscale(100%) opacity(75%)"
+
+    }
 
 
     get position() {
@@ -95,13 +99,26 @@ export default class Player extends Sprite {
     }
 
 
-
     startNewLife() {
-        this.isAlive = true
-        console.log(this)
-        // console.log(this.stats.healthMax)
-        // this.stats.health = this.stats.healthMax
-        // this.setState(playerStates.STANDING_LEFT)
+        this.resetPlayerPosition()
+        this.canvasFilter = "none"
+        setTimeout(() => {
+            this.stats.isAlive = true
+            this.stats.health = this.stats.healthMax
+            // console.log(this.stats.healthMax)
+            // this.stats.health = this.stats.healthMax
+            this.setState(playerStates.STANDING_LEFT)
+        }, 500)
+
+    }
+
+    resetPlayerPosition() {
+        this.weight = this.#maxWeight
+        this.dx = (CANVAS_WIDTH - this.dWidth) / 2
+        this.dy = 0 - this.dHeight
+        this.velocityX = 0
+        this.velocityY = -50
+
     }
 
     startNewLevel() {

@@ -37,8 +37,8 @@ export default class UI {
 
     receiveUpdate(data, sender) {
 
-        console.log(sender + " sent data: ")
-        console.log(data)
+        // console.log(sender + " sent data: ")
+        // console.log(data)
         // Checking for undefined here instead of falsey values, as we want to 
         // still update if the value is equal to 0
         if (data.comboCounter !== undefined) {
@@ -67,7 +67,7 @@ export default class UI {
     }
 
     updateTextContent(elementId, value) {
-        console.log(elementId, value)
+        // console.log(elementId, value)
         document.getElementById(elementId).textContent = value
     }
 

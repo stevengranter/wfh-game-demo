@@ -154,9 +154,11 @@ export default class Sprite {
     draw(context) {
         // Check if the sprite is not visible or out of bounds, then return without drawing
         if ((!this.isVisible) || (this.isOutOfBounds())) return
-
+        // console.log("drawing: dx", this.dx, "dy", this.dy)
         // if (this.projectile && this.projectile.isVisible) this.projectile.draw(context)
-
+        if (this.canvasFilter) {
+            context.filter = this.canvasFilter
+        }
         // Draw the sprite on the canvas context
         context.drawImage(
             this.imageObject,       // Image to draw

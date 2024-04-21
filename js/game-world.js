@@ -152,6 +152,7 @@ export class GameWorld extends Observable {
             console.log("Player is Dead")
         }
 
+
         // Timekeeping, setting deltaTime with each frame
         GameWorld.#deltaTime = (timeStamp - this.lastTime) / 1000
         this.lastTime = timeStamp
@@ -163,9 +164,13 @@ export class GameWorld extends Observable {
         this.currentScene.update(GameWorld.#deltaTime, this.input)
 
         // Detect collisions by calling CollisionDetector (using AABB algorithm)
-        this.detectCollisions()
-        this.detectProjectileCollisions()
-        this.detectPlayerByEnemies()
+        if (this.player.stats.isAlive) {
+            this.detectCollisions()
+            this.detectProjectileCollisions()
+            this.detectPlayerByEnemies()
+        }
+
+        console.log("player.dy = ", this.player.dy)
 
         // Draw the scene to the canvas
         this.currentScene.draw(this.ctx, true, true, true)
