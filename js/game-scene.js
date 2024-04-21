@@ -44,7 +44,7 @@ export class GameScene extends Observable {
         if (this.layers) {
             this.layers.forEach((layer) => {
                 layer.player = this.player
-                console.log("addplayertoscene:" + layer)
+                // console.log("addplayertoscene:" + layer)
             })
         }
     }
@@ -89,7 +89,7 @@ export class GameScene extends Observable {
                 let duration = music.duration
                 this.isMusicLoaded = true
                 this.sceneTime = Math.floor(duration)
-                console.log(this.sceneTime) // Log the scene time
+                // console.log(this.sceneTime) // Log the scene time
             })
 
             return music // Return the created Audio instance

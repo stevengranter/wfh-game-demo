@@ -34,10 +34,10 @@ window.addEventListener("load", function () {
     player.altSprite = playerAltAppearance
     player.altAppearance = false
     player.loadSprite()
-    console.log(player)
+    // console.log(player)
 
     // 🖥️ Initialize UI elements
-    const ui = new UI("[data-ui]", player)
+    const ui = new UI(['data-ui', 'data-binding'], player)
 
     // 🕹️ Initialize Input handler
     const input = new InputHandler(ui)
@@ -102,28 +102,20 @@ window.addEventListener("load", function () {
         */
         game.subscribe(game.player.stats)
         game.player.stats.scoreKeeper.subscribe(game.ui)
+        game.player.stats.subscribe(game.ui)
 
         /*
-        Subscribe player Sprite instance to game.player.stats so sprite affects can 
+        Subscribe player sprite instance to game.player.stats so sprite affects can 
         apply when certain stats are reached
         */
         game.player.stats.subscribe(game.player)
         game.player.stats.scoreKeeper.subscribe(game.player)
-        game.subscribe(game.ui.bindings.scene.timeRemaining)
-        game.subscribe(game.ui.bindings.scene.timeRemainingStyle)
-
-        /* 
-        Subscribe all the UI bindings to the game.player.stats so the UI elements update as a player's
-        stats change
-        */
-        Object.values(game.ui.bindings.player).forEach((binding) => {
-            game.player.stats.subscribe(binding)
-        })
 
 
     }
 
     // Add event listener to start button
+    // console.log(ui)
     const startButton = ui.elements.startButton
     startButton.addEventListener("click", function (e) {
         game.loop(0)
@@ -146,7 +138,7 @@ window.addEventListener("load", function () {
     readyScene00()
 
     ui.toggleUI("cutscene")
-    ui.hide(ui.elements.banner)
+    // ui.hide(ui.elements.banner)
 
     function showEnemies() {
         console.log(game.spawner)
@@ -155,6 +147,6 @@ window.addEventListener("load", function () {
 
     game.runIntro()
 
-    setTimeout(showEnemies, 10000)
+    // setTimeout(showEnemies, 10000)
 
 }) // end: window.addEventListener("load")

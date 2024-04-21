@@ -147,7 +147,7 @@ export class GameWorld extends Observable {
         // but we do want to set the player state to trigger animation 
         // and stats changes
         if (!this.player.stats.isAlive) {
-            this.player.stats.isAlive = false
+            // this.player.stats.isAlive = false
             this.player.setState(playerStates.DEAD)
             console.log("Player is Dead")
         }
@@ -321,7 +321,7 @@ export class GameWorld extends Observable {
             // If goals is undefined or has no keys, it's considered empty
             console.log("scene has no goals or goals property is undefined")
         }
-        console.log(this.sceneGoals)
+        // console.log(this.sceneGoals)
     }
 
     // if (this.currentScene.goals.bronze.type === "score") {
@@ -371,7 +371,7 @@ export class GameWorld extends Observable {
         console.log("currentScene is now", sceneIndex, this.currentScene)
         this.initSceneGoals()
         this.initSceneEvents()
-        console.log(this.currentScene)
+        // console.log(this.currentScene)
         this.player.setBounds(this.currentScene.spriteLayer.playerBounds)
         // console.log(this.currentScene.playerBounds)
         // this.player.bounds = this.currentScene.playerBounds
@@ -385,7 +385,7 @@ export class GameWorld extends Observable {
                     // Add the ability to adjust volume to the slider
                     const musicVolumeSlider = this.ui.elements.musicRange
                     const musicElement = this.music
-                    console.log(this.currentScene.isMusicLoaded)
+                    // console.log(this.currentScene.isMusicLoaded)
                     musicVolumeSlider.addEventListener("input", (e) => {
                         const volumeValue = e.target.value
                         musicElement.volume = volumeValue / 100
@@ -451,7 +451,7 @@ export class GameWorld extends Observable {
         const sceneTimeIntervalId = setInterval(notifyTimeRemaining, 1000)
 
 
-        console.log("player.progress" + this.player.stats.progress)
+        console.log("player.progress: " + this.player.stats.progress)
 
         // Call the functions in the desired order
 
@@ -488,7 +488,7 @@ export class GameWorld extends Observable {
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
         const dialogText = document.querySelector('#intro-dialog div').textContent
         typeWriter('intro-dialog', dialogText, 25)
-        console.log("player.stats.isAlive: " + this.player.stats.isAlive)
+        // console.log("player.stats.isAlive: " + this.player.stats.isAlive)
 
         document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
             setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
@@ -504,7 +504,7 @@ export class GameWorld extends Observable {
         this.ui.hide(this.ui.elements.titleScreen)
         this.ui.show(this.ui.elements.shopScreen)
         this.ui.hide(this.ui.elements.introScreen)
-        console.log(this.ui)
+        // console.log(this.ui)
         let dialogText = document.querySelector('#shop-dialog div').textContent
         typeWriter('shop-dialog', dialogText, 25)
 

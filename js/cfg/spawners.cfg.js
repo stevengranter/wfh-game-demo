@@ -48,7 +48,7 @@ export const getWienerConfig = () => {
                 },
             },
         },
-        healthValue: 5,
+        healthValue: -10,
         pointValue: 100,
         spriteTag: spriteTags.WIENER,
         timeLimit: 4

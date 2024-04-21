@@ -38,7 +38,7 @@ export default class ScoreKeeper extends Observable {
     }
 
     calculateCombo(data) {
-        console.log(data)
+        // console.log(data)
         if (data.tag === "wiener") {
             this.comboCounter = 1
         } else {
@@ -50,15 +50,15 @@ export default class ScoreKeeper extends Observable {
         switch (value) {
             case 1:
                 this.#comboCounter++
-                console.log("combo incremented: ", this.#comboCounter)
+                // console.log("combo incremented: ", this.#comboCounter)
                 break
             case -1:
                 this.#comboCounter--
-                console.log("combo decremented:", this.#comboCounter)
+                // console.log("combo decremented:", this.#comboCounter)
                 break
             case 0:
                 this.#comboCounter = 0
-                console.log("combo reset:", this.#comboCounter)
+                // console.log("combo reset:", this.#comboCounter)
                 break
             default:
                 break

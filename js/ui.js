@@ -2,83 +2,114 @@
 
 import { toCamelCase } from "./utils.js"
 export default class UI {
-    constructor(dataAttribute, player) {
-        this.elements = this.init(dataAttribute)
-        // console.log(dataAttribute)
-        this.bindings = {}
-        this.bindings.player = {}
-        this.bindings.scene = {}
-        // this.readoutElements = this.initReadouts
-        this.bindings.player.score = new DataBinder("score", "textContent")
+    constructor(dataAttributes, player) {
+        this.init(dataAttributes)
+        this.elements = this.uiElements // FIX: for older code that references elements property
 
-        this.bindings.scoreRemaining = new DataBinder("score-remaining", "textContent", (data) => {
-            let scoreRemaining = 5000 - this.bindings.score
-            return scoreRemaining
-        })
+    }
 
-        this.bindings.scene.timeRemaining = new DataBinder("time-remaining", "textContent")
-        this.bindings.scene.timeRemainingStyle = new DataBinder("time-remaining", "style.color", (data) => {
-            // console.log(data)
-            if (data < 15) {
-                data = "var(--clr-red)"
+    init(dataAttributes) {
+        dataAttributes.forEach((attribute) => {
+            // console.log(attribute)
+
+            let uiDOMElements = document.querySelectorAll(`[${attribute}="true"]`)
+
+            let elements = new Object()
+            for (let i = 0; i < uiDOMElements.length; i++) {
+                let currentElement = uiDOMElements[i]
+                let elementKey = currentElement.id
+                let camelCaseKey = toCamelCase(elementKey)
+                elements[camelCaseKey] = currentElement
+
             }
-            return data
+
+            // console.log(elements)
+            // console.log(typeof elements)
+            let propertyName = this.convertDataAttribute(attribute)
+            this[propertyName] = elements
+            // console.log(this)
+            return elements
+
         })
-
-        this.bindings.player.healthBarWidth = new DataBinder("health", "style.width", (data) => {
-            data = data + "%"
-            // console.log(data)
-            return data
-        })
-        this.bindings.player.healthBarColor = new DataBinder("health", "style.backgroundColor", (data) => {
-            if (data <= 30) {
-                data = "var(--clr-red)"
-            }
-            else if ((data > 30) && (data < 70)) {
-                // console.log("color change")
-                data = "var(--clr-orange)"
-            } else {
-                data = "var(--clr-green)"
-            }
-            return data
-        })
-
-        this.bindings.player.lives = new DataBinder("lives", "textContent")
-
-        this.bindings.player.wienersCollected = new DataBinder("wieners-collected", "textContent")
-        // console.log(this)
-        // this.hudScore.update("1000")
-
-
-        console.log(this)
 
     }
 
 
     receiveUpdate(data) {
-        console.log("UI received: ", data)
-        // Checking for undefined here instead of falsy values, as we want to 
-        // still updateComboDisplay if data.comboCounter === 0
+        // console.log("UI received: ", data)
+        // Checking for undefined here instead of falsey values, as we want to 
+        // still update if the value is equal to 0
         if (data.comboCounter !== undefined) {
-            console.log(data)
+            // console.log(data)
             this.updateComboDisplay(data)
-
-        }
+        } else
+            this.processUpdate(data)
     }
 
     processUpdate(data) {
-        if (data.hasOwnProperty(this.elementId)) {
-            const element = document.getElementById(this.elementId)
-            let value = this.formatFunction ? this.formatFunction(data[this.elementId]) : data[this.elementId]
-            if (this.attribute.startsWith('style.')) {
-                const styleAttribute = this.attribute.slice(6)
-                element.style[styleAttribute] = value
+        Object.entries(data).forEach(([key, value]) => { // Destructure the [key, value] pair
+            // console.log(key, value)
+            this.updateUI(key, value)
+        })
+    }
 
+    updateUI(key, value) {
+        let elementId = key
+        try {
+            const element = document.getElementById(elementId)
+        } catch {
+            console.warn("No DOM element with ID: " + elementId)
+        }
+        // helper functions to convert values to colors, width, etc.
+        const numberToColorVar = (number) => {
+            if (number <= 100 && number >= 50) {
+                return "var(--clr-green)"
+            }
+            else if (number < 50 && number >= 25) {
+                return "var(--clr-orange)"
             } else {
-                element[this.attribute] = value
+                return "var(--clr-red)"
             }
         }
+
+        try {
+            const element = document.getElementById(elementId)
+            // console.log(element)
+            if (element) {
+                let styleAttributes = element.getAttribute('data-style-attributes')
+                let elementAttribute = element.getAttribute('data-element-attribute')
+                if (styleAttributes) {
+                    // Split the string into an array by commas
+                    let attributesArray = styleAttributes.split(',').map(attribute => attribute.trim())
+                    // console.log(attributesArray)
+                    attributesArray.forEach((attribute) => {
+                        if (attribute.includes("olor")) { // using 'olor' to include "Color" or "color" in the attribute
+                            // console.log("attribute includes color")
+                            element.style[attribute] = numberToColorVar(value)
+
+                        }
+                        if (attribute.includes("idth")) { // using 'idth' to include "width" or "Width" in the attribute
+                            // console.log("attribute includes width")
+                            element.style[attribute] = value + "%"
+                        }
+                    })
+                }
+                if (elementAttribute) {
+                    element[elementAttribute] = value
+                    // console.dir(element)
+                }
+            }
+            else {
+                // If no element was found, issue warning
+                console.warn("No element with id: ", elementId)
+            }
+        } catch (error) {
+            // Log the error message
+            console.error("Error updating the UI for element id:", elementId, error)
+        }
     }
+
+
 
     updateComboDisplay(data) {
         if (data.comboCounter > 0 && data.comboCounter <= 5) {
@@ -103,7 +134,7 @@ export default class UI {
                 letter.style.opacity = "100%"
             }
         } else if (data.comboCounter <= 0) {
-            console.log("combo counter UI should reset")
+            // console.log("combo counter UI should reset")
             let letters = this.elements.hudCombo.querySelectorAll("span")
             letters.forEach((letter) => {
                 letter.style.color = ""
@@ -113,20 +144,19 @@ export default class UI {
     }
 
 
-    init(dataAttribute) {
-        let uiDOMElements = document.querySelectorAll(`${dataAttribute}`)
 
-        let elements = new Object()
-        for (let i = 0; i < uiDOMElements.length; i++) {
-            let currentElement = uiDOMElements[i]
-            let elementKey = currentElement.id
-            let camelCaseKey = toCamelCase(elementKey)
-            elements[camelCaseKey] = currentElement
 
+    convertDataAttribute(attribute) {
+        // Remove 'data-' prefix and split the remaining string by '-'
+        let parts = attribute.replace('data-', '').split('-')
+
+        // Capitalize the first letter of each part after the first one
+        for (let i = 1; i < parts.length; i++) {
+            parts[i] = parts[i].charAt(0).toUpperCase() + parts[i].slice(1)
         }
-        // console.log(elements)
-        // console.log(typeof elements)
-        return elements
+
+        // Join all parts together and append '-elements' at the end
+        return parts.join('') + 'Elements'
     }
 
     show(element) {
@@ -163,79 +193,7 @@ export default class UI {
     }
 
 
-    appendTemplate(template, container) {
-        container.appendChild(template)
-    }
-
-    preloadTemplate(template) {
-        return new Promise((resolve, reject) => {
-            const images = template.querySelectorAll("img")
-            let imagesLoaded = 0
-            const totalImages = images.length
-
-            if (totalImages === 0) {
-                resolve(template)
-                return
-            }
-
-            images.forEach(image => {
-                const src = image.getAttribute('src')
-                const img = new Image()
-                img.onload = img.onerror = () => {
-                    imagesLoaded++
-                    if (imagesLoaded === totalImages) {
-                        resolve(template)
-                    }
-                }
-                img.src = src
-            })
-        })
-    }
-
-    fetchExternalTemplate(url) {
-        return fetch(url)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok.')
-                }
-                return response.text()
-            })
-            .then(data => {
-                const parser = new DOMParser()
-                const doc = parser.parseFromString(data, 'text/html')
-                const template = doc.querySelector('template')
-                return document.importNode(template.content, true)
-            })
-            .catch(error => {
-                console.error('Error loading the template:', error)
-                throw error
-            })
-    }
 
 
-}
-
-export class DataBinder {
-    constructor(elementId, attribute, formatFunction = null) {
-        this.elementId = elementId
-        this.attribute = attribute
-        this.formatFunction = formatFunction
-    }
-
-    receiveUpdate(data) {
-        // console.log(this.constructor.name)
-        // console.dir(data)
-        if (data.hasOwnProperty(this.elementId)) {
-            const element = document.getElementById(this.elementId)
-            let value = this.formatFunction ? this.formatFunction(data[this.elementId]) : data[this.elementId]
-            if (this.attribute.startsWith('style.')) {
-                const styleAttribute = this.attribute.slice(6)
-                element.style[styleAttribute] = value
-
-            } else {
-                element[this.attribute] = value
-            }
-        }
-    }
 }
 

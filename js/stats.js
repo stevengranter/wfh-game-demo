@@ -91,7 +91,7 @@ export default class Stats extends Observable {
 
     set wienersCollected(value) {
         this.#wienersCollected = value
-        console.log("wieners-collected:" + this.#wienersCollected)
+        // console.log("wieners-collected:" + this.#wienersCollected)
         this.notify({ 'wieners-collected': this.#wienersCollected })
 
     }
@@ -102,7 +102,7 @@ export default class Stats extends Observable {
 
     set seagullBlessingsReceived(value) {
         this.#seagullBlessingsReceived = value
-        console.log("seagull-blessings-received:" + this.#seagullBlessingsReceived)
+        // console.log("seagull-blessings-received:" + this.#seagullBlessingsReceived)
         this.notify({ "seagull-blessings-received": this.#seagullBlessingsReceived })
 
     }
