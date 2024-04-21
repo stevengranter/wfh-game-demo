@@ -103,6 +103,7 @@ window.addEventListener("load", function () {
         game.subscribe(game.player.stats)
         game.player.stats.scoreKeeper.subscribe(game.ui)
         game.player.stats.subscribe(game.ui)
+        game.subscribe(game.ui)
 
         /*
         Subscribe player sprite instance to game.player.stats so sprite affects can 

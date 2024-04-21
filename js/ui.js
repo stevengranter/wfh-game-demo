@@ -42,76 +42,38 @@ export default class UI {
         // Checking for undefined here instead of falsey values, as we want to 
         // still update if the value is equal to 0
         if (data.comboCounter !== undefined) {
-            // console.log(data)
             this.updateComboDisplay(data)
-        } else
-            this.processUpdate(data)
-    }
-
-    processUpdate(data, sender) {
-
-        Object.entries(data).forEach(([key, value]) => { // Destructure the [key, value] pair
-            // console.log(key, value)
-            this.updateUI(key, value)
-        })
-    }
-
-    updateUI(key, value) {
-        let elementId = key
-        try {
-            const element = document.getElementById(elementId)
-        } catch {
-            console.warn("No DOM element with ID: " + elementId)
-        }
-        // helper functions to convert values to colors, width, etc.
-        const numberToColorVar = (number) => {
-            if (number <= 100 && number >= 50) {
-                return "var(--clr-green)"
-            }
-            else if (number < 50 && number >= 25) {
-                return "var(--clr-orange)"
-            } else {
-                return "var(--clr-red)"
-            }
-        }
-
-        try {
-            const element = document.getElementById(elementId)
-            // console.log(element)
-            if (element) {
-                let styleAttributes = element.getAttribute('data-style-attributes')
-                let elementAttribute = element.getAttribute('data-element-attribute')
-                if (styleAttributes) {
-                    // Split the string into an array by commas
-                    let attributesArray = styleAttributes.split(',').map(attribute => attribute.trim())
-                    // console.log(attributesArray)
-                    attributesArray.forEach((attribute) => {
-                        if (attribute.includes("olor")) { // using 'olor' to include "Color" or "color" in the attribute
-                            // console.log("attribute includes color")
-                            element.style[attribute] = numberToColorVar(value)
-
-                        }
-                        if (attribute.includes("idth")) { // using 'idth' to include "width" or "Width" in the attribute
-                            // console.log("attribute includes width")
-                            element.style[attribute] = value + "%"
-                        }
-                    })
-                }
-                if (elementAttribute) {
-                    element[elementAttribute] = value
-                    // console.dir(element)
-                }
-            }
-            else {
-                // If no element was found, issue warning
-                console.warn("No element with id: ", elementId)
-            }
-        } catch (error) {
-            // Log the error message
-            console.error("Error updating the UI for element id:", elementId, error)
+        } else if (data.score !== undefined) {
+            this.updateTextContent("score", data.score)
+        } else if ((data.health !== undefined) && (sender === "Stats")) {
+            this.updateStyleAttribute("health", "width", data.health + "%")
+            this.updateStyleAttribute("health", "backgroundColor", this.numberToColorVar(data.health))
+        } else if (data["time-remaining"]) {
+            this.updateTextContent("time-remaining", data['time-remaining'])
+        } else if (data.lives !== undefined) {
+            this.updateTextContent("lives", data.lives)
         }
     }
 
+    numberToColorVar(number) {
+        if (number <= 100 && number >= 50) {
+            return "var(--clr-green)"
+        }
+        else if (number < 50 && number >= 25) {
+            return "var(--clr-orange)"
+        } else {
+            return "var(--clr-red)"
+        }
+    }
+
+    updateTextContent(elementId, value) {
+        console.log(elementId, value)
+        document.getElementById(elementId).textContent = value
+    }
+
+    updateStyleAttribute(elementId, styleAttribute, value) {
+        document.getElementById(elementId).style[styleAttribute] = value
+    }
 
 
     updateComboDisplay(data) {
