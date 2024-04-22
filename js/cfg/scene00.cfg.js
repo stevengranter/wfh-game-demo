@@ -40,11 +40,11 @@ const getScene00Layer_SpriteConfig = () => {
 
             },
             {
-                startTime: 10000,
+                startTime: 30000,
                 type: "spawner",
                 objectType: "wiener",
-                totalSpawnCount: 200,
-                spawningDuration: 55,
+                totalSpawnCount: 100,
+                spawningDuration: 25,
             }
 
 

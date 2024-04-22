@@ -170,7 +170,7 @@ export class GameWorld extends Observable {
             this.detectPlayerByEnemies()
         }
 
-        console.log("player.dy = ", this.player.dy)
+        // console.log("player.dy = ", this.player.dy)
 
         // Draw the scene to the canvas
         this.currentScene.draw(this.ctx, true, true, true)
