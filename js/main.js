@@ -136,7 +136,7 @@ window.addEventListener("load", function () {
 
 
     initObservers()
-    readyScene00()
+    // readyScene00()
 
     ui.toggleUI("cutscene")
     // ui.hide(ui.elements.banner)

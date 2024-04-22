@@ -7,6 +7,8 @@ import { playerStates } from "./player-state.js"
 import { GameScene } from "./game-scene.js"
 import { typeWriter, animateBlur, getRandomInt } from "./utils.js"
 import { Enemy } from "./enemy.js"
+import { scene00Config } from "./cfg/scene00.cfg.js"
+import { scene01Config } from "./cfg/scene01.cfg.js"
 
 
 export const gameStateKeys = {
@@ -103,8 +105,8 @@ export class GameWorld extends Observable {
     }
 
     // the main game loop
-    loop(timeStamp) {
-
+    loop(timeStamp, scene = this.currentScene) {
+        // console.log("this.isSceneOver: ", this.isSceneOver)
         // Guard clauses to exit the loop if any of the conditions are met
 
         // if there is no reference to player, input, or UI
@@ -114,7 +116,7 @@ export class GameWorld extends Observable {
         }
 
         // if currentScene hasn't been declared for some reason
-        if (!this.currentScene) {
+        if (!scene) {
             console.error("No currentScene defined for Gameworld loop")
             return
         }
@@ -138,7 +140,7 @@ export class GameWorld extends Observable {
         }
 
         // if the music has ended, we should be at the end of the scene, and gameplay should stop
-        if (this.currentScene.music.currentTime === 0) {
+        if (scene.music.currentTime === 0) {
             console.log("Music has ended, scene is over")
             return
         }
@@ -161,7 +163,7 @@ export class GameWorld extends Observable {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
         // Update the currentScene(includes background layers, player sprite and spawned items)
-        this.currentScene.update(GameWorld.#deltaTime, this.input)
+        scene.update(GameWorld.#deltaTime, this.input)
 
         // Detect collisions by calling CollisionDetector (using AABB algorithm)
         if (this.player.stats.isAlive) {
@@ -173,7 +175,7 @@ export class GameWorld extends Observable {
         // console.log("player.dy = ", this.player.dy)
 
         // Draw the scene to the canvas
-        this.currentScene.draw(this.ctx, true, true, true)
+        scene.draw(this.ctx, true, true, true)
 
         // requestAnimationFrame to get next frame
         requestAnimationFrame(this.loop.bind(this))
@@ -270,16 +272,27 @@ export class GameWorld extends Observable {
 
     endScene() {
         // Pause the game and the music
+        clearInterval(this.goalCheckIntervalId)
+        clearInterval(this.sceneTimeIntervalId)
+        clearInterval(this.#currentScene.intervalId)
+
         this.gameState = gameStateKeys.SCENE_END
         this.isSceneOver = true
         this.isPaused = true
         this.spawner.reset()
-        clearInterval(this.#currentScene.intervalId)
+
+        console.log(this.spawner)
+
         this.pauseMusic()
         // console.log("player progress before set: " + this.player.stats.progress)
         this.player.stats.progress += 1
         console.log("winner winner chicken dinner")
         // console.log("player progress after set: " + this.player.stats.progress)
+
+        this.readyScene(scene01Config)
+        const currentSceneIndex = this.player.stats.progress
+        this.currentScene = this.#scenes[currentSceneIndex]
+
 
 
 
@@ -298,11 +311,16 @@ export class GameWorld extends Observable {
 
         document.getElementById("next-scene-button").addEventListener("click", (e) => {
 
+            this.startScene()
 
+
+        })
+
+        document.getElementById("goto-shop-button").addEventListener("click", (e) => {
 
             this.runShop()
 
-            // console.log("next scene button clicked")
+
         })
 
 
@@ -364,13 +382,24 @@ export class GameWorld extends Observable {
     }
 
 
+    // 🌊 Function to load and ready scene and add to GameWorld instance
+    readyScene(sceneConfig) {
+        // scene01Config imported from cfg/scene01.cfg.js
+        const scene = new GameScene(sceneConfig, this.player)
 
+        // Add scene to game instance
+        this.addScene(scene)
+
+        // Add spawner to sprite Layer in scene
+        scene.spriteLayer.spawner = this.spawner
+
+    }
 
 
     startScene = () => {
 
         // TODO: fix
-
+        this.isSceneOver = false
         const sceneIndex = this.player.stats.progress
         this.currentScene = this.#scenes[sceneIndex]
         console.log("currentScene is now", sceneIndex, this.currentScene)
@@ -406,7 +435,7 @@ export class GameWorld extends Observable {
         }
 
         const placesPlayer = () => {
-            this.player.stats.lives = 3
+            //  this.player.stats.lives = 3
             this.player.stats.score = 0
             this.player.stats.healthMax = 100
             this.player.stats.health = 100
@@ -423,7 +452,7 @@ export class GameWorld extends Observable {
         }
 
         const checkGoal = () => {
-            // console.log(this.player)
+            // console.log("running checkGoal()")
             if (!this.isSceneOver) {
                 if (this.player.stats.score >= this.sceneGoals.bronze.value) {
                     console.log("You won! ⭐️")
@@ -433,6 +462,7 @@ export class GameWorld extends Observable {
         }
 
         const notifyTimeRemaining = () => {
+            // console.log("running notifyTimeRemaining")
             if (this.music !== undefined) {
                 this.#timeRemaining = this.music.duration - this.music.currentTime
                 this.notify({ "time-remaining": Math.floor(this.#timeRemaining) })
@@ -450,10 +480,10 @@ export class GameWorld extends Observable {
 
 
         // Check for goal every 0.5 seconds
-        const goalCheckIntervalId = setInterval(checkGoal, 500)
+        this.goalCheckIntervalId = setInterval(checkGoal, 500)
 
         // Send observers the time remaining every 1s
-        const sceneTimeIntervalId = setInterval(notifyTimeRemaining, 1000)
+        this.sceneTimeIntervalId = setInterval(notifyTimeRemaining, 1000)
 
 
         console.log("player.progress: " + this.player.stats.progress)
@@ -472,8 +502,8 @@ export class GameWorld extends Observable {
 
         // console.log(this.player.stats)
 
-        const currentSceneIndex = this.player.stats.progress
-        this.currentScene = this.#scenes[currentSceneIndex]
+
+
         // console.dir(this.currentScene)
 
         this.ui.toggleUI("cutscene")
@@ -487,7 +517,10 @@ export class GameWorld extends Observable {
         this.ui.show(this.ui.elements.popupNan)
         setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
         setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(0px)" }, 700)
-        // function animateBlur(blurValue, maxBlur, step) 
+
+        this.readyScene(scene00Config)
+        const currentSceneIndex = this.player.stats.progress
+        this.currentScene = this.#scenes[currentSceneIndex]
 
         this.currentScene.draw(this.ctx, false, true, true)
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
@@ -513,6 +546,8 @@ export class GameWorld extends Observable {
         let dialogText = document.querySelector('#shop-dialog div').textContent
         typeWriter('shop-dialog', dialogText, 25)
 
+        this.readyScene(scene01Config)
+
         document.getElementById("item-rainbonnet").querySelector(".buy-button").addEventListener("pointerdown", () => {
             let dialogText = "You don't have enough points for that. I can't just be giving stuff away now can I?"
             typeWriter('shop-dialog', dialogText, 25)
@@ -520,6 +555,7 @@ export class GameWorld extends Observable {
                 typeWriter('shop-dialog', "Sorry, come back once you get some more points.", 25)
             }, 5000) // Delay the second message by 5 seconds
             setTimeout(() => {
+                this.isSceneOver = false
                 this.startScene()
             }, 2000)
         })

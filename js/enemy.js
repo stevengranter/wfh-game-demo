@@ -83,12 +83,17 @@ export class Enemy extends Sprite {
             // (which allows it to be launched again), and reset the 
             // projectile's position and velocity
             if (this.projectile.isOutOfBounds()) {
-                this.projectile.isVisible = false
-                this.resetProjectilePosition()
-                this.resetProjectileVelocity()
+                this.resetProjectile()
             }
         }
 
     }
 
+
+    resetProjectile() {
+        this.projectile.isVisible = false
+        this.projectile.isScored = false
+        this.resetProjectilePosition()
+        this.resetProjectileVelocity()
+    }
 } // end of Enemy class

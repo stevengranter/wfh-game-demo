@@ -24,7 +24,7 @@ class ObjectPool {
             if (typeof this.configGenerator === 'function') {
                 if (this.objectType == "gull") {
                     obj = new Enemy(this.configGenerator(), this.childSpriteConfigGenerator())
-                    this.enemies.push(obj)
+                    // this.enemies.push(obj)
                 } else {
                     obj = new Sprite(this.configGenerator())
                     // console.log("object created for pool")
@@ -71,7 +71,10 @@ export default class Spawner {
 
     reset() {
         // Stop all spawning
-        this.spawnIntervals.forEach(clearInterval)
+        this.spawnIntervals.forEach((spawnInterval) => {
+            clearInterval(spawnInterval)
+        }
+        )
         this.spawnIntervals = [] // Clear the list of intervals
 
 
@@ -87,9 +90,10 @@ export default class Spawner {
         this.spawnedObjects = []
 
         // reset pools
-        // for (const objectType in this.objectPools) {
-        //     this.objectPools[objectType].pool = [];
-        // }
+        for (const objectType in this.objectPools) {
+            this.objectPools[objectType].pool = []
+            console.log(this.objectPools)
+        }
     }
 
     spawnObject(objectType, objectId, totalSpawnCount, spawningDuration, resetConfig) {
