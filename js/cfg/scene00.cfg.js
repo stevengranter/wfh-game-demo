@@ -36,7 +36,7 @@ const getScene00Layer_SpriteConfig = () => {
                 type: "spawner",
                 objectType: "gull",
                 totalSpawnCount: 30,
-                spawningDuration: 30,
+                spawningDuration: 50,
 
             },
             {

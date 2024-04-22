@@ -49,7 +49,8 @@ export default class Layer {
     async init() {
         try {
             this.imageObject = await this.loadImage(this.spriteSrc)
-            console.log("Layer image loaded")
+            console.log(`✔️ Layer is loaded (${this.spriteSrc})`)
+
         } catch (error) {
             console.error('Error loading image:', error)
         }

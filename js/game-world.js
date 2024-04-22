@@ -35,6 +35,7 @@ export class GameWorld extends Observable {
     #scenes
     #currentScene
     #timeRemaining
+    #isNextSceneReady = false
 
     // set #deltaTime to 1 to avoid a NaN error when starting the game loop
     static #deltaTime = 1
@@ -58,6 +59,7 @@ export class GameWorld extends Observable {
             this.isReady = true
         }
 
+        this.#isNextSceneReady = false
 
         this.canvas = document.getElementById("game-screen__canvas")
         this.ctx = this.canvas.getContext("2d")
@@ -87,6 +89,10 @@ export class GameWorld extends Observable {
         this.notify({ currentScene: this.#currentScene })
     }
 
+    get scenes() {
+        return this.#scenes
+    }
+
     // Getter for private static #deltaTime variable 
     // (No setter defined, as #deltaTime should only be set by the GameWorld class in the game loop)
     static get deltaTime() {
@@ -98,7 +104,8 @@ export class GameWorld extends Observable {
     addScene(gameScene) {
         if (gameScene instanceof GameScene) {
             this.#scenes.push(gameScene)
-            console.log("Game scene added")
+            console.log(`✔️ ${gameScene.constructor.name} added to scenes array (${gameScene.name})`)
+            // console.dir(gameScene)
         } else {
             console.warn("Invalid scene type. Expected GameScene.")
         }
@@ -289,7 +296,7 @@ export class GameWorld extends Observable {
         console.log("winner winner chicken dinner")
         // console.log("player progress after set: " + this.player.stats.progress)
 
-        this.readyScene(scene01Config)
+        this.loadScene(scene01Config)
         const currentSceneIndex = this.player.stats.progress
         this.currentScene = this.#scenes[currentSceneIndex]
 
@@ -337,12 +344,12 @@ export class GameWorld extends Observable {
             Object.entries(this.currentScene.goals).forEach(([key, value]) => {
                 // console.log(key, value)
                 this.sceneGoals[key] = value
-                console.log("scene has goals")
+                // console.log("✔️ Scene goals are set")
 
             })
         } else {
             // If goals is undefined or has no keys, it's considered empty
-            console.log("scene has no goals or goals property is undefined")
+            console.warn("Scene has no goals or goals property is undefined")
         }
         // console.log(this.sceneGoals)
     }
@@ -382,17 +389,28 @@ export class GameWorld extends Observable {
     }
 
 
-    // 🌊 Function to load and ready scene and add to GameWorld instance
-    readyScene(sceneConfig) {
-        // scene01Config imported from cfg/scene01.cfg.js
-        const scene = new GameScene(sceneConfig, this.player)
+    // Method to load and ready scene and add to GameWorld instance
+    loadScene(sceneConfig) {
+        try {
+            // sceneConfig imported from cfg directory
+            const scene = new GameScene(sceneConfig, this.player)
 
-        // Add scene to game instance
-        this.addScene(scene)
+            // Add scene to game instance
+            this.addScene(scene)
 
-        // Add spawner to sprite Layer in scene
-        scene.spriteLayer.spawner = this.spawner
+            // Ensure spriteLayer exists before adding spawner
+            if (scene.spriteLayer) {
+                scene.spriteLayer.spawner = this.spawner
+            } else {
+                console.error("spriteLayer does not exist on the scene object")
+            }
 
+            // set nextSceneReady flag to true, log to console
+            this.#isNextSceneReady = true
+            console.log(`✅ %cScene is loaded and ready: ${scene.name}`, `color: green;`)
+        } catch (error) {
+            console.error("Could not load next scene", error)
+        }
     }
 
 
@@ -402,7 +420,7 @@ export class GameWorld extends Observable {
         this.isSceneOver = false
         const sceneIndex = this.player.stats.progress
         this.currentScene = this.#scenes[sceneIndex]
-        console.log("currentScene is now", sceneIndex, this.currentScene)
+        console.log(`ℹ️ %ccurrent scene is: ${sceneIndex}. ${this.currentScene.name}`, `color:blue;`)
         this.initSceneGoals()
         this.initSceneEvents()
         // console.log(this.currentScene)
@@ -486,7 +504,7 @@ export class GameWorld extends Observable {
         this.sceneTimeIntervalId = setInterval(notifyTimeRemaining, 1000)
 
 
-        console.log("player.progress: " + this.player.stats.progress)
+        console.log(`ℹ️ %cplayer progress is ${this.player.stats.progress}`, `color:blue`)
 
         // Call the functions in the desired order
 
@@ -518,7 +536,7 @@ export class GameWorld extends Observable {
         setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
         setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(0px)" }, 700)
 
-        this.readyScene(scene00Config)
+        this.loadScene(scene00Config)
         const currentSceneIndex = this.player.stats.progress
         this.currentScene = this.#scenes[currentSceneIndex]
 
@@ -532,8 +550,8 @@ export class GameWorld extends Observable {
             setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
             setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(475px)" }, 700)
             setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0, 0, 0.1) }, 1000)
-            setTimeout(() => this.startScene(), 1300)
-        })
+            setTimeout(() => { this.startScene() }, 1300)
+        }, { once: true })
     }
 
     runShop() {
@@ -546,7 +564,7 @@ export class GameWorld extends Observable {
         let dialogText = document.querySelector('#shop-dialog div').textContent
         typeWriter('shop-dialog', dialogText, 25)
 
-        this.readyScene(scene01Config)
+        this.loadScene(scene01Config)
 
         document.getElementById("item-rainbonnet").querySelector(".buy-button").addEventListener("pointerdown", () => {
             let dialogText = "You don't have enough points for that. I can't just be giving stuff away now can I?"
@@ -558,7 +576,7 @@ export class GameWorld extends Observable {
                 this.isSceneOver = false
                 this.startScene()
             }, 2000)
-        })
+        }, { once: true })
 
 
 

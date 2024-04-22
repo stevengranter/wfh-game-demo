@@ -31,7 +31,7 @@ export class GameScene extends Observable {
         // Attempt to load the music and set the flag accordingly
         try {
             this.music = this.loadMusic(music)
-            console.log("Music is loaded") // Log success message
+            console.log(`✔️ Music is loaded 🎵 (${this.music.src})`) // Log success message
             this.isMusicLoaded = true
         } catch (error) {
             console.warn("Music could not be loaded") // Warn if music cannot be loaded

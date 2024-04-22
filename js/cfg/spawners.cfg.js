@@ -78,7 +78,7 @@ export const getGullConfig = () => {
                 random:
                 {
                     lowerBound: 0,
-                    upperBound: -40
+                    upperBound: 20
                 },
             },
         },
@@ -93,7 +93,7 @@ export const getGullConfig = () => {
             velocityY: {
                 random:
                 {
-                    lowerBound: 10,
+                    lowerBound: -10,
                     upperBound: 20
                 },
             },
