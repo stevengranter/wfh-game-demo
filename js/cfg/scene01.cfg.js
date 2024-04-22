@@ -71,7 +71,7 @@ export const scene01Config = {
     // },
     layers: [scene01Layer_Background, scene00Layer_Sprite],
     spriteLayerIndex: 1,
-    music: ["../audio/music/i_equals_da_by.mp3"],
+    music: ["./audio/music/i_equals_da_by.mp3"],
     sfx: [],
     events: [],
     goals: {

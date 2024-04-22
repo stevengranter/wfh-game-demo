@@ -87,7 +87,7 @@ export const scene00Config = {
     name: "Garden",
     layers: [scene00Layer_Background, scene00Layer_Sprite, scene00Layer_Foreground],
     spriteLayerIndex: 1,
-    music: ["../audio/music/alouette_55s.mp3"],
+    music: ["./audio/music/alouette_55s.mp3"],
     sfx: [],
     goals: {
         gold: {
