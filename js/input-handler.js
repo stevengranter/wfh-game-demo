@@ -21,7 +21,19 @@ export default class InputHandler {
         addEventListener("keyup", (e) => this.listenForKeys(e))
 
 
-        // console.log(this)
+        const touchOverlay = this.ui.uiElements.touchControllerOverlay
+
+        touchOverlay.addEventListener('pointerdown', (e) => {
+            // e.preventDefault()
+            this.listenForPointer(e, 'touchOverlay')
+            // return false
+        },)
+        touchOverlay.addEventListener('pointerup', (e) => {
+            // e.preventDefault()
+            this.listenForPointer(e, 'touchOverlay')
+            // return false
+        })
+
 
     }
 
@@ -150,53 +162,29 @@ export default class InputHandler {
     }
 
     listenForPointer(e, element) {
-        if (element === "gameScreen") {
+
+        if (element === "touchOverlay") {
             e.preventDefault()
-            // console.dir(e)
+            // return false
+        }
 
-            let isButtonPressed = (e.type == "pointerdown") ? true : false
-            // console.log(isButtonPressed)
+        let sourceElement = e.target.id
 
-            switch (e.button) {
-                case 0:
-                    this.left = isButtonPressed
-                    // // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
-                    break
-                case 1:
-                    this.up = isButtonPressed
-                    // // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.up:", this.up)
-                    break
-                case 2:
-                    this.right = isButtonPressed
-                    // // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
-                    break
-                default:
-                    break
-            }
-        } else {
-            // console.dir(element)
-            // console.dir(e)
+        let isButtonPressed = (e.type == "pointerdown") ? true : false
+        // console.log(isButtonPressed)
 
-            console.log(e.srcElement.dataset.inputType)
+        switch (sourceElement) {
+            case "touchcontroller_left":
+                this.left = isButtonPressed
+                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
+                break
+            case "touchcontroller_right":
+                this.right = isButtonPressed
+                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
+                break
+            default:
+                break
 
-            let isButtonPressed = (e.type == "pointerdown") ? true : false
-
-            switch (e.srcElement.dataset.inputType) {
-                case "right":
-                    this.right = isButtonPressed
-                    break
-                case "left":
-                    this.left = isButtonPressed
-                    break
-                case "up":
-                    this.up = isButtonPressed
-                    break
-                // case "escape":
-                //     this.escape = isButtonPressed
-                //     break
-                default:
-                    break
-            }
         }
     }
 

@@ -17,10 +17,11 @@ export const gameStateKeys = {
     INTRO: "intro",
     POPUP: "popup",
     PLAY: "play",
-    PAUSED_BY_PLAYER: "paused-by-player",
-    SCENE_END: "scene-end",
-    GAMEOVER: "game-over",
-    END: "game-end",
+    PAUSED_BY_PLAYER: "paused",
+    SCENE_END: "endscene",
+    SCENE_START: "startscene",
+    GAMEOVER: "gameover",
+    END: "endgame",
     CREDITS: "credits",
 }
 
@@ -87,8 +88,10 @@ export class GameWorld extends Observable {
         return this.#currentScene
     }
 
-    set currentScene(scene) {
-        this.#currentScene = scene
+    set currentScene(scene = null) {
+        const sceneIndex = this.player.stats.progress
+        this.#currentScene = this.#scenes[sceneIndex]
+        // this.#currentScene = scene
         this.notify({ currentScene: this.#currentScene })
     }
 
@@ -153,7 +156,7 @@ export class GameWorld extends Observable {
 
         // if the scene has ended, we should exit the loop
         if (this.isSceneOver) {
-            this.ui.show(this.ui.endsceneScreen)
+            this.endScene()
             console.log("Game scene has ended")
             return
         }
@@ -309,8 +312,11 @@ export class GameWorld extends Observable {
         clearInterval(this.#currentScene.intervalId)
 
         this.gameState = gameStateKeys.SCENE_END
-        this.isSceneOver = true
         this.isPaused = true
+        this.pauseGame()
+
+        this.isSceneOver = true
+
         this.spawner.reset()
 
         console.log(this.spawner)
@@ -439,31 +445,32 @@ export class GameWorld extends Observable {
     }
 
 
-    startScene = () => {
 
+    startScene = (scene = this.currentScene) => {
+
+        if (scene === undefined) scene = this.currentScene
         // TODO: fix, temporarily running scene1 first
         this.isSceneOver = false
         // this.loadScene(scene01Config)
-        const sceneIndex = this.player.stats.progress
-        this.currentScene = this.#scenes[sceneIndex]
-        console.log(`ℹ️ %ccurrent scene is: ${sceneIndex}. ${this.currentScene.name}`, `color:blue;`)
+
+        // console.log(`ℹ️ %ccurrent scene is: ${this.currentScene.name}`, `color:blue;`)
         this.initSceneGoals()
         this.initSceneEvents()
         // console.log(this.currentScene)
-        this.player.setBounds(this.currentScene.spriteLayer.playerBounds)
-        // console.log(this.currentScene.playerBounds)
-        // this.player.bounds = this.currentScene.playerBounds
+        this.player.setBounds(scene.spriteLayer.playerBounds)
+        // console.log(scene.playerBounds)
+        // this.player.bounds = scene.playerBounds
 
         const playMusic = () => {
-            if (this.currentScene.hasOwnProperty("music")) {
+            if (scene.hasOwnProperty("music")) {
 
-                if (this.currentScene.isMusicLoaded) {
-                    this.music = this.currentScene.music
+                if (scene.isMusicLoaded) {
+                    this.music = scene.music
 
                     // Add the ability to adjust volume to the slider
                     const musicVolumeSlider = this.ui.elements.musicRange
                     const musicElement = this.music
-                    // console.log(this.currentScene.isMusicLoaded)
+                    // console.log(scene.isMusicLoaded)
                     musicVolumeSlider.addEventListener("input", (e) => {
                         const volumeValue = e.target.value
                         musicElement.volume = volumeValue / 100
@@ -526,6 +533,8 @@ export class GameWorld extends Observable {
                     clearInterval(this.sceneTimeIntervalId)
                     clearInterval(this.goalCheckIntervalId)
                     this.gameState = gameStateKeys.SCENE_END
+                    this.isPaused = true
+                    this.pauseGame()
                     this.endScene()
                 }
 
@@ -603,7 +612,9 @@ export class GameWorld extends Observable {
 
         // console.dir(this.currentScene)
 
-        this.ui.toggleUI("cutscene")
+        this.gameState = gameStateKeys.INTRO
+        this.ui.toggleUI(this.gameState)
+        // this.ui.toggleUI(this.gameState)
 
 
 
@@ -629,7 +640,7 @@ export class GameWorld extends Observable {
         typeWriter('intro-dialog', dialogText, 25)
         // console.log("player.stats.isAlive: " + this.player.stats.isAlive)
 
-        document.getElementById("intro-dialog").addEventListener("pointerdown", () => {
+        this.ui.uiElements.touchControllerOverlay.addEventListener("pointerdown", () => {
             setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
             setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(475px)" }, 700)
             setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0, 0, 0.1) }, 1000)
@@ -676,27 +687,38 @@ export class GameWorld extends Observable {
         // console.log("gameworld received :", data)
     }
 
-    pauseGame() {
+    pauseGame(gameState = this.gameState) {
+
         if (this.isPaused) {
-            console.log(this.gameState)
+            console.log(gameState)
             this.pauseMusic()
-            switch (this.#gameState) {
-                case gameStateKeys.PAUSED_BY_PLAYER:
-                    this.ui.toggleUI("paused")
-                    break
-                case gameStateKeys.LEVEL_END:
-                    this.ui.toggleUI("level-end")
-                    break
-                case gameStateKeys.POPUP:
-                    this.ui.toggleUI("popup")
-                    break
-                default:
-                    console.warn("No UI defined for gamestate: " + this.#gameState)
+
+            if (gameState) {
+                console.log("switching UI states..")
+                this.ui.toggleUI(gameState)
             }
+            // switch (this.#gameState) {
+            //     case gameStateKeys.PAUSED_BY_PLAYER:
+            //         this.ui.toggleUI(this.game)
+            //         document.getElementById("touch-controller-overlay").style = "display: none" // TODO: should use gamestate to hide and show
+            //         break
+            //     case gameStateKeys.SCENE_END:
+            //         this.ui.toggleUI("scene-end")
+            //         document.getElementById("touch-controller-overlay").style = "display: none" // TODO: should use gamestate to hide and show
+            //         break
+            //     case gameStateKeys.POPUP:
+            //         this.ui.toggleUI("popup")
+            //         // document.getElementById("touch-controller-overlay").style = "display: none" // TODO: should use gamestate to hide and show
+            //         break
+            //     default:
+            //         console.warn("No UI defined for gamestate: " + this.#gameState)
+            // }
         }
         else {
+            console.log(this.gameState)
             this.#gameState = gameStateKeys.PLAY
             this.ui.toggleUI("play")
+            document.getElementById("touch-controller-overlay").style = "display: flex" // TODO: should use gamestate to hide and show
             // this.music.currentTime = this.musicPausedTimes
             this.playMusic()
             console.log(this.lastTime)

@@ -143,26 +143,20 @@ export default class UI {
 
     toggleUI(gameState, isActive = true) {
         for (let key in this.elements) {
-            // console.log("in elements loop")
-            // console.log(typeof this.elements[key])
             let element = this.elements[key]
             if (element.dataset !== undefined) {
-                // console.log("element has dataset")
-                // console.log(element.dataset)
                 if (element.dataset.gamestate !== undefined) {
-                    // console.log(element + "has gameState of " + element.dataset.gamestate)
-                    if (element.dataset.gamestate === gameState && isActive === true) {
+                    const gameStateArray = element.dataset.gamestate.split(' ')
+                    if (gameStateArray.includes(gameState) && isActive === true) {
                         this.show(element)
-                        // element.style.display = "block"
-
                     } else {
                         this.hide(element)
-                        // element.style.display = "none"
                     }
                 }
             }
         }
     }
+
 
 
 

@@ -150,6 +150,12 @@ window.addEventListener("load", function () {
     console.log(game.player)
     game.runIntro()
 
+    function checkGameState() {
+        console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
+        setTimeout(checkGameState, 1000)
+    }
+    checkGameState()
+
     // setTimeout(showEnemies, 10000)
 
 }) // end: window.addEventListener("load")
