@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Coiny&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Itim&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="./css/style.css" />
+
+    <title>🌭 Wieners From Heaven: Maple Syrup Edition 🇨🇦</title>
+  </head>
+  <body>
+    <div class="interface__super-nantendo" id="ui--super-nantendo">
+      <div class="game-screen" id="game-screen" data-ui="true">
+        <canvas
+          id="game-screen__canvas"
+          class="pixelated"
+          width="475"
+          height="270"
+          data-gamestate="play"
+        ></canvas>
+        <img
+          src="./images/ui--overlay-screen-border-02.svg"
+          class="game-screen__border"
+          id="game-screen-border"
+        />
+         
+        <div
+          id="game-screen__hud-overlay"
+          class="overlay hidden"
+          data-ui="true"
+          data-gamestate="play"
+        >
+          <div id="debug-panel" class="hidden">
+            <div id="debug-player-dx">player.dx = <span></span></div>
+            <div id="debug-player-speedX">player.speedX = <span></span></div>
+            <div id="debug-player-speedY">player.speedY = <span></span></div>
+          </div>
+
+          <div id="game-screen__ingame-overlay__hud" data-ui="true">
+            <div class="hud-left">
+              <div id="hud-player-stats">
+                <div id="hud-lives" class="pixelated">
+                  <img src="./images/nan-portrait-pixel-01.png" alt="" />
+                  <div id="lives"></div>
+                </div>
+                <div id="hud-health-meter">
+                  <span id="health"></span>
+                </div>
+              </div>
+
+              <div id="hud-score-stats">
+                <div id="score">0</div>
+                <div id="current-ranking"></div>
+                <div id="score-remaining" data-ui="true"></div>
+              </div>
+
+              <div id="hud-combo" data-ui="true">
+                <span>C</span><span>O</span><span>M</span><span>B</span
+                ><span>O</span>
+              </div>
+
+              <div id="wieners-collected" data-ui="true"></div>
+            </div>
+
+            <div id="hud-scene-stats" class="hud-right">
+              <div id="time-remaining" data-ui="true"></div>
+            </div>
+          </div>
+        </div>
+        <div
+          id="game-screen__banner-overlay"
+          class="overlay"
+          data-gamestate="play"
+        >
+          <div id="banner" data-ui="true"></div>
+        </div>
+
+        <div id="game-screen__menu-overlay" class="overlay" data-ui="true" data-gamestate="paused">
+          <!-- START: #menu-screen -->
+          <div
+            id="pause-menu--container"
+            class="ui-panel"
+            data-ui="true"
+            data-gamestate="paused startscene endscene"
+          >
+            <header><h2>Options</h2></header>
+            <ul>
+              <!-- <li>
+                <label for="master-volume">
+                  <img
+                    class="ui-icon"
+                    src="./images/ui--volume-icon.svg"
+                    alt="Music Volume"
+                  />
+                </label>
+                <div class="range-container">
+                  <input
+                    title="master-volume"
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="100"
+                    class="slider"
+                    id="volume-range"
+                  />
+                </div>
+              </li> -->
+              <li>
+                <label for="music-volume">
+                  <img
+                    class="ui-icon"
+                    src="./images/ui--music-icon.svg"
+                    alt="Music Volume"
+                  />
+                </label>
+                <div class="range-container">
+                  <input
+                    title="music-volume"
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="80"
+                    class="slider"
+                    id="music-range"
+                    data-ui="true"
+                  />
+                </div>
+              </li>
+              <li>
+                <label for="sfx-volume">
+                  <img
+                    class="ui-icon"
+                    src="./images/ui--sfx-icon.svg"
+                    alt="Sound Effects Volume"
+                /></label>
+                <div class="range-container">
+                  <input
+                    title="sfx-volume"
+                    type="range"
+                    min="1"
+                    max="100"
+                    value="80"
+                    class="slider"
+                    id="sfx-range"
+                  />
+                </div>
+              </li>
+            </ul>
+            <button id="resume-button" data-ui="true">Resume</button>
+
+            <div id="stop-button">
+              <div class="border">
+                <button>Stop</button>
+              </div>
+            </div>
+            `
+          </div>
+
+          <div
+            id="scene-start--container"
+            data-ui="true"
+            data-gamestate="startscene"
+          >
+            <div class="ui-panel">
+              <h2>Scene Start</h2>
+              <ul>
+                <li>Wieners caught: <span id="scene-wieners"></span></li>
+                <li>Score: <span id="scene-score"></span></li>
+                <li>
+                  Lucky Seagull Blessings: <span id="scene-blessings"></span>
+                </li>
+                <!-- <li>Rating: ⭐️ ⭐️ ⭐️</li> -->
+                <button id="next-scene-button">Next scene</button
+                ><br />
+                <button id="goto-shop-button">Shop at Tibbo's</button>
+              </ul>
+            </div>
+            <div id="excited-chicken" data-ui="true">
+              <img  
+                src="./images/wiener-chicken-01.png"
+                alt="an excited chicken"
+              />
+            </div>
+          </div>
+
+          <div
+            id="scene-end--container"
+            data-ui="true"
+            data-gamestate="endscene"
+          >
+            <div class="ui-panel">
+              <h2>Wiener, Wiener,<br />Chicken Diener!</h2>
+              <ul>
+                <li>Wieners caught: <span id="scene-wieners"></span></li>
+                <li>Score: <span id="scene-score"></span></li>
+                <li>
+                  Lucky Seagull Blessings: <span id="scene-blessings"></span>
+                </li>
+                <!-- <li>Rating: ⭐️ ⭐️ ⭐️</li> -->
+                <button id="next-scene-button">Next scene</button
+                ><br />
+                <button id="goto-shop-button">Shop at Tibbo's</button>
+              </ul>
+            </div>
+            <div id="excited-chicken" data-ui="true">
+              <img
+                src="./images/wiener-chicken-01.png"
+                alt="an excited chicken"
+              />
+            </div>
+          </div>
+          <!-- <div id="congrats-screen" class="ui-panel">
+            <header><h2>Next scene unlocked!</h2></header>
+            <p>
+              You have enough points to progress to the next scene! Keep
+              collecting for bonus items
+            </p>
+          </div>
+
+          <div id="sceneselect-screen" class="ui-panel">
+           
+          </div> -->
+        </div>
+
+        <div
+          id="game-screen__cutscene-overlay"
+          class="overlay"
+          data-ui="true"
+          data-gamestate="intro cutscene"
+          display="block"
+        >
+          <div
+            id="title-screen"
+            data-ui="true"
+            data-gamestate="title"
+            class="block"
+          >
+            <div>
+              <img src="./images/wfh-logo.webp" alt="" />
+              <div id="start-button" data-ui="true"><h2>Start</h2></div>
+            </div>
+          </div>
+
+          <div id="intro-screen" data-ui="true" data-gamestate="intro" class="hidden">
+            <div>
+              <img
+                id="popup-nan"
+                src="./images/nan-portrait-3d.webp"
+                alt=""
+                data-ui="true"
+                class="hidden character-portrait"
+              />
+              <div
+                class="dialog-panel itim-regular"
+                id="intro-dialog"
+                data-ui="true"
+              >
+                <div>
+                  My grandkids are coming for dinner now the once, but I had no
+                  time to get to the shop. So, I prayed for a miracle and
+                  wieners started falling from the sky! I need to catch as many
+                  as I can, while I avoid the gulls. Please help!
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="popup-screen"
+            data-ui="true"
+            class="hidden"
+            data-gamestate="popup"
+          >
+            <div>
+              <img
+                id="popup-tibbo"
+                src="./images/mr-tibbo-portrait-3d.webp"
+                alt=""
+                data-ui="true"
+                class="character-portrait"
+              />
+              <div
+                class="dialog-panel itim-regular"
+                id="popup-dialog"
+                data-ui="true"
+              >
+                <div>
+                  <p>
+                    It's raining scats and dogs out here! Get it? With the
+                    seagulls and the hot dogs and...
+                  </p>
+
+                  <p>
+                    Sorry, Mrs. Tibbo don't have no time for my foolishness,
+                    neither.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            id="shop-screen"
+            data-ui="true"
+            class="hidden"
+            data-gamestate="cutscene"
+          >
+            <div
+              class="dialog-panel itim-regular"
+              id="shop-dialog"
+              data-ui="true"
+            >
+              <div>You'll be drier than Mrs. Tibbo's cherry cake in that!</div>
+            </div>
+            <div class="shop-panel" id="item-rainbonnet">
+              <img
+                class="item-photo"
+                src="./images/shop/item_rainbonnet.webp"
+              />
+              <h2>Waterproof Rain Bonnet</h2>
+              <p>
+                Provides basic protection from rain and other precipitation.
+              </p>
+              <div class="price">5000 points</div>
+              <button class="buy-button">buy</button>
+            </div>
+          </div>
+
+          <!-- #menu-screen :END -->
+        </div>
+
+         <div
+          id="touch-controller-overlay"
+          class="overlay"
+          data-gamestate="play"
+          data-ui="true"
+        >
+          <div id="touchcontroller_left">
+        </div>
+        <div id="touchcontroller_right"></div>
+      </div>
+
+      
+      <div id="debug-menu--container" data-ui="true"></div>
+      <!-- <div id="controller-container"> -->
+      <div id="ui--virtual-controller" data-ui="true" data-current-state="">
+        <div id="ui--virtual-controller-buttons" style="">
+          <div id="virtual-controller--button-dpad" alt="" srcset="" />
+          <img
+            src="./images/ui--dpad-left.svg"
+            id="virtual-controller--button-dpad-left"
+            data-ui="true"
+            data-events="touchstart touchend pointerdown pointerup"
+            data-input-type="left"
+          />
+          <img
+            src="./images/ui--dpad-right.svg"
+            id="virtual-controller--button-dpad-right"
+            data-ui="true"
+            data-events="touchstart touchend pointerdown pointerup"
+            data-input-type="right"
+          />
+        </div>
+        <img
+          id="virtual-controller--button-primary"
+          class="touchable"
+          src="./images/ui--overlay-main-button-01.png"
+          data-ui="true"
+          data-events="touchstart touchend pointerdown pointerup"
+          data-input-type="up"
+          alt=""
+        />
+      </div>
+      <div id="ui--virtual-controller-menu-buttons">
+        <img
+          id="virtual-controller--button-select"
+          class="touchable"
+          src="./images/ui--controls--select-button-01.png"
+          data-ui="true"
+          data-events="touchstart touchend pointerdown pointerup"
+          alt=""
+        />
+        <img
+          id="virtual-controller--button-start"
+          class="touchable"
+          src="./images/ui--controls--start-button-01.png"
+          data-ui="true"
+          data-events="touchstart touchend pointerdown pointerup"
+          data-input-type="escape"
+          alt=""
+        />
+      </div>
+      <!-- </div> -->
+    </div>
+  </body>
+  <script type="module" src="./js/main.new.js"></script>
+</html>

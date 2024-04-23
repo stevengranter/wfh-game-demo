@@ -176,11 +176,11 @@ export default class InputHandler {
         switch (sourceElement) {
             case "touchcontroller_left":
                 this.left = isButtonPressed
-                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
+                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
                 break
             case "touchcontroller_right":
                 this.right = isButtonPressed
-                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
+                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
                 break
             default:
                 break

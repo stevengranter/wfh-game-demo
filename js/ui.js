@@ -149,6 +149,7 @@ export default class UI {
                     const gameStateArray = element.dataset.gamestate.split(' ')
                     if (gameStateArray.includes(gameState) && isActive === true) {
                         this.show(element)
+
                     } else {
                         this.hide(element)
                     }
