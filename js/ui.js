@@ -52,6 +52,13 @@ export default class UI {
             this.updateTextContent("time-remaining", data['time-remaining'])
         } else if (data.lives !== undefined) {
             this.updateTextContent("lives", data.lives)
+        } else if (data["current-ranking"] !== undefined) {
+            this.updateTextContent("current-ranking", data["current-ranking"])
+            // this.show(this.elements.banner)
+            // this.updateTextContent("banner", data["current-ranking"])
+            // setTimeout(() => {
+            //     this.hide(this.elements.banner)
+            // }, 2000)
         }
     }
 

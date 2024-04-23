@@ -56,7 +56,7 @@ export class Enemy extends Sprite {
     resetProjectileVelocity() {
         this.projectile.velocityX = 0
         this.projectile.velocityY = 0
-        console.log("projectile velocity reset")
+        // console.log("projectile velocity reset")
     }
 
     // Method to draw the enemy sprite (by calling super(context)) and then drawing the projectile

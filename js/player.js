@@ -65,6 +65,8 @@ export default class Player extends Sprite {
         this.frameTimer = 0
         this.frameInterval = 1000 / this.fps
 
+
+
         document.addEventListener('playerDeath', () => {
             console.log(`Player is dead!`) // ealth!"
 
@@ -98,18 +100,19 @@ export default class Player extends Sprite {
         // this.notify("player.currentState = " + this.currentState)
     }
 
+    setAltConfig() {
+
+    }
+
 
     startNewLife() {
         this.resetPlayerPosition()
         this.canvasFilter = "none"
-        setTimeout(() => {
-            this.stats.isAlive = true
-            this.stats.health = this.stats.healthMax
-            // console.log(this.stats.healthMax)
-            // this.stats.health = this.stats.healthMax
-            this.setState(playerStates.STANDING_LEFT)
-        }, 500)
-
+        this.stats.health = this.stats.healthMax
+        // console.log(this.stats.healthMax)
+        // this.stats.health = this.stats.healthMax
+        this.setState(playerStates.STANDING_LEFT)
+        this.stats.isAlive = true
     }
 
     resetPlayerPosition() {
@@ -117,7 +120,7 @@ export default class Player extends Sprite {
         this.dx = (CANVAS_WIDTH - this.dWidth) / 2
         this.dy = 0 - this.dHeight
         this.velocityX = 0
-        this.velocityY = -50
+        this.velocityY = 150
 
     }
 

@@ -37,6 +37,10 @@ export default class ScoreKeeper extends Observable {
         return this.#comboCounter
     }
 
+    get totalScore() {
+        return this.#sceneScores.reduce((accumulator, currentScore) => accumulator + currentScore, 0)
+    }
+
     calculateCombo(data) {
         // console.log(data)
         if (data.tag === "wiener") {

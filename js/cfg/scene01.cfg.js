@@ -25,20 +25,20 @@ const getScene01Layer_SpriteConfig = () => {
             {
                 startTime: 5000,
                 type: "spawner",
-                objectType: "wiener",
-                totalSpawnCount: 25,
-                spawningDuration: 5,
+                objectType: "gull",
+                totalSpawnCount: 90,
+                spawningDuration: 30,
 
             },
             {
-                startTime: 10000,
+                startTime: 6000,
                 type: "spawner",
                 objectType: "wiener",
                 totalSpawnCount: 100,
-                spawningDuration: 5
+                spawningDuration: 20
             },
             {
-                startTime: 10000,
+                startTime: 60000,
                 type: "spawner",
                 objectType: "wiener",
                 totalSpawnCount: 500,
@@ -62,7 +62,7 @@ const scene00Layer_Sprite = new Layer({ ...getScene01Layer_SpriteConfig() })
 
 export const scene01Config = {
     index: 0,
-    name: "Cavendish",
+    name: "Beach Sheds",
     // playerBounds: {
     //     topLeft: { x: 0, y: 0 },
     //     topRight: { x: CANVAS_WIDTH, y: 0 },

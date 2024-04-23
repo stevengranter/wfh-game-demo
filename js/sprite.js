@@ -159,6 +159,10 @@ export default class Sprite {
         if (this.canvasFilter) {
             context.filter = this.canvasFilter
         }
+
+        if (this.altAppearance) {
+            this.imageObject = this.altSprite.imageObject
+        }
         // Draw the sprite on the canvas context
         context.drawImage(
             this.imageObject,       // Image to draw
@@ -176,6 +180,7 @@ export default class Sprite {
             // console.log(this.childSprite)
             this.childSprite.draw(context)
         }
+        context.filter = "none"
     }
 
     // Method to update Sprite position on canvas

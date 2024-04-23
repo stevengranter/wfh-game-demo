@@ -15,6 +15,7 @@ export const gameStateKeys = {
     TITLE: "title",
     START: "start",
     INTRO: "intro",
+    POPUP: "popup",
     PLAY: "play",
     PAUSED_BY_PLAYER: "paused-by-player",
     SCENE_END: "scene-end",
@@ -34,6 +35,7 @@ export class GameWorld extends Observable {
     #gameState
     #scenes
     #currentScene
+    #currentRanking
     #timeRemaining
     #isNextSceneReady = false
 
@@ -46,6 +48,7 @@ export class GameWorld extends Observable {
         this.#currentScene = {
             intervalId: null
         }
+        this.#currentRanking = 0
         this.#gameState = gameStateKeys.TITLE
         this.#scenes = []
 
@@ -91,6 +94,15 @@ export class GameWorld extends Observable {
 
     get scenes() {
         return this.#scenes
+    }
+
+    get currentRanking() {
+        return this.#currentRanking
+    }
+
+    set currentRanking(value) {
+        this.#currentRanking = value
+        this.notify({ 'current-ranking': this.#currentRanking })
     }
 
     // Getter for private static #deltaTime variable 
@@ -158,7 +170,19 @@ export class GameWorld extends Observable {
         if (!this.player.stats.isAlive) {
             // this.player.stats.isAlive = false
             this.player.setState(playerStates.DEAD)
-            console.log("Player is Dead")
+            // console.log("Player is Dead")
+            if (this.currentScene.name === "Beach Sheds") {
+                this.isPaused = true
+                this.gameState = gameStateKeys.POPUP
+                this.pauseGame()
+                this.runPopup()
+            } else {
+                setTimeout(() => {
+                    console.log(this.player.currentState)
+                    this.player.currentState.exit().bind(this.player)
+                }, 2000)
+
+            }
         }
 
 
@@ -173,7 +197,7 @@ export class GameWorld extends Observable {
         scene.update(GameWorld.#deltaTime, this.input)
 
         // Detect collisions by calling CollisionDetector (using AABB algorithm)
-        if (this.player.stats.isAlive) {
+        if (this.player.stats.isAlive === true) {
             this.detectCollisions()
             this.detectProjectileCollisions()
             this.detectPlayerByEnemies()
@@ -217,7 +241,7 @@ export class GameWorld extends Observable {
             // console.log("No enemies detected")
         }
         enemies.forEach((enemy) => {
-            if (enemy.detectPlayer({ 'dx': this.player.dx, 'dy': this.player.dy }, 150)) {
+            if (enemy.detectPlayer({ 'dx': this.player.dx, 'dy': this.player.dy }, 200)) {
                 enemy.launchProjectile({ velocityX: 10, velocityY: getRandomInt(100, 300) })
             }
         })
@@ -258,7 +282,8 @@ export class GameWorld extends Observable {
         superNantendo.classList.add("teal-bg")
         // canvas.classList.remove("hidden")
 
-        this.currentScene = game.scenes[0]
+        this.currentScene = game.scenes[1]
+
 
         // console.log(this.currentScene)
 
@@ -416,8 +441,9 @@ export class GameWorld extends Observable {
 
     startScene = () => {
 
-        // TODO: fix
+        // TODO: fix, temporarily running scene1 first
         this.isSceneOver = false
+        // this.loadScene(scene01Config)
         const sceneIndex = this.player.stats.progress
         this.currentScene = this.#scenes[sceneIndex]
         console.log(`ℹ️ %ccurrent scene is: ${sceneIndex}. ${this.currentScene.name}`, `color:blue;`)
@@ -453,12 +479,13 @@ export class GameWorld extends Observable {
         }
 
         const placesPlayer = () => {
-            //  this.player.stats.lives = 3
             this.player.stats.score = 0
             this.player.stats.healthMax = 100
             this.player.stats.health = 100
             this.player.stats.wienersCollected = 0
             this.player.stats.isAlive = true
+            this.currentRanking = null
+            this.player.stats.scoreKeeper.comboCounter = 0
 
         }
 
@@ -470,14 +497,24 @@ export class GameWorld extends Observable {
         }
 
         const checkGoal = () => {
-            // console.log("running checkGoal()")
+
             if (!this.isSceneOver) {
-                if (this.player.stats.score >= this.sceneGoals.bronze.value) {
-                    console.log("You won! ⭐️")
-                    this.endScene()
+                if ((this.player.stats.score >= this.sceneGoals.bronze.value) && (this.currentRanking < 1)) {
+                    console.log(`%cYou won! ⭐️`, `color:orange`)
+                    this.currentRanking++
+                    this.notify({ 'current-ranking': '⭐️' })
+                } else if ((this.player.stats.score >= this.sceneGoals.silver.value) && (this.currentRanking === 1)) {
+                    console.log(`%cYou won! ⭐️⭐️`, `color:orange`)
+                    this.currentRanking++
+                    this.notify({ 'current-ranking': '⭐️⭐️' })
+                } else if ((this.player.stats.score >= this.sceneGoals.gold.value) && (this.currentRanking === 2)) {
+                    console.log(`%cYou won! ⭐️⭐️⭐️`, `color: orange`)
+                    this.currentRanking++
+                    this.notify({ 'current-ranking': '⭐️⭐️⭐️' })
                 }
             }
         }
+
 
         const notifyTimeRemaining = () => {
             // console.log("running notifyTimeRemaining")
@@ -486,8 +523,8 @@ export class GameWorld extends Observable {
                 this.notify({ "time-remaining": Math.floor(this.#timeRemaining) })
                 if (this.#timeRemaining <= 0) {
                     console.log("Out of Time ⌛️")
-                    clearInterval(sceneTimeIntervalId)
-                    clearInterval(goalCheckIntervalId)
+                    clearInterval(this.sceneTimeIntervalId)
+                    clearInterval(this.goalCheckIntervalId)
                     this.gameState = gameStateKeys.SCENE_END
                     this.endScene()
                 }
@@ -513,6 +550,48 @@ export class GameWorld extends Observable {
         setTimeout(curtainUp, 1000)
     }
 
+    runPopup() {
+
+        this.ui.toggleUI("cutscene")
+
+
+
+        this.ui.hide(this.ui.elements.titleScreen)
+        this.ui.hide(this.ui.elements.shopScreen)
+        this.ui.show(this.ui.elements.popupScreen)
+        this.ui.show(this.ui.elements.popupTibbo)
+
+
+        setTimeout(() => { this.ui.elements.popupDialog.style.transform = "translateY(0)" }, 500)
+        setTimeout(() => { this.ui.elements.popupTibbo.style.transform = "translateY(0px)" }, 700)
+
+        this.currentScene.draw(this.ctx, false, true, true)
+        setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
+        const dialogText = document.querySelector('#popup-dialog div').textContent
+        typeWriter('popup-dialog', dialogText, 25)
+        // console.log("player.stats.isAlive: " + this.player.stats.isAlive)
+
+
+        document.getElementById("popup-dialog").addEventListener("pointerdown", () => {
+            const rainGearPrice = this.player.stats.totalScore + this.player.stats.scoreKeeper.currentScore
+            console.log(rainGearPrice)
+            let dialogText = `Looks like you could use that rain gear. I can sell it to you for ${rainGearPrice} points.`
+            typeWriter('popup-dialog', dialogText, 25)
+            this.player.altAppearance = true
+
+
+            setTimeout(() => { this.ui.elements.popupDialog.style.transform = "translateY(400px)" }, 500)
+            setTimeout(() => { this.ui.elements.popupTibbo.style.transform = "translateY(475px)" }, 700)
+            setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0, 0, 0.1) }, 1000)
+            setTimeout(() => {
+                this.startScene()
+                this.player.stats.hasBuff = true
+                this.player.startNewLife()
+
+            }, 2500)
+        }, { once: true })
+
+    }
 
     runIntro() {
 
@@ -537,8 +616,12 @@ export class GameWorld extends Observable {
         setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(0px)" }, 700)
 
         this.loadScene(scene00Config)
+
+
+        // TODO: temporary disable to test scene01
         const currentSceneIndex = this.player.stats.progress
         this.currentScene = this.#scenes[currentSceneIndex]
+        this.currentScene = this.#scenes[0]
 
         this.currentScene.draw(this.ctx, false, true, true)
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
@@ -560,6 +643,7 @@ export class GameWorld extends Observable {
         this.ui.hide(this.ui.elements.titleScreen)
         this.ui.show(this.ui.elements.shopScreen)
         this.ui.hide(this.ui.elements.introScreen)
+        this.ui.hide(this.ui.elements.popupScreen)
         // console.log(this.ui)
         let dialogText = document.querySelector('#shop-dialog div').textContent
         typeWriter('shop-dialog', dialogText, 25)
@@ -602,6 +686,9 @@ export class GameWorld extends Observable {
                     break
                 case gameStateKeys.LEVEL_END:
                     this.ui.toggleUI("level-end")
+                    break
+                case gameStateKeys.POPUP:
+                    this.ui.toggleUI("popup")
                     break
                 default:
                     console.warn("No UI defined for gamestate: " + this.#gameState)

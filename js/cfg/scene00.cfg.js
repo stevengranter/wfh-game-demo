@@ -92,15 +92,15 @@ export const scene00Config = {
     goals: {
         gold: {
             type: "score",
-            value: 10000
+            value: 5000
         },
         silver: {
             type: "score",
-            value: 5000
+            value: 2500
         },
         bronze: {
             type: "score",
-            value: 2500
+            value: 500
         }
     }
 

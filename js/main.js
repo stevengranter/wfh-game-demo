@@ -146,6 +146,8 @@ window.addEventListener("load", function () {
         console.dir(`Enemies: ${game.spawner.objectPools['gull'].enemies}`)
     }
 
+    console.log(game.ui)
+    console.log(game.player)
     game.runIntro()
 
     // setTimeout(showEnemies, 10000)

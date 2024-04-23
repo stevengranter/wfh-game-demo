@@ -204,9 +204,6 @@ export class Dead extends PlayerState {
         this.player.weight = 0
         this.player.velocityX = 0
         this.player.velocityY = -150
-        setTimeout(() => {
-            this.exit()
-        }, 1200)
     }
 
     exit() {

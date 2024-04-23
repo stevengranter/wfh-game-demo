@@ -64,6 +64,7 @@
 
             <div id="hud-score-stats">
               <div id="score">0</div>
+              <div id="current-ranking"></div>
               <div id="score-remaining" data-ui="true"></div>
             </div>
 
@@ -226,16 +227,27 @@
                 </div>
               </div>
           </div>
-
-          
-          <!-- <div id="endscene-screen" class="ui-panel">
-            <header><h2>scene end</h2></header>
-            <p></p>
-          </div>
-          <div id="gameover-screen" class="ui-panel">
-            <header><h2>Game Over</h2></header>
-          </div> -->
         </div>
+
+      <div id="popup-screen" data-ui="true" class="hidden" data-gamestate="popup">
+      <div>
+              <img
+                id="popup-tibbo"
+                src="./images/mr-tibbo-portrait-3d.webp"
+                alt=""
+                data-ui="true"
+                class="character-portrait"
+              />
+              <div class="dialog-panel itim-regular" id="popup-dialog" data-ui="true">
+                <div>
+                  <p>It's raining scats and dogs out here! Get it? 
+                    With the seagulls and the hot dogs and...
+                    <p>Sorry, Mrs. Tibbo don't have no time for my 
+                      foolishness, neither.</p>
+                </div>
+              </div>
+          </div>
+      </div>
 
         <div id="shop-screen" data-ui="true" class="hidden" data-gamestate="cutscene">
           <div class="dialog-panel itim-regular" id="shop-dialog" data-ui="true">

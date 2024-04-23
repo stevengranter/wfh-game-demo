@@ -19,7 +19,7 @@ export default class Stats extends Observable {
         this.scoreKeeper = new ScoreKeeper()
         this.#score = this.scoreKeeper.currentScore
         // console.log(this.#score)
-
+        this.hasBuff = false
         this.deathEvent = new CustomEvent('playerDeath', {
             detail: {
                 message: 'Player has died! 💀',
@@ -33,7 +33,12 @@ export default class Stats extends Observable {
         // console.log("playerstats has received", data)
         if (data.health != undefined) {
             // console.log("health: " + data.health)
-            this.health += data.health
+            if (data.health < 0 && this.hasBuff === true) {
+                this.health -= 5
+            } else {
+                this.health += data.health
+            }
+
         }
         if (data.points != undefined) {
             // console.log("points:" + data.points)
@@ -83,6 +88,10 @@ export default class Stats extends Observable {
         this.#score = this.scoreKeeper.currentScore
         // console.log(this.#score)
         this.notify({ score: this.scoreKeeper.currentScore })
+    }
+
+    get totalScore() {
+        return this.scoreKeeper.totalScore
     }
 
     get wienersCollected() {
