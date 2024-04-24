@@ -57,6 +57,14 @@ export function toCamelCase(str) {
     })
 }
 
+// Function to convert snake case to PascalCase
+export function snakeToPascal(snake) {
+    return snake.toLowerCase()
+        .split('_')
+        .map(segment => segment.charAt(0).toUpperCase() + segment.slice(1))
+        .join('')
+}
+
 export function toKebabCase(str) {
     return str
         // Remove all non-word characters (like punctuation) and replace with a hyphen

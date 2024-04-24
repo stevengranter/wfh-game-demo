@@ -5,7 +5,9 @@ import CollisionDetector from "./collision-detector.js"
 import Observable from "./observable.js"
 import { playerStates } from "./player-state.js"
 import { GameScene } from "./game-scene.js"
-import { typeWriter, animateBlur, wait, getRandomInt } from "./utils.js"
+import GameState from "./game-state.js"
+import { Title, Start, Intro, Popup, Play, Paused, EndScene, StartScene, GameOver, End, Credits } from "./game-state.js"
+import { typeWriter, animateBlur, wait, getRandomInt, snakeToPascal } from "./utils.js"
 import { Enemy } from "./enemy.js"
 import { scene00Config } from "./cfg/scene00.cfg.js"
 import { scene01Config } from "./cfg/scene01.cfg.js"
@@ -57,9 +59,23 @@ export default class GameWorld extends Observable {
         this.#isReady = this.#validateArguments(player, ui, input)
 
 
+        // this.states = []
 
+        // Object.entries(gameStateKeys).forEach(([key, value]) => {
+        //     // Convert the value to PascalCase for the class name
+        //     const className = snakeToPascal(value)
+        //     // Dynamically import the class using the transformed name
+        //     // const StateClass = window[className]
+        //     if (!className) {
+        //         throw new Error(`No class found for state: ${value} as ${className}`)
+        //     }
+        //     // Instantiate the class and store it with the key name
+        //     this.states.push(new className(this))
+        // })
+
+        // this.states = [new Title(this), new Start(this), new Intro(this), new Popup(this), new Play(this), new Paused(this), new EndScene(this), new StartScene(this), new GameOver(this), new End(this), new Credits()]
         // #gameState is initialized to "title" for the title screen
-        this.#gameState = gameStateKeys.TITLE
+        // this.#gameState = gameStateKeys.TITLE
 
         // I GameWorldlize an empty array to score the game's scenes
         this.#scenes = []
@@ -81,6 +97,8 @@ export default class GameWorld extends Observable {
 
         // Freeze the instance to prevent further modification
         GameWorld.#instance = Object.freeze(this)
+
+        console.dir(this)
     }
 
     // Method sets the #instance static property if it hasn't been defined,
@@ -227,9 +245,9 @@ export default class GameWorld extends Observable {
         wait(200).then(() => {
             window.addEventListener("keydown", (e) => {
                 if (e.key === "Escape") {
-                    game.isPaused = !game.isPaused
-                    game.gameState = gameStateKeys.PAUSED_BY_PLAYER
-                    game.pauseGame()
+                    this.isPaused = !this.isPaused
+                    this.thisState = thisStateKeys.PAUSED_BY_PLAYER
+                    this.pauseGame()
                 }
             })
         })

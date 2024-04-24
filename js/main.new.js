@@ -47,7 +47,9 @@ window.addEventListener("load", function () {
     const input = new InputHandler(ui)
 
     // 🌎 Initialize Game World, add references to game canvas element, player, ui and input
+
     const game = new GameWorld("game-screen__canvas", player, ui, input)
+
 
     // Set the game state to "title" to show/hide relavent UI elements
     console.log(game.gameState)
@@ -55,11 +57,11 @@ window.addEventListener("load", function () {
 
 
     // TODO: Remove, only for DEBUG
-    function checkGameState() {
-        console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
-        setTimeout(checkGameState, 1000)
-    }
-    checkGameState()
+    // function checkGameState() {
+    //     console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
+    //     setTimeout(checkGameState, 1000)
+    // }
+    // checkGameState()
     // end TODO
 
     // --- SPAWNER and OBJECT POOLS --- //
