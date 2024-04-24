@@ -20,6 +20,7 @@ import GameWorld from "./game-world.new.js"
 import UI from "./ui.js"
 import Player from "./player.js"
 import InputHandler from "./input-handler.js"
+import { gameStateKeys } from "./constants.js"
 
 
 // Event listener to wait for document to load before running scripts
@@ -37,31 +38,54 @@ window.addEventListener("load", function () {
     player.loadSprite()
     // console.log(player)
 
+
     // 🖥️ Initialize UI elements
-    const ui = new UI(['data-ui', 'data-binding'], player)
+    const ui = new UI(['data-ui'], player)
+
 
     // 🕹️ Initialize Input handler
     const input = new InputHandler(ui)
 
-    // 🌎 Initialize Game World, add references to player, ui and input
+    // 🌎 Initialize Game World, add references to game canvas element, player, ui and input
     const game = new GameWorld("game-screen__canvas", player, ui, input)
 
-    // --- SPAWNER and OBJECT POOL --- //
-
-    // 🏊🏼‍♂️ Create spawner and register object pools for each object with spawner
-    const spawner = new Spawner()
-
-    // console.log("🚀 ~  game.spawner:", game.spawner)
+    // Set the game state to "title" to show/hide relavent UI elements
+    console.log(game.gameState)
+    game.ui.toggleUI(game.gameState)
 
 
-    // 🌭 Create wieners object pool (config imported from cfg/spawners.cfg.js)
-    game.spawner.registerObjectPool("wiener", getWienerConfig)
+    // TODO: Remove, only for DEBUG
+    function checkGameState() {
+        console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
+        setTimeout(checkGameState, 1000)
+    }
+    checkGameState()
+    // end TODO
 
-    // 🐦 Create gull object pool (config imported from cfg/spawners.cfg.js)
-    game.spawner.registerObjectPool("gull", getGullConfig, getGullBlessingConfig)
+    // --- SPAWNER and OBJECT POOLS --- //
 
-    // 💩 Create gull blessing object pool (config imported from cfg/spawners.cfg.js)
-    // spawner.registerObjectPool("blessing", getGullBlessingConfig)
+    // Verify if game.spawner exists, then register object pools to spawner
+    if (game.spawner instanceof Spawner) {
+
+        // 🌭 Create wieners object pool (config imported from cfg/spawners.cfg.js)
+        game.spawner.registerObjectPool("wiener", getWienerConfig)
+
+        // 🐦 Create gull object pool (config imported from cfg/spawners.cfg.js)
+        game.spawner.registerObjectPool("gull", getGullConfig, getGullBlessingConfig)
+
+    } else {
+        throw new Error("game.spawner is not configured")
+
+    }
+
+    // Preload the first scene before the user presses the Start button
+    try {
+        game.loadScene(scene00Config)
+    } catch {
+        throw new Error("Problem preloading scene")
+    }
+
+
 
     // --- UI and DATA BINDING --- //
 
@@ -86,48 +110,34 @@ window.addEventListener("load", function () {
 
     }
 
-    // Add event listener to start button
-    // console.log(ui)
-    const startButton = ui.elements.startButton
-    startButton.addEventListener("click", function (e) {
-        game.loop(0)
+
+    // Add event listener to start button which calls the startgame() method
+    const startButton = ui.uiElements.startButton
+    startButton.addEventListener("pointerdown", function (e) {
+        console.log("START button clicked")
+        game.startGame()
     }.bind(game))
 
-    wait(200).then(() => {
-        window.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") {
-                game.isPaused = !game.isPaused
-                game.gameState = gameStateKeys.PAUSED_BY_PLAYER
-                game.pauseGame()
-            }
-        })
-    })
 
+    // ui.toggleUI("cutscene")
+    // // ui.hide(ui.elements.banner)
 
+    // function showEnemies() {
+    //     console.log(game.spawner)
+    //     console.dir(`Enemies: ${game.spawner.objectPools['gull'].enemies}`)
+    // }
 
+    // console.dir(game)
 
-    // initObservers()
-    // readyScene00()
+    // // game.runIntro()
 
-    ui.toggleUI("cutscene")
-    // ui.hide(ui.elements.banner)
+    // game.loop()
 
-    function showEnemies() {
-        console.log(game.spawner)
-        console.dir(`Enemies: ${game.spawner.objectPools['gull'].enemies}`)
-    }
-
-    console.dir(game)
-
-    // game.runIntro()
-
-    game.loop()
-
-    function checkGameState() {
-        console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
-        setTimeout(checkGameState, 1000)
-    }
-    checkGameState()
+    // function checkGameState() {
+    //     console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
+    //     setTimeout(checkGameState, 1000)
+    // }
+    // checkGameState()
 
     // setTimeout(showEnemies, 10000)
 

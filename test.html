@@ -236,15 +236,27 @@
            
           </div> -->
         </div>
+       
+          <div
+          id="touch-controller-overlay"
+          class="overlay"
+          data-gamestate="play"
+          data-ui="true"
+        >
+          <div id="touchcontroller_left">
+        </div>
+        <div id="touchcontroller_right"></div>
+      </div>
 
         <div
           id="game-screen__cutscene-overlay"
           class="overlay"
           data-ui="true"
-          data-gamestate="intro cutscene"
+          data-gamestate="intro cutscene title"
           display="block"
         >
-          <div
+         
+        <div
             id="title-screen"
             data-ui="true"
             data-gamestate="title"
@@ -255,7 +267,6 @@
               <div id="start-button" data-ui="true"><h2>Start</h2></div>
             </div>
           </div>
-
           <div id="intro-screen" data-ui="true" data-gamestate="intro" class="hidden">
             <div>
               <img
@@ -263,7 +274,7 @@
                 src="./images/nan-portrait-3d.webp"
                 alt=""
                 data-ui="true"
-                class="hidden character-portrait"
+                class="character-portrait"
               />
               <div
                 class="dialog-panel itim-regular"
@@ -344,16 +355,7 @@
           <!-- #menu-screen :END -->
         </div>
 
-         <div
-          id="touch-controller-overlay"
-          class="overlay"
-          data-gamestate="play"
-          data-ui="true"
-        >
-          <div id="touchcontroller_left">
-        </div>
-        <div id="touchcontroller_right"></div>
-      </div>
+       
 
       
       <div id="debug-menu--container" data-ui="true"></div>

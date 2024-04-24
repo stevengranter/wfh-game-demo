@@ -104,7 +104,11 @@ export default class Layer {
     drawPlayer(context) {
         if (this.isPlayerLayer === true) {
             try { this.player.draw(context) }
-            catch { console.error(`drawPlayer: this.player is ${this.player}`) }
+            catch {
+                // console.error(`drawPlayer: this.player is ${this.player}`)
+                console.log("drawPlayer error:")
+                console.dir(this.player)
+            }
 
         }
     }
@@ -126,7 +130,8 @@ export default class Layer {
         if (!this.imageObject) return
 
         if (this.imageObject) {
-            if (this.filter !== "none") {
+            if (this.filter !== "none" && this.filter !== undefined) {
+                console.log(this.filter)
                 context.filter = this.filter
             }
             // console.log(this.imageObject)

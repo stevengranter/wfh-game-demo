@@ -5,7 +5,7 @@ import CollisionDetector from "./collision-detector.js"
 import Observable from "./observable.js"
 import { playerStates } from "./player-state.js"
 import { GameScene } from "./game-scene.js"
-import { typeWriter, animateBlur, getRandomInt } from "./utils.js"
+import { typeWriter, animateBlur, wait, getRandomInt } from "./utils.js"
 import { Enemy } from "./enemy.js"
 import { scene00Config } from "./cfg/scene00.cfg.js"
 import { scene01Config } from "./cfg/scene01.cfg.js"
@@ -31,12 +31,12 @@ export default class GameWorld extends Observable {
     // Declare a static private variable to hold the instance
     static #instance
     static #deltaTime
-    static #isReady
+    #isReady
 
     // Declare private properties (descriptions provided in constructor comments)
-    static #player
-    static #ui
-    static #input
+    #player
+    #ui
+    #input
     #currentScene
     #currentRanking
     #gameState
@@ -50,16 +50,18 @@ export default class GameWorld extends Observable {
             throw new Error("You can only create one instance of GameWorld!")
         }
 
-        // set #isReady flag if player, ui, and input are valid arguments
-        GameWorld.#isReady = GameWorld.validateArguments(player, ui, input)
-
         // Call super method to inherit Observable class props and methods
         super()
+
+        // set #isReady flag if player, ui, and input are valid arguments
+        this.#isReady = this.#validateArguments(player, ui, input)
+
+
 
         // #gameState is initialized to "title" for the title screen
         this.#gameState = gameStateKeys.TITLE
 
-        // Initialize an empty array to score the game's scenes
+        // I GameWorldlize an empty array to score the game's scenes
         this.#scenes = []
 
         // Initialize the #currentScene.intervalId to null
@@ -71,8 +73,8 @@ export default class GameWorld extends Observable {
         // (one of: ⭐️ || ⭐️⭐️ || ⭐️⭐️⭐️)
         this.#currentRanking = 0
 
-        // call initializeCanvas static method to set canvas and context
-        GameWorld.initializeCanvas(canvasId)
+        // call initializeCanvas method to set canvas and context
+        this.initializeCanvas(canvasId)
 
         // create instance of spawner, store in spawner property
         this.spawner = new Spawner()
@@ -92,30 +94,31 @@ export default class GameWorld extends Observable {
 
     // Method validates the arguments passed to the GameWorld constructor in
     // getInstance() method
-    static validateArguments(player, ui, input) {
+    #validateArguments(player, ui, input) {
         if (!(player instanceof Player)) {
             throw new Error("The provided 'player' is not an instance of Player class")
         } else {
-            GameWorld.#player = player
+            this.#player = player
         }
         if (!(ui instanceof UI)) {
             throw new Error("The provided 'ui' is not an instance of UI class")
         } else {
-            GameWorld.#ui = ui
+            this.#ui = ui
         }
         if (!(input instanceof InputHandler)) {
             throw new Error("The provided 'input' is not an instance of Input class")
         } else {
-            GameWorld.#input = input
+            this.#input = input
         }
     }
 
-    // Static method to initialize canvas and context(ctx) properties,
+    // Method to initialize canvas and context(ctx) properties,
     // throws an error if canvasId passed isn't valid
-    static initializeCanvas(canvasId) {
+    initializeCanvas(canvasId) {
         try {
             this.canvas = document.getElementById(canvasId)
             this.ctx = this.canvas.getContext("2d")
+            console.log(this)
             return true
         } catch {
             throw new Error("The provided canvasId is not a canvas element")
@@ -138,6 +141,25 @@ export default class GameWorld extends Observable {
     set gameState(gameState) {
         this.#gameState = gameState
         this.notify({ gameState: this.#gameState })
+    }
+
+    // Getter for player property
+    // (No setter as it shouldn't be modified from the outside)
+
+    get player() {
+        return this.#player
+    }
+    // Getter for ui property
+    // (No setter as it shouldn't be modified from the outside)
+
+    get ui() {
+        return this.#ui
+    }
+    // Getter for input property
+    // (No setter as it shouldn't be modified from the outside)
+
+    get input() {
+        return this.#input
     }
 
     // Getter/setter for private #currentScene property
@@ -201,10 +223,44 @@ export default class GameWorld extends Observable {
         }
     }
 
+    initializeEventListeners() {
+        wait(200).then(() => {
+            window.addEventListener("keydown", (e) => {
+                if (e.key === "Escape") {
+                    game.isPaused = !game.isPaused
+                    game.gameState = gameStateKeys.PAUSED_BY_PLAYER
+                    game.pauseGame()
+                }
+            })
+        })
+    }
+
 
     // Method to start the game (called when pressing the Start button)
     startGame() {
         console.log("in startGame() method")
+        this.gameState = gameStateKeys.START
+        this.ui.toggleUI(this.gameState)
+        if (!this.#isNextSceneReady) runLoadingScreen()
+
+        const currentSceneIndex = 0
+        this.currentScene = this.#scenes[currentSceneIndex]
+        this.currentScene = this.#scenes[0]
+
+        console.log(this.currentScene)
+
+        this.initializeEventListeners()
+        console.log(this.scenes)
+        this.fadeInScene()
+        this.runIntro()
+    }
+
+
+    // Method to fade in the scene
+
+    fadeInScene() {
+        this.currentScene.draw(this.ctx)
+        setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
     }
 
     // Method to pause the game
@@ -216,6 +272,20 @@ export default class GameWorld extends Observable {
     // (after Start button is pressed, before scene starts)
     runIntro() {
         console.log("in runIntro() method")
+        this.gameState = gameStateKeys.INTRO
+        this.ui.toggleUI(this.gameState)
+
+        console.log(this.ui)
+        setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
+        setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(0)" }, 700)
+
+    }
+
+    runLoadingScreen() {
+        while (!this.isNextSceneReady) {
+            console.log("Please wait - loading...")
+        }
+        console.log("in runLoadingScreen() method")
     }
 
     // Method to start a game scene
@@ -236,11 +306,10 @@ export default class GameWorld extends Observable {
 
     // ♾️ START: THE MAIN GAME LOOP
     loop(timeStamp, scene = this.currentScene) {
-        console.log(GameWorld.#player)
+        console.log(this.#player)
     }
 
-    // ♾️ END: THE MAIN GAME LOOP
-
+    // ♾️ END: THE MAIN GAME LOO
 
 
 }  // 🏁 END of GameScene class declaration

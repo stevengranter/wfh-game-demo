@@ -147,11 +147,18 @@ export default class UI {
             if (element.dataset !== undefined) {
                 if (element.dataset.gamestate !== undefined) {
                     const gameStateArray = element.dataset.gamestate.split(' ')
+                    // console.log(gameStateArray)
                     if (gameStateArray.includes(gameState) && isActive === true) {
+                        // console.log("now showing: ", element.id)
+
                         this.show(element)
+                        element.style = "pointer-events:auto" // TODO: 
 
                     } else {
+                        // console.log("now hiding: ", element.id)
                         this.hide(element)
+                        element.style = "pointer-events:none" // TODO: 
+
                     }
                 }
             }
