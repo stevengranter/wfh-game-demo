@@ -57,11 +57,11 @@ window.addEventListener("load", function () {
 
 
     // TODO: Remove, only for DEBUG
-    function checkGameState() {
-        console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
-        setTimeout(checkGameState, 1000)
-    }
-    checkGameState()
+    // function checkGameState() {
+    //     console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
+    //     setTimeout(checkGameState, 1000)
+    // }
+    // checkGameState()
     // end TODO
 
     // --- SPAWNER and OBJECT POOLS --- //
