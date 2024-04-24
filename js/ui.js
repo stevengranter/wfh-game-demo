@@ -36,8 +36,8 @@ export default class UI {
 
 
     receiveUpdate(data, sender) {
-
-        // console.log(sender + " sent data: ")
+        console.log("ui received:")
+        console.log(sender + " sent data: ")
         // console.log(data)
         // Checking for undefined here instead of falsey values, as we want to 
         // still update if the value is equal to 0

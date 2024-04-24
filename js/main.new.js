@@ -49,19 +49,19 @@ window.addEventListener("load", function () {
     // 🌎 Initialize Game World, add references to game canvas element, player, ui and input
 
     const game = new GameWorld("game-screen__canvas", player, ui, input)
-
+    console.log("Hello?")
 
     // Set the game state to "title" to show/hide relavent UI elements
-    console.log(game.gameState)
-    game.ui.toggleUI(game.gameState)
-
+    console.log(game.currentState)
+    game.ui.toggleUI(game.currentState)
+    console.dir(game.scenes)
 
     // TODO: Remove, only for DEBUG
-    // function checkGameState() {
-    //     console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
-    //     setTimeout(checkGameState, 1000)
-    // }
-    // checkGameState()
+    function checkGameState() {
+        console.log(`%cgamestate is ${game.currentState}`, `color: orange`)
+        setTimeout(checkGameState, 1000)
+    }
+    checkGameState()
     // end TODO
 
     // --- SPAWNER and OBJECT POOLS --- //
@@ -136,7 +136,7 @@ window.addEventListener("load", function () {
     // game.loop()
 
     // function checkGameState() {
-    //     console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
+    //     console.log(`%cgamestate is ${game.currentState}`, `color: orange`)
     //     setTimeout(checkGameState, 1000)
     // }
     // checkGameState()

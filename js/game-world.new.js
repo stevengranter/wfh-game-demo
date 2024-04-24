@@ -33,6 +33,7 @@ export default class GameWorld extends Observable {
     // Declare a static private variable to hold the instance
     static #instance
     static #deltaTime
+    #gameStateKeys
     #isReady
 
     // Declare private properties (descriptions provided in constructor comments)
@@ -41,7 +42,7 @@ export default class GameWorld extends Observable {
     #input
     #currentScene
     #currentRanking
-    #gameState
+    #currentState
     #scenes
     #isNextSceneReady
 
@@ -61,10 +62,24 @@ export default class GameWorld extends Observable {
         // TODO: Do this programatically by iterating over gameStateKeys
         this.states = [new Title(this), new Start(this), new Intro(this), new Popup(this), new Play(this), new Paused(this), new EndScene(this), new StartScene(this), new GameOver(this), new End(this), new Credits()]
 
-        //#gameState is initialized to "title" for the title screen
-        this.#gameState = gameStateKeys.TITLE
+        console.log(this.states)
 
-        // I GameWorldlize an empty array to score the game's scenes
+        // Iterate over the this.states array to populate a gameStateKeys object
+        // that references the index of the corresponding game state in this.states
+        this.#gameStateKeys = {}
+        for (let i = 0; i < this.states.length; i++) {
+            let keyName = this.states[i].constructor.name
+            let keyValue = i
+            this.#gameStateKeys[keyName] = keyValue
+        }
+
+        console.log(this.gameStateKeys)
+
+        console.log(this.states)
+        //#currentState is initialized to "title" for the title screen
+        this.#currentState = this.states[this.#gameStateKeys.Title]
+
+        // Initialize an empty array to score the game's scenes
         this.#scenes = []
 
         // Initialize the #currentScene.intervalId to null
@@ -92,7 +107,7 @@ export default class GameWorld extends Observable {
     // otherwise we return the instance
     static getInstance(player, ui, input) {
         if (!GameWorld.#instance) {
-            new GameWorld(player, ui, input)
+            GameWorld.#instance = new GameWorld(player, ui, input)
         }
         return GameWorld.#instance
     }
@@ -138,14 +153,15 @@ export default class GameWorld extends Observable {
         return GameWorld.#deltaTime
     }
 
-    // Getter/setter for private #gameState property
-    get gameState() {
-        return this.#gameState
+    // Getter/setter for private #currentState property
+    get currentState() {
+        return this.#currentState
     }
 
-    set gameState(gameState) {
-        this.#gameState = gameState
-        this.notify({ gameState: this.#gameState })
+    set currentState(gameStateIndex) {
+        this.#currentState = this.states[gameStateIndex]
+        this.#currentState.enter()
+        this.notify({ gameState: this.#currentState.constructor.name })
     }
 
     // Getter for player property
@@ -228,6 +244,12 @@ export default class GameWorld extends Observable {
         }
     }
 
+
+
+
+
+
+
     initializeEventListeners() {
         wait(200).then(() => {
             window.addEventListener("keydown", (e) => {
@@ -244,8 +266,13 @@ export default class GameWorld extends Observable {
     // Method to start the game (called when pressing the Start button)
     startGame() {
         console.log("in startGame() method")
-        this.gameState = gameStateKeys.START
-        this.ui.toggleUI(this.gameState)
+        this.currentState = this.#gameStateKeys["Start"]
+        // this.currentState = this.states[this.states.map(state => state.constructor.name).indexOf('Start')]
+        // const myState = this.states[this.states.map(state => state.constructor.name).indexOf('Start')]
+        // console.log(myState)
+        // console.dir(this.states[1])
+        // this.currentState = 1
+        this.ui.toggleUI("Start")
         if (!this.#isNextSceneReady) runLoadingScreen()
 
         const currentSceneIndex = 0
@@ -268,10 +295,7 @@ export default class GameWorld extends Observable {
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
     }
 
-    // Method to pause the game
-    pauseGame() {
-        console.log("in pauseGame() method")
-    }
+
 
     // Method to run the intro sequence 
     // (after Start button is pressed, before scene starts)
@@ -293,20 +317,7 @@ export default class GameWorld extends Observable {
         console.log("in runLoadingScreen() method")
     }
 
-    // Method to start a game scene
-    startScene() {
-        console.log("in startScene() method")
-    }
 
-    // Method to end a game scene
-    endScene() {
-        console.log("in endScene() method")
-    }
-
-    // Method to end the game
-    endGame() {
-        console.log("in endGame() method")
-    }
 
 
     // ♾️ START: THE MAIN GAME LOOP
