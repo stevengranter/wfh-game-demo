@@ -21,7 +21,6 @@ import Spawner from "./spawner.js"
 import {
     CANVAS_WIDTH,
     CANVAS_HEIGHT,
-    gameStateKeys,
     musicStateKeys
 } from "./constants.js"
 
@@ -33,7 +32,7 @@ export default class GameWorld extends Observable {
     // Declare a static private variable to hold the instance
     static #instance
     static #deltaTime
-    #gameStateKeys
+    gameStateKeys
     #isReady
 
     // Declare private properties (descriptions provided in constructor comments)
@@ -59,25 +58,25 @@ export default class GameWorld extends Observable {
         // set #isReady flag if player, ui, and input are valid arguments
         this.#isReady = this.#validateArguments(player, ui, input)
 
-        // TODO: Do this programatically by iterating over gameStateKeys
+        // TODO: Do this programatically by iterating overgameStateKeys
         this.states = [new Title(this), new Start(this), new Intro(this), new Popup(this), new Play(this), new Paused(this), new EndScene(this), new StartScene(this), new GameOver(this), new End(this), new Credits()]
 
-        console.log(this.states)
+        // console.log(this.states)
 
-        // Iterate over the this.states array to populate a gameStateKeys object
+        // Iterate over the this.states array to populate agameStateKeys object
         // that references the index of the corresponding game state in this.states
-        this.#gameStateKeys = {}
+        this.gameStateKeys = {}
         for (let i = 0; i < this.states.length; i++) {
             let keyName = this.states[i].constructor.name
             let keyValue = i
-            this.#gameStateKeys[keyName] = keyValue
+            this.gameStateKeys[keyName] = keyValue
         }
 
-        console.log(this.gameStateKeys)
+        // console.log(this.gameStateKeys)
 
-        console.log(this.states)
+        // console.log(this.states)
         //#currentState is initialized to "title" for the title screen
-        this.#currentState = this.states[this.#gameStateKeys.Title]
+        this.#currentState = this.states[this.gameStateKeys.Title]
 
         // Initialize an empty array to score the game's scenes
         this.#scenes = []
@@ -138,7 +137,7 @@ export default class GameWorld extends Observable {
         try {
             this.canvas = document.getElementById(canvasId)
             this.ctx = this.canvas.getContext("2d")
-            console.log(this)
+            // console.log(this)
             return true
         } catch {
             throw new Error("The provided canvasId is not a canvas element")
@@ -160,8 +159,11 @@ export default class GameWorld extends Observable {
 
     set currentState(gameStateIndex) {
         this.#currentState = this.states[gameStateIndex]
+        console.dir(this.#currentState)
         this.#currentState.enter()
-        this.notify({ gameState: this.#currentState.constructor.name })
+        // Sending the elementID for game state, as UI is the main
+        // receiver and will change the UI according to the state
+        this.notify({ 'game-state': this.#currentState.elementID })
     }
 
     // Getter for player property
@@ -263,16 +265,13 @@ export default class GameWorld extends Observable {
     }
 
 
+
     // Method to start the game (called when pressing the Start button)
     startGame() {
         console.log("in startGame() method")
-        this.currentState = this.#gameStateKeys["Start"]
-        // this.currentState = this.states[this.states.map(state => state.constructor.name).indexOf('Start')]
-        // const myState = this.states[this.states.map(state => state.constructor.name).indexOf('Start')]
-        // console.log(myState)
-        // console.dir(this.states[1])
-        // this.currentState = 1
-        this.ui.toggleUI("Start")
+        this.currentState = this.gameStateKeys["Start"]
+
+        // this.ui.toggleUI("Start")
         if (!this.#isNextSceneReady) runLoadingScreen()
 
         const currentSceneIndex = 0
@@ -301,8 +300,8 @@ export default class GameWorld extends Observable {
     // (after Start button is pressed, before scene starts)
     runIntro() {
         console.log("in runIntro() method")
-        this.gameState = gameStateKeys.INTRO
-        this.ui.toggleUI(this.gameState)
+        this.currentState = this.gameStateKeys["Intro"]
+        // this.ui.toggleUI(this.gameState)
 
         console.log(this.ui)
         setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(0)" }, 500)

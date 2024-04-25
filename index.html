@@ -25,10 +25,7 @@
   </head>
   <body>
     <div class="interface__super-nantendo" id="ui--super-nantendo">
-      <div id="game-screen"
-        class="game-screen"  
-         data-ui="true"
-         data-gamestate="play intro">
+      <div class="game-screen" id="game-screen" data-ui="true">
         <canvas
           id="game-screen__canvas"
           class="pixelated"
@@ -36,14 +33,14 @@
           height="270"
           data-gamestate="play"
         ></canvas>
-
         <img
           src="./images/ui--overlay-screen-border-02.svg"
           class="game-screen__border"
           id="game-screen-border"
         />
          
-        <div id="game-screen__hud-overlay"
+        <div
+          id="game-screen__hud-overlay"
           class="overlay hidden"
           data-ui="true"
           data-gamestate="play"
@@ -84,17 +81,14 @@
               <div id="time-remaining" data-ui="true"></div>
             </div>
           </div>
-
-          <div
+        </div>
+        <div
           id="game-screen__banner-overlay"
           class="overlay"
           data-gamestate="play"
         >
           <div id="banner" data-ui="true"></div>
-      </div>
-      </div>
-
-      
+        </div>
 
         <div id="game-screen__menu-overlay" class="overlay" data-ui="true" data-gamestate="paused">
           <!-- START: #menu-screen -->
@@ -102,7 +96,7 @@
             id="pause-menu--container"
             class="ui-panel"
             data-ui="true"
-            data-gamestate="paused startscene endscene title"
+            data-gamestate="paused startscene endscene"
           >
             <header><h2>Options</h2></header>
             <ul>
@@ -242,14 +236,27 @@
            
           </div> -->
         </div>
+       
+          <div
+          id="touch-controller-overlay"
+          class="overlay"
+          data-gamestate="play"
+          data-ui="true"
+        >
+          <div id="touchcontroller_left">
+        </div>
+        <div id="touchcontroller_right"></div>
+      </div>
 
-        <div id="game-screen__cutscene-overlay"
+        <div
+          id="game-screen__cutscene-overlay"
           class="overlay"
           data-ui="true"
           data-gamestate="intro cutscene title"
           display="block"
         >
-          <div
+         
+        <div
             id="title-screen"
             data-ui="true"
             data-gamestate="title"
@@ -260,7 +267,6 @@
               <div id="start-button" data-ui="true"><h2>Start</h2></div>
             </div>
           </div>
-
           <div id="intro-screen" data-ui="true" data-gamestate="intro" class="hidden">
             <div>
               <img
@@ -268,7 +274,7 @@
                 src="./images/nan-portrait-3d.webp"
                 alt=""
                 data-ui="true"
-                class="hidden character-portrait"
+                class="character-portrait"
               />
               <div
                 class="dialog-panel itim-regular"
@@ -349,15 +355,7 @@
           <!-- #menu-screen :END -->
         </div>
 
-         <div id="touch-controller-overlay"
-          class="overlay"
-          data-gamestate="play"
-          data-ui="true"
-        >
-          <div id="touchcontroller_left">
-        </div>
-        <div id="touchcontroller_right"></div>
-      </div>
+       
 
       
       <div id="debug-menu--container" data-ui="true"></div>
@@ -412,5 +410,5 @@
       <!-- </div> -->
     </div>
   </body>
-  <script type="module" src="./js/main.js"></script>
+  <script type="module" src="./js/main.new.js"></script>
 </html>

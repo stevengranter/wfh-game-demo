@@ -1,5 +1,6 @@
 
 import { snakeToPascal } from "./utils.js"
+import { scene00Config } from "./cfg/scene00.cfg.js"
 // Keys for the different game states
 // The string values correspond to game states listed in the "data-gamestate" data
 // attribute on HTML elements in the main HTML file
@@ -20,34 +21,58 @@ export const gameStateIDs = {
 // GameState class
 // Handles state changes in the game (pause, menu, play, etc)
 export default class GameState {
-    constructor(key) {
-        this.key = key
+    constructor(elementID) {
+        this.elementID = elementID
     }
 }
 
 export class Title extends GameState {
-    constructor() {
-        super("Title")
+    constructor(game) {
+        super(gameStateIDs.TITLE)
+        this.game = game
     }
 
     enter() {
-        console.log(`in enter() in ${this.constructor.name}`)
+        console.log(`entered ${this.constructor.name} state`)
+        // While on title screen, we'll preload the first scene
+        this.game.loadScene(scene00Config)
+        this.handleInput()
+
     }
 
-    handleInput() { }
+    handleInput(input) {
+        const startButton = document.getElementById("start-button")
+        if (startButton) {
+            this.exitHandler = this.exit.bind(this)
+            startButton.addEventListener("pointerdown", this.exitHandler)
+        }
+    }
 
-    exit() { }
+    exit() {
+        console.log(`exiting ${this.constructor.name} state`)
+        const startButton = document.getElementById("start-button")
+        if (startButton) {
+            try {
+                startButton.removeEventListener("pointerdown", this.exitHandler)
+                console.log("eventhandler removed")
+            } catch {
+                console.warn("Could not remove event handler")
+            }
+        }
+        this.game.currentState = this.game.gameStateKeys["Start"]
+    }
 
 }
 
 export class Start extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.START)
-        console.log(gameStateIDs.START)
+        this.game = game
     }
 
     enter() {
         console.log(`in enter() in ${constructor.name}`)
+
     }
 
     handleInput() { }
@@ -56,9 +81,10 @@ export class Start extends GameState {
 }
 
 export class Intro extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.INTRO)
-        console.log(gameStateIDs.INTRO)
+        this.game = game
+
     }
     enter() {
         console.log(`in enter() in ${constructor.name}`)
@@ -70,9 +96,10 @@ export class Intro extends GameState {
 }
 
 export class Popup extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.POPUP)
-        console.log(gameStateIDs.POPUP)
+        this.game = game
+
     }
 
     enter() {
@@ -86,9 +113,10 @@ export class Popup extends GameState {
 
 
 export class Play extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.PLAY)
-        console.log(gameStateIDs.PLAY)
+        this.game = game
+
     }
 
     enter() {
@@ -102,9 +130,10 @@ export class Play extends GameState {
 
 
 export class Paused extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.PAUSED_BY_PLAYER)
-        console.log(gameStateIDs.PAUSED_BY_PLAYER)
+        this.game = game
+
     }
 
     enter() {
@@ -118,9 +147,10 @@ export class Paused extends GameState {
 
 
 export class EndScene extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.END_SCENE)
-        console.log(gameStateIDs.END_SCENE)
+        this.game = game
+
     }
 
     enter() {
@@ -134,9 +164,10 @@ export class EndScene extends GameState {
 
 
 export class StartScene extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.START_SCENE)
-        console.log(gameStateIDs.START_SCENE)
+        this.game = game
+
     }
 
     enter() {
@@ -150,9 +181,10 @@ export class StartScene extends GameState {
 
 
 export class GameOver extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.GAMEOVER)
-        console.log(gameStateIDs.GAMEOVER)
+        this.game = game
+
     }
 
     enter() {
@@ -165,9 +197,10 @@ export class GameOver extends GameState {
 }
 
 export class End extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.END)
-        console.log(gameStateIDs.END)
+        this.game = game
+
     }
 
     enter() {
@@ -180,9 +213,10 @@ export class End extends GameState {
 }
 
 export class Credits extends GameState {
-    constructor() {
+    constructor(game) {
         super(gameStateIDs.CREDITS)
-        console.log(gameStateIDs.CREDITS)
+        this.game = game
+
     }
 
     enter() {

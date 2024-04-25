@@ -8,6 +8,9 @@ export default class UI {
 
     }
 
+
+
+
     init(dataAttributes) {
         dataAttributes.forEach((attribute) => {
             // console.log(attribute)
@@ -34,10 +37,14 @@ export default class UI {
 
     }
 
+    update() {
+
+    }
+
 
     receiveUpdate(data, sender) {
         console.log("ui received:")
-        console.log(sender + " sent data: ")
+        console.dir(data)
         // console.log(data)
         // Checking for undefined here instead of falsey values, as we want to 
         // still update if the value is equal to 0
@@ -59,6 +66,8 @@ export default class UI {
             // setTimeout(() => {
             //     this.hide(this.elements.banner)
             // }, 2000)
+        } else if (data['game-state'] !== undefined) {
+            this.toggleUI(data['game-state'])
         }
     }
 

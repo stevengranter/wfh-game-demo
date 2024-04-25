@@ -46,22 +46,27 @@ window.addEventListener("load", function () {
     // 🕹️ Initialize Input handler
     const input = new InputHandler(ui)
 
+    // Add a property to the ui instance to hold input instance
+    ui.input = input
+
     // 🌎 Initialize Game World, add references to game canvas element, player, ui and input
 
     const game = new GameWorld("game-screen__canvas", player, ui, input)
-    console.log("Hello?")
+
 
     // Set the game state to "title" to show/hide relavent UI elements
+    // console.log(game.currentState)
+    game.currentState = game.gameStateKeys['Title']
     console.log(game.currentState)
-    game.ui.toggleUI(game.currentState)
-    console.dir(game.scenes)
+    game.ui.toggleUI(game.currentState.elementID)
+
 
     // TODO: Remove, only for DEBUG
-    function checkGameState() {
-        console.log(`%cgamestate is ${game.currentState}`, `color: orange`)
-        setTimeout(checkGameState, 1000)
-    }
-    checkGameState()
+    // function checkGameState() {
+    //     console.log(`%cgamestate is ${game.currentState}`, `color: orange`)
+    //     setTimeout(checkGameState, 1000)
+    // }
+    // checkGameState()
     // end TODO
 
     // --- SPAWNER and OBJECT POOLS --- //
@@ -81,11 +86,11 @@ window.addEventListener("load", function () {
     }
 
     // Preload the first scene before the user presses the Start button
-    try {
-        game.loadScene(scene00Config)
-    } catch {
-        throw new Error("Problem preloading scene")
-    }
+    // try {
+    //     game.loadScene(scene00Config)
+    // } catch {
+    //     throw new Error("Problem preloading scene")
+    // }
 
 
 
@@ -112,13 +117,14 @@ window.addEventListener("load", function () {
 
     }
 
+    initObservers()
 
     // Add event listener to start button which calls the startgame() method
-    const startButton = ui.uiElements.startButton
-    startButton.addEventListener("pointerdown", function (e) {
-        console.log("START button clicked")
-        game.startGame()
-    }.bind(game))
+    // const startButton = ui.uiElements.startButton
+    // startButton.addEventListener("pointerdown", function (e) {
+    //     console.log("START button clicked")
+    //     game.startGame()
+    // }.bind(game))
 
 
     // ui.toggleUI("cutscene")
