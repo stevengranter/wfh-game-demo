@@ -1,5 +1,5 @@
 
-import { snakeToPascal } from "./utils.js"
+import { snakeToPascal, typeWriter, animateBlur } from "./utils.js"
 import { scene00Config } from "./cfg/scene00.cfg.js"
 // Keys for the different game states
 // The string values correspond to game states listed in the "data-gamestate" data
@@ -24,6 +24,17 @@ export default class GameState {
     constructor(elementID) {
         this.elementID = elementID
     }
+
+    enter() {
+        console.log(`entered ${this.constructor.name} state`)
+    }
+
+
+    run() {
+
+    }
+
+
 }
 
 export class Title extends GameState {
@@ -33,14 +44,14 @@ export class Title extends GameState {
     }
 
     enter() {
-        console.log(`entered ${this.constructor.name} state`)
+        super.enter()
         // While on title screen, we'll preload the first scene
         this.game.loadScene(scene00Config)
-        this.handleInput()
+        this.run()
 
     }
 
-    handleInput(input) {
+    run() {
         const startButton = document.getElementById("start-button")
         if (startButton) {
             this.exitHandler = this.exit.bind(this)
@@ -59,7 +70,7 @@ export class Title extends GameState {
                 console.warn("Could not remove event handler")
             }
         }
-        this.game.currentState = this.game.gameStateKeys["Start"]
+        this.game.currentState = this.game.gameStateKeys["Intro"]
     }
 
 }
@@ -71,13 +82,19 @@ export class Start extends GameState {
     }
 
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
 
     }
 
-    handleInput() { }
+    run() {
+        super.run()
 
-    exit() { }
+
+    }
+
+    exit() {
+        super.enter()
+    }
 }
 
 export class Intro extends GameState {
@@ -87,12 +104,65 @@ export class Intro extends GameState {
 
     }
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
+        setTimeout(() => { this.game.ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
+        setTimeout(() => { this.game.ui.elements.popupNan.style.transform = "translateY(0)" }, 700)
+        const currentSceneIndex = this.game.player.stats.progress
+        this.game.currentScene = this.game.scenes[currentSceneIndex]
+        this.game.currentScene = this.game.scenes[0]
+
+        const animateBlurEntry = animateBlur(this.game.currentScene, this.game.ctx, 0.5, 2, 0.2)
+
+        this.game.currentScene.draw(this.ctx, false, true, true)
+        setTimeout(animateBlurEntry, 1000)
+
+
+        const dialogText = document.querySelector('#intro-dialog div').textContent
+        typeWriter('intro-dialog', dialogText, 25)
+
+        this.game.currentScene.draw(this.game.ctx, false, true, true)
+
+
+        this.run()
     }
 
-    handleInput() { }
+    run() {
+        // Retrieve the element only once to avoid multiple DOM queries.
+        const element = document.getElementById(this.elementID)
+        if (!element) {
+            console.error(`Element with ID '${this.elementID}' not found.`)
+            return
+        }
 
-    exit() { }
+        console.log(this.elementID)
+
+        // Define keydownHandler as a method to avoid creating it every time run is called.
+        const keydownHandler = () => {
+            console.log("in keyDownHandler")
+
+            // Use a single setTimeout to manage the sequence of animations.
+            setTimeout(() => {
+                this.game.ui.elements.introDialog.style.transform = "translateY(400px)"
+                setTimeout(() => {
+                    this.game.ui.elements.popupNan.style.transform = "translateY(475px)"
+                    setTimeout(() => {
+                        const animateBlurExit = animateBlur(this.game.currentScene, this.game.ctx, 0.5, 2, 0.2)
+                        animateBlurExit()
+                    }, 300) // Delay by additional 300ms (total of 1000ms after first timeout).
+                }, 200) // Delay by additional 200ms (total of 700ms after first timeout).
+            }, 500)
+
+            // Remove the event listener to prevent the callback from executing multiple times
+            document.removeEventListener("keydown", keydownHandler)
+        }
+
+        // Add the event listener directly with the handler reference.
+        document.addEventListener("keydown", keydownHandler)
+    }
+
+    exit() {
+        super.enter()
+    }
 }
 
 export class Popup extends GameState {
@@ -103,12 +173,16 @@ export class Popup extends GameState {
     }
 
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
     }
 
-    handleInput() { }
+    run() {
+        super.run()
+    }
 
-    exit() { }
+    exit() {
+        super.enter()
+    }
 }
 
 
@@ -120,12 +194,16 @@ export class Play extends GameState {
     }
 
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
     }
 
-    handleInput() { }
+    run() {
+        super.run()
+    }
 
-    exit() { }
+    exit() {
+        super.enter()
+    }
 }
 
 
@@ -137,12 +215,16 @@ export class Paused extends GameState {
     }
 
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
     }
 
-    handleInput() { }
+    run() {
+        super.run()
+    }
 
-    exit() { }
+    exit() {
+        super.enter()
+    }
 }
 
 
@@ -154,12 +236,16 @@ export class EndScene extends GameState {
     }
 
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
     }
 
-    handleInput() { }
+    run() {
+        super.run()
+    }
 
-    exit() { }
+    exit() {
+        super.enter()
+    }
 }
 
 
@@ -171,12 +257,16 @@ export class StartScene extends GameState {
     }
 
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
     }
 
-    handleInput() { }
+    run() {
+        super.run()
+    }
 
-    exit() { }
+    exit() {
+        super.enter()
+    }
 }
 
 
@@ -188,12 +278,16 @@ export class GameOver extends GameState {
     }
 
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
     }
 
-    handleInput() { }
+    run() {
+        super.run()
+    }
 
-    exit() { }
+    exit() {
+        super.enter()
+    }
 }
 
 export class End extends GameState {
@@ -204,12 +298,16 @@ export class End extends GameState {
     }
 
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
     }
 
-    handleInput() { }
+    run() {
+        super.run()
+    }
 
-    exit() { }
+    exit() {
+        super.enter()
+    }
 }
 
 export class Credits extends GameState {
@@ -220,10 +318,14 @@ export class Credits extends GameState {
     }
 
     enter() {
-        console.log(`in enter() in ${constructor.name}`)
+        super.enter()
     }
 
-    handleInput() { }
+    run() {
+        super.run()
+    }
 
-    exit() { }
+    exit() {
+        super.enter()
+    }
 }

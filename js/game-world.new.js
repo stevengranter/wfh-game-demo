@@ -266,55 +266,10 @@ export default class GameWorld extends Observable {
 
 
 
-    // Method to start the game (called when pressing the Start button)
-    startGame() {
-        console.log("in startGame() method")
-        this.currentState = this.gameStateKeys["Start"]
-
-        // this.ui.toggleUI("Start")
-        if (!this.#isNextSceneReady) runLoadingScreen()
-
-        const currentSceneIndex = 0
-        this.currentScene = this.#scenes[currentSceneIndex]
-        this.currentScene = this.#scenes[0]
-
-        console.log(this.currentScene)
-
-        this.initializeEventListeners()
-        console.log(this.scenes)
-        this.fadeInScene()
-        this.runIntro()
-    }
-
-
-    // Method to fade in the scene
-
-    fadeInScene() {
-        this.currentScene.draw(this.ctx)
-        setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2) }, 1000)
-    }
 
 
 
-    // Method to run the intro sequence 
-    // (after Start button is pressed, before scene starts)
-    runIntro() {
-        console.log("in runIntro() method")
-        this.currentState = this.gameStateKeys["Intro"]
-        // this.ui.toggleUI(this.gameState)
 
-        console.log(this.ui)
-        setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
-        setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(0)" }, 700)
-
-    }
-
-    runLoadingScreen() {
-        while (!this.isNextSceneReady) {
-            console.log("Please wait - loading...")
-        }
-        console.log("in runLoadingScreen() method")
-    }
 
 
 

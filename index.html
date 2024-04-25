@@ -96,7 +96,7 @@
             id="pause-menu--container"
             class="ui-panel"
             data-ui="true"
-            data-gamestate="paused startscene endscene"
+            data-gamestate="paused start endscene"
           >
             <header><h2>Options</h2></header>
             <ul>
@@ -174,7 +174,7 @@
           <div
             id="scene-start--container"
             data-ui="true"
-            data-gamestate="startscene"
+            data-gamestate="start"
           >
             <div class="ui-panel">
               <h2>Scene Start</h2>
@@ -256,18 +256,7 @@
           display="block"
         >
          
-        <div
-            id="title-screen"
-            data-ui="true"
-            data-gamestate="title"
-            class="block"
-          >
-            <div>
-              <img src="./images/wfh-logo.webp" alt="" />
-              <div id="start-button" data-ui="true"><h2>Start</h2></div>
-            </div>
-          </div>
-          <div id="intro-screen" data-ui="true" data-gamestate="intro" class="hidden">
+         <div id="intro-screen" data-ui="true" data-gamestate="intro" class="hidden">
             <div>
               <img
                 id="popup-nan"
@@ -290,6 +279,20 @@
               </div>
             </div>
           </div>
+
+
+        <div
+            id="title-screen"
+            data-ui="true"
+            data-gamestate="title"
+            class="block"
+          >
+            <div>
+              <img src="./images/wfh-logo.webp" alt="" />
+              <div id="start-button" data-ui="true"><h2>Start</h2></div>
+            </div>
+          </div>
+         
 
           <div
             id="popup-screen"

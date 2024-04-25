@@ -255,7 +255,9 @@ embed {
 }
 
 #intro-screen {
-  overflow: hidden;
+  /* overflow: hidden; */
+  width: 100%;
+  height: 100%;
 }
 
 .character-portrait {

@@ -42,6 +42,7 @@ export default class Layer {
         if (this.spriteSrc) this.init()
 
         this.spawner = spawner
+        this.filter = null
         // console.log(this)
 
     }
@@ -130,8 +131,9 @@ export default class Layer {
         if (!this.imageObject) return
 
         if (this.imageObject) {
-            if (this.filter !== "none" && this.filter !== undefined) {
-                // console.log(this.filter)
+            console.log(this.filter)
+            if (this.filter) {
+                console.log(this.filter)
                 context.filter = this.filter
             }
             // console.log(this.imageObject)

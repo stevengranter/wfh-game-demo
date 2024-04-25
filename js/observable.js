@@ -19,11 +19,11 @@ export default class Observable {
 
     notify(data) {
         let sender = this.constructor.name
-        console.log(`${sender} sent data:`)
-        console.dir(data)
+        console.log("in notify (from ", this.constructor.name)
         this.#observers.forEach(observer => {
-            // console.dir(observer)
-
+            console.dir(observer)
+            console.log(`${sender} sent data:`)
+            console.dir(data)
             observer.receiveUpdate(data, sender)
         })
     }

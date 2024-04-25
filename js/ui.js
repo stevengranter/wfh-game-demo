@@ -67,7 +67,10 @@ export default class UI {
             //     this.hide(this.elements.banner)
             // }, 2000)
         } else if (data['game-state'] !== undefined) {
-            this.toggleUI(data['game-state'])
+            console.log(data['game-state'])
+            this.hide(this.elements.titleScreen)
+            this.show(this.elements.introScreen)
+            // this.toggleUI(data['game-state'], true)
         }
     }
 
@@ -158,13 +161,13 @@ export default class UI {
                     const gameStateArray = element.dataset.gamestate.split(' ')
                     // console.log(gameStateArray)
                     if (gameStateArray.includes(gameState) && isActive === true) {
-                        // console.log("now showing: ", element.id)
+                        console.log("now showing: ", element.id)
 
                         this.show(element)
                         element.style = "pointer-events:auto" // TODO: 
 
                     } else {
-                        // console.log("now hiding: ", element.id)
+                        console.log("now hiding: ", element.id)
                         this.hide(element)
                         element.style = "pointer-events:none" // TODO: 
 
