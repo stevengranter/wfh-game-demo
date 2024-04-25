@@ -1,6 +1,13 @@
 
-export default class GameManager extends Observable {
-    constructor(game) {
+// Say hello to Gord. Why Gord? Because God was taken. 
+// Union rules 🤷🏼‍♂️
+//
+// G.O.R.D. = Game Organizer & Revered Designer
+// Because of this, and because this class is very, very important,
+// GORD is all capitalized (unlike lower order classes)
+// 
+export default class GORD extends Observable {
+    constructor(game, player, input, ui) {
         super()
         this.game = game
     }

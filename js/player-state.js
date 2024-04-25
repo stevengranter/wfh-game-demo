@@ -1,7 +1,7 @@
 "use strict"
 
 import { wait } from "./utils.js"
-import { GameWorld } from "./game-world.js"
+import { GameWorld } from "./game-world.old"
 
 export const playerStates = {
     DEAD: 0,

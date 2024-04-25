@@ -1,28 +1,28 @@
 "use strict"
 
 // Import required classes and utility functions
-import CollisionDetector from "./collision-detector.js"
-import Observable from "./observable.js"
-import { playerStates } from "./player-state.js"
-import { GameScene } from "./game-scene.js"
-import GameState from "./game-state.js"
-import { Title, Start, Intro, Popup, Play, Paused, EndScene, StartScene, GameOver, End, Credits } from "./game-state.js"
-import { typeWriter, animateBlur, wait, getRandomInt, snakeToPascal } from "./utils.js"
-import { Enemy } from "./enemy.js"
-import { scene00Config } from "./cfg/scene00.cfg.js"
-import { scene01Config } from "./cfg/scene01.cfg.js"
-import Player from "./player.js"
-import { playerConfig, playerAltConfig } from "./cfg/player.cfg.js"
-import UI from "./ui.js"
-import InputHandler from "./input-handler.js"
-import Spawner from "./spawner.js"
+import CollisionDetector from "../collision-detector.js"
+import Observable from "../observable.js"
+import { playerStates } from "../player-state.js"
+import { GameScene } from "../game-scene.js"
+import GameState from "../game-state.js"
+import { Title, Start, Intro, Popup, Play, Paused, EndScene, StartScene, GameOver, End, Credits } from "../game-state.js"
+import { typeWriter, animateBlur, wait, getRandomInt, snakeToPascal } from "../utils.js"
+import { Enemy } from "../enemy.js"
+import { scene00Config } from "../cfg/scene00.cfg.js"
+import { scene01Config } from "../cfg/scene01.cfg.js"
+import Player from "../player.js"
+import { playerConfig, playerAltConfig } from "../cfg/player.cfg.js"
+import UI from "../ui.js"
+import InputHandler from "../input-handler.js"
+import Spawner from "../spawner.js"
 
 // Import required constants
 import {
     CANVAS_WIDTH,
     CANVAS_HEIGHT,
     musicStateKeys
-} from "./constants.js"
+} from "../constants.js"
 
 
 

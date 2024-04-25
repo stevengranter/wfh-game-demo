@@ -1,14 +1,14 @@
 "use strict"
 
 // Import required classes and utility functions
-import CollisionDetector from "./collision-detector.js"
-import Observable from "./observable.js"
-import { playerStates } from "./player-state.js"
-import { GameScene } from "./game-scene.js"
-import { typeWriter, animateBlur, getRandomInt } from "./utils.js"
-import { Enemy } from "./enemy.js"
-import { scene00Config } from "./cfg/scene00.cfg.js"
-import { scene01Config } from "./cfg/scene01.cfg.js"
+import CollisionDetector from "../collision-detector.js"
+import Observable from "../observable.js"
+import { playerStates } from "../player-state.js"
+import { GameScene } from "../game-scene.js"
+import { typeWriter, animateBlur, getRandomInt } from "../utils.js"
+import { Enemy } from "../enemy.js"
+import { scene00Config } from "../cfg/scene00.cfg.js"
+import { scene01Config } from "../cfg/scene01.cfg.js"
 
 
 export const gameStateKeys = {

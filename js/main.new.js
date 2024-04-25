@@ -15,7 +15,7 @@ import { wait } from "./utils.js"
 import Sprite from "./sprite.js"
 import Spawner from "./spawner.js"
 import { GameScene } from "./game-scene.js"
-import GameWorld from "./game-world.new.js"
+import GameWorld from "./backups/game-world.new.js"
 // import { GameWorld, gameStateKeys } from "./game-world.new.js"
 import UI from "./ui.js"
 import Player from "./player.js"
@@ -49,9 +49,9 @@ window.addEventListener("load", function () {
     // Add a property to the ui instance to hold input instance
     ui.input = input
 
-    // 🌎 Initialize Game World, add references to game canvas element, player, ui and input
+    // 🌎 Initialize game, add references to game canvas element, player, ui and input
 
-    const game = new GameWorld("game-screen__canvas", player, ui, input)
+    const game = new TheKnownUniverse("game-screen__canvas", player, input, ui)
 
 
     // Set the game state to "title" to show/hide relavent UI elements
