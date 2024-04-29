@@ -1,24 +1,20 @@
-// ui.js
 "use strict"
 
 import { toCamelCase } from "./utils.js"
-
-// UI class handles user-interface tasks such as hiding or showing UI elements
-// and updating heads-up-display scoring and indicators
-// It is the main class that interacts with the DOMe
 export default class UI {
-
-    constructor(dataAttributes) {
+    constructor(dataAttributes, player) {
         this.init(dataAttributes)
         this.elements = this.uiElements // FIX: for older code that references elements property
 
     }
 
-    // Initializer for the UL elements
-    // @dataAttributes is of type "data-foo" 
+
+
+
     init(dataAttributes) {
         dataAttributes.forEach((attribute) => {
             // console.log(attribute)
+
             let uiDOMElements = document.querySelectorAll(`[${attribute}="true"]`)
 
             let elements = new Object()
@@ -34,7 +30,7 @@ export default class UI {
             // console.log(typeof elements)
             let propertyName = this.convertDataAttribute(attribute)
             this[propertyName] = elements
-            console.log(this)
+            // console.log(this)
             return elements
 
         })
@@ -47,8 +43,8 @@ export default class UI {
 
 
     receiveUpdate(data, sender) {
-        console.log("ui received:")
-        console.dir(data)
+        // console.log("ui received:")
+        // console.dir(data)
         // console.log(data)
         // Checking for undefined here instead of falsey values, as we want to 
         // still update if the value is equal to 0
@@ -165,13 +161,13 @@ export default class UI {
                     const gameStateArray = element.dataset.gamestate.split(' ')
                     // console.log(gameStateArray)
                     if (gameStateArray.includes(gameState) && isActive === true) {
-                        console.log("now showing: ", element.id)
+                        // console.log("now showing: ", element.id)
 
                         this.show(element)
                         element.style = "pointer-events:auto" // TODO: 
 
                     } else {
-                        console.log("now hiding: ", element.id)
+                        // console.log("now hiding: ", element.id)
                         this.hide(element)
                         element.style = "pointer-events:none" // TODO: 
 
