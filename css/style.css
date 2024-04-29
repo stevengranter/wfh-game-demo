@@ -250,7 +250,7 @@ embed {
 }
 
 #title-screen div img {
-  height: fit-content;
+  /* height: fit-content; */
   max-width: 50%;
 }
 
@@ -727,7 +727,7 @@ div#excited-chicken {
   bottom: 0;
   right: 0;
   max-width: 50%;
-  transform: translateY(500px) rotate(-15deg) scale(30%);
+  /* transform: translateY(500px) rotate(-15deg) scale(30%); */
   transition: all 0.5s 0s ease-in-out;
 }
 

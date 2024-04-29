@@ -90,13 +90,13 @@
           <div id="banner" data-ui="true"></div>
         </div>
 
-        <div id="game-screen__menu-overlay" class="overlay" data-ui="true" data-gamestate="paused">
+        <div id="game-screen__menu-overlay" class="overlay" data-ui="true">
           <!-- START: #menu-screen -->
           <div
             id="pause-menu--container"
             class="ui-panel"
             data-ui="true"
-            data-gamestate="paused start endscene"
+            data-gamestate="paused"
           >
             <header><h2>Options</h2></header>
             <ul>
@@ -171,7 +171,9 @@
             `
           </div>
 
-          <div
+         
+
+            <div
             id="scene-start--container"
             data-ui="true"
             data-gamestate="start"
@@ -198,7 +200,7 @@
             </div>
           </div>
 
-          <div
+            <div
             id="scene-end--container"
             data-ui="true"
             data-gamestate="endscene"
@@ -223,7 +225,12 @@
                 alt="an excited chicken"
               />
             </div>
+
+          <div id="game-over--container" data-gamestate="gameover">
+            <h1>GameOver</h1>
           </div>
+
+        
           <!-- <div id="congrats-screen" class="ui-panel">
             <header><h2>Next scene unlocked!</h2></header>
             <p>
@@ -236,6 +243,9 @@
            
           </div> -->
         </div>
+
+       
+          </div>
        
           <div
           id="touch-controller-overlay"

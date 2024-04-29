@@ -144,11 +144,15 @@ export default class UI {
     }
 
     show(element) {
+        element.style.display = "block"
+        element.style.visibility = "visible"
         element.classList.remove("hidden")
         element.classList.add("block")
     }
 
     hide(element) {
+        element.style.display = "none"
+        element.style.visibility = "hidden"
         element.classList.add("hidden")
         element.classList.remove("block")
     }

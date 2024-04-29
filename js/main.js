@@ -140,7 +140,7 @@ window.addEventListener("load", function () {
     initObservers()
     // readyScene00()
 
-    ui.toggleUI("cutscene")
+    // ui.toggleUI("endscene")
     // ui.hide(ui.elements.banner)
 
     function showEnemies() {
@@ -148,9 +148,18 @@ window.addEventListener("load", function () {
         console.dir(`Enemies: ${game.spawner.objectPools['gull'].enemies}`)
     }
 
-    console.log(game.ui)
-    console.log(game.player)
-    game.runIntro()
+    console.log(ui)
+
+    game.ui.toggleUI("title")
+    // console.log(game.ui)
+    // console.log(game.player)
+    // game.runIntro()
+
+    document.getElementById("start-button").addEventListener("pointerdown", (event) => {
+        event.preventDefault()
+        game.gameState = "intro"
+        game.startGame()
+    })
 
     function checkGameState() {
         console.log(`%cgamestate is ${game.gameState}`, `color: orange`)

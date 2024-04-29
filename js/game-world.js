@@ -146,6 +146,7 @@ export default class GameWorld extends Observable {
         // if the music has ended, we should be at the end of the scene, and gameplay should stop
         if (scene.music.currentTime === 0) {
             console.log("Music has ended, scene is over")
+            this.endScene()
             return
         }
 
@@ -159,7 +160,7 @@ export default class GameWorld extends Observable {
             if (this.currentScene.name === "Beach Sheds") {
                 this.isPaused = true
                 this.gameState = gameStateKeys.POPUP
-                this.pauseGame()
+                // this.pauseGame()
                 this.runPopup()
             } else {
                 setTimeout(() => {
@@ -260,14 +261,15 @@ export default class GameWorld extends Observable {
 
         this.initScene()
 
-        this.gameState = gameStateKeys.PLAY
+        this.gameState = gameStateKeys.INTRO
         this.ui.toggleUI(this.gameState)
 
         const superNantendo = document.getElementById("ui--super-nantendo")
         superNantendo.classList.add("teal-bg")
         // canvas.classList.remove("hidden")
 
-        this.currentScene = game.scenes[1]
+        this.currentScene = this.scenes[0]
+        this.runIntro()
 
 
         // console.log(this.currentScene)
@@ -295,7 +297,7 @@ export default class GameWorld extends Observable {
 
         this.gameState = gameStateKeys.SCENE_END
         this.isPaused = true
-        this.pauseGame()
+        // this.pauseGame()
 
         this.isSceneOver = true
 
@@ -316,7 +318,10 @@ export default class GameWorld extends Observable {
 
 
 
-        this.ui.toggleUI(this.gameState)
+        // this.ui.toggleUI(this.gameState)
+        const sceneEndContainer = document.getElementById("scene-end--container")
+        sceneEndContainer.className = ''
+        ui.show(sceneEndContainer)
 
         // window and chicken animations
         const sceneEndContainerDIV = this.ui.elements.sceneEndContainer.querySelector("div")
@@ -400,6 +405,13 @@ export default class GameWorld extends Observable {
             })
         }
     }
+
+    initScene() {
+        this.initSceneGoals()
+        this.initSceneEvents()
+    }
+
+    pauseMusic() { }
 
 
     // Method to load and ready scene and add to GameWorld instance
@@ -519,7 +531,7 @@ export default class GameWorld extends Observable {
                     clearInterval(this.goalCheckIntervalId)
                     this.gameState = gameStateKeys.SCENE_END
                     this.isPaused = true
-                    this.pauseGame()
+                    // this.pauseGame()
                     this.endScene()
                 }
 
@@ -542,6 +554,10 @@ export default class GameWorld extends Observable {
         setTimeout(placesPlayer, 1000)
         setTimeout(playMusic, 500)
         setTimeout(curtainUp, 1000)
+    }
+
+    runGameOver() {
+        this.ui.toggle("gameover")
     }
 
     runPopup() {
@@ -597,7 +613,7 @@ export default class GameWorld extends Observable {
 
         // console.dir(this.currentScene)
 
-        this.gameState = gameStateKeys.INTRO
+        this.ui.toggleUI("intro")
         // this.ui.toggleUI(this.gameState)
         // this.ui.toggleUI(this.gameState)
 
