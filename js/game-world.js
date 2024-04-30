@@ -259,10 +259,10 @@ export default class GameWorld extends Observable {
         // scene01.layers[0].filter = "none"
 
 
-        this.initScene()
+        // this.initScene()
 
         this.gameState = gameStateKeys.INTRO
-        // this.ui.toggleUI(this.gameState)
+        // this.ui.showUI(this.gameState)
 
         const superNantendo = document.getElementById("ui--super-nantendo")
         superNantendo.classList.add("teal-bg")
@@ -318,7 +318,7 @@ export default class GameWorld extends Observable {
 
 
 
-        // this.ui.toggleUI(this.gameState)
+        // this.ui.showUI(this.gameState)
         const sceneEndContainer = document.getElementById("scene-end--container")
         sceneEndContainer.className = ''
         ui.show(sceneEndContainer)
@@ -397,7 +397,7 @@ export default class GameWorld extends Observable {
                             event.spawningDuration,
                             event.resetConfig
                         )
-                    }, event.startTime)
+                    }, event.startTime * 1000)
 
                 } catch (error) {
                     console.error(`Error during event processing: ${error.message}`)
@@ -495,7 +495,7 @@ export default class GameWorld extends Observable {
 
         const curtainUp = () => {
             this.gameState = gameStateKeys.PLAY
-            this.ui.toggleUI(this.gameState)
+            this.ui.showUI(this.gameState)
             this.isPaused = false
             this.loop(0)
         }
@@ -562,7 +562,7 @@ export default class GameWorld extends Observable {
 
     runPopup() {
 
-        this.ui.toggleUI("cutscene")
+        this.ui.showUI("cutscene")
 
 
 
@@ -606,16 +606,16 @@ export default class GameWorld extends Observable {
     runIntro() {
         console.log("in runIntro")
         // console.log(this.ui)
-
+        this.setState = gameStateKeys.INTRO
         // console.log(this.player.stats)
 
 
 
         // console.dir(this.currentScene)
 
-        this.ui.toggleUI("intro")
-        // this.ui.toggleUI(this.gameState)
-        // this.ui.toggleUI(this.gameState)
+        this.ui.showUI("intro")
+        // this.ui.showUI(this.gameState)
+        // this.ui.showUI(this.gameState)
 
 
 

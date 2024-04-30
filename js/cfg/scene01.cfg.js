@@ -23,7 +23,7 @@ const getScene01Layer_SpriteConfig = () => {
         eventTimeline: [
 
             {
-                startTime: 5000,
+                startTime: 5,
                 type: "spawner",
                 objectType: "gull",
                 totalSpawnCount: 90,
@@ -31,14 +31,14 @@ const getScene01Layer_SpriteConfig = () => {
 
             },
             {
-                startTime: 6000,
+                startTime: 6,
                 type: "spawner",
                 objectType: "wiener",
                 totalSpawnCount: 100,
                 spawningDuration: 20
             },
             {
-                startTime: 60000,
+                startTime: 60,
                 type: "spawner",
                 objectType: "wiener",
                 totalSpawnCount: 500,

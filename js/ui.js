@@ -143,19 +143,63 @@ export default class UI {
         return parts.join('') + 'Elements'
     }
 
-    show(element) {
+    // public: set element to show by setting visibility and display properties
+    showElement(element) {
+        element.style.visibility = "show"
         element.style.display = "block"
-        element.style.visibility = "visible"
-        element.classList.remove("hidden")
-        element.classList.add("block")
+        element.style.pointerEvents = "auto" // TODO: 
     }
 
-    hide(element) {
+    // public: set element to hide by setting visibility and display properties
+    hideElement(element) {
+        element.style.visibility = "hide"
         element.style.display = "none"
-        element.style.visibility = "hidden"
-        element.classList.add("hidden")
-        element.classList.remove("block")
+        element.style.pointerEvents = "none" // TODO: 
+
     }
+
+    // public: Shows UI by state argument passed to function, 
+    // first calls hideUI() to hide all elements that do *not* have that state
+    showUI(state) {
+        this.hideUI(state)
+        const elements = document.querySelectorAll(`[data-gamestate~="${state}"]`)
+        elements.forEach((element) => {
+            this.showElement(element)
+        })
+
+    }
+
+    // private: Hides UI elements that do not have the state passed
+    // viu the argument by iterating over all data-gamestate elements
+    // and filtering 
+    hideUI(state) {
+        // select all elements that have the data-gamestate attribute
+        const allElements = document.querySelectorAll('[data-gamestate]')
+        // Filter out elements that include state arg in their data-gamestate attribute
+        const filteredElements = Array.from(allElements).filter(element => {
+            const gameStates = element.getAttribute('data-gamestate').split(' ')
+            return !gameStates.includes(state)
+        })
+
+        filteredElements.forEach((element) => {
+            this.hideElement(element)
+        })
+    }
+
+
+    // show(element) {
+    //     element.style.display = "block"
+    //     element.style.visibility = "visible"
+    //     element.classList.remove("hidden")
+    //     element.classList.add("block")
+    // }
+
+    // hide(element) {
+    //     element.style.display = "none"
+    //     element.style.visibility = "hidden"
+    //     element.classList.add("hidden")
+    //     element.classList.remove("block")
+    // }
 
     toggleUI(gameState, isActive = true) {
         for (let key in this.elements) {

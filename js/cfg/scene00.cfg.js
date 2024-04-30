@@ -24,70 +24,46 @@ const getScene00Layer_SpriteConfig = () => {
         // spriteSrc: "./images/garden-06.png",
         eventTimeline: [
             {
-                startTime: 500,
+                startTime: 5,
                 type: "spawner",
                 objectType: "wiener",
-                totalSpawnCount: 10,
+                totalSpawnCount: 30,
+                spawningDuration: 15,
+
+            },
+            {
+                startTime: 20,
+                type: "spawner",
+                objectType: "wiener",
+                totalSpawnCount: 60,
+                spawningDuration: 15,
+
+            },
+            {
+                startTime: 50,
+                type: "spawner",
+                objectType: "wiener",
+                totalSpawnCount: 1200,
                 spawningDuration: 10,
 
             },
             {
-                startTime: 8000,
-                type: "spawner",
-                objectType: "wiener",
-                totalSpawnCount: 30,
-                spawningDuration: 15,
-
-            },
-            {
-                startTime: 20000,
-                type: "spawner",
-                objectType: "wiener",
-                totalSpawnCount: 60,
-                spawningDuration: 15,
-
-            },
-            {
-                startTime: 30000,
-                type: "spawner",
-                objectType: "wiener",
-                totalSpawnCount: 120,
-                spawningDuration: 15,
-
-            },
-            {
-                startTime: 30000,
+                startTime: 25,
                 type: "spawner",
                 objectType: "gull",
                 totalSpawnCount: 60,
-                spawningDuration: 15,
+                spawningDuration: 30,
 
             },
 
             {
-                startTime: 5000,
+                startTime: 5,
                 type: "spawner",
                 objectType: "gull",
-                totalSpawnCount: 30,
+                totalSpawnCount: 10,
                 spawningDuration: 20,
 
             },
-            {
-                startTime: 10000,
-                type: "spawner",
-                objectType: "wiener",
-                totalSpawnCount: 120,
-                spawningDuration: 30,
-            },
-            {
-                startTime: 30000,
-                type: "spawner",
-                objectType: "wiener",
-                totalSpawnCount: 100,
-                spawningDuration: 25,
-            }
-
-
         ],
         // floorHeight: 60,
         playerBounds: {

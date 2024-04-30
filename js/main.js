@@ -150,7 +150,7 @@ window.addEventListener("load", function () {
 
     console.log(ui)
 
-    game.ui.toggleUI("title")
+    game.ui.showUI("title")
     // console.log(game.ui)
     // console.log(game.player)
     // game.runIntro()
