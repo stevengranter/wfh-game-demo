@@ -262,7 +262,7 @@ export default class GameWorld extends Observable {
         this.initScene()
 
         this.gameState = gameStateKeys.INTRO
-        this.ui.toggleUI(this.gameState)
+        // this.ui.toggleUI(this.gameState)
 
         const superNantendo = document.getElementById("ui--super-nantendo")
         superNantendo.classList.add("teal-bg")
@@ -604,7 +604,7 @@ export default class GameWorld extends Observable {
     }
 
     runIntro() {
-
+        console.log("in runIntro")
         // console.log(this.ui)
 
         // console.log(this.player.stats)
@@ -619,11 +619,11 @@ export default class GameWorld extends Observable {
 
 
 
-        this.ui.hide(this.ui.elements.titleScreen)
-        this.ui.hide(this.ui.elements.shopScreen)
-        this.ui.show(this.ui.elements.introScreen)
+        // this.ui.hide(this.ui.elements.titleScreen)
+        // this.ui.hide(this.ui.elements.shopScreen)
+        // this.ui.show(this.ui.elements.introScreen)
 
-        this.ui.show(this.ui.elements.popupNan)
+        // this.ui.show(this.ui.elements.popupNan)
         setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(0)" }, 500)
         setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(0px)" }, 700)
 
@@ -641,11 +641,11 @@ export default class GameWorld extends Observable {
         // typeWriter('intro-dialog', dialogText, 25)
         // console.log("player.stats.isAlive: " + this.player.stats.isAlive)
 
-        document.getElementById("game-screen__cutscene-overlay").addEventListener("pointerdown", () => {
-            setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(400px)" }, 500)
-            setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(475px)" }, 700)
-            setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0, 0, 0.1) }, 1000)
-            setTimeout(() => { this.startScene(this.scenes[0]) }, 1300)
+        document.getElementById("intro-screen").addEventListener("pointerdown", () => {
+            setTimeout(this.ui.elements.introDialog.style.transform = "translateY(400px)", 500)
+            setTimeout(this.ui.elements.popupNan.style.transform = "translateY(475px)", 700)
+            setTimeout(animateBlur(this.currentScene, this.ctx, 0, 0, 0.1), 1000)
+            setTimeout(this.startScene(this.scenes[0]), 1300)
         }, { once: true })
     }
 
