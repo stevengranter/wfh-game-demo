@@ -670,7 +670,7 @@ export default class GameWorld extends Observable {
     }
 
     runIntro() {
-        console.log("in runIntro")
+        // console.log("in runIntro")
         // console.log(this.ui)
         this.setState = gameStateKeys.INTRO
         // console.log(this.player.stats)

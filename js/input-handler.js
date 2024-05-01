@@ -182,14 +182,14 @@ export default class InputHandler {
         switch (targetElement.id) {
             case "touchcontroller_left":
             case "virtual-controller--button-dpad-left":
-                console.log
+                // console.log
                 this.left = isButtonPressed
-                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
+                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
                 break
             case "touchcontroller_right":
             case "virtual-controller--button-dpad-right":
                 this.right = isButtonPressed
-                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
+                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
                 break
             default:
                 break
