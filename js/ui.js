@@ -5,7 +5,7 @@ export default class UI {
     constructor(dataAttributes, player) {
         this.init(dataAttributes)
         this.elements = this.uiElements // FIX: for older code that references elements property
-
+        this.toggleUI = this.showUI
     }
 
 

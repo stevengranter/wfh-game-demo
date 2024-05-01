@@ -3,7 +3,7 @@
 // Importing the Observable parent class 
 import Observable from "./observable.js"
 
-// GameScene class extends Observable to inherit event handling capabilities
+// GameScene class extends Observable to inherit event observing capabilities
 export class GameScene extends Observable {
     // playerBounds // Private field to store player bounds
 

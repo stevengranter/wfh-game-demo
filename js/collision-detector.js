@@ -25,10 +25,10 @@ export default class CollisionDetector {
       if (!object.isScored) {
         object.isScored = true
         object.isVisible = false
-        // console.log(`collision with ${object.spriteTag}`)
+
         wait(500) // wait for 0.5 seconds to avoid returning multiple collisions
         const scoreObject = {}
-        // console.log(object)
+
         scoreObject.health = object.healthValue
         scoreObject.points = object.pointValue
         scoreObject.tag = object.spriteTag

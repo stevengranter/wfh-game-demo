@@ -11,7 +11,12 @@ import { Enemy } from "./enemy.js"
 import { scene00Config } from "./cfg/scene00.cfg.js"
 import { scene01Config } from "./cfg/scene01.cfg.js"
 
-
+export const musicStateKeys = {
+    PAUSED: "paused",
+    PLAYING: "playing",
+    STOPPED: "stopped",
+    READY: "ready"
+}
 
 
 export default class GameWorld extends Observable {
@@ -160,7 +165,7 @@ export default class GameWorld extends Observable {
             if (this.currentScene.name === "Beach Sheds") {
                 this.isPaused = true
                 this.gameState = gameStateKeys.POPUP
-                // this.pauseGame()
+                this.pauseGame()
                 this.runPopup()
             } else {
                 setTimeout(() => {
@@ -288,6 +293,35 @@ export default class GameWorld extends Observable {
     }
 
 
+    pauseGame() {
+        if (this.isPaused) {
+            // console.log(this.gameState)
+            this.pauseMusic()
+            switch (this.#gameState) {
+                case gameStateKeys.PAUSED_BY_PLAYER:
+                    this.ui.toggleUI("paused")
+                    break
+                case gameStateKeys.LEVEL_END:
+                    this.ui.toggleUI("level-end")
+                    break
+                default:
+                    console.warn("No UI defined for gamestate: " + this.#gameState)
+            }
+
+
+
+        }
+        else {
+            this.gameState = gameStateKeys.PLAY
+            this.ui.toggleUI("play")
+            // this.music.currentTime = this.musicPausedTime
+
+            this.playMusic()
+            this.loop(this.lastTime)
+            this.isPaused = false
+        }
+    }
+
 
     endScene() {
         // Pause the game and the music
@@ -297,7 +331,7 @@ export default class GameWorld extends Observable {
 
         this.gameState = gameStateKeys.SCENE_END
         this.isPaused = true
-        // this.pauseGame()
+        this.pauseGame()
 
         this.isSceneOver = true
 
@@ -321,7 +355,7 @@ export default class GameWorld extends Observable {
         // this.ui.showUI(this.gameState)
         const sceneEndContainer = document.getElementById("scene-end--container")
         sceneEndContainer.className = ''
-        ui.show(sceneEndContainer)
+        this.ui.show(sceneEndContainer)
 
         // window and chicken animations
         const sceneEndContainerDIV = this.ui.elements.sceneEndContainer.querySelector("div")
@@ -411,7 +445,22 @@ export default class GameWorld extends Observable {
         this.initSceneEvents()
     }
 
-    pauseMusic() { }
+
+    playMusic() {
+        this.music.play()
+        this.musicState = musicStateKeys.PLAYING
+    }
+
+    pauseMusic() {
+        this.music.pause()
+        this.musicState = musicStateKeys.PAUSED
+    }
+
+    stopMusic() {
+        this.music.stop()
+        this.musicState = musicStateKeys.PAUSED
+    }
+
 
 
     // Method to load and ready scene and add to GameWorld instance
@@ -531,7 +580,7 @@ export default class GameWorld extends Observable {
                     clearInterval(this.goalCheckIntervalId)
                     this.gameState = gameStateKeys.SCENE_END
                     this.isPaused = true
-                    // this.pauseGame()
+                    this.pauseGame()
                     this.endScene()
                 }
 
