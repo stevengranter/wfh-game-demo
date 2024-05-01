@@ -148,7 +148,7 @@ window.addEventListener("load", function () {
         console.dir(`Enemies: ${game.spawner.objectPools['gull'].enemies}`)
     }
 
-    console.log(ui)
+    // console.log(ui)
 
     game.gameState = "title"
     game.ui.showUI("title")
@@ -162,11 +162,11 @@ window.addEventListener("load", function () {
         game.startGame()
     })
 
-    function checkGameState() {
-        console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
-        setTimeout(checkGameState, 1000)
-    }
-    checkGameState()
+    // function checkGameState() {
+    //     console.log(`%cgamestate is ${game.gameState}`, `color: orange`)
+    //     setTimeout(checkGameState, 1000)
+    // }
+    // checkGameState()
 
     // setTimeout(showEnemies, 10000)
 

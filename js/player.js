@@ -50,6 +50,7 @@ export default class Player extends Sprite {
         this.speedMultiplier = 1
 
         this.stats = new Stats()
+        this.isResetting = false
         // console.log(this.stats)
 
         // this.scoreManager = new ScoreManager()

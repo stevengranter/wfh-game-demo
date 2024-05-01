@@ -168,13 +168,13 @@ export default class GameWorld extends Observable {
                 this.pauseGame()
                 this.runPopup()
             } else {
-                setTimeout(() => {
-                    console.log(this.player.currentState)
-                    this.player.currentState.exit().bind(this.player)
-                }, 2000)
+                this.player.isResetting = false
+                this.resetPlayer()
 
             }
         }
+
+
 
 
         // Timekeeping, setting deltaTime with each frame
@@ -205,6 +205,22 @@ export default class GameWorld extends Observable {
 
     }
 
+    resetPlayer() {
+        // Check if the player is already resetting
+        if (!this.player.isResetting) {
+            // Use arrow function to keep "this" context
+            setTimeout(() => {
+                // Make sure "this" refers to the player
+                if (this.player && this.player.currentState && typeof this.player.currentState.exit === 'function') {
+                    this.player.currentState.exit()
+                }
+            }, 2000) // Delay the exit call by 2000 ms
+            // Set flag indicating that player reset has started
+            this.player.isResetting = true
+        }
+    }
+
+
     detectCollisions() {
         let colliders = this.spawner.getAllSpawnedObjects()
         // console.log(colliders)
@@ -232,7 +248,7 @@ export default class GameWorld extends Observable {
             // console.log("No enemies detected")
         }
         enemies.forEach((enemy) => {
-            if (enemy.detectPlayer({ 'dx': this.player.dx, 'dy': this.player.dy }, 200)) {
+            if (enemy.detectPlayer({ 'dx': this.player.dx, 'dy': this.player.dy }, 150)) {
                 enemy.launchProjectile({ velocityX: 10, velocityY: getRandomInt(100, 300) })
             }
         })
@@ -493,11 +509,11 @@ export default class GameWorld extends Observable {
     startScene = (scene = this.currentScene) => {
 
         // if (scene === undefined) scene = this.currentScene
-        console.log(this)
+        // console.log(this)
         // console.log(this.currentScene)
         // TODO: fix, temporarily running scene1 first
         this.isSceneOver = false
-        console.log(scene)
+        // console.log(scene)
         // this.loadScene(scene01Config)
 
         // console.log(`ℹ️ %ccurrent scene is: ${this.currentScene.name}`, `color:blue;`)
@@ -597,7 +613,7 @@ export default class GameWorld extends Observable {
         this.sceneTimeIntervalId = setInterval(notifyTimeRemaining, 1000)
 
 
-        console.log(`ℹ️ %cplayer progress is ${this.player.stats.progress}`, `color:blue`)
+        // console.log(`ℹ️ %cplayer progress is ${this.player.stats.progress}`, `color:blue`)
 
         // Call the functions in the desired order
 

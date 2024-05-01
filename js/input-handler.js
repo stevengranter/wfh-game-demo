@@ -25,7 +25,7 @@ export default class InputHandler {
 
         document.addEventListener('pointerdown', (event) => {
             // e.preventDefault()
-            console.log(event)
+            // console.log(event)
             this.listenForPointer(event)
             // return false
         },)
@@ -174,7 +174,7 @@ export default class InputHandler {
         }
 
 
-        console.log(targetElement)
+        // console.log(targetElement)
 
         let isButtonPressed = (event.type == "pointerdown") ? true : false
         // console.log(isButtonPressed)
