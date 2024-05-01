@@ -150,6 +150,7 @@ window.addEventListener("load", function () {
 
     console.log(ui)
 
+    game.gameState = "title"
     game.ui.showUI("title")
     // console.log(game.ui)
     // console.log(game.player)

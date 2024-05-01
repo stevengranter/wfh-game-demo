@@ -466,6 +466,7 @@ h3 {
   border: 1svw solid black;
   outline: 0.5svw solid white;
   border-radius: 3svw;
+  padding-left: 30px;
 }
 
 .ui-panel h2 {

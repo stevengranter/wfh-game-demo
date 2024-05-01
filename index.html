@@ -90,7 +90,7 @@
           <div id="banner" data-ui="true"></div>
         </div>
 
-        <div id="game-screen__menu-overlay" class="overlay" data-ui="true">
+        <div id="game-screen__menu-overlay" class="overlay hidden" data-ui="true">
           <!-- START: #menu-screen -->
           <div
             id="pause-menu--container"
@@ -180,6 +180,7 @@
           >
             <div class="ui-panel">
               <h2>Scene Start</h2>
+              <!--
               <ul>
                 <li>Wieners caught: <span id="scene-wieners"></span></li>
                 <li>Score: <span id="scene-score"></span></li>
@@ -187,10 +188,13 @@
                   Lucky Seagull Blessings: <span id="scene-blessings"></span>
                 </li>
                 <!-- <li>Rating: ⭐️ ⭐️ ⭐️</li> -->
+                <!--
                 <button id="next-scene-button">Next scene</button
                 ><br />
                 <button id="goto-shop-button">Shop at Tibbo's</button>
-              </ul>
+                </ul>
+                -->
+  
             </div>
             <div id="excited-chicken" data-ui="true">
               <img  
@@ -207,17 +211,26 @@
           >
             <div class="ui-panel">
               <h2>Wiener, Wiener,<br />Chicken Diener!</h2>
+              Thanks for playing!
+              <h3>Coming Soon:</h3>
               <ul>
+                <li>Shop at Tibbo's Convenience Store</li>
+                <li>Level 2</li>
+                <li>Fewer bugs! Moar fun!</li>
+              </ul>
+              <!--<ul>
                 <li>Wieners caught: <span id="scene-wieners"></span></li>
                 <li>Score: <span id="scene-score"></span></li>
                 <li>
                   Lucky Seagull Blessings: <span id="scene-blessings"></span>
                 </li>
                 <!-- <li>Rating: ⭐️ ⭐️ ⭐️</li> -->
+                <!--
                 <button id="next-scene-button">Next scene</button
                 ><br />
                 <button id="goto-shop-button">Shop at Tibbo's</button>
-              </ul>
+              </ul> 
+            -->
             </div>
             <div id="excited-chicken" data-ui="true">
               <img
@@ -371,7 +384,7 @@
        
 
       
-      <div id="debug-menu--container" data-ui="true"></div>
+      <div id="debug-menu--container" data-ui="true" class="hidden"></div>
       <!-- <div id="controller-container"> -->
       <div id="ui--virtual-controller" data-ui="true" data-current-state="">
         <div id="ui--virtual-controller-buttons" style="">
