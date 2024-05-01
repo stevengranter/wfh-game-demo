@@ -324,23 +324,24 @@ export default class GameWorld extends Observable {
 
 
     endScene() {
-        // Pause the game and the music
+        // Clear the interval timers for the scene and goals
         clearInterval(this.goalCheckIntervalId)
         clearInterval(this.sceneTimeIntervalId)
         clearInterval(this.#currentScene.intervalId)
 
+        // reset the spawner
+        this.spawner.reset()
+
+
+        // Set gameState to SCENE_END and SceneOver flag to true
+        this.isSceneOver = true
         this.gameState = gameStateKeys.SCENE_END
+
+        // set isPaused flag to true and pause the game
         this.isPaused = true
         this.pauseGame()
 
-        this.isSceneOver = true
 
-        this.spawner.reset()
-
-        console.log(this.spawner)
-
-        this.pauseMusic()
-        // console.log("player progress before set: " + this.player.stats.progress)
         this.player.stats.progress += 1
         console.log("winner winner chicken dinner")
         // console.log("player progress after set: " + this.player.stats.progress)
@@ -353,9 +354,9 @@ export default class GameWorld extends Observable {
 
 
         // this.ui.showUI(this.gameState)
-        const sceneEndContainer = document.getElementById("scene-end--container")
-        sceneEndContainer.className = ''
-        this.ui.show(sceneEndContainer)
+        // const sceneEndContainer = document.getElementById("scene-end--container")
+        // sceneEndContainer.className = ''
+        this.ui.showUI(gameStateKeys.SCENE_END)
 
         // window and chicken animations
         const sceneEndContainerDIV = this.ui.elements.sceneEndContainer.querySelector("div")
