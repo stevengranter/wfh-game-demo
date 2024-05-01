@@ -21,16 +21,17 @@ export default class InputHandler {
         addEventListener("keyup", (e) => this.listenForKeys(e))
 
 
-        const touchOverlay = this.ui.uiElements.touchControllerOverlay
+        // const touchOverlay = this.ui.uiElements.touchControllerOverlay
 
-        touchOverlay.addEventListener('pointerdown', (e) => {
+        document.addEventListener('pointerdown', (event) => {
             // e.preventDefault()
-            this.listenForPointer(e, 'touchOverlay')
+            console.log(event)
+            this.listenForPointer(event)
             // return false
         },)
-        touchOverlay.addEventListener('pointerup', (e) => {
+        document.addEventListener('pointerup', (event) => {
             // e.preventDefault()
-            this.listenForPointer(e, 'touchOverlay')
+            this.listenForPointer(event)
             // return false
         })
 
@@ -161,26 +162,31 @@ export default class InputHandler {
         }
     }
 
-    listenForPointer(e, element) {
+    listenForPointer(event) {
+        let targetElement = event.target
 
-        if (element === "touchOverlay") {
+        if (targetElement === "touchcontroller_right") {
             e.preventDefault()
             // return false
         }
 
-        let sourceElement = e.target.id
 
-        let isButtonPressed = (e.type == "pointerdown") ? true : false
+        console.log(targetElement)
+
+        let isButtonPressed = (event.type == "pointerdown") ? true : false
         // console.log(isButtonPressed)
 
-        switch (sourceElement) {
+        switch (targetElement.id) {
             case "touchcontroller_left":
+            case "virtual-controller--button-dpad-left":
+                console.log
                 this.left = isButtonPressed
-                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
+                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
                 break
             case "touchcontroller_right":
+            case "virtual-controller--button-dpad-right":
                 this.right = isButtonPressed
-                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
+                console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
                 break
             default:
                 break

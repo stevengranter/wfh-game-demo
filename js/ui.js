@@ -145,14 +145,16 @@ export default class UI {
 
     // public: set element to show by setting visibility and display properties
     showElement(element) {
-        element.style.visibility = "show"
-        element.style.display = "block"
+        // element.style.visibility = "show"
+        element.style.display = ""
+        element.classList.remove("hidden")
         element.style.pointerEvents = "auto" // TODO: 
     }
 
     // public: set element to hide by setting visibility and display properties
     hideElement(element) {
-        element.style.visibility = "hide"
+        // element.style.visibility = "hidden"
+        // element.classList = "hidden"
         element.style.display = "none"
         element.style.pointerEvents = "none" // TODO: 
 
