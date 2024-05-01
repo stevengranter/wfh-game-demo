@@ -168,7 +168,7 @@ export default class InputHandler {
         if (targetElement.id === "touchcontroller_right" ||
             targetElement.id === "touchcontroller_left" ||
             targetElement.id === "virtual-controller--button-dpad-left" ||
-            targetElement.id === "virtual-controller--button-dpad-left") {
+            targetElement.id === "virtual-controller--button-dpad-right") {
             event.preventDefault()
             // return false
         }
