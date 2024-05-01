@@ -165,8 +165,11 @@ export default class InputHandler {
     listenForPointer(event) {
         let targetElement = event.target
 
-        if (targetElement === "touchcontroller_right") {
-            e.preventDefault()
+        if (targetElement.id === "touchcontroller_right" ||
+            targetElement.id === "touchcontroller_left" ||
+            targetElement.id === "virtual-controller--button-dpad-left" ||
+            targetElement.id === "virtual-controller--button-dpad-left") {
+            event.preventDefault()
             // return false
         }
 

@@ -691,8 +691,8 @@ export default class GameWorld extends Observable {
         // console.log("player.stats.isAlive: " + this.player.stats.isAlive)
 
         document.getElementById("intro-screen").addEventListener("pointerdown", () => {
-            setTimeout(this.ui.elements.introDialog.style.transform = "translateY(400px)", 500)
-            setTimeout(this.ui.elements.popupNan.style.transform = "translateY(475px)", 700)
+            setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(300px)" }, 500)
+            setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(475px)" }, 700)
             setTimeout(animateBlur(this.currentScene, this.ctx, 0, 0, 0.1), 1000)
             setTimeout(this.startScene(this.scenes[0]), 1300)
         }, { once: true })
