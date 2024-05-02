@@ -26,19 +26,21 @@ export default class InputHandler {
 
         // prevent context menu from appearing on pointerdown
         // on either touchOverlay or virtual controller
-        touchOverlay.addEventListener("contextmenu", (event) => {
+        document.addEventListener("contextmenu", (event) => {
             event.preventDefault()
         })
 
-        virtualController.addEventListener("contextmenu", (event) => {
+        document.addEventListener("contextmenu", (event) => {
             event.preventDefault()
         })
 
         // add event listerners for pointerdown and pointerup
         document.addEventListener('pointerdown', (event) => {
+            event.preventDefault()
             this.handlePointerEvent(event)
         },)
         document.addEventListener('pointerup', (event) => {
+            event.preventDefault()
             this.handlePointerEvent(event)
         })
 
@@ -176,7 +178,10 @@ export default class InputHandler {
         if (targetElement.id === "touchcontroller_right" ||
             targetElement.id === "touchcontroller_left" ||
             targetElement.id === "virtual-controller--button-dpad-left" ||
-            targetElement.id === "virtual-controller--button-dpad-right") {
+            targetElement.id === "virtual-controller--button-dpad-right" ||
+            targetElement.id === "virtual-controller--button-primary" ||
+            targetElement.id === "virtual-controller--button-select" ||
+            targetElement.id === "virtual-controller--button-start") {
 
             // console.log(targetElement)
             let isButtonPressed = event.type === "pointerdown" ? true : false
@@ -195,6 +200,15 @@ export default class InputHandler {
                 case "virtual-controller--button-dpad-right":
                     this.right = isButtonPressed
                     // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
+                    break
+                case "virtual-controller--button-primary":
+                    this.up = isButtonPressed
+                    break
+                case "virtual-controller--button-select":
+                    this.escape = isButtonPressed
+                    break
+                case "virtual-controller--button-start":
+                    this.escape = isButtonPressed
                     break
                 default:
                     break
