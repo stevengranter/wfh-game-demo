@@ -21,18 +21,25 @@ export default class InputHandler {
         addEventListener("keyup", (e) => this.listenForKeys(e))
 
 
-        // const touchOverlay = this.ui.uiElements.touchControllerOverlay
+        const touchOverlay = document.getElementById("touch-controller-overlay")
+        const virtualController = document.getElementById("ui--virtual-controller")
 
+        // prevent context menu from appearing on pointerdown
+        // on either touchOverlay or virtual controller
+        touchOverlay.addEventListener("contextmenu", (event) => {
+            event.preventDefault()
+        })
+
+        virtualController.addEventListener("contextmenu", (event) => {
+            event.preventDefault()
+        })
+
+        // add event listerners for pointerdown and pointerup
         document.addEventListener('pointerdown', (event) => {
-            // e.preventDefault()
-            // console.log(event)
-            this.listenForPointer(event)
-            // return false
+            this.handlePointerEvent(event)
         },)
         document.addEventListener('pointerup', (event) => {
-            // e.preventDefault()
-            this.listenForPointer(event)
-            // return false
+            this.handlePointerEvent(event)
         })
 
 
@@ -97,14 +104,14 @@ export default class InputHandler {
                         case "pointerdown":
                             element.addEventListener("pointerdown", (e) => {
                                 // e.preventDefault()
-                                this.listenForPointer(e, element)
+                                this.handlePointerEvent(e, element)
                                 console.log("pointerdown")
                             })
                             break
                         case "pointerup":
                             element.addEventListener("pointerup", (e) => {
                                 // e.preventDefault()
-                                this.listenForPointer(e, element)
+                                this.handlePointerEvent(e, element)
                                 console.log("pointerup")
                             })
                             break
@@ -121,7 +128,8 @@ export default class InputHandler {
     }
 
     listenForKeys(e) {
-        let isKeyPressed = (e.type == "keydown") ? true : false
+        let isKeyPressed = e.type == "keydown" ? true : false
+
 
         // const previousKeyPressed = isKeyPressed
 
@@ -162,39 +170,41 @@ export default class InputHandler {
         }
     }
 
-    listenForPointer(event) {
+    handlePointerEvent(event) {
         let targetElement = event.target
 
         if (targetElement.id === "touchcontroller_right" ||
             targetElement.id === "touchcontroller_left" ||
             targetElement.id === "virtual-controller--button-dpad-left" ||
             targetElement.id === "virtual-controller--button-dpad-right") {
-            event.preventDefault()
-            // return false
+
+            // console.log(targetElement)
+            let isButtonPressed = event.type === "pointerdown" ? true : false
+            // console.log(isButtonPressed)
+
+            // console.log(isButtonPressed)
+
+            switch (targetElement.id) {
+                case "touchcontroller_left":
+                case "virtual-controller--button-dpad-left":
+                    // console.log
+                    this.left = isButtonPressed
+                    // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
+                    break
+                case "touchcontroller_right":
+                case "virtual-controller--button-dpad-right":
+                    this.right = isButtonPressed
+                    // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
+                    break
+                default:
+                    break
+
+            }
+
         }
+        return false
 
 
-        // console.log(targetElement)
-
-        let isButtonPressed = (event.type == "pointerdown") ? true : false
-        // console.log(isButtonPressed)
-
-        switch (targetElement.id) {
-            case "touchcontroller_left":
-            case "virtual-controller--button-dpad-left":
-                // console.log
-                this.left = isButtonPressed
-                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
-                break
-            case "touchcontroller_right":
-            case "virtual-controller--button-dpad-right":
-                this.right = isButtonPressed
-                // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
-                break
-            default:
-                break
-
-        }
     }
 
 }
