@@ -4,6 +4,8 @@
 import { wait } from "./utils.js"
 
 // Class declaration for collision detector
+
+
 export default class CollisionDetector {
 
   // Basic Axis-Aligned Bounding Box (AABB) collision detection
@@ -41,5 +43,3 @@ export default class CollisionDetector {
     }
   }
 }
-
-
