@@ -14,8 +14,8 @@ export default class InputHandler {
         this.left = false;
         this.up = false;
         this.down = false;
+
         this.pause = false;
-        this.escape = false;
 
         // Prevent context menu from appearing on pointerdown
         // on either touchOverlay or virtual controller
@@ -88,7 +88,8 @@ export default class InputHandler {
                 // // console.log("🚀 ~ InputHandler ~ listenForKeys ~ this.down:", this.down)
                 break;
             case "Escape":
-                this.escape = isKeyPressed;
+                this.pause = isKeyPressed;
+                console.log("Escape key pressed");
                 break;
             default:
                 break;
@@ -127,23 +128,22 @@ export default class InputHandler {
             switch (targetElement.id) {
                 case "touchcontroller_left":
                 case "virtual-controller--button-dpad-left":
-                    // console.log
                     this.left = isButtonPressed;
-                    // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.left:", this.left)
                     break;
                 case "touchcontroller_right":
                 case "virtual-controller--button-dpad-right":
                     this.right = isButtonPressed;
-                    // console.log("🚀 ~ InputHandler ~ listenForMouse ~ this.right:", this.right)
                     break;
                 case "virtual-controller--button-primary":
                     this.up = isButtonPressed;
                     break;
                 case "virtual-controller--button-select":
-                    this.escape = isButtonPressed;
+                    this.pause = isButtonPressed;
+                    console.log("SELECT button pressed");
                     break;
                 case "virtual-controller--button-start":
-                    this.escape = isButtonPressed;
+                    this.pause = isButtonPressed;
+                    console.log("START button pressed");
                     break;
                 default:
                     break;
