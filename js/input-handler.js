@@ -21,6 +21,10 @@ export default class InputHandler {
         // on either touchOverlay or virtual controller
         this.disableContextMenu();
 
+        // WARNING: This is very bad for accessibility, but without it the browser window will zoom in if 
+        // screen is touched twice in short succession. 
+        this.disableDoubleTapZoom();
+
         // Initialize event listeners
         this.addKeyboardListener();
 
@@ -50,6 +54,17 @@ export default class InputHandler {
             }
         }, 100);
 
+    }
+
+    disableDoubleTapZoom() {
+        let last_touch_end = 0;
+        document.addEventListener("touchend", function (e) {
+            const now = (new Date()).getTime();
+            if (now - last_touch_end <= 300) {
+                e.preventDefault();
+            }
+            last_touch_end = now;
+        }, false);
     }
 
     disableContextMenu() {

@@ -148,7 +148,7 @@ img {
   /* flex-direction: column; */
 }
 
-#ui--virtual-controller * {
+#ui--virtual-controller > * {
   -webkit-user-select: none; /* Chrome/Safari */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
@@ -156,6 +156,7 @@ img {
   -webkit-user-drag: none;
   -webkit-touch-callout: none; /* iOS Safari */
   touch-callout: none; /* Standard syntax, if it existed */
+  touch-action: manipulation;
 }
 
 img {
