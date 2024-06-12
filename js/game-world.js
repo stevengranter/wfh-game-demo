@@ -470,12 +470,12 @@ export default class GameWorld extends Observable {
 
     playMusic() {
         this.music.play();
-        console.log(`this.music.play  = ${this.music.play}`);
+        // console.log(`this.music.play  = ${this.music.play}`);
         this.musicState = musicStateKeys.PLAYING;
     }
 
     pauseMusic() {
-        console.log(`window.audioContext: ${window.audioContext}`);
+        // console.log(`window.audioContext: ${window.audioContext}`);
         if (this.music && !this.music.paused) {
             this.music.pause();
             this.musicState = musicStateKeys.PAUSED;
@@ -728,7 +728,7 @@ export default class GameWorld extends Observable {
         // console.log("player.stats.isAlive: " + this.player.stats.isAlive)
 
         document.getElementById("intro-screen").addEventListener("pointerdown", () => {
-            this.endIntroScene();
+            this.endIntro();
             // setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(300px)"; }, 500);
             // setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(475px)"; }, 700);
             // setTimeout(animateBlur(this.currentScene, this.ctx, 0, 0, 0.1), 1000);
@@ -736,7 +736,7 @@ export default class GameWorld extends Observable {
         }, { once: true });
     }
 
-    endIntroScene() {
+    endIntro() {
         setTimeout(() => { this.ui.elements.introDialog.style.transform = "translateY(300px)"; }, 500);
         setTimeout(() => { this.ui.elements.popupNan.style.transform = "translateY(475px)"; }, 700);
         setTimeout(animateBlur(this.currentScene, this.ctx, 0, 0, 0.1), 1000);

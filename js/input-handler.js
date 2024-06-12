@@ -53,10 +53,21 @@ export default class InputHandler {
     }
 
     disableContextMenu() {
-        document.addEventListener("contextmenu", (event) => {
+        const virtualController = document.getElementById('ui--virtual-controller');
+        const touchControllerOverlay = document.getElementById('touch-controller-overlay');
+        const gameScreenBorder = document.getElementById("game-screen-border");
+        const gameScreenCutsceneOverlay = document.getElementById("game-screen__cutscene-overlay");
+
+        virtualController.addEventListener("contextmenu", (event) => {
             event.preventDefault();
         });
-        document.addEventListener("contextmenu", (event) => {
+        touchControllerOverlay.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        });
+        gameScreenBorder.addEventListener("contextmenu", (event) => {
+            event.preventDefault();
+        });
+        gameScreenCutsceneOverlay.addEventListener("contextmenu", (event) => {
             event.preventDefault();
         });
     }

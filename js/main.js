@@ -134,7 +134,7 @@ window.addEventListener("load", function () {
             }
         });
         document.getElementById("virtual-controller--button-start").addEventListener("pointerdown", (e) => {
-            console.log("START pressed (alt)");
+            // console.log("START pressed (alt)");
             togglePause();
         });
     });
