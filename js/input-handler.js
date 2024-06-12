@@ -108,15 +108,19 @@ export default class InputHandler {
 
     // Pointer handler to convert pointer events to input handler action
     pointerHandler(event) {
+
+        let validPointerTargets = [
+            "touchcontroller_right",
+            "touchcontroller_left",
+            "virtual-controller--button-dpad-left",
+            "virtual-controller--button-dpad-right",
+            "virtual-controller--button-primary",
+            "virtual-controller--button-select",
+            "virtual-controller--button-start"];
+
         let targetElement = event.target;
 
-        if (targetElement.id === "touchcontroller_right" ||
-            targetElement.id === "touchcontroller_left" ||
-            targetElement.id === "virtual-controller--button-dpad-left" ||
-            targetElement.id === "virtual-controller--button-dpad-right" ||
-            targetElement.id === "virtual-controller--button-primary" ||
-            targetElement.id === "virtual-controller--button-select" ||
-            targetElement.id === "virtual-controller--button-start") {
+        if (validPointerTargets.includes(targetElement.id)) {
 
             let isButtonPressed = event.type === "pointerdown" ? true : false;
 
