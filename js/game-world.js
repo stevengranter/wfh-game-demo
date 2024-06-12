@@ -27,7 +27,7 @@ export default class GameWorld extends Observable {
     #timeRemaining;
     #isNextSceneReady = false;
 
-    // set #deltaTime to 1 to avoid a NaN error when starting the game loop
+    // set #deltaTime to 1 to avoid a NaN error when dividing by 0 when starting the game loop
     static #deltaTime = 1;
 
     constructor(player, ui, input) {
@@ -113,10 +113,16 @@ export default class GameWorld extends Observable {
         }
     }
 
-    // the main game loop
+    // 🔁 Here it is. The... MAIN. GAME. LOOP 👾
     loop(timeStamp, scene = this.currentScene) {
-        // console.log("this.isSceneOver: ", this.isSceneOver)
-        // Guard clauses to exit the loop if any of the conditions are met
+
+        // 💂‍♀️ Guard clauses to exit the loop if any of the conditions are met
+
+        // unless the gameState is "play", we shouldn't run the loop
+        if (this.#gameState !== gameStateKeys.PLAY) {
+            // console.warn("Game state isn't in play state");
+            return;
+        }
 
         // if there is no reference to player, input, or UI
         if (!this.isReady) {
@@ -130,16 +136,10 @@ export default class GameWorld extends Observable {
             return;
         }
 
-        // if the game is paused, we don't want to run the loop
-        if (this.isPaused) {
-            return;
-        }
-
-        // unless the gameState is "play", we shouldn't run the loop
-        if (this.#gameState !== gameStateKeys.PLAY) {
-            console.warn("Game state isn't in play state");
-            return;
-        }
+        // // if the game is paused, we don't want to run the loop
+        // if (this.isPaused) {
+        //     return;
+        // }
 
         // if the scene has ended, we should exit the loop
         if (this.isSceneOver) {
@@ -155,7 +155,7 @@ export default class GameWorld extends Observable {
             return;
         }
 
-        // here we don't exit the loop (through return statement), 
+        // If the player has died, we don't exit the loop (through return statement), 
         // but we do want to set the player state to trigger animation 
         // and stats changes
         if (!this.player.stats.isAlive) {
@@ -197,7 +197,12 @@ export default class GameWorld extends Observable {
         // console.log("player.dy = ", this.player.dy)
 
         // Draw the scene to the canvas
-        scene.draw(this.ctx, true, true, true);
+        scene.draw(this.ctx,
+            {
+                background: true,
+                spawners: true,
+                player: true
+            });
 
         // requestAnimationFrame to get next frame
         requestAnimationFrame(this.loop.bind(this));
@@ -574,15 +579,15 @@ export default class GameWorld extends Observable {
 
             if (!this.isSceneOver) {
                 if ((this.player.stats.score >= this.sceneGoals.bronze.value) && (this.currentRanking < 1)) {
-                    console.log(`%cYou won! ⭐️`, `color:orange`);
+                    // console.log(`%cYou won! ⭐️`, `color:orange`);
                     this.currentRanking++;
                     this.notify({ 'current-ranking': '⭐️' });
                 } else if ((this.player.stats.score >= this.sceneGoals.silver.value) && (this.currentRanking === 1)) {
-                    console.log(`%cYou won! ⭐️⭐️`, `color:orange`);
+                    // console.log(`%cYou won! ⭐️⭐️`, `color:orange`);
                     this.currentRanking++;
                     this.notify({ 'current-ranking': '⭐️⭐️' });
                 } else if ((this.player.stats.score >= this.sceneGoals.gold.value) && (this.currentRanking === 2)) {
-                    console.log(`%cYou won! ⭐️⭐️⭐️`, `color: orange`);
+                    // console.log(`%cYou won! ⭐️⭐️⭐️`, `color: orange`);
                     this.currentRanking++;
                     this.notify({ 'current-ranking': '⭐️⭐️⭐️' });
                 }
@@ -645,7 +650,12 @@ export default class GameWorld extends Observable {
         setTimeout(() => { this.ui.elements.popupDialog.style.transform = "translateY(0)"; }, 500);
         setTimeout(() => { this.ui.elements.popupTibbo.style.transform = "translateY(0px)"; }, 700);
 
-        this.currentScene.draw(this.ctx, false, true, true);
+        this.currentScene.draw(this.ctx,
+            {
+                background: false,
+                spawners: true,
+                player: true
+            });
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2); }, 1000);
         const dialogText = document.querySelector('#popup-dialog div').textContent;
         typeWriter('popup-dialog', dialogText, 25);
@@ -705,7 +715,13 @@ export default class GameWorld extends Observable {
         this.currentScene = this.#scenes[currentSceneIndex];
         this.currentScene = this.#scenes[0];
 
-        this.currentScene.draw(this.ctx, false, true, true);
+        this.currentScene.draw(this.ctx,
+            {
+                background: false,
+                spawners: true,
+                player: true
+            });
+
         setTimeout(() => { animateBlur(this.currentScene, this.ctx, 0.5, 2, 0.2); }, 1000);
         // const dialogText = document.querySelector('#intro-dialog div').textContent
         // typeWriter('intro-dialog', dialogText, 25)

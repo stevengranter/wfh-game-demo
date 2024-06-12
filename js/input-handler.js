@@ -27,6 +27,29 @@ export default class InputHandler {
         // Event listeners for pointerdown and pointerup events
         this.addPointerListener();
 
+        // global gamepad object
+        let gamepadIndex;
+        window.addEventListener('gamepadconnected', (event) => {
+
+
+            gamepadIndex = event.gamepad.index;
+            if (gamepadIndex !== undefined) {
+                // a gamepad is connected and has an index
+                const myGamepad = navigator.getGamepads()[gamepadIndex];
+                console.log(myGamepad);
+                this.processGamepadInput(myGamepad);
+            }
+        });
+
+        // now print the axes on the connected gamepad, for example: 
+        setInterval(() => {
+            if (gamepadIndex !== undefined) {
+                // a gamepad is connected and has an index
+                const myGamepad = navigator.getGamepads()[gamepadIndex];
+                this.processGamepadInput(myGamepad);
+            }
+        }, 100);
+
     }
 
     disableContextMenu() {
@@ -55,7 +78,7 @@ export default class InputHandler {
     keyHandler(e) {
         let isKeyPressed = e.type == "keydown" ? true : false;
 
-        console.log(e.key);
+        // console.log(e.key);
         // const previousKeyPressed = isKeyPressed
 
         switch (e.key) {
@@ -89,7 +112,7 @@ export default class InputHandler {
                 break;
             case "Escape":
                 this.pause = isKeyPressed;
-                console.log("Escape key pressed");
+                // console.log("Escape key pressed");
                 break;
             default:
                 break;
@@ -139,11 +162,11 @@ export default class InputHandler {
                     break;
                 case "virtual-controller--button-select":
                     this.pause = isButtonPressed;
-                    console.log("SELECT button pressed");
+                    // console.log("SELECT button pressed");
                     break;
                 case "virtual-controller--button-start":
                     this.pause = isButtonPressed;
-                    console.log("START button pressed");
+                    // console.log("START button pressed");
                     break;
                 default:
                     break;

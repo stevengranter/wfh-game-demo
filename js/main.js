@@ -140,16 +140,39 @@ window.addEventListener("load", function () {
     });
 
     function togglePause() {
-        if (game.gameState !== "play" && game.gameState !== "paused") {
-            console.warn(`Cannot pause game, gameState is ${game.gameState}`);
-            event.preventDefault();
-            game.gameState = "intro";
-            game.startGame();
-            return;
+
+        switch (game.gameState) {
+            case "play":
+                console.log("gameState is play");
+                game.isPaused = !game.isPaused;
+                game.gameState = gameStateKeys.PAUSED_BY_PLAYER;
+                game.pauseGame();
+                break;
+            case "paused":
+                console.log("gameState is paused");
+                game.isPaused = !game.isPaused;
+                game.gameState = gameStateKeys.PAUSED_BY_PLAYER;
+                game.pauseGame();
+                break;
+            case "intro":
+                console.log("gameState is intro");
+                game.endIntro();
+                break;
+            default:
+                game.gameState = "intro";
+                game.startGame();
+                break;
         }
-        game.isPaused = !game.isPaused;
-        game.gameState = gameStateKeys.PAUSED_BY_PLAYER;
-        game.pauseGame();
+        // if (game.gameState !== "play" && game.gameState !== "paused") {
+        //     console.warn(`Cannot pause game, gameState is ${game.gameState}`);
+        //     event.preventDefault();
+
+        // }
+        // if (game.gameState === "intro") {
+        //     game.endIntroScene();
+        //     return;
+        // }
+
     }
 
     initObservers();

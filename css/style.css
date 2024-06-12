@@ -274,6 +274,12 @@ embed {
   flex-direction: row;
   width: 100%;
   height: 100%;
+  }
+  
+  #title-screen {
+   background: rgb(229,246,255);
+   background: linear-gradient(0deg, rgba(229,246,255,1) 4%, rgb(49, 204, 239) 77%); height: 100%;
+
 }
 
 #title-screen div img {
@@ -387,6 +393,7 @@ dialog-panel #intro-cutscene {
   /* padding: 0; */
   transition: 0.3s;
   /* max-width: 30%; */
+  max-height: 25%;
 }
 a {
   text-decoration: none;
